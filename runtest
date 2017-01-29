@@ -58,10 +58,13 @@ class Noark5Tester (Endpoint):
     def __init__(self):
         Endpoint.__init__(self,self.baseurl)
         self.success_count = 0
-        self.fail_count = 0
+        self.failure_count = 0
     def success(self, msg):
         print "success: " + msg
         self.success_count += 1
+    def failure(self, msg):
+        print "failure: " + msg
+        self.failure_count += 1
     def testArkiv(self):
         a = self.json_get("hateoas-api/arkiv")
         print a
@@ -74,7 +77,7 @@ class Noark5Tester (Endpoint):
         self.login()
         self.testArkiv()
         self.testArkivDel()
-        print "%d successes, %d failures" % (self.success_count, self.fail_count)
+        print "%d successes, %d failures" % (self.success_count, self.failure_count)
         
 
 def main():
