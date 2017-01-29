@@ -33,7 +33,9 @@ class Endpoint:
     def json_post(self, path, data):
         url = self.expandurl(path)
         print url
-        headers = {'Content-Type': 'application/json'}
+        headers = {
+            'Content-Type': 'application/vnd.noark5-v4+json',
+        }
         jsondata = json.dumps(data)
         request = urllib2.Request(url, jsondata, headers)
         response = self._browser.open(request).read()
@@ -44,7 +46,7 @@ class Endpoint:
         print url
         headers = {
             'X_REQUESTED_WITH' :'XMLHttpRequest',
-            'ACCEPT' : 'application/json, text/javascript, */*; q=0.01',
+            'Accept' : 'application/json, application/vnd.noark5-v4+json, text/javascript, */*; q=0.01',
             }
         request = urllib2.Request(url, None, headers)
         response = self._browser.open(request).read()
