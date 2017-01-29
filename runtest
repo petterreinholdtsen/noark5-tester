@@ -38,8 +38,9 @@ class Endpoint:
         }
         jsondata = json.dumps(data)
         request = urllib2.Request(url, jsondata, headers)
-        response = self._browser.open(request).read()
-        return response
+        response = self._browser.open(request)
+        content = response.read()
+        return (content, response)
 
     def json_get(self, path):
         url = self.expandurl(path)
@@ -49,8 +50,9 @@ class Endpoint:
             'Accept' : 'application/json, application/vnd.noark5-v4+json, text/javascript, */*; q=0.01',
             }
         request = urllib2.Request(url, None, headers)
-        response = self._browser.open(request).read()
-        return response
+        response = self._browser.open(request)
+        content = response.read()
+        return (content, response)
 
 class Noark5Tester (Endpoint):
     baseurl = "http://127.0.0.1:8092/noark5v4/"
@@ -65,21 +67,49 @@ class Noark5Tester (Endpoint):
     def failure(self, msg):
         print "failure: " + msg
         self.failure_count += 1
+
+    def testBase(self):
+        (content, res) = self.json_get(".")
+        self.success("found base")
+        contenttype = res.info().getheader('Content-Type')
+        if 0 != contenttype.find('application/vnd.noark5-v4+json'):
+            self.failure('incorrect content-type for base: %s' % contenttype)
+        else:
+            self.success('correct content-type for base')
+            baseref = json.loads(content)
+#            print d
+            if '_links' in baseref:
+                self.success('found _links in json response')
+                return baseref
+            else:
+                self.failure('did not find _links in json response')
+        
+        return None
     def testArkiv(self):
-        a = self.json_get("hateoas-api/arkiv")
+        (a, res) = self.json_get("hateoas-api/arkiv")
         print a
         self.success("found arkiv")
     def testArkivDel(self):
-        ad = self.json_get("hateoas-api/arkivdel")
+        (ad, res) = self.json_get("hateoas-api/arkivdel")
         print ad
         self.success("found arkivdel")
     def runtests(self):
-        self.login()
-        self.testArkiv()
-        self.testArkivDel()
-        print "%d successes, %d failures" % (self.success_count, self.failure_count)
-        
-
+        try:
+            baseref = self.testBase()
+            try:
+                self.login()
+                self.gotlogin = True
+                self.success("able to log in")
+            except urllib2.HTTPError, e:
+                self.gotlogin = False
+                self.failure("unable to log in, trying other things")
+#            self.discover()
+            self.testArkiv()
+            self.testArkivDel()
+            self.testNewDocument()
+        finally:
+            print "%d successes, %d failures" % (self.success_count,
+                                                 self.failure_count)
 def main():
     t = Noark5Tester()
     t.runtests()
