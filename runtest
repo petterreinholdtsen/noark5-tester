@@ -20,7 +20,7 @@ class Endpoint:
         return urlparse.urljoin(self.baseurl, path);
 
     def login(self, username = 'admin', password = 'password'):
-        url = self.expandurl('.')
+        url = self.expandurl('login')
         print url
         self._browser.open(url)
         self._browser.select_form(nr=0)
@@ -57,7 +57,6 @@ class Noark5Tester (Endpoint):
         Endpoint.__init__(self,self.baseurl)
         self.success_count = 0
         self.fail_count = 0
-        self.login()
     def success(self, msg):
         print "success: " + msg
         self.success_count += 1
@@ -70,6 +69,7 @@ class Noark5Tester (Endpoint):
         print ad
         self.success("found arkivdel")
     def runtests(self):
+        self.login()
         self.testArkiv()
         self.testArkivDel()
         print "%d successes, %d failures" % (self.success_count, self.fail_count)
