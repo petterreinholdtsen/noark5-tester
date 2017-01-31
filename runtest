@@ -119,14 +119,6 @@ class Noark5Tester (Endpoint):
                 self.failure('did not find _links in json response')
         
         return None
-    def testArkiv(self):
-        (a, res) = self.json_get("hateoas-api/arkiv")
-        print a
-        self.success("found arkiv")
-    def testArkivDel(self):
-        (ad, res) = self.json_get("hateoas-api/arkivdel")
-        print ad
-        self.success("found arkivdel")
     def testNewDocument(self):
         fondsdata = {
             "title"           : "Title of the test fonds",
@@ -211,8 +203,6 @@ class Noark5Tester (Endpoint):
                 self.failure("unable to log in, trying other things")
             self.discover()
             self.testNewDocument()
-            self.testArkiv()
-            self.testArkivDel()
         finally:
             print "%d successes, %d failures" % (self.success_count,
                                                  self.failure_count)
