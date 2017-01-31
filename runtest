@@ -74,6 +74,34 @@ class Noark5Tester (Endpoint):
         else:
             self.failure(msg)
 
+    def discover(self):
+        print "recorsively discovering URLs from the root"
+        self.urls = []
+        urlsleft = ['.']
+        urlseen = {}
+        while 0 < len(urlsleft):
+            url = urlsleft.pop(0)
+            if url in urlseen:
+                continue
+            urlseen[url] = 1
+            try:
+                (content, res) = self.json_get(url)
+                ctype = res.info().getheader('Content-Type')
+                self.verify(0 == ctype.find('application/vnd.noark5-v4+json'),
+                            "returned MIME type is application/vnd.noark5-v4+json")
+                if 0 == ctype.find('application/vnd.noark5-v4+json'):
+#                    print content
+                    baseref = json.loads(content)
+                    for l in baseref['_links']:
+                        if 'href' in l:
+                            if l['href'] not in urlseen:
+                                urlsleft.append(l['href'])
+                self.urls.append(url)
+            except urllib2.HTTPError, e:
+                self.failure("unable to fetch %s" % url)
+        for url in sorted(self.urls):
+            self.success("found %s" % url)
+        
     def testBase(self):
         (content, res) = self.json_get(".")
         self.success("found base")
@@ -182,6 +210,7 @@ class Noark5Tester (Endpoint):
             except urllib2.HTTPError, e:
                 self.gotlogin = False
                 self.failure("unable to log in, trying other things")
+            self.discover()
             self.testNewDocument()
             self.testArkiv()
             self.testArkivDel()
