@@ -34,6 +34,7 @@ class Endpoint:
         url = self.expandurl(path)
         print url
         headers = {
+            'Accept' : 'application/vnd.noark5-v4+json',
             'Content-Type': 'application/vnd.noark5-v4+json',
         }
         jsondata = json.dumps(data)
@@ -67,6 +68,11 @@ class Noark5Tester (Endpoint):
     def failure(self, msg):
         print "failure: " + msg
         self.failure_count += 1
+    def verify(self, check, msg):
+        if (check):
+            self.success(msg)
+        else:
+            self.failure(msg)
 
     def testBase(self):
         (content, res) = self.json_get(".")
@@ -93,6 +99,79 @@ class Noark5Tester (Endpoint):
         (ad, res) = self.json_get("hateoas-api/arkivdel")
         print ad
         self.success("found arkivdel")
+    def testNewDocument(self):
+        fondsdata = {
+            "title"           : "Title of the test fonds",
+            "description"     : "Description of the test fonds",
+            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+            "documentMedium"  : "Elektronisk arkiv",
+        }
+        createfondsurl = 'hateoas-api/arkivstruktur/ny-arkiv'
+        (c, res) = self.json_post(createfondsurl, fondsdata)
+        fondinfo = json.loads(c)
+        print fondinfo, res
+        fondid = fondinfo['systemID']
+        self.verify(fondid is not None, "created fond")
+
+        seriesdata = {
+            "title"           : "Title of the test series",
+            "description"     : "Description of the test series",
+            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+            "documentMedium"  : "Elektronisk arkiv",
+        }
+        createseriesurl = 'hateoas-api/arkivstruktur/arkiv/%s/ny-arkivdel' % fondid
+        (c, res) = self.json_post(createseriesurl, seriesdata)
+        serieinfo = json.loads(c)
+        serieid = serieinfo['systemID']
+        self.verify(serieid is not None, "created serie")
+
+        filedata = {
+            "fileId"          : "2006/01",
+            "officialTitle"   : "Public title of the test file",
+            "title"           : "Title of the test file",
+            "description"     : "Description of the test file",
+            "keyword"         : ["keyword 1", "keyword 2", "keyword 3"],
+            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+            "documentMedium"  : "Elektronisk arkiv",
+        }
+        createfileurl = 'hateoas-api/arkivstruktur/arkivdel/%s/ny-mappe' % serieid
+        (c, res) = self.json_post(createfileurl, filedata)
+        fileinfo = json.loads(c)
+        fileid = fileinfo['systemID']
+        self.verify(fileid is not None, "created file")
+
+        recorddata = {
+        }
+        createrecordurl = 'hateoas-api/arkivstruktur/mappe/%s/ny-registrering' % fileid
+        (c, res) = self.json_post(createrecordurl, recorddata)
+        recordinfo = json.loads(c)
+        recordid = recordinfo['systemID']
+        self.verify(recordid is not None, "created record")
+
+        docdescdata = {
+            "dokumenttype"    : "type dokument",
+            "dokumentstatus"  : "status of document",
+            "title"           : "Title of the test document desciprion",
+            "tilknyttetRegistreringSom" : "Associated with record as"
+        }
+
+        createdocdescurl = 'hateoas-api/arkivstruktur/registrering/%s/ny-dokumentbeskrivelse' % recordid
+        (c, res) = self.json_post(createdocdescurl, docdescdata)
+        docdescinfo = json.loads(c)
+        docdescid = docdescinfo['systemID']
+        self.verify(docdescid is not None, "created document description")
+
+        docobjdata = {
+            "versjonsnummer"  : 1,
+            "variantformat"   : "Arkivformat",
+            "format"          : "PDF",
+            "formatDetaljer"  : "PDF/A PDFv1.4",
+        }
+        createdocobjurl = 'hateoas-api/arkivstruktur/dokumentbeskrivelse/%s/ny-dokumentobjekt' % docdescid
+        (c, res) = self.json_post(createdocobjurl, docobjdata)
+        docobjinfo = json.loads(c)
+        docobjid = docobjinfo['systemID']
+        self.verify(docobjid is not None, "created document object")
     def runtests(self):
         try:
             baseref = self.testBase()
@@ -103,10 +182,9 @@ class Noark5Tester (Endpoint):
             except urllib2.HTTPError, e:
                 self.gotlogin = False
                 self.failure("unable to log in, trying other things")
-#            self.discover()
+            self.testNewDocument()
             self.testArkiv()
             self.testArkivDel()
-            self.testNewDocument()
         finally:
             print "%d successes, %d failures" % (self.success_count,
                                                  self.failure_count)
