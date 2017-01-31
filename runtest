@@ -32,7 +32,7 @@ class Endpoint:
 
     def json_post(self, path, data):
         url = self.expandurl(path)
-        print url
+#        print url
         headers = {
             'Accept' : 'application/vnd.noark5-v4+json',
             'Content-Type': 'application/vnd.noark5-v4+json',
@@ -45,7 +45,7 @@ class Endpoint:
 
     def json_get(self, path):
         url = self.expandurl(path)
-        print url
+#        print url
         headers = {
             'X_REQUESTED_WITH' :'XMLHttpRequest',
             'Accept' : 'application/json, application/vnd.noark5-v4+json, text/javascript, */*; q=0.01',
@@ -75,7 +75,7 @@ class Noark5Tester (Endpoint):
             self.failure(msg)
 
     def discover(self):
-        print "recorsively discovering URLs from the root"
+        print "recursively discovering URLs from the root"
         self.urls = []
         urlsleft = ['.']
         urlseen = {}
@@ -88,7 +88,7 @@ class Noark5Tester (Endpoint):
                 (content, res) = self.json_get(url)
                 ctype = res.info().getheader('Content-Type')
                 self.verify(0 == ctype.find('application/vnd.noark5-v4+json'),
-                            "returned MIME type is application/vnd.noark5-v4+json")
+                            "MIME type is application/vnd.noark5-v4+json for url %s" % url)
                 if 0 == ctype.find('application/vnd.noark5-v4+json'):
 #                    print content
                     baseref = json.loads(content)
