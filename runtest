@@ -137,7 +137,6 @@ class Noark5Tester (Endpoint):
         createfondsurl = 'hateoas-api/arkivstruktur/ny-arkiv'
         (c, res) = self.json_post(createfondsurl, fondsdata)
         fondinfo = json.loads(c)
-        print fondinfo, res
         fondid = fondinfo['systemID']
         self.verify(fondid is not None, "created fond")
 
