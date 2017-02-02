@@ -88,10 +88,12 @@ class Noark5Tester (Endpoint):
                 (content, res) = self.json_get(url)
                 ctype = res.info().getheader('Content-Type')
                 self.verify(0 == ctype.find('application/vnd.noark5-v4+json'),
-                            "MIME type is application/vnd.noark5-v4+json for url %s" % url)
+                            "MIME type %s should be application/vnd.noark5-v4+json for url %s" % (ctype, url))
                 if 0 == ctype.find('application/vnd.noark5-v4+json'):
 #                    print content
                     baseref = json.loads(content)
+                    if not '_links' in baseref:
+                        self.failure("%s missing _links: %s" % (url, baseref))
                     for l in baseref['_links']:
                         if 'href' in l:
                             if l['href'] not in urlseen:
@@ -170,7 +172,7 @@ class Noark5Tester (Endpoint):
         docdescdata = {
             "dokumenttype"    : "type dokument",
             "dokumentstatus"  : "status of document",
-            "title"           : "Title of the test document desciprion",
+            "title"           : "Title of the test document description",
             "tilknyttetRegistreringSom" : "Associated with record as"
         }
 
