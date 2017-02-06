@@ -34,6 +34,35 @@ import urllib2
 import n5core.endpoint
 
 class Noark5Tester (n5core.endpoint.Endpoint):
+    knownrels = [
+        'http://rel.kxml.no/noark5/v4/api/administrasjon/ny-arkivskaper/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivdel/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivskaper/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/basisregistrering/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentbeskrivelse/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentobjekt/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/klasse/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/klassifikasjonssystem/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentbeskrivelse/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentobjekt/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-klassifikasjonssystem/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-merknad/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/registrering/',
+        'http://rel.kxml.no/noark5/v4/api/metadata/arkivdelstatus/',
+        'http://rel.kxml.no/noark5/v4/api/metadata/dokumentmedium/',
+        'http://rel.kxml.no/noark5/v4/api/metadata/dokumentstatus/',
+        'http://rel.kxml.no/noark5/v4/api/metadata/dokumenttype/',
+        'http://rel.kxml.no/noark5/v4/api/metadata/tilknyttetregistreringsom/',
+        'http://rel.kxml.no/noark5/v4/api/sakarkiv/',
+        'self',
+    ]
     baseurl = "http://127.0.0.1:8092/noark5v4/"
 
     def __init__(self):
@@ -43,18 +72,25 @@ class Noark5Tester (n5core.endpoint.Endpoint):
     def success(self, msg):
         print "success: " + msg
         self.success_count += 1
+        return True
     def failure(self, msg):
         print "failure: " + msg
         self.failure_count += 1
+        return False
     def verify(self, check, msg):
         if (check):
-            self.success(msg)
+            return self.success(msg)
         else:
-            self.failure(msg)
+            return self.failure(msg)
 
     def discover(self):
-        print "recursively discovering URLs from the root"
+        print "recursively discovering standard URLs from the top"
+        relok = {}
+        for r in self.knownrels:
+            relok[r] = True
+            relok[r.rstrip('/')] = True # With and without trailing slash
         self.urls = []
+        self.rels = {}
         urlsleft = ['.']
         urlseen = {}
         while 0 < len(urlsleft):
@@ -65,22 +101,34 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             try:
                 (content, res) = self.json_get(url)
                 ctype = res.info().getheader('Content-Type')
-                self.verify(0 == ctype.find('application/vnd.noark5-v4+json'),
-                            "MIME type %s should be application/vnd.noark5-v4+json for url %s" % (ctype, url))
-                if 0 == ctype.find('application/vnd.noark5-v4+json'):
+                if self.verify(0 == ctype.find('application/vnd.noark5-v4+json'),
+                               "MIME type %s should be application/vnd.noark5-v4+json for url %s" % (ctype, url)):
 #                    print content
                     baseref = json.loads(content)
                     if not '_links' in baseref:
                         self.failure("%s missing _links: %s" % (url, baseref))
                     for l in baseref['_links']:
-                        if 'href' in l:
-                            if l['href'] not in urlseen:
-                                urlsleft.append(l['href'])
+                        # Ignore non-standard relations
+                        if 'href' in l and \
+                           -1 != l['rel'].find("//rel.kxml.no/noark5/"):
+                            href = l['href']
+                            if href not in urlseen:
+                                urlsleft.append(href)
+                            if 'rel' in l and l['rel'] != 'self':
+                                self.verify(l['rel'] in relok,
+                                            'rel %s should be well known' % l['rel'])
+                                rel = l['rel']
+                                if rel in self.rels and href != self.rels[rel]:
+                                    self.failure("unique duplicate rel %s in _links for %s" % (rel, url))
+                                else:
+                                    self.rels[rel] = href
                 self.urls.append(url)
             except urllib2.HTTPError, e:
                 self.failure("unable to fetch %s" % url)
         for url in sorted(self.urls):
             self.success("found %s" % url)
+        for rel in sorted(self.rels.keys()):
+            print("mapping %s to %s" % (rel, self.rels[rel]))
         
     def testBase(self):
         (content, res) = self.json_get(".")
