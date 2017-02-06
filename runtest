@@ -177,10 +177,10 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             try:
                 self.login()
                 self.gotlogin = True
-                self.success("able to log in")
+                self.success("able to log in using admin/password")
             except urllib2.HTTPError, e:
                 self.gotlogin = False
-                self.failure("unable to log in, trying other things")
+                self.failure("unable to log in, operating in read only mode")
             self.discover()
             self.testNewDocument()
         finally:
