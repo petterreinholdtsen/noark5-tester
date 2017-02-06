@@ -1,0 +1,186 @@
+#!/usr/bin/python
+
+import sys
+sys.path.append('lib')
+
+import json
+import n5core.endpoint
+import sqlite3
+
+#class Nokark5Client(n5core.endpoint.Endpoint):
+
+def createFond(ep, fondsdata):
+        """
+
+Example fondsdata:
+
+        fondsdata = {
+            "title"           : "Title of the test fonds",
+            "description"     : "Description of the test fonds",
+            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+            "documentMedium"  : "Elektronisk arkiv",
+        }
+
+"""
+        createfondsurl = 'hateoas-api/arkivstruktur/ny-arkiv'
+        (c, res) = ep.json_post(createfondsurl, fondsdata)
+        fondinfo = json.loads(c)
+        return fondinfo
+
+def createSeries(ep, fondid, seriesdata):
+        """
+
+Example seriesdata:
+
+        seriesdata = {
+            "title"           : "Title of the test series",
+            "description"     : "Description of the test series",
+            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+            "documentMedium"  : "Elektronisk arkiv",
+        }
+"""
+        createseriesurl = 'hateoas-api/arkivstruktur/arkiv/%s/ny-arkivdel' % fondid
+        (c, res) = ep.json_post(createseriesurl, seriesdata)
+        serieinfo = json.loads(c)
+        return serieinfo
+
+def createFile(ep, serieid, filedata):
+        """
+Example filedata:
+
+        filedata = {
+            "fileId"          : "2006/01",
+            "officialTitle"   : "Public title of the test file",
+            "title"           : "Title of the test file",
+            "description"     : "Description of the test file",
+            "keyword"         : ["keyword 1", "keyword 2", "keyword 3"],
+            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+            "documentMedium"  : "Elektronisk arkiv",
+        }
+"""
+        createfileurl = 'hateoas-api/arkivstruktur/arkivdel/%s/ny-mappe' % serieid
+        (c, res) = ep.json_post(createfileurl, filedata)
+        fileinfo = json.loads(c)
+        return fileinfo
+
+def createRecord(ep, fileid, recorddata):
+        """
+Example recorddata:
+
+        recorddata = {
+        }
+"""
+        createrecordurl = 'hateoas-api/arkivstruktur/mappe/%s/ny-registrering' % fileid
+        (c, res) = ep.json_post(createrecordurl, recorddata)
+        recordinfo = json.loads(c)
+        return recordinfo
+
+def createDocDesc(ep, recordid, docdescdata):
+        """
+
+Example docdescdata:
+
+        docdescdata = {
+            "dokumenttype"    : "type dokument",
+            "dokumentstatus"  : "status of document",
+            "title"           : "Title of the test document description",
+            "tilknyttetRegistreringSom" : "Associated with record as"
+        }
+"""
+        createdocdescurl = 'hateoas-api/arkivstruktur/registrering/%s/ny-dokumentbeskrivelse' % recordid
+        (c, res) = ep.json_post(createdocdescurl, docdescdata)
+        docdescinfo = json.loads(c)
+        return docdescinfo
+
+def createDocObject(ep, docdescid, docobjdata):
+        """
+Example docobjdata:
+        docobjdata = {
+            "versjonsnummer"  : 1,
+            "variantformat"   : "Arkivformat",
+            "format"          : "PDF",
+            "formatDetaljer"  : "PDF/A PDFv1.4",
+        }
+"""
+        createdocobjurl = 'hateoas-api/arkivstruktur/dokumentbeskrivelse/%s/ny-dokumentobjekt' % docdescid
+        (c, res) = ep.json_post(createdocobjurl, docobjdata)
+        docobjinfo = json.loads(c)
+        return docobjinfo
+
+def main():
+        baseurl = "http://localhost:8092/noark5v4/"
+        e = n5core.endpoint.Endpoint(baseurl)
+        e.login()
+
+        # Mapping from agency to fond and serie
+        fonds = {}
+        series = {}
+
+        conn = sqlite3.connect('postliste-oslo-havn.sqlite')
+        c = conn.cursor()
+        c.execute('select * from swdata order by docdate')
+        print c.description
+        print c.rowcount
+        i = 0
+        n = {}
+        for f in c.description:
+                n[f[0]] = i
+                i += 1
+        i = 0
+        for row in c:
+                i += 1
+                # accesscode, agency, casedesc, casedocseq, caseid,
+                # caseseqnr, caseyear, docdate, docdesc, doctype,
+                # exemption, journalid, journalseqnr, journalyear,
+                # recipient, recorddate, scrapedurl, scrapestamputc,
+                # sender
+
+                agency = row[n['agency']]
+                if agency not in fonds:
+                        print "First time agency %s" % agency
+                        fondsdata = {
+                                "title"           : agency,
+                                "documentMedium"  : "Elektronisk arkiv",
+                        }
+                        fondinfo = createFond(e, fondsdata)
+                        fondid = fondinfo['systemID']
+
+                        seriesdata = {
+                                "title"           : agency,
+                                "documentMedium"  : "Elektronisk arkiv",
+                        }
+                        serieinfo = createSeries(e, fondid, seriesdata)
+                        serieid = serieinfo['systemID']
+                        fonds[agency] = fondid
+                        series[agency] = serieid
+                else:
+                        fondid = fonds[agency]
+                        serieid = series[agency]
+                print "creating using %s and %s" % (fondid, serieid)
+                filedata = {
+                        "fileId"          : row[n['caseid']],
+                        "officialTitle"   : row[n['casedesc']],
+                        "title"           : "",
+                        "description"     : "",
+                        "keyword"         : ["keyword 1"],
+                        "oppbevaringsted" : [ "location 1" ],
+                        "documentMedium"  : "Elektronisk arkiv",
+                }
+                fileinfo = createFile(e, serieid, filedata)
+                fileid = fileinfo['systemID']
+
+                recorddata = {
+                }
+                recordinfo = createRecord(e, fileid, recorddata)
+                recordid = recordinfo['systemID']
+
+                docdescdata = {
+                        "dokumenttype"    : row[n['doctype']],
+                        "title"           : row[n['docdesc']],
+                        "tilknyttetRegistreringSom" : "Associated with record as"
+                }
+                docdescinfo = createDocDesc(e, recordid, docdescdata)
+                docdescid = docdescinfo['systemID']
+        print "Added %d entries" % i
+if __name__ == '__main__':
+    main()
