@@ -29,7 +29,7 @@ class Endpoint:
     def expandurl(self, path):
 #        print self.baseurl, path
         url = urlparse.urljoin(self.baseurl, path)
-        print url
+#        print url
         return url
 
     def login(self, username = 'admin', password = 'password'):
