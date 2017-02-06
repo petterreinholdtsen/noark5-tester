@@ -177,6 +177,13 @@ Test basis requirements for NOARK 5 Core.
         # FIXME Verify authentication, not sure how
         return None
 
+    def parselinks(self,links):
+        rels = {}
+        for l in links:
+            if 'href' in l and 'rel' in l:
+                rels[l['rel']] = l['href']
+        return rels
+
     def testNewDocument(self):
         fondsdata = {
             "title"           : "Title of the test fonds",
@@ -184,11 +191,19 @@ Test basis requirements for NOARK 5 Core.
             "oppbevaringsted" : [ "location 1", "location2", "location3" ],
             "documentMedium"  : "Elektronisk arkiv",
         }
-        createfondsurl = 'hateoas-api/arkivstruktur/ny-arkiv'
+        createfondsrel = \
+            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv'
+        if createfondsrel not in self.rels:
+            self.failure("unable to create a new fond, no ny-arkiv entry discovered")
+            return
+        createfondsurl = self.rels[createfondsrel]
         (c, res) = self.json_post(createfondsurl, fondsdata)
         fondinfo = json.loads(c)
         fondid = fondinfo['systemID']
         self.verify(fondid is not None, "created fond")
+        self.verify(201 == res.code, "fond creationg returned HTTP code 201")
+        linkrefs = self.parselinks(fondinfo['_links'])
+        self.verify('self' in linkrefs, "_links in response from fond creation should include 'self' reference")
 
         seriesdata = {
             "title"           : "Title of the test series",
@@ -196,11 +211,20 @@ Test basis requirements for NOARK 5 Core.
             "oppbevaringsted" : [ "location 1", "location2", "location3" ],
             "documentMedium"  : "Elektronisk arkiv",
         }
-        createseriesurl = 'hateoas-api/arkivstruktur/arkiv/%s/ny-arkivdel' % fondid
+        createseriesrel = \
+            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel'
+        if createseriesrel in linkrefs:
+            self.success("_links in response from fond creation include '%s' reference" % createseriesrel)
+            createseriesurl = linkrefs[createserierel]
+        else:
+            self.failure("_links in response from fond creation missing '%s' reference" % createseriesrel)
+            createseriesurl = 'hateoas-api/arkivstruktur/arkiv/%s/ny-arkivdel' % fondid
         (c, res) = self.json_post(createseriesurl, seriesdata)
         serieinfo = json.loads(c)
         serieid = serieinfo['systemID']
         self.verify(serieid is not None, "created serie")
+        linkrefs = self.parselinks(fondinfo['_links'])
+        self.verify('self' in linkrefs, "_links in response from serie creation should include 'self' reference")
 
         filedata = {
             "fileId"          : "2006/01",
@@ -211,19 +235,37 @@ Test basis requirements for NOARK 5 Core.
             "oppbevaringsted" : [ "location 1", "location2", "location3" ],
             "documentMedium"  : "Elektronisk arkiv",
         }
-        createfileurl = 'hateoas-api/arkivstruktur/arkivdel/%s/ny-mappe' % serieid
+        createfilerel = \
+            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/'
+        if createfilerel in linkrefs:
+            self.success("_links in response from serie creation include '%s' reference" % createfilerel)
+            createfileurl = linkrefs[createfilerel]
+        else:
+            self.failure("_links in response from serie creation missing '%s' reference" % createfilerel)
+            createfileurl = 'hateoas-api/arkivstruktur/arkivdel/%s/ny-mappe' % serieid
         (c, res) = self.json_post(createfileurl, filedata)
         fileinfo = json.loads(c)
         fileid = fileinfo['systemID']
         self.verify(fileid is not None, "created file")
+        linkrefs = self.parselinks(fondinfo['_links'])
+        self.verify('self' in linkrefs, "_links in response from file creation should include 'self' reference")
 
         recorddata = {
         }
-        createrecordurl = 'hateoas-api/arkivstruktur/mappe/%s/ny-registrering' % fileid
+        createrecordrel = \
+            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering/'
+        if createrecordrel in linkrefs:
+            self.success("_links in response from file creation include '%s' reference" % createrecordrel)
+            createrecordurl = linkrefs[createrecordrel]
+        else:
+            self.failure("_links in response from file creation missing '%s' reference" % createfilerel)
+            createrecordurl = 'hateoas-api/arkivstruktur/mappe/%s/ny-registrering' % fileid
         (c, res) = self.json_post(createrecordurl, recorddata)
         recordinfo = json.loads(c)
         recordid = recordinfo['systemID']
         self.verify(recordid is not None, "created record")
+        linkrefs = self.parselinks(fondinfo['_links'])
+        self.verify('self' in linkrefs, "_links in response from record creation should include 'self' reference")
 
         docdescdata = {
             "dokumenttype"    : "type dokument",
@@ -231,12 +273,20 @@ Test basis requirements for NOARK 5 Core.
             "title"           : "Title of the test document description",
             "tilknyttetRegistreringSom" : "Associated with record as"
         }
-
-        createdocdescurl = 'hateoas-api/arkivstruktur/registrering/%s/ny-dokumentbeskrivelse' % recordid
+        createdocdescrel = \
+            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentbeskrivelse/'
+        if createdocdescrel in linkrefs:
+            self.success("_links in response from record creation include '%s' reference" % createdocdescrel)
+            createdocdescurl = linkrefs[createdocdescrel]
+        else:
+            self.failure("_links in response from record creation missing '%s' reference" % createrecordrel)
+            createdocdescurl = 'hateoas-api/arkivstruktur/registrering/%s/ny-dokumentbeskrivelse' % recordid
         (c, res) = self.json_post(createdocdescurl, docdescdata)
         docdescinfo = json.loads(c)
         docdescid = docdescinfo['systemID']
         self.verify(docdescid is not None, "created document description")
+        linkrefs = self.parselinks(fondinfo['_links'])
+        self.verify('self' in linkrefs, "_links in response from docdesc creation should include 'self' reference")
 
         docobjdata = {
             "versjonsnummer"  : 1,
@@ -244,11 +294,20 @@ Test basis requirements for NOARK 5 Core.
             "format"          : "PDF",
             "formatDetaljer"  : "PDF/A PDFv1.4",
         }
-        createdocobjurl = 'hateoas-api/arkivstruktur/dokumentbeskrivelse/%s/ny-dokumentobjekt' % docdescid
+        createdocobjrel = \
+            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentobjekt/'
+        if createdocobjrel in linkrefs:
+            self.success("_links in response from docdesc creation include '%s' reference" % createdocobjrel)
+            createdocobjurl = linkrefs[createdocobjrel]
+        else:
+            self.failure("_links in response from docdesc creation missing '%s' reference" % createdocobjrel)
+            createdocobjurl = 'hateoas-api/arkivstruktur/dokumentbeskrivelse/%s/ny-dokumentobjekt' % docdescid
         (c, res) = self.json_post(createdocobjurl, docobjdata)
         docobjinfo = json.loads(c)
         docobjid = docobjinfo['systemID']
         self.verify(docobjid is not None, "created document object")
+        linkrefs = self.parselinks(fondinfo['_links'])
+        self.verify('self' in linkrefs, "_links in response from docobj creation should include 'self' reference")
 
     def runtests(self):
         try:
