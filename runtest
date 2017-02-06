@@ -20,7 +20,7 @@
 """
 
 Connect to the REST API of a Noark 5 service and check that it behaves
-as it should.
+as it should.  See also http://rel.kxml.no/noark5/konformitetsniva/
 
 """
 
