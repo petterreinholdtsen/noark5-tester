@@ -1,0 +1,87 @@
+Kommentarer og notater om spesifikasjonen for NOARK 5 tjenestegrensesnitt
+=========================================================================
+
+https://samdok.com/2016/09/20/noark5-tjenestegrensesnitt-v-1-0-beta-er-na-tilgjengelig/
+
+
+-------------------------------------------------------------------------
+
+The specification refer to
+<URL: http://rel.kxml.no/noark5/konformitetsniva/ > defining what
+features must be present for an implementation to be conforming.  But
+that list is a bit short.  Is there some more details available
+anywhere?
+
+I suspect Nikita already fill the basic level 0 requirements except the
+XML one, but it is unclear to me exactly what each requirement mean.
+
+The list is simply
+
+ * CORS Cross-origin resource sharing
+ * authentication is required
+ * json format is supported
+ * xml format is supported
+
+For example, for CORS, is it enough to be able to do a OPTIONS request,
+or should the requests and answers have particular content?  Anyone
+know?  The test server on "http://n5test.kxml.no/api/" do not support
+OPTIONS at all, so no help there. :(
+
+-------------------------------------------------------------------------
+
+Punkt 6.1.1.9 skisserer hvordan lagre PDF og JPEG i arkivet.  Men hvor
+finnes listen over hvilke formater som er akseptert inn i arkivet og
+hvilke MIME-typer som bør brukes for disse?  Hva med RFC 822-type
+epost?  SMS?  Lydfiler?
+
+Epost-ideer finnes i
+<URL: http://people.skolelinux.org/pere/blog/Hvordan_b_r_RFC_822_formattert_epost_lagres_i_en_NOARK5_database_.html >.
+-------------------------------------------------------------------------
+
+I punkt 4.1 (Autentisering) står det at 'Single Sign On bør støttes'.
+Hva betyr dette?  Er det Kerberos-autentisering ala det Microsoft
+Active Directory tilbyr, eller noe annet?
+
+Det står også at "NOARK5 kjerne må ha metoder for å autentisere
+brukere og gi de riktige tilganger til kjernen".  Hva slags
+granularitet kreves?  Bør det kreves at en må kunne gi tilganger ved
+hjelp av rettighetsgrupper, for å slippe manuelt vedlikehold av
+brukerrettigheter?
+
+-------------------------------------------------------------------------
+
+Et eksempel er at jeg har sett at spesifikasjonen oppgir
+relasjonsnøkler både med ut uten avsluttende skråstrek.  Tabellene har
+med skråstrek, mens det i teksten finnes noen få eksempler der de er
+oppgitt uten skråstrek (se side 12-13 og 25-26).  Skal det være
+<URL: http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil/ > eller
+<URL: http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil > eller er
+det meningen at begge skal brukes om hverandre?  Det er nok lurt om
+spesifikasjonen kun bruker en av disse, for å gjøre det enklere å
+implementere klienter til API-et.
+
+-------------------------------------------------------------------------
+
+Hva sier spesifikasjonen om hva som skal returneres i _links når det
+ikke finnes noe i databasen?  F.eks. for
+relasjon <URL: http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv >
+når det ikke er opprettet noen arkiv?  Bør _links peke til en tom
+liste, inneholde 'self'-lenker, eller ikke eksistere?
+
+-------------------------------------------------------------------------
+
+Is there ever going to be a need for future "generic" timestamps in a
+NOARK5 archive?  Section 6.1.1.8 in the specification state that dates
+should be according to http://www.w3.org/TR/NOTE-datetime, and this note
+specifies that all time stamps including the hour of day should also
+include a numeric time zone.
+
+But to specify 12 noon two months from now, it is in general unknown
+here in Norway if the timezone for this day is timezone +01 or +02,
+because of daylight savings.  If daylight savings are introduced or
+dropped in the two month period, the timezone changes.
+
+Is this going to be a problem with the NOARK 5 API?  Are we ever going
+to need to specify relative and/or repeating times?
+
+-------------------------------------------------------------------------
