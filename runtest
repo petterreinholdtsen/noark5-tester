@@ -124,7 +124,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                     self.rels[rel] = href
                 self.urls.append(url)
             except urllib2.HTTPError, e:
-                self.failure("unable to fetch %s" % url)
+                self.failure("unable to GET %s" % url)
         for url in sorted(self.urls):
             self.success("found %s" % url)
         for rel in sorted(self.rels.keys()):
@@ -153,7 +153,7 @@ Test basis requirements for NOARK 5 Core.
                 self.success('level 0 XML - correct Content-Type for base')
             # FIXME should verify XML content too
         except urllib2.HTTPError, e:
-            self.failure("level 0 XML - unable to fetch content.")
+            self.failure("level 0 XML - unable to GET content for base.")
 
         # Verify ability to produce JSON output
         try:
@@ -172,7 +172,7 @@ Test basis requirements for NOARK 5 Core.
                 else:
                     self.failure('level 0 JSON - did not find _links in json response')
         except urllib2.HTTPError, e:
-            self.failure('level 0 JSON - unable to fetch JSON content.')
+            self.failure('level 0 JSON - unable to GET JSON content for base.')
 
         # FIXME Verify authentication, not sure how
         return None
