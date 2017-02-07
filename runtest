@@ -63,9 +63,11 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'http://rel.kxml.no/noark5/v4/api/sakarkiv/',
         'self',
     ]
-    baseurl = "http://127.0.0.1:8092/noark5v4/"
-
     def __init__(self):
+        if 1 < len(sys.argv) and '--reference' == sys.argv[1]:
+            self.baseurl = "http://n5test.kxml.no/api/"
+        else:
+            self.baseurl = "http://localhost:8092/noark5v4/"
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
         self.success_count = 0
         self.failure_count = 0

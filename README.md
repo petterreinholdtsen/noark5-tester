@@ -8,6 +8,9 @@ A demonstration API is available from http://n5test.kxml.no/api/ .
 This is not quite working according to the specification available
 from
 https://samdok.com/leveranser/leveranser-2016/noark5-tjenestegrensesnitt-v-1-0-beta/ .
+To connect the script to this demonstration API, run it like this::
+
+  ./runtest --reference
 
 This test suite was written to test the code in 
 https://github.com/HiOA-ABI/nikita-noark5-core .
