@@ -224,7 +224,7 @@ Test basis requirements for NOARK 5 Core.
         serieinfo = json.loads(c)
         serieid = serieinfo['systemID']
         self.verify(serieid is not None, "created serie")
-        linkrefs = self.parselinks(fondinfo['_links'])
+        linkrefs = self.parselinks(serieinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from serie creation should include 'self' reference")
 
         filedata = {
@@ -248,7 +248,7 @@ Test basis requirements for NOARK 5 Core.
         fileinfo = json.loads(c)
         fileid = fileinfo['systemID']
         self.verify(fileid is not None, "created file")
-        linkrefs = self.parselinks(fondinfo['_links'])
+        linkrefs = self.parselinks(fileinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from file creation should include 'self' reference")
 
         recorddata = {
@@ -265,7 +265,7 @@ Test basis requirements for NOARK 5 Core.
         recordinfo = json.loads(c)
         recordid = recordinfo['systemID']
         self.verify(recordid is not None, "created record")
-        linkrefs = self.parselinks(fondinfo['_links'])
+        linkrefs = self.parselinks(recordinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from record creation should include 'self' reference")
 
         docdescdata = {
@@ -286,7 +286,7 @@ Test basis requirements for NOARK 5 Core.
         docdescinfo = json.loads(c)
         docdescid = docdescinfo['systemID']
         self.verify(docdescid is not None, "created document description")
-        linkrefs = self.parselinks(fondinfo['_links'])
+        linkrefs = self.parselinks(docdescinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from docdesc creation should include 'self' reference")
 
         docobjdata = {
@@ -307,7 +307,7 @@ Test basis requirements for NOARK 5 Core.
         docobjinfo = json.loads(c)
         docobjid = docobjinfo['systemID']
         self.verify(docobjid is not None, "created document object")
-        linkrefs = self.parselinks(fondinfo['_links'])
+        linkrefs = self.parselinks(docobjinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from docobj creation should include 'self' reference")
 
     def runtests(self):
