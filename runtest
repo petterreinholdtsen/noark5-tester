@@ -212,7 +212,7 @@ Test basis requirements for NOARK 5 Core.
             "oppbevaringsted" : [ "location 1", "location2", "location3" ],
             "documentMedium"  : "Elektronisk arkiv",
         }
-        createseriesrel = \
+        createserierel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
         if createseriesrel in linkrefs:
             self.success("_links in response from fond creation include '%s' reference" % createseriesrel)
@@ -259,7 +259,7 @@ Test basis requirements for NOARK 5 Core.
             self.success("_links in response from file creation include '%s' reference" % createrecordrel)
             createrecordurl = linkrefs[createrecordrel]
         else:
-            self.failure("_links in response from file creation missing '%s' reference" % createfilerel)
+            self.failure("_links in response from file creation missing '%s' reference" % createrecordrel)
             createrecordurl = 'hateoas-api/arkivstruktur/mappe/%s/ny-registrering' % fileid
         (c, res) = self.json_post(createrecordurl, recorddata)
         recordinfo = json.loads(c)
@@ -280,7 +280,7 @@ Test basis requirements for NOARK 5 Core.
             self.success("_links in response from record creation include '%s' reference" % createdocdescrel)
             createdocdescurl = linkrefs[createdocdescrel]
         else:
-            self.failure("_links in response from record creation missing '%s' reference" % createrecordrel)
+            self.failure("_links in response from record creation missing '%s' reference" % createdocdescrel)
             createdocdescurl = 'hateoas-api/arkivstruktur/registrering/%s/ny-dokumentbeskrivelse' % recordid
         (c, res) = self.json_post(createdocdescurl, docdescdata)
         docdescinfo = json.loads(c)
