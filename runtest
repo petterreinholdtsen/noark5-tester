@@ -212,11 +212,11 @@ Test basis requirements for NOARK 5 Core.
             "oppbevaringsted" : [ "location 1", "location2", "location3" ],
             "documentMedium"  : "Elektronisk arkiv",
         }
-        createserierel = \
+        createseriesrel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
         if createseriesrel in linkrefs:
             self.success("_links in response from fond creation include '%s' reference" % createseriesrel)
-            createseriesurl = linkrefs[createserierel]
+            createseriesurl = linkrefs[createseriesrel]
         else:
             self.failure("_links in response from fond creation missing '%s' reference" % createseriesrel)
             createseriesurl = 'hateoas-api/arkivstruktur/arkiv/%s/ny-arkivdel' % fondid
