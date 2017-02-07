@@ -88,7 +88,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         relok = {}
         for r in self.knownrels:
             relok[r] = True
-            relok[r.rstrip('/')] = True # With and without trailing slash
         self.urls = []
         self.rels = {}
         urlsleft = ['.']
@@ -192,7 +191,7 @@ Test basis requirements for NOARK 5 Core.
             "documentMedium"  : "Elektronisk arkiv",
         }
         createfondsrel = \
-            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv'
+            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
         if createfondsrel not in self.rels:
             self.failure("unable to create a new fond, no ny-arkiv entry discovered")
             return
@@ -212,7 +211,7 @@ Test basis requirements for NOARK 5 Core.
             "documentMedium"  : "Elektronisk arkiv",
         }
         createseriesrel = \
-            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel'
+            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
         if createseriesrel in linkrefs:
             self.success("_links in response from fond creation include '%s' reference" % createseriesrel)
             createseriesurl = linkrefs[createserierel]
