@@ -145,7 +145,8 @@ Test basis requirements for NOARK 5 Core.
             self.success("level 0 CORS - HTTP OPTTIONS request worked")
         except urllib2.HTTPError, e:
             self.failure("level 0 CORS - HTTP OPTTIONS request not working")
-        
+        except urllib2.URLError:
+            self.failure("level 0 CORS - unable to connect via HTTP")
         # Verify ability to produce XML output
         try:
             (content, res) = self.xml_get(".")
