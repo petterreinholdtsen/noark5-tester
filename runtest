@@ -63,6 +63,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'http://rel.kxml.no/noark5/v4/api/sakarkiv/',
         'self',
     ]
+    verbose = False
     def __init__(self):
         if 1 < len(sys.argv) and '--reference' == sys.argv[1]:
             self.baseurl = "http://n5test.kxml.no/api/"
@@ -86,7 +87,8 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             return self.failure(msg)
 
     def discover(self):
-        print "recursively discovering standard URLs from the top"
+        if self.verbose:
+            print "recursively discovering standard URLs from the top"
         relok = {}
         for r in self.knownrels:
             relok[r] = True
