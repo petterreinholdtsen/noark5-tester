@@ -55,6 +55,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/',
         'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-merknad/',
         'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering/',
+        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/referanseFil/',
         'http://rel.kxml.no/noark5/v4/api/arkivstruktur/registrering/',
         'http://rel.kxml.no/noark5/v4/api/metadata/arkivdelstatus/',
         'http://rel.kxml.no/noark5/v4/api/metadata/dokumentmedium/',
@@ -292,7 +293,9 @@ Test basis requirements for NOARK 5 Core.
         self.verify(docdescid is not None, "created document description")
         linkrefs = self.parselinks(docdescinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from docdesc creation should include 'self' reference")
-
+        reffilerel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/referanseFil/'
+        self.verify(reffilerel in linkrefs, "_links in response from docdesc creation should include '%s' reference" % reffilerel)
+        
         docobjdata = {
             "versjonsnummer"  : 1,
             "variantformat"   : "Arkivformat",
