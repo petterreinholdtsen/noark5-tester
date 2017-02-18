@@ -6,6 +6,12 @@ https://samdok.com/2016/09/20/noark5-tjenestegrensesnitt-v-1-0-beta-er-na-tilgje
 
 -------------------------------------------------------------------------
 
+What is the copyright status of the specification document?  Is it
+covered by copyright at all?  If so, can its license status be
+documented in the text?  Perhaps something like CC-BY can be used?
+
+-------------------------------------------------------------------------
+
 The specification refer to
 <URL: http://rel.kxml.no/noark5/konformitetsniva/ > defining what
 features must be present for an implementation to be conforming.  But
@@ -89,5 +95,11 @@ dropped in the two month period, the timezone changes.
 
 Is this going to be a problem with the NOARK 5 API?  Are we ever going
 to need to specify relative and/or repeating times?
+
+-------------------------------------------------------------------------
+
+I følge 'Multipl.'-feltet for flere (alle?) klasser, så er systemID et
+[0...1]-felt, mens merknaden til feltet sier systemID alltid skal
+eksistere.  Når kan feltet mangle, hvilket er slik jeg forstår [0...1]?
 
 -------------------------------------------------------------------------
