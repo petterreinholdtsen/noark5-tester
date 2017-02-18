@@ -28,6 +28,7 @@ as it should.  See also http://rel.kxml.no/noark5/konformitetsniva/
 import sys
 sys.path.append('lib')
 
+import argparse
 import json
 import mechanize
 import urlparse
@@ -67,7 +68,11 @@ class Noark5Tester (n5core.endpoint.Endpoint):
     ]
     verbose = False
     def __init__(self):
-        if 1 < len(sys.argv) and '--reference' == sys.argv[1]:
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--reference", help="connect to demo API site",
+                            action="store_true")
+        args = parser.parse_args()
+        if args.reference:
             self.baseurl = "http://n5test.kxml.no/api/"
         else:
             self.baseurl = "http://localhost:8092/noark5v4/"
