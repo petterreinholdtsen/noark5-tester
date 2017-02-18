@@ -325,6 +325,7 @@ Test basis requirements for NOARK 5 Core.
     def runtests(self):
         try:
             baseref = self.testBasis()
+            self.discover()
             try:
                 self.login()
                 self.gotlogin = True
