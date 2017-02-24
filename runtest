@@ -148,7 +148,8 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         for url in sorted(self.urls):
             self.success("found %s" % url)
         for rel in sorted(self.rels.keys()):
-            print("mapping %s to %s" % (rel, self.rels[rel]))
+            if self.verbose:
+                print("mapping %s to %s" % (rel, self.rels[rel]))
         
     def testBasis(self):
         """
