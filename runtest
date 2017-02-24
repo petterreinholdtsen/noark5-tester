@@ -238,13 +238,17 @@ Test basis requirements for NOARK 5 Core.
         self.verify('self' in linkrefs, "_links in response from serie creation should include 'self' reference")
 
         filedata = {
-            "fileId"          : "2006/01",
-            "officialTitle"   : "Public title of the test file",
-            "title"           : "Title of the test file",
-            "description"     : "Description of the test file",
-            "keyword"         : ["keyword 1", "keyword 2", "keyword 3"],
-            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
-            "documentMedium"  : "Elektronisk arkiv",
+            "fileId" : "2006/01",
+            "officialTitle"      : "Public title of the test file",
+            "title"              : "Title of the test file",
+            "description"        : "Description of the test file",
+            "keyword"            : ["keyword 1", "keyword 2", "keyword 3"],
+            "oppbevaringsted"    : [ "location 1", "location2", "location3" ],
+            "documentMedium"     : "Elektronisk arkiv",
+            "saksdato"           : "2016-10-04",
+            "administrativEnhet" : "The administrative unit",
+            "saksansvarlig"      : "Joe the case handler",
+            "saksstatus"         : "Opprettet",
         }
         createfilerel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/'
