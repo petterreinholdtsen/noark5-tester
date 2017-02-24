@@ -256,17 +256,13 @@ Test basis requirements for NOARK 5 Core.
         self.verify('self' in linkrefs, "_links in response from serie creation should include 'self' reference")
 
         filedata = {
-            "fileId" : "2006/01",
+            "fileId"             : "2006/01",
             "officialTitle"      : "Public title of the test file",
             "title"              : "Title of the test file",
             "description"        : "Description of the test file",
             "keyword"            : ["keyword 1", "keyword 2", "keyword 3"],
             "oppbevaringsted"    : [ "location 1", "location2", "location3" ],
             "documentMedium"     : "Elektronisk arkiv",
-            "saksdato"           : "2016-10-04",
-            "administrativEnhet" : "The administrative unit",
-            "saksansvarlig"      : "Joe the case handler",
-            "saksstatus"         : "Opprettet",
         }
         createfilerel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/'
@@ -282,6 +278,37 @@ Test basis requirements for NOARK 5 Core.
         self.verify(fileid is not None, "created file")
         self.verifyuniquerels(fileinfo['_links'], createfileurl)
         linkrefs = self.parselinks(fileinfo['_links'])
+        self.verify('self' in linkrefs, "_links in response from file creation should include 'self' reference")
+
+        casefiledata = {
+            "fileId" : "2006/01",
+            "officialTitle"      : "Public title of the test file",
+            "title"              : "Title of the test file",
+            "description"        : "Description of the test file",
+            "keyword"            : ["keyword 1", "keyword 2", "keyword 3"],
+            "oppbevaringsted"    : [ "location 1", "location2", "location3" ],
+            "documentMedium"     : "Elektronisk arkiv",
+            "saksdato"           : "2016-10-04",
+            "administrativEnhet" : "The administrative unit",
+            "saksansvarlig"      : "Joe the case handler",
+            "saksstatus"         : "Opprettet",
+        }
+        createcasefilerel = \
+            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-saksmappe/'
+        if createcasefilerel in linkrefs:
+            self.success("_links in response from serie creation include '%s' reference" % createcasefilerel)
+            createcasefileurl = linkrefs[createcasefilerel]
+        else:
+            self.failure("_links in response from serie creation missing '%s' reference" % createcasefilerel)
+            createcasefileurl = 'hateoas-api/arkivstruktur/arkivdel/%s/ny-saksmappe' % serieid
+        print createcasefileurl
+        print casefiledata
+        (c, res) = self.json_post(createcasefileurl, casefiledata)
+        casefileinfo = json.loads(c)
+        casefileid = fileinfo['systemID']
+        self.verify(casefileid is not None, "created file")
+        self.verifyuniquerels(casefileinfo['_links'], createfileurl)
+        linkrefs = self.parselinks(casefileinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from file creation should include 'self' reference")
 
         recorddata = {
