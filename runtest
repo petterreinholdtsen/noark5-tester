@@ -93,6 +93,15 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         else:
             return self.failure(msg)
 
+    def verifyuniquerels(self, links, url):
+        currels = {}
+        for l in links:
+            rel = l['rel']
+            if rel in currels:
+                self.failure("duplicate rel %s in _links for %s" % (rel, url))
+            else:
+                currels[l['rel']] = url
+
     def discover(self):
         if self.verbose:
             print "recursively discovering standard URLs from the top"
@@ -117,6 +126,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                     baseref = json.loads(content)
                     if not '_links' in baseref:
                         self.failure("%s missing _links: %s" % (url, baseref))
+                    self.verifyuniquerels(baseref['_links'], url)
                     for l in baseref['_links']:
                         # Ignore non-standard relations
                         if 'href' in l and \
@@ -204,15 +214,21 @@ Test basis requirements for NOARK 5 Core.
         }
         createfondsrel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
-        if createfondsrel not in self.rels:
-            self.failure("unable to create a new fond, no ny-arkiv entry discovered")
-            return
+        if self.gotlogin:
+            if createfondsrel not in self.rels:
+                self.failure("unable to create a new fond, no ny-arkiv entry discovered")
+                return
+        else:
+            if createfondsrel in self.rels:
+                self.failure("discovered ny-arkiv entry even when not logged in!")
+                return
         createfondsurl = self.rels[createfondsrel]
         (c, res) = self.json_post(createfondsurl, fondsdata)
         fondinfo = json.loads(c)
         fondid = fondinfo['systemID']
         self.verify(fondid is not None, "created fond")
         self.verify(201 == res.code, "fond creationg returned HTTP code 201")
+        self.verifyuniquerels(fondinfo['_links'], createfondsurl)
         linkrefs = self.parselinks(fondinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from fond creation should include 'self' reference")
 
@@ -234,6 +250,7 @@ Test basis requirements for NOARK 5 Core.
         serieinfo = json.loads(c)
         serieid = serieinfo['systemID']
         self.verify(serieid is not None, "created serie")
+        self.verifyuniquerels(serieinfo['_links'], createseriesurl)
         linkrefs = self.parselinks(serieinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from serie creation should include 'self' reference")
 
@@ -262,6 +279,7 @@ Test basis requirements for NOARK 5 Core.
         fileinfo = json.loads(c)
         fileid = fileinfo['systemID']
         self.verify(fileid is not None, "created file")
+        self.verifyuniquerels(fileinfo['_links'], createfileurl)
         linkrefs = self.parselinks(fileinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from file creation should include 'self' reference")
 
@@ -279,6 +297,7 @@ Test basis requirements for NOARK 5 Core.
         recordinfo = json.loads(c)
         recordid = recordinfo['systemID']
         self.verify(recordid is not None, "created record")
+        self.verifyuniquerels(recordinfo['_links'], createrecordurl)
         linkrefs = self.parselinks(recordinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from record creation should include 'self' reference")
 
@@ -300,6 +319,7 @@ Test basis requirements for NOARK 5 Core.
         docdescinfo = json.loads(c)
         docdescid = docdescinfo['systemID']
         self.verify(docdescid is not None, "created document description")
+        self.verifyuniquerels(docdescinfo['_links'], createdocdescurl)
         linkrefs = self.parselinks(docdescinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from docdesc creation should include 'self' reference")
         reffilerel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/referanseFil/'
@@ -323,6 +343,7 @@ Test basis requirements for NOARK 5 Core.
         docobjinfo = json.loads(c)
         docobjid = docobjinfo['systemID']
         self.verify(docobjid is not None, "created document object")
+        self.verifyuniquerels(docobjinfo['_links'], createdocobjurl)
         linkrefs = self.parselinks(docobjinfo['_links'])
         self.verify('self' in linkrefs, "_links in response from docobj creation should include 'self' reference")
 
