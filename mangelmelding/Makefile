@@ -14,7 +14,7 @@ mangler-liste.xml: *.md Makefile
 validate-docbook: mangler.xml mangler-liste.xml Makefile
 	xmllint --xinclude --postvalid mangler.xml
 mangler.pdf: validate-docbook mangler.xml mangler-liste.xml Makefile
-	dblatex mangler.xml
+	xmlto --with-fop pdf mangler.xml
 
 clean:
 	$(RM) mangler-liste.xml *~
