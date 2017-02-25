@@ -8,4 +8,15 @@
   <subtitle>mangler i spesifikasjonen</subtitle>
 </bookinfo>
 <xi:include href="mangler-liste.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+<chapter>
+  <title>Om denne listen</title>
+  <para>
+    Denne listen over mangler vedlikeholdes i markdown-format i
+    git-arkivet tilgjengelig fra
+    <ulink url="https://github.com/petterreinholdtsen/noark5-tester"/>
+    og har en struktur inspirert av Austin Group for mangelmeldinger
+    for POSIX-standarden, tilgjengelig fra
+    <ulink url="http://www.opengroup.org/austin/mantis.html"/>.
+  </para>
+</chapter>
 </book>
