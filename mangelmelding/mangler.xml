@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<?xml-stylesheet href="docbook-css-0.4/driver.css" type="text/css"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+ "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+<book id="index" lang="nb">
+<bookinfo>
+  <title>Mangler i NOARK 5</title>
+  <subtitle>mangler i spesifikasjonen</subtitle>
+</bookinfo>
+<xi:include href="mangler-liste.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+</book>
