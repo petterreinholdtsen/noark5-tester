@@ -29,11 +29,11 @@ andre plasser der http://rel.kxml.no/ er omtalt.  Se f.eks. 6.1.1.3
 (Opprette objekter (create)) side 16, 6.1.1.4 (Preutfylling av objekt)
 side 18, 7.2.1.1 (Arkiv) side 57, 7.2.1.2 (Arkivdel) side 66 og videre
 ut over i dokumentet.  Men det er noen få eksempler der de er oppgitt
-uten skråstrek (side 12-13 og 25-26).  I tillegg oppgir
-demonstrasjons-API-et tilgjengelig fra
+uten avsluttende skråstrek, nemlig side 12-13 og 25-26.  I tillegg
+oppgir demonstrasjons-API-et tilgjengelig fra
 [n5test.kxml.no](http://n5test.kxml.no/api/) konsekvent alle rel-URLer
-uten skråstrek.  I sum blir det dermed uklart om disse URL-ene skal
-oppgis med eller uten skåstrek.
+uten avsluttende skråstrek.  I sum blir det dermed uklart om disse
+URL-ene skal oppgis med eller uten avsluttende skåstrek.
 
 Skal det være http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil/
 eller http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil eller er det
