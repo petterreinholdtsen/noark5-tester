@@ -4,8 +4,8 @@ Hvordan gjøres SystemdID unik og persistent på tvers av andre systemer?
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
-        Alvorlighet  kommentar
-       Meldingstype  ?
+        Alvorlighet  protest
+       Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
         Dokumentdel  6.3
          Sidenummer  28
