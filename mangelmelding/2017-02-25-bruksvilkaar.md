@@ -18,7 +18,7 @@ Beskrivelse
 
 Det er uklart om dokumentet er vernet etter åndsverkslovens
 bestemmelser eller om det er omfavnet av et av unntakene i
-åndsverksloven (f.eks. § 9).  Hvis spesifikasjonen er vernet etter
+åndsverkslovens § 9.  Hvis spesifikasjonen er vernet etter
 åndsverksloven så bør en velge og dokumentere bruksvilkår slik at alle
 som ønsker å bruke standarden vet hva som gjelder.  En bør velge godt
 kjente bruksvilkår egnet for dokumentasjon, f.eks. en av Creative
