@@ -1,5 +1,5 @@
-Klargjør opphavsrettslig status og eventuelle bruksvilkår
-=========================================================
+Legg inn opphavsrettslig status og bruksvilkår i spesifikasjonsteksten
+======================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -12,12 +12,6 @@ Klargjør opphavsrettslig status og eventuelle bruksvilkår
         Linjenummer  1
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
-
-Oppsummering
-------------
-
-Det bør legges inn hvilke åndsverksmessige vilkår som gjelder for
-spesifikasjonen.
 
 Beskrivelse
 -----------

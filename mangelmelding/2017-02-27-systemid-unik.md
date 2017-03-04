@@ -13,11 +13,6 @@ Hvordan gjøres SystemdID unik og persistent på tvers av andre systemer?
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
-Oppsummering
-------------
-
-Hvordan gjøres SystemdID unik og persistent på tvers av andre systemer?
-
 Beskrivelse
 -----------
 

@@ -1,5 +1,5 @@
-Skal rel-URL ha avsluttende skråstrek eller ikke
-================================================
+Klargjør om rel-URLer skal ha avsluttende skråstrek eller ikke
+==============================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -12,11 +12,6 @@ Skal rel-URL ha avsluttende skråstrek eller ikke
         Linjenummer  14
     Innsendingsdato  2017-02-06
  ------------------  ---------------------------------
-
-Oppsummering
-------------
-
-Klargjør om rel-URLer skal ha avsluttende skråstrek eller ikke.
 
 Beskrivelse
 -----------

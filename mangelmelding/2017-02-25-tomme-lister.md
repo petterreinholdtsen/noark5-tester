@@ -1,5 +1,5 @@
-Hva skal returneres når lister er tomme?
-========================================
+Klargjør hva som skal returneres når database eller lister er tomme
+===================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -12,12 +12,6 @@ Hva skal returneres når lister er tomme?
         Linjenummer  ?
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
-
-Oppsummering
-------------
-
-Klargjør hva som skal returneres for når databasen eller lister er
-tomme.
 
 Beskrivelse
 -----------

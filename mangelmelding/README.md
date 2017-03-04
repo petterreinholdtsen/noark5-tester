@@ -15,7 +15,7 @@ Group](http://www.opengroup.org/austin/mantis.html), dvs:
  1. Sidenummer
  1. Linjenummer
  1. Innsendingsdato
- 1. Oppsummering
+ 1. Oppsummering (legges inn som overskrift)
  1. Beskrivelse
  1. Ønsket endring
  1. Respons
