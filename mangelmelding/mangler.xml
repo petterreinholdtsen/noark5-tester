@@ -4,8 +4,8 @@
  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
 <book id="index" lang="nb">
 <bookinfo>
-  <title>Mangler i NOARK 5</title>
-  <subtitle>mangler i spesifikasjonen</subtitle>
+  <title>Mangler i NOARK 5 Tjenestegrensesnitt</title>
+  <subtitle>samlet ved utvikling av testklient</subtitle>
 </bookinfo>
 <xi:include href="mangler-liste.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 <chapter>
