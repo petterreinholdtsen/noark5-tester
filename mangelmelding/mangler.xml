@@ -3,9 +3,14 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
 <book id="index" lang="nb">
-<bookinfo>
-  <title>Mangler i NOARK 5 Tjenestegrensesnitt</title>
-  <subtitle>samlet ved utvikling av testklient</subtitle>
+  <bookinfo>
+    
+    <title>Mangler i spesifikasjonsdokumentet for NOARK 5
+    Tjenestegrensesnitt</title>
+    
+    <subtitle>Samlet ved utvikling av program for å teste
+    implementasjon mot spesifikasjon.</subtitle>
+    
 </bookinfo>
 <xi:include href="mangler-liste.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 <chapter>
