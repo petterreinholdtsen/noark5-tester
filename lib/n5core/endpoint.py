@@ -45,18 +45,24 @@ class Endpoint:
         self._browser.submit()
         html = self._browser.response().read()
 
-    def json_post(self, path, data):
+    def post(self, path, data, mimetype):
         url = self.expandurl(path)
-#        print url
+        print("POST %s to %s" % (mimetype, url))
         headers = {
-            'Accept' : 'application/vnd.noark5-v4+json',
-            'Content-Type': 'application/vnd.noark5-v4+json',
+            'Accept' : mimetype,
+            'Content-Type': mimetype,
+            'Content-Length' : len(data),
         }
-        jsondata = json.dumps(data)
-        request = urllib2.Request(url, jsondata, headers)
+        request = urllib2.Request(url, data, headers)
         response = self._browser.open(request)
         content = response.read()
+        if self.verbose:
+            print content
         return (content, response)
+
+    def json_post(self, path, data):
+        jsondata = json.dumps(data)
+        return self.post(path, jsondata, 'application/vnd.noark5-v4+json')
 
     def _get(self, path, headers = None):
         url = self.expandurl(path)
