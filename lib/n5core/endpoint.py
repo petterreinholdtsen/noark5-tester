@@ -25,11 +25,13 @@ class Endpoint:
     def __init__(self, baseurl):
         self.baseurl = baseurl
         self._browser = mechanize.Browser()
+        self.verbose = False
 
     def expandurl(self, path):
 #        print self.baseurl, path
         url = urlparse.urljoin(self.baseurl, path)
-#        print url
+        if self.verbose:
+            print url
         return url
 
     def login(self, username = 'admin', password = 'password'):
@@ -62,6 +64,8 @@ class Endpoint:
         request = urllib2.Request(url, None, headers)
         response = self._browser.open(request)
         content = response.read()
+        if self.verbose:
+            print content
         return (content, response)
 
     def json_get(self, path):
