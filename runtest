@@ -64,6 +64,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'http://rel.kxml.no/noark5/v4/api/metadata/dokumenttype/',
         'http://rel.kxml.no/noark5/v4/api/metadata/tilknyttetregistreringsom/',
         'http://rel.kxml.no/noark5/v4/api/sakarkiv/',
+        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-saksmappe/',
         'self',
     ]
     verbose = False
