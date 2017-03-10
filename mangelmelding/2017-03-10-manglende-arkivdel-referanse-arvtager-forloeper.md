@@ -15,7 +15,7 @@ Manglende beskrivelse av referanseForloeper/referanseArvtager for arkivdel
 
 Beskrivelse
 -----------
-Det mangler rel beskrivelser for referanseForloeper/referanseArvtager i tabellen 
+Det mangler rel beskrivelser for referanseForloeper/referanseArvtager i tabellen
 relasjonsnøkler på side 66.
 
 
@@ -27,12 +27,12 @@ Denne operasjonen kan utføres på to måter:
 [PUT] arkivstruktur/arkivdel/{systemIdForloeper}/referanseArvtager/{systemIdArvtager}/
 [PUT] arkivstruktur/arkivdel/{systemIdArvtager}/referanseForloeper/{systemIdForloeper}/
 
-Her identifiseres arvtager og forloeper i HTTP-requesten eller 
+Her identifiseres arvtager og forloeper i HTTP-requesten eller
 
 [PUT] arkivstruktur/arkivdel/{systemIdForloeper}/referanseArvtager/
 [PUT] arkivstruktur/arkivdel/{systemIdArvtager}/referanseForloeper/
 
-Her identifiseres arvtager og forloeper i HTTP-body. 
+Her identifiseres arvtager og forloeper i HTTP-body.
 
 Videre bør det spesifiseres om koblingen framover/tilbake utføres automatisk
 
