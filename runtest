@@ -301,7 +301,7 @@ Test basis requirements for NOARK 5 Core.
         createcasefilerel = \
             'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-saksmappe/'
         casefileinfo = self.createEntity('casefile', createcasefilerel,
-                                         self.parselinks(fileinfo['_links']),
+                                         self.parselinks(serieinfo['_links']),
                                          casefiledata)
 
         recorddata = {
