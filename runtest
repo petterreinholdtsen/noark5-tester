@@ -271,11 +271,11 @@ Test basis requirements for NOARK 5 Core.
         #print serieinfo
         
         filedata = {
-            "fileId"             : "2006/01",
-            "officialTitle"      : "Public title of the test file",
+            "mappeID"            : "2017/01",
+            "offentligTittel"    : "Public title of the test file",
             "tittel"             : "Title of the test file",
             "beskrivelse"        : "Description of the test file",
-            "keyword"            : ["keyword 1", "keyword 2", "keyword 3"],
+            "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
             "oppbevaringsted"    : [ "location 1", "location2", "location3" ],
             "dokumentmedium"     : "Elektronisk arkiv",
         }
@@ -286,11 +286,11 @@ Test basis requirements for NOARK 5 Core.
                                      filedata)
 
         casefiledata = {
-            "fileId" : "2006/01",
-            "officialTitle"      : "Public title of the test file",
-            "tittel"             : "Title of the test file",
+            "mappeID"            : "2017/1",
+            "offentligTittel"    : "Public title of the test case file",
+            "tittel"             : "Title of the test case file",
             "beskrivelse"        : "Description of the test file",
-            "keyword"            : ["keyword 1", "keyword 2", "keyword 3"],
+            "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
             "oppbevaringsted"    : [ "location 1", "location2", "location3" ],
             "dokumentmedium"     : "Elektronisk arkiv",
             "saksdato"           : "2016-10-04",
