@@ -227,7 +227,11 @@ Test basis requirements for NOARK 5 Core.
           except urllib2.HTTPError, e:
             self.failure('unable to GET %s' % url)
         print("POST %s: %s" % (url, data))
-        (c, res) = self.json_post(url, data)
+        try:
+            (c, res) = self.json_post(url, data)
+        except urllib2.HTTPError, e:
+            self.failure("POST %s failed: %s" % (url, e.read().decode('UTF-8')))
+            raise
         info = json.loads(c)
         id = info['systemID']
         self.verify(id is not None, "created %s" % name)
