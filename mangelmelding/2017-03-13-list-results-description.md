@@ -15,8 +15,8 @@ Besrkivelse av lister
 
 Beskrivelse
 -----------
-1. Det er ingen entydig besrkivelse av hvordan resultater som inneholder lister 
-skal strukturres. 
+1. Det er ingen entydig beskrivelse av hvordan resultater som inneholder lister
+skal struktureres.
 
 2. Webløsningen viser to forskjellige måter dette kan løses på.
 
@@ -48,15 +48,15 @@ http://n5test.kxml.no/api/arkivstruktur/arkiv  genererer
   }
 ]
 
-Dette mener vi er noe som kompliserer utvikling av klienten. Er det en god 
-grunn at klienten skal måtte forholde seg til to forsjellige måter å strukturere
+Dette mener vi er noe som kompliserer utvikling av klienten. Er det en god
+grunn at klienten skal måtte forholde seg til to forskjellige måter å strukturere
 lister? 
 
 Ønsket endring
 --------------
 
-1. Det utvikles en strukturbesrkivelse for resultater som inneolder lister
-2. Liste beskrivelse for objekter blir enklest mulig. Vi øsnker at følgende
+1. Det utvikles en strukturbeskrivelse for resultater som inneholder lister
+2. Liste beskrivelse for objekter blir enklest mulig. Vi ønsker at følgende
    struktur skal være gjeldende [ { obj }, { obj } ]
 
 Respons
