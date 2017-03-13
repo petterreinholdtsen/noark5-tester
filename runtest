@@ -137,8 +137,13 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                 if href not in urlseen:
                                     urlsleft.append(href)
                                 if 'rel' in l and l['rel'] != 'self':
-                                    self.verify(l['rel'] in relok,
-                                                'rel %s should be well known' % l['rel'])
+                                    # FIXME figure out if rels should match spec
+                                    if l['rel'] in relok:
+                                        self.success('rel %s is well known' % l['rel'])
+                                    elif l['rel'] + '/' in relok:
+                                        self.success('rel %s is well known (missing trailing slash)' % l['rel'])
+                                    else:
+                                        self.failure('rel %s should be well known' % l['rel'])
                                     rel = l['rel']
                                     if rel in self.rels and href != self.rels[rel]:
                                         self.failure("unique duplicate rel %s in _links for %s" % (rel, url))
