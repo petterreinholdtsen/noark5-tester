@@ -103,7 +103,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             else:
                 currels[l['rel']] = url
 
-    def discover(self):
+    def recursiveHateoas(self):
         if self.verbose:
             print "recursively discovering standard URLs from the top"
         relok = {}
@@ -341,7 +341,7 @@ Test basis requirements for NOARK 5 Core.
     def runtests(self):
         try:
             baseref = self.testBasis()
-            self.discover()
+            self.recursiveHateoas()
             try:
                 self.login()
                 self.gotlogin = True
@@ -349,7 +349,7 @@ Test basis requirements for NOARK 5 Core.
             except urllib2.HTTPError, e:
                 self.gotlogin = False
                 self.failure("unable to log in, operating in read only mode")
-            self.discover()
+            self.recursiveHateoas()
             self.testNewDocument()
         finally:
             print "%d successes, %d failures" % (self.success_count,
