@@ -126,7 +126,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
 #                    print content
                     baseref = json.loads(content)
                     if '_links' not in baseref:
-                        self.failure("%s missing _links" % url)
+                        self.failure("GET %s missing _links" % url)
                     else:
                         self.verifyuniquerels(baseref['_links'], url)
                         for l in baseref['_links']:
