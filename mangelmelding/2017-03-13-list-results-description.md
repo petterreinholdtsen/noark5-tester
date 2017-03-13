@@ -22,12 +22,13 @@ skal struktureres.
 
 Lister struktureres på tom forskjellige måter:
 
- a. { "entitetsnavn": [ { obj }, { obj } ] }
- b. [ { obj }, { obj } ]
+  a. { "entitetsnavn": [ { obj }, { obj } ] }
+  b. [ { obj }, { obj } ]
 
 Konkrete eksempler fra webløsningen er følgende:
 
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ genererer 
+```
 {
  "mappe": [
    {
@@ -37,9 +38,10 @@ http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ genererer
    }
  ]
 }
-
+```
 http://n5test.kxml.no/api/arkivstruktur/arkiv  genererer
 
+```
 [
   {
     tittel: "Høflig arkiv",
@@ -47,7 +49,7 @@ http://n5test.kxml.no/api/arkivstruktur/arkiv  genererer
     ....
   }
 ]
-
+```
 Dette mener vi er noe som kompliserer utvikling av klienten. Er det en god
 grunn at klienten skal måtte forholde seg til to forskjellige måter å strukturere
 lister? 
