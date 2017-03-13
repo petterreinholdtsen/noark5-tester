@@ -331,6 +331,8 @@ Test basis requirements for NOARK 5 Core.
             "variantformat"   : "Arkivformat",
             "format"          : "PDF",
             "formatDetaljer"  : "PDF/A PDFv1.4",
+            "filstoerrelse"   : 11,
+            "mimeType"       : "application/xml", 
         }
         createdocobjrel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentobjekt/'
