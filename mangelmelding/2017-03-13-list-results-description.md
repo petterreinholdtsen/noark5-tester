@@ -22,8 +22,8 @@ skal struktureres.
 
 Lister struktureres på tom forskjellige måter:
 
-  a. { "entitetsnavn": [ { obj }, { obj } ] }
-  b. [ { obj }, { obj } ]
+  a. { "entitetsnavn": [ { obj }, { obj } ] }  
+  b. [ { obj }, { obj } ]  
 
 Konkrete eksempler fra webløsningen er følgende:
 
