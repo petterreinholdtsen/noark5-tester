@@ -338,6 +338,18 @@ Test basis requirements for NOARK 5 Core.
                                        self.parselinks(docdescinfo['_links']),
                                        docobjdata)
 
+        # FIXME try to upload a file, for examle an xml file and large
+        # chunked file.
+        reffilerel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil/'
+        self.verify(reffilerel in self.parselinks(docobjinfo['_links']),
+                    "_links in response from %s rel should include '%s' rel" % (createdocobjrel, reffilerel))
+        rels = self.parselinks(docobjinfo['_links'])
+        url = rels[reffilerel]
+        data = "<xml></xml>"
+        (c, res) = self.post(url, data, 'application/xml')
+        self.verify(c == '', "post return nothing")
+        self.verify(200 == res.code, "file upload returned HTTP code 201")
+
     def runtests(self):
         try:
             baseref = self.testBasis()
