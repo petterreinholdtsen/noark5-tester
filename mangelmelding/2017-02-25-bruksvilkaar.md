@@ -20,7 +20,25 @@ Det er uklart om dokumentet er vernet etter åndsverkslovens
 bestemmelser eller om det er omfavnet av et av unntakene i
 åndsverkslovens § 9.
 
-FIXME explain why this is a problem.
+RA som åndsverkseier av standarden og assosiert materiale kan kreve 
+erstatning for uberettiget bruk av opphavsrettslig beskyttet materiale 
+som er underlagt rettighetshaverens enerett.
+
+Selv om Riksarkivet per dags dato ikke krever at det betales vederlag 
+for bruk av standarden så betyr det ikke at det vil skje i framtiden. 
+Dette er en spesiell risiko en fri-programvare implementasjon av 
+standarden må ta hensyn til da utnyttelsen/spredning av programvaren
+ er noe utviklerne ikke kontrollerer.
+
+Utviklerne løper da en potensiell risiko at det kreves vederlag betaling 
+for instanser som utviklere har ingen kontroll over.
+
+Denne problemstillingen mener vi omfatter standarden, metadatakatalogene, 
+tjenestegrensesnittet, XSD-filer og andre tekniske ressurser. I hovedsak
+er disse tilgjengelig fra:
+
+http://arkivverket.no/arkivverket/Offentleg-forvalting/Noark/Noark-5
+
 
 Hvis spesifikasjonen er vernet etter åndsverksloven så bør det velges
 og dokumenteres bruksvilkår slik at alle som ønsker å bruke standarden
