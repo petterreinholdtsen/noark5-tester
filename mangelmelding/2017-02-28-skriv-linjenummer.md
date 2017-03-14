@@ -13,11 +13,6 @@ Skriv linjenummer i margen på alle sider?
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
-Oppsummering
-------------
-
-Skriv linjenummer i margen på alle sider?
-
 Beskrivelse
 -----------
 
