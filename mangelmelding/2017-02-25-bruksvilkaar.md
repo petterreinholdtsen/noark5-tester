@@ -22,11 +22,13 @@ bestemmelser eller om det er omfavnet av et av unntakene i
 åndsverksloven så bør en velge og dokumentere bruksvilkår slik at alle
 som ønsker å bruke standarden vet hva som gjelder.  En bør velge godt
 kjente bruksvilkår egnet for dokumentasjon, f.eks. en av Creative
-Commons-lisensene.
+Commons-lisensene. En bør ikke lage en ny type bruksvilkår for å spare
+de som vurderer å bruke spesifikasjonen fra å måtte sette jurister til
+å vurdere et nytt et sett med avtalevilkår.
 
 Gitt formuleringen i åndsverkslovens § 9 antar jeg at dokumentet ikke
-er vernet, men det hadde vært veldig fint om det var klart om
-Arkivverket er enig i den vurderingen.
+er vernet, men det hadde vært veldig fint om det var klart skrevet ned
+om Arkivverket er enig i den vurderingen.
 
 Ønsket endring
 --------------
