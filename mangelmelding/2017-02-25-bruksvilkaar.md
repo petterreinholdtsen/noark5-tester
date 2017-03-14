@@ -18,17 +18,33 @@ Beskrivelse
 
 Det er uklart om dokumentet er vernet etter åndsverkslovens
 bestemmelser eller om det er omfavnet av et av unntakene i
-åndsverkslovens § 9.  Hvis spesifikasjonen er vernet etter
-åndsverksloven så bør en velge og dokumentere bruksvilkår slik at alle
-som ønsker å bruke standarden vet hva som gjelder.  En bør velge godt
-kjente bruksvilkår egnet for dokumentasjon, f.eks. en av Creative
-Commons-lisensene. En bør ikke lage en ny type bruksvilkår for å spare
-de som vurderer å bruke spesifikasjonen fra å måtte sette jurister til
-å vurdere et nytt et sett med avtalevilkår.
+åndsverkslovens § 9.
+
+FIXME explain why this is a problem.
+
+Hvis spesifikasjonen er vernet etter åndsverksloven så bør det velges
+og dokumenteres bruksvilkår slik at alle som ønsker å bruke standarden
+vet hva som gjelder.  En bør velge godt kjente bruksvilkår egnet for
+tekster og dokumentasjon, f.eks. en av Creative Commons-lisensene.
+Det bør ikke lages en ny type bruksvilkår for å unngå at de som
+vurderer å bruke spesifikasjonen må sette jurister til å vurdere et
+helt nytt et sett med avtalevilkår.
 
 Gitt formuleringen i åndsverkslovens § 9 antar jeg at dokumentet ikke
 er vernet, men det hadde vært veldig fint om det var klart skrevet ned
 om Arkivverket er enig i den vurderingen.
+
+Forslaget om at dokumenet kommer inn under åndsverkslovens § 9 er
+understøttet av «Bruk av åpne IT-standarder og åpen kildekode i
+offentlig sektor» avgitt til Moderniseringsdepartementet 2005-06-21,
+der seksjon «4.3 Utfordringer knyttet til offentlig innhold» sier:
+
+> «Lov om opphavsrett til åndsverk m.v. omhandler opphavsrett til
+> verk. I utgangspunktet er offentlige verk (dvs. dokumenter etc.)
+> uten vern etter denne lov, jf.  §9.  Dette gjelder uavhengig av om
+> dokumentet (verket) foreligger i digital eller analog form.»
+
+FIXME make secondary proposal with concrete license 
 
 Ønsket endring
 --------------
