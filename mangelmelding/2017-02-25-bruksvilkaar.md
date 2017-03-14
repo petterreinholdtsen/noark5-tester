@@ -20,25 +20,25 @@ Det er uklart om dokumentet er vernet etter åndsverkslovens
 bestemmelser eller om det er omfavnet av et av unntakene i
 åndsverkslovens § 9.
 
-RA som åndsverkseier av standarden og assosiert materiale kan kreve 
-erstatning for uberettiget bruk av opphavsrettslig beskyttet materiale 
-som er underlagt rettighetshaverens enerett.
+De som tar spesifikasjonen i bruk kan dermed risikere at Riksarkivet
+som rettighetsinnehaver for spesifikasjonen og assosiert materiale kan
+kreve erstatning for uberettiget bruk av opphavsrettslig beskyttet
+materiale som er underlagt rettighetshaverens enerett.
 
-Selv om Riksarkivet per dags dato ikke krever at det betales vederlag 
-for bruk av standarden så betyr det ikke at det vil skje i framtiden. 
-Dette er en spesiell risiko en fri-programvare implementasjon av 
-standarden må ta hensyn til da utnyttelsen/spredning av programvaren
- er noe utviklerne ikke kontrollerer.
+Selv om Riksarkivet per dags dato ikke krever at det betales vederlag
+for bruk av standarden så betyr det ikke at det vil forbli slik i
+framtiden.  Dette er en risiko spesielt en fri
+programvare-implementasjon av spesifikasjonen må ta hensyn til,
+ettersom utnyttelsen/spredning av programvaren ikke er noe utviklerne
+kontrollerer.
 
 Utviklerne løper da en potensiell risiko at det kreves vederlag betaling 
 for instanser som utviklere har ingen kontroll over.
 
-Denne problemstillingen mener vi omfatter standarden, metadatakatalogene, 
-tjenestegrensesnittet, XSD-filer og andre tekniske ressurser. I hovedsak
-er disse tilgjengelig fra:
-
+Denne problemstillingen omfatter både standarden, metadatakatalogene,
+tjenestegrensesnittet, XSD-filer og andre tekniske ressurser, dvs.  i
+hovedsak det som er tilgjengelig fra
 http://arkivverket.no/arkivverket/Offentleg-forvalting/Noark/Noark-5
-
 
 Hvis spesifikasjonen er vernet etter åndsverksloven så bør det velges
 og dokumenteres bruksvilkår slik at alle som ønsker å bruke standarden
@@ -50,7 +50,7 @@ helt nytt et sett med avtalevilkår.
 
 Gitt formuleringen i åndsverkslovens § 9 antar jeg at dokumentet ikke
 er vernet, men det hadde vært veldig fint om det var klart skrevet ned
-om Arkivverket er enig i den vurderingen.
+om Riksarkivet er enig i den vurderingen.
 
 Forslaget om at dokumenet kommer inn under åndsverkslovens § 9 er
 understøttet av «Bruk av åpne IT-standarder og åpen kildekode i
@@ -72,13 +72,13 @@ foreslår noe slikt:
 > Denne spesifikasjonen faller inn under unntakene i åndsverkslovens §
 > 9, og er ikke opphavsrettslig vernet.
 
-Hvis Arkivverket derimot mener spesifikasjonsteksten *er* vernet av
+Hvis Riksarkivet derimot mener spesifikasjonsteksten *er* vernet av
 åndsverksloven, så foreslår jeg at dokumentetet erklærer at
 bruksvilkårene er i tråd med [Cretive Commons CC0
 1.0](https://creativecommons.org/publicdomain/zero/1.0/deed.no) og
 legger inn en formulering ala dette:
 
-> Arkivverket har, i den utstrekning loven tillater, erklært at dette
+> Riksarkivet har, i den utstrekning loven tillater, erklært at dette
 > dokumentet er i det fri ved å si fra seg alle de opphavsrettigheter
 > og nærstående rettigheter som de hadde til verket.
 >
@@ -90,4 +90,3 @@ Respons
 -------
 
 Ingen respons fra arkivverket så langt.
-
