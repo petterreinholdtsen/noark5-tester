@@ -8,8 +8,8 @@ Legg inn opphavsrettslig status og bruksvilkår i spesifikasjonsteksten
        Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
         Dokumentdel  Innhold
-         Sidenummer  2
-        Linjenummer  1
+         Sidenummer  6
+        Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
@@ -44,17 +44,29 @@ der seksjon «4.3 Utfordringer knyttet til offentlig innhold» sier:
 > uten vern etter denne lov, jf.  §9.  Dette gjelder uavhengig av om
 > dokumentet (verket) foreligger i digital eller analog form.»
 
-FIXME make secondary proposal with concrete license 
-
 Ønsket endring
 --------------
 
-Legg inn ny dokumentdel (f.eks. del 0 før del 1 - orientering og
-introduksjon), der en klargjør åndsverksmessig status.  Jeg foreslår
-noe slikt:
+Legg inn nytt avsnitt mellom punkt 1.6 (Prosjektets organisering) og
+1.7 (Endringslogg), der en klargjør åndsverksmessig status.  Jeg
+foreslår noe slikt:
 
 > Denne spesifikasjonen faller inn under unntakene i åndsverkslovens §
 > 9, og er ikke opphavsrettslig vernet.
+
+Hvis Arkivverket derimot mener spesifikasjonsteksten *er* vernet av
+åndsverksloven, så foreslår jeg at dokumentetet erklærer at
+bruksvilkårene er i tråd med [Cretive Commons CC0
+1.0](https://creativecommons.org/publicdomain/zero/1.0/deed.no) og
+legger inn en formulering ala dette:
+
+> Arkivverket har, i den utstrekning loven tillater, erklært at dette
+> dokumentet er i det fri ved å si fra seg alle de opphavsrettigheter
+> og nærstående rettigheter som de hadde til verket.
+>
+> Du kan kopiere, endre, distribuere og fremføre verket, selv for
+> kommersielle formål, uten å spørre om tillatelse. Se Annen
+> Informasjon nedenfor.
 
 Respons
 -------
