@@ -13,6 +13,9 @@ Klargjør forhold mellom tjenestegrensesnittet og standarden / katalogene
     Innsendingsdato  Ikke sendt inn
  ------------------  ---------------------------------
 
+Denne teksten er del av en samling innspill til NOARK5-standarden
+tilgjengelig fra https://github.com/petterreinholdtsen/noark5-tester/ .
+
 Beskrivelse
 -----------
 Vi ser det er noen uoverensstemmelser mellom tjenestegrensesnittet, standarden
@@ -56,9 +59,3 @@ Det gjøres et arbeid med å få tjenestegrensesnittet og standarden i samsvar
 egentlig er samme felt.
 
 XSD-filene tilhørende tjenestegrensesnittet må kvalitetsikres.
-
-
-Respons
--------
-
-Ingen respons fra arkivverket så langt.
