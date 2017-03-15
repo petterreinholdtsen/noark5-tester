@@ -33,6 +33,7 @@ import json
 import mechanize
 import urlparse
 import urllib2
+import xml.etree.ElementTree
 import n5core.endpoint
 
 class Noark5Tester (n5core.endpoint.Endpoint):
@@ -158,6 +159,35 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             if self.verbose:
                 print("mapping %s to %s" % (rel, self.rels[rel]))
         
+    def verifyXML(self, prefix, xmlreq, xmlcontent):
+        validlinktags = {
+            '{http://www.kxml.no/rest/1.0}rel':1,
+            '{http://www.kxml.no/rest/1.0}href':1,
+            '{http://www.kxml.no/rest/1.0}type':1,
+            '{http://www.kxml.no/rest/1.0}deprecation':1,
+            '{http://www.kxml.no/rest/1.0}name':1,
+            '{http://www.kxml.no/rest/1.0}title':1,
+        }
+        #print content
+        #print xmlreq
+        contenttype = xmlreq.info().getheader('Content-Type')
+        if 0 != contenttype.find('application/vnd.noark5-v4+xml'):
+            self.failure('level 0 XML - incorrect Content-Type for base: %s' % contenttype)
+        else:
+            self.success(prefix + ' - correct Content-Type for base')
+            root = xml.etree.ElementTree.fromstring(xmlcontent)
+            #print root.tag, root.attrib
+            if self.verify("{http://www.kxml.no/rest/1.0}Links" == root.tag, "root XML tag should be <Links xmlns=\"http://www.kxml.no/rest/1.0\" ...>"):
+                for child in root:
+                    if self.verify("{http://www.kxml.no/rest/1.0}Links" == child.tag, "first child XML tag should be <Links xmlns=\"http://www.kxml.no/rest/1.0\">"):
+                        for subchild in child:
+                            #print subchild.tag
+                            if self.verify("{http://www.kxml.no/rest/1.0}link" == subchild.tag, "second child XML tag should be <links xmlns=\"http://www.kxml.no/rest/1.0\">"):
+                                for link in subchild:
+                                    #print link
+                                    self.verify(link.tag in validlinktags,
+                                                '<Links><Links><link> content should have well known tags')
+
     def testBasis(self):
         """
 Test basis requirements for NOARK 5 Core.
@@ -175,14 +205,10 @@ Test basis requirements for NOARK 5 Core.
         # Verify ability to produce XML output
         try:
             (content, res) = self.xml_get(".")
-            contenttype = res.info().getheader('Content-Type')
-            if 0 != contenttype.find('application/vnd.noark5-v4+xml'):
-                self.failure('level 0 XML - incorrect Content-Type for base: %s' % contenttype)
-            else:
-                self.success('level 0 XML - correct Content-Type for base')
-            # FIXME should verify XML content too
+            self.verifyXML('level 0 XML', res, content)
         except urllib2.HTTPError, e:
             self.failure("level 0 XML - unable to GET content for base.")
+            print("FAIL: %s" % e.read())
 
         # Verify ability to produce JSON output
         try:
