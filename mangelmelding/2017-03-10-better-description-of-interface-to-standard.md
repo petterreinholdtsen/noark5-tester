@@ -1,5 +1,5 @@
-Better description of relationship between standard and interface
-==============================================================
+Klargjør forholdet mellom NOARK5-spesifikasjon og tjenestegrensesnitt
+=====================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
