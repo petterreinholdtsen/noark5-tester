@@ -1,4 +1,4 @@
-Better description of relationship between standard and interface
+Bedre beskrivelse av forhold mellom tjenestegrensesnittet og standarden / katalogene
 ==============================================================
 
  ------------------  ---------------------------------
@@ -10,31 +10,51 @@ Better description of relationship between standard and interface
         Dokumentdel  n/a
          Sidenummer  n/a
         Linjenummer  n/a
-    Innsendingsdato  2017-03-10
+    Innsendingsdato  Ikke sendt inn
  ------------------  ---------------------------------
 
 Beskrivelse
 -----------
+Vi ser det er noen uoverensstemmelser mellom tjenestegrensesnittet, standarden
+ og metadatakatalogene.
 
-The interface as it currently stands lacks a proper description of what the
-core and client should do in certain situations. Riksarkivet have pointed at
-the standard and said the answer lies there. Some times the answer can not be
- found in the standard! There is too much left for interpretation.
+Eksempelvis:
+Dokumentdel 7.2.1.7 Dokumentobjekt i tjenestegrensesnittet har et attributt 
+som heter mimeType. Dette attributtet finnes ikke i metadatakatalogene eller
+ i standarden.
 
- In particular, how to handle file uploads is not explained in sufficient
- detail (Own mangelmelding on this). What are the minimum fields that must
- be set by the client for a create request, as opposed to an update request.
- Which values should be set by the client, and which should be set by the
- server?
+Er feltene dokumentobjekt.format og dokumentobjekt.mimeType det samme? I dag
+ser jeg for meg at en kjerne vil ha følgende data i dokumentObjekt:
 
- If the interface standard is not going to include a description of such
- things, an additional document should be created that details this.
+{
+"format": "PDF",
+"formatDetaljer" : "PDF/A PDF 1.4"
+"mimeType" : "application/pdf"
+}
+
+Vi ser noe lignende i filen arkivstruktur10.xsd som finnes her:
+
+ http://skjema.kxml.no/arkivverket/noark5/v4.0/arkivstruktur10.xsd
+
+Vi tror 'arkivdel' attributtet som er definert under mappe egentlig er 
+'referanseArkivdel'.
+
+Vi finner ingen referanse for elementet <Hendelseslogg> definert i standarden, 
+metadatakatalogene eller XSD-filene.
+
+Videre vil vi påpeke at metadatakatalogen bruker camelCase og elementet 
+<Hendelseslogg> følger ikke den generelle Noark navngivingsmåten. 
+
+En rask gjennomgang av arkivstruktur10.xsd viser at det meste av navngiving er riktig.
 
 Ønsket endring
 --------------
+Det gjøres et arbeid med å få tjenestegrensesnittet og standarden i samsvar
+ med hverandre. Spesielt gjelder å få avklart mimeType og format og om de 
+egentlig er samme felt.
 
-This issue needs further attention. Further work must be carried out on how
-to provide adequate descriptions of expectations for both the core and client
+XSD-filene tilhørende tjenestegrensesnittet må kvalitetsikres.
+
 
 Respons
 -------
