@@ -1,5 +1,5 @@
-Bedre beskrivelse av forhold mellom tjenestegrensesnittet og standarden / katalogene
-==============================================================
+Klargjør forhold mellom tjenestegrensesnittet og standarden / katalogene
+========================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
