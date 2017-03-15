@@ -26,11 +26,13 @@ som heter mimeType. Dette attributtet finnes ikke i metadatakatalogene eller
 Er feltene dokumentobjekt.format og dokumentobjekt.mimeType det samme? I dag
 ser jeg for meg at en kjerne vil ha følgende data i dokumentObjekt:
 
+```
 {
 "format": "PDF",
 "formatDetaljer" : "PDF/A PDF 1.4"
 "mimeType" : "application/pdf"
 }
+```
 
 Vi ser noe lignende i filen arkivstruktur10.xsd som finnes her:
 
@@ -39,11 +41,11 @@ Vi ser noe lignende i filen arkivstruktur10.xsd som finnes her:
 Vi tror 'arkivdel' attributtet som er definert under mappe egentlig er 
 'referanseArkivdel'.
 
-Vi finner ingen referanse for elementet <Hendelseslogg> definert i standarden, 
+Vi finner ingen referanse for elementet &lt;Hendelseslogg&gt; definert i standarden, 
 metadatakatalogene eller XSD-filene.
 
 Videre vil vi påpeke at metadatakatalogen bruker camelCase og elementet 
-<Hendelseslogg> følger ikke den generelle Noark navngivingsmåten. 
+&lt;Hendelseslogg&gt; følger ikke den generelle Noark navngivingsmåten. 
 
 En rask gjennomgang av arkivstruktur10.xsd viser at det meste av navngiving er riktig.
 
