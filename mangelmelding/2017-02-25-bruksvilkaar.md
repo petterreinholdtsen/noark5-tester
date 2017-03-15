@@ -43,11 +43,11 @@ http://arkivverket.no/arkivverket/Offentleg-forvalting/Noark/Noark-5
 Jeg tror det er viktig å sikre at det ikke kan oppstå en situasjon
 slik Skolelinux-prosjektet opplevde da de ønsket å bruke kontoplanen i
 norsk regnskapsstandard (NS 4102) i fri programvaresystemet SQL Ledger
-og
-[http://developer.skolelinux.org/brev/2004-01-10-ufri_norsk_standard.pdf](ble
-nektet av Pronorm AS i brev datert 2004-01-05).  Dette på tross av at
-lov og forskrift krever at regnskapsstandarden brukes når en
-rapporterer regnskap til Skattemyndighet og Brønnøysundsregistrene.
+og [ble nektet av Pronorm AS i brev datert
+2004-01-05](http://developer.skolelinux.org/brev/2004-01-10-ufri_norsk_standard.pdf).
+Dette på tross av at lov og forskrift krever at regnskapsstandarden
+brukes når en rapporterer regnskap til Skattemyndighet og
+Brønnøysundsregistrene.
 
 Hvis spesifikasjonen er vernet etter åndsverksloven så bør det velges
 og dokumenteres bruksvilkår slik at alle som ønsker å bruke standarden
