@@ -1,5 +1,5 @@
-Dokumentere prosess for å melde feil og uklarheter i spesifikasjonen
-====================================================================
+Prosessen for å melde feil og uklarheter i beskrivelse av NOARK 5 Tjenestegresesnitt bør klargjøres
+===================================================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -12,6 +12,9 @@ Dokumentere prosess for å melde feil og uklarheter i spesifikasjonen
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
+
+Denne teksten er del av en samling innspill til NOARK5-standarden
+tilgjengelig fra https://github.com/petterreinholdtsen/noark5-tester/ .
 
 Beskrivelse
 -----------
@@ -69,25 +72,45 @@ nettsiden med alle slike mangelmeldinger og responsen de har fått.
 Basert på formatet til The Austin Group foreslår jeg at alle
 mangelmeldinger inneholder følgende deler:
 
- 1. Oppsummering / overskrift
- 1. Prosjekt
- 1. Kategori
- 1. Alvorlighet
- 1. Meldingstype
- 1. Brukerreferanse
- 1. Dokumentdel
- 1. Sidenummer
- 1. Linjenummer
- 1. Innsendingsdato
- 1. Beskrivelse
- 1. Ønsket endring
- 1. Respons
+ 1. Oppsummering / overskrift - Enlinjers kort oppsummering av
+    mangelmeldingen.
+ 1. Prosjekt - Kort navn på spesifikasjon/prosjektet meldingen
+    omhandler, f.eks. 'NOARK 5 Tjenestegresesnitt'.
+ 1. Kategori - Hvilken del / utgave av prosjektet meldingen gjelder.
+    Her kan en legge inn versjon for spesifikasjonen som diskuteres,
+    f.eks. 'Versjon 1.0 beta'.
+ 1. Alvorlighet - Enten 'kommentar' eller 'protest', der 'protest'
+    betyr at spesifikasjonen ikke bør godkjennes før mangelen er
+    utbedret, mens 'kommentar' er et innspill for å gjøre
+    spesifikasjonen bedre.
+ 1. Meldingstype - Enten 'utelatt' eller 'trenger klargjøring'.  Bruk
+    'utelatt' hvis spesifikasjonen mangler noe som burde vært omtalt,
+    og 'trenger klargjøring' hvis eksisterende tekst ikke er klar og
+    entydig nok.
+ 1. Brukerreferanse - Navn, epostadresse eller annen måte for
+    innsender å kjenne igjen sine meldinger.
+ 1. Dokumentdel - Hvilken del av spesifikasjonen meldingen gjelder.
+ 1. Sidenummer - Hvilken side i spesifikasjonen meldingen gjelder.
+ 1. Linjenummer - Hvilken linje på siden meldingen gjelder.
+ 1. Innsendingsdato - Når meldingen ble sendt inn til arkivverket,
+    eller 'ikke sendt inn' hvis den ennå ikke er sendt inn.
+ 1. Beskrivelse - En presis beskrivelse av problemet som forklarer
+    hvorfor det er et problem.  Husk å ta med tilstrekkelig forklaring
+    til at noen som er kjent med temaet kan ta en avgjørelse.
+ 1. Ønsket endring - Konkrete og spesifikke forslag til endringer i
+    spesifikasjonen, inkludert formuleringer, slik at de som vurderer
+    meldingen vet hva du mener vil løse problemet.
+ 1. Respons - Tilbakemeldingen som er kommet fra arkivverket, hvis det
+    er kommet respons.  Droppes hvis ingen respons er kommet
 
 Delene fra og med Oppsummering til og med innsendingsdato er korte
 nøkkelopplysninger om henvendelsen.  Beskrivelse er fritekstfelt som
 forklarer hva henvendelsen gjelder, og Ønsket endring er et konkret og
 spesifikk forslag til hvordan spesifikasjonsteksten bør endres for å
-løse utfordringen som forklares i beskrivelsen.
+løse utfordringen som forklares i beskrivelsen.  Se forøvrig
+feltbeskrivelsene fra The Austin Group.
+
+Felt som ikke er aktuelle eller relevant gis verdien 'n/a'.
 
 Det legges inn lenketil den omtalte nettsiden i nytt avsnitt under
 punkt 2 (Normative Referanser) med følgende tekst:
@@ -96,8 +119,3 @@ punkt 2 (Normative Referanser) med følgende tekst:
 > følge retninglinjene dokumentert på https://url.til/nettside/ og
 > sendes inn i henhold til instruksene der.  Tidligere henvendelser og
 > svar er tilgjengelig fra denne nettsiden.
-
-Respons
--------
-
-Ingen respons fra arkivverket så langt.
