@@ -13,6 +13,9 @@ Legg inn opphavsrettslig status og bruksvilkår i spesifikasjonsteksten
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
+Denne teksten er del av en samling innspill til NOARK5-standarden
+tilgjengelig fra https://github.com/petterreinholdtsen/noark5-tester/ .
+
 Beskrivelse
 -----------
 
@@ -94,8 +97,3 @@ legger inn en formulering ala dette:
 > Du kan kopiere, endre, distribuere og fremføre verket, selv for
 > kommersielle formål, uten å spørre om tillatelse. Se Annen
 > Informasjon nedenfor.
-
-Respons
--------
-
-Ingen respons fra arkivverket så langt.
