@@ -34,8 +34,8 @@ spesifikasjonen.
 
 I følge
 https://samdok.com/2016/09/20/noark5-tjenestegrensesnitt-v-1-0-beta-er-na-tilgjengelig/
-skal innspill sendes til samdok@arkivverket.no, men der får en høre at
-ansvaret er sendt videre.
+skal innspill inntil videre sendes til samdok@arkivverket.no, men når
+en gjør dette får en beskjed om at ansvaret er sendt videre.
 
 Det hadde også vært svært nyttig hvis det eksisterte en prosess som
 publiserte oppdaterert spesifikasjon etter hvert som det blir
@@ -48,7 +48,7 @@ Et eksempel på en slik prosess finnes hos The Austin Group, som
 vedlikeholder POSIX-standarden.  Der skal alle mangelmeldinger
 («defect reports») følge et fast format (se
 http://www.opengroup.org/austin/mantis.html) og både meldinger og
-respons fra ekspertgruppen gjøres tilgjengleig på Internett slik at
+respons fra ekspertgruppen gjøres tilgjengelig på Internett slik at
 alle kan se hva som er kommet av innspill så langt, samt kommentere på
 innspill som er kommet.
 
@@ -57,7 +57,7 @@ http://www.opengroup.org/austin/aardvark/latest/xshbug2.txt, fra den
 gangen jeg sendte inn slike henvendelser til endringer i
 POSIX-standarden.
 
-Kan dere få på plass en ligende prosess for NOARK5-spesifikasjonen?
+Kan dere få på plass en lignende prosess for NOARK5-spesifikasjonen?
 
 Ønsket endring
 --------------
