@@ -89,8 +89,8 @@ forklarer hva henvendelsen gjelder, og Ønsket endring er et konkret og
 spesifikk forslag til hvordan spesifikasjonsteksten bør endres for å
 løse utfordringen som forklares i beskrivelsen.
 
-Det legges inn lenke til den omtalte nettsiden under punkt 2
-(Normative Referanser) som lyder følgende:
+Det legges inn lenketil den omtalte nettsiden i nytt avsnitt under
+punkt 2 (Normative Referanser) med følgende tekst:
 
 > Spørsmål, innspill til videre utvikling og/eller feilretting bør
 > følge retninglinjene dokumentert på https://url.til/nettside/ og
