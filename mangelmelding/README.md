@@ -34,7 +34,8 @@ Group](http://www.opengroup.org/austin/mantis.html), dvs:
  1. Ønsket endring - Konkrete og spesifikke forslag til endringer i
     spesifikasjonen, inkludert formuleringer, slik at de som vurderer
     meldingen vet hva du mener vil løse problemet.
- 1. Respons - Tilbakemeldingen som er kommet fra arkivverket.
+ 1. Respons - Tilbakemeldingen som er kommet fra arkivverket, hvis det
+    er kommet respons.  Droppes hvis ingen respons er kommet
 
 Felt som ikke er aktuelle eller relevant gis verdien 'n/a'.
 
