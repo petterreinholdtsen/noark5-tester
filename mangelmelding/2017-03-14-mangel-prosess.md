@@ -10,7 +10,7 @@ Prosessen for å melde feil og uklarheter i beskrivelse av NOARK 5 Tjenestegrese
         Dokumentdel  2
          Sidenummer  8
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-03-15
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
@@ -37,12 +37,13 @@ spesifikasjonen.
 
 I følge
 https://samdok.com/2016/09/20/noark5-tjenestegrensesnitt-v-1-0-beta-er-na-tilgjengelig/
-skal innspill inntil videre sendes til samdok@arkivverket.no, men når
-en gjør dette får en beskjed om at ansvaret er sendt videre.
+skal innspill inntil videre sendes til samdok (at) arkivverket.no, men
+når en gjør dette i februar 2017 får en inntrykk av at ansvaret for
+oppfølging er sendt videre.
 
 Det hadde også vært svært nyttig hvis det eksisterte en prosess som
 publiserte oppdaterert spesifikasjon etter hvert som det blir
-korrigert slike svakheter, og som publiserte tidligere spørsmål og
+korrigert svakheter i teksten, og som publiserte tidligere spørsmål og
 svar slik at enhver kan få med seg disse.  Dvs. en offentlig
 tilgjengelig liste med spørsmål og korreksjoner til NOARK5-relaterte
 spesifikasjoner.
@@ -53,9 +54,8 @@ vedlikeholder POSIX-standarden.  Der skal alle mangelmeldinger
 http://www.opengroup.org/austin/mantis.html) og både meldinger og
 respons fra ekspertgruppen gjøres tilgjengelig på Internett slik at
 alle kan se hva som er kommet av innspill så langt, samt kommentere på
-innspill som er kommet.
-
-Litt utdaterte eksempler på slike henvendelser finnes samlet under
+innspill som er kommet.  Litt utdaterte eksempler på slike
+henvendelser finnes samlet under
 http://www.opengroup.org/austin/aardvark/latest/xshbug2.txt, fra den
 gangen jeg sendte inn slike henvendelser til endringer i
 POSIX-standarden.
@@ -69,8 +69,8 @@ Lag en nettside som forklarer hvordan mangelmeldinger bør skrives og
 hvor de bør sendes inn, og vedlikehold en liste lenket til fra denne
 nettsiden med alle slike mangelmeldinger og responsen de har fått.
 
-Basert på formatet til The Austin Group foreslår jeg at alle
-mangelmeldinger inneholder følgende deler:
+Basert på formatet til The Austin Group foreslår jeg at en ber om at
+alle slike mangelmeldinger inneholder følgende punkter:
 
  1. `Oppsummering / overskrift` - Enlinjers kort oppsummering av
     mangelmeldingen.
@@ -101,19 +101,20 @@ mangelmeldinger inneholder følgende deler:
     spesifikasjonen, inkludert formuleringer, slik at de som vurderer
     meldingen vet hva du mener vil løse problemet.
  1. `Respons` - Tilbakemeldingen som er kommet fra arkivverket, hvis det
-    er kommet respons.  Droppes hvis ingen respons er kommet
+    er kommet respons.  Tas ikke med hvis ingen respons er kommet.
 
-Delene fra og med Oppsummering til og med innsendingsdato er korte
-nøkkelopplysninger om henvendelsen.  Beskrivelse er fritekstfelt som
-forklarer hva henvendelsen gjelder, og Ønsket endring er et konkret og
-spesifikk forslag til hvordan spesifikasjonsteksten bør endres for å
-løse utfordringen som forklares i beskrivelsen.  Se forøvrig
-feltbeskrivelsene fra The Austin Group.
+Delene fra og med `Oppsummering` til og med `Innsendingsdato` er korte
+nøkkelopplysninger om henvendelsen (se eksempel over).  Felt som ikke
+er aktuelle eller relevant gis verdien 'n/a'.  `Beskrivelse` er
+fritekstfelt som forklarer hva henvendelsen gjelder, og `Ønsket
+endring` er et konkret og spesifikk forslag til hvordan
+spesifikasjonsteksten bør endres for å løse utfordringen som forklares
+i beskrivelsen.  Se forøvrig feltbeskrivelsene fra The Austin Group.
 
-Felt som ikke er aktuelle eller relevant gis verdien 'n/a'.
-
-Det legges inn lenketil den omtalte nettsiden i nytt avsnitt under
-punkt 2 (Normative Referanser) med følgende tekst:
+For å sikre at de som leser fremtidige utgaver av spesifikasjonen vet
+hvordan tilbakemeldinger ønskes mottatt, legges det inn lenke til den
+omtalte nettsiden i nytt avsnitt under punkt 2 (Normative Referanser)
+med følgende tekst:
 
 > Spørsmål, innspill til videre utvikling og/eller feilretting bør
 > følge retninglinjene dokumentert på https://url.til/nettside/ og
