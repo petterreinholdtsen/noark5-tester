@@ -1,0 +1,4 @@
+#!/bin/sh
+
+basename=$(basename $1 .md)
+pandoc -V papersize:"a4paper"  -t latex "$1" -o "${basename}.pdf"
