@@ -7,8 +7,8 @@ Følge OData anbefalinger for CRUD - Update
         Alvorlighet  kommentar
        Meldingstype  utelatt
     Brukerreferanse  thomas.sodring@hioa.no
-        Dokumentdel  7.2.1.12
-         Sidenummer  117
+        Dokumentdel  6.1.1.5
+         Sidenummer  19
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
