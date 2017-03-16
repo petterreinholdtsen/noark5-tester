@@ -120,3 +120,8 @@ med følgende tekst:
 > følge retninglinjene dokumentert på https://url.til/nettside/ og
 > sendes inn i henhold til instruksene der.  Tidligere henvendelser og
 > svar er tilgjengelig fra denne nettsiden.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.

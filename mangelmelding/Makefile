@@ -4,7 +4,7 @@ mangler-liste.xml: *.md Makefile
 	rm -f mangler-liste.xml
 	( echo "<?xml version='1.0' encoding='UTF-8'?>" ; \
 	  echo '<chapter><title>Mangeloversikt</title>' ; \
-	  for f in 2*.md; do \
+	  for f in sendt/*.md 2*.md; do \
 		cat $$f; \
 		echo ; \
 	  done | pandoc -f markdown+ascii_identifiers -t docbook $$f ; \
