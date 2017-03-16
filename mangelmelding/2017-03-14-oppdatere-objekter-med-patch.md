@@ -17,16 +17,16 @@ Beskrivelse
 -----------
 
 Når det gjelder komposisjoner som er beskrevet på side 18 så står det
-"Heleide objekter(komposisjoner) kan opprettes sammen med hovedobjektet"
+«Heleide objekter(komposisjoner) kan opprettes sammen med hovedobjektet».
 
 Det må også være mulig å opprette/oppdatere slike komposisjoner på et senere
 tidspunkt. Valget står da mellom en PUT på hele objektet der objektet
-inngår eller at det er egne REL/URL for slike operasjoner.
+inngår eller at det er egne relasjonslenker for slike operasjoner.
 
 Slik vi forstår tjenestegrensesnittet er det mening at hele objektet skal
 lastes fram og tilbake og kjernen må ta stilling til om felter er blitt
 endret. Dette kompliseres enda mer ved at det ikke er lov å endre noen
-felter etter objektet er opprettet/avsluttet.
+felter etter at objektet er opprettet/avsluttet.
 
 Man løper en stor dataintegritetsrisiko hvis man tvinger klienten til å holde
 hele objektet med alle komposisjoner i minne og sende hele objektet tilbake
@@ -45,15 +45,13 @@ kjernen og en klient. Diverse klienter vil ikke nødvendigvis forstå viktighete
 og betydningen av Noark metadata og sammenhenger mellom entiteter!
 
 For å understøtte argumentet at kjernen må støtte PATCH. Tjenestegrensesnittet
- sier selv at noen steder bygges det på OData. OData retningslinjene [1] sier 
+ sier selv at noen steder bygges det på OData. [OData-retningslinjene](https://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398329) sier 
 følgende for oppdateringer:
 
-  Update an Entity
-
-  _The OData services SHOULD support PATCH as the preferred means of updating an entity.
-  But also services MAY additionally support PUT_.
-
-[1] https://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398329
+> Update an Entity
+>
+> _The OData services SHOULD support PATCH as the preferred means of updating an entity.
+> But also services MAY additionally support PUT_.
 
 Vi mener prinsippet som ligger til grunn for en slik anbefaling er at du skal
 isolere og kun jobbe med data som trenger oppdatering, framfor å risikere
@@ -67,19 +65,17 @@ Det må da taes stilling til hvordan komposisjoner opprettes og oppdateres.
 I tjenestegrensesnittet opprettes komposisjoner sammen med entiteten.
 
 Vi ser ikke noe problem med nøstet komposisjoner når entititer opprettes
-og det står ingenting om det i Odata anbefalingene [2]
+og det står ingenting om det i [Odata-anbefalingene](https://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398328),
+men når vi ser på [OData anbefalinger for oppdateringer](https://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398329) står det følgende:
 
-[2] https://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398328
-
-men når vi ser på OData anbefalinger for oppdateringer står det følgende [1]:
-
-  The entity MUST NOT contain related entities as inline content. It MAY contain binding information for navigation properties.
+> The entity MUST NOT contain related entities as inline content. It
+> MAY contain binding information for navigation properties.
 
 Tjenestegrensesnittet nøster komposisjoner. Det er litt uklart om anbefalinger
  over også gjelder for disse eller bare arkivenhetene (arkivdel, mappe osv).
 
 Hvis komposisjoner også omfattes av OData anbefalingene så må det utvikles nye
-RELs for alle entiteter med komposisjoner. Slik vi forstår det, vil en
+relasjons-URL-er for alle entiteter med komposisjoner. Slik vi forstår det, vil en
 tilknytting av en komposisjon til en entitet være en oppdatering av entiteten
 og da vil det måtte brukes en PATCH forespørsel.
 
@@ -110,8 +106,3 @@ OData som best practice innebærer en generell endring i hvordan CRUD er beskrev
 3. Et felt oppdateres med en PATCH.
 4. Komposisjoner nøstes ikke
 5. Komposisjoner knyttes til entiteter via PATCH
-
-Respons
--------
-
-Ingen respons fra arkivverket så langt.
