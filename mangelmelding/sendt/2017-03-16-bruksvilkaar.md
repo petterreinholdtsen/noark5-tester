@@ -100,3 +100,8 @@ legger inn en formulering ala dette:
 > kommersielle formål, uten å spørre om tillatelse i tråd med
 > vilkårene beskrevet i [Cretive Commons CC0
 > 1.0](https://creativecommons.org/publicdomain/zero/1.0/deed.no).
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
