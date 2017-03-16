@@ -59,8 +59,8 @@ En rask gjennomgang av arkivstruktur10.xsd viser at det meste av navngiving er
 riktig.
 
 Det er heller ikke opplagt hvorfor filen arkivstruktur10.xsd finnes når det virker 
-som om dette egentlig en bare gjentagelse av filen arkivstruktur.xsd som finnes på
-Riksarkivets hjemmesider. 
+som om dette egentlig er bare en gjentagelse av filen arkivstruktur.xsd som finnes 
+på Riksarkivets hjemmesider. 
 
 Ønsket endring
 --------------
