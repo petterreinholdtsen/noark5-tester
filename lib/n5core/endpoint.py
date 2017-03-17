@@ -83,14 +83,18 @@ Recursively look for relation in API.
                 pass
                 self.failure("unable to GET %s" % url)
 
-    def post(self, path, data, mimetype):
+    def post(self, path, data, mimetype, length=None):
         url = self.expandurl(path)
         print("POST %s to %s" % (mimetype, url))
+        if length is None:
+            length = len(data)
         headers = {
-            'Accept' : mimetype,
+            'Accept' : 'application/vnd.noark5-v4+json',
             'Content-Type': mimetype,
-            'Content-Length' : len(data),
+            'Content-Length' : length,
         }
+        if self.verbose:
+            print("POST %s: %s" % (url, headers))
         request = urllib2.Request(url, data, headers)
         response = self._browser.open(request)
         content = response.read()
