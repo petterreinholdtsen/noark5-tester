@@ -1,0 +1,70 @@
+#!/usr/bin/env python
+"""
+
+Upload PDF to Noark 5 API for archiving.
+
+"""
+
+import sys
+sys.path.append('lib')
+
+import argparse
+import json
+import n5core.endpoint
+from pyPdf import PdfFileReader
+
+def objectOperation(json, relation):
+    """
+Return the URL/href for a given relation on the object represented by
+the json structure.
+
+"""
+    if '_links' not in json:
+        return None
+    for l in json['_links']:
+        if l['rel'] == relation:
+            return l['href']
+    return None
+
+def main():
+    parser = argparse.ArgumentParser()
+#        parser.add_argument("--reference", help="connect to demo API site",
+#                            action="store_true")
+    parser.add_argument("pdffile", nargs='+', help="PDF file to archive")
+    args = parser.parse_args()
+        
+    baseurl = "http://localhost:8092/noark5v4/"
+    api = n5core.endpoint.Endpoint(baseurl)
+    api.login()
+
+    fondshref = api.findRelation('http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/')
+    
+    (c, res) = api.json_get(fondshref)
+    fondsinfo = json.loads(c)
+    print len(fondsinfo)
+    print
+
+    serieshref = objectOperation(fondsinfo[0],
+                               'http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivdel/')
+    print("Arkivdel %s" % serieshref)
+    (c, res) = api.json_get(serieshref)
+    seriesinfo = json.loads(c)
+    print len(fondsinfo)
+    print
+
+    fileshref = objectOperation(fondsinfo[0],
+                               'http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/')
+    print("Mappe %s" % fileshref)
+    
+    print
+
+    for pdfname in (args.pdffile):
+        print(pdfname)
+        pdf = PdfFileReader(file(pdfname, "rb"))
+        print(pdf.getDocumentInfo().title)
+        print(pdf.getDocumentInfo().producer)
+        print(pdf.getDocumentInfo().creator)
+        #pdf.getDocumentInfo().creationdate ?
+
+if __name__ == '__main__':
+    main()
