@@ -63,6 +63,14 @@ def createObject(api, url, data):
         fondinfo = json.loads(c)
         return fondinfo
 
+def getFileSize(filehandle):
+    curpos = filehandle.tell()
+    filehandle.seek(0, os.SEEK_END)
+    size = filehandle.tell()
+    print("filesize: ", size)
+    filehandle.seek(curpos, os.SEEK_SET)
+    return size
+
 def main():
     relver = 'http://rel.kxml.no/noark5/v4/api'
     relbase = relver + '/arkivstruktur'
@@ -103,10 +111,7 @@ def main():
         print(pdfname)
         pdffile = file(pdfname, "rb")
 
-        pdffile.seek(0, os.SEEK_END)
-        pdfsize = pdffile.tell()
-        print "Size: ", pdfsize
-        pdffile.seek(0, os.SEEK_SET)
+        pdfsize = getFileSize(pdffile)
         pdf = PdfFileReader(pdffile)
         newreghref = objectOperation(info, relbase + '/ny-registrering/')
         recordinfo = createObject(api, newreghref, { })
@@ -132,7 +137,9 @@ def main():
         #pdf.getDocumentInfo().creationdate ?
 
         newfilehref = objectOperation(docobjinfo, relbase + '/fil/')
-        (c, res) = api.post(newfilehref, pdffile, 'application/pdf', length=pdfsize)
+        pdffile.seek(0, os.SEEK_SET)
+        (c, res) = api.post(newfilehref, pdffile, 'application/pdf',
+                            length=pdfsize)
         if 200 == res.code:
             print("file upload ok (status == 200)")
 
