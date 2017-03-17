@@ -26,6 +26,32 @@ the json structure.
             return l['href']
     return None
 
+def pickUnlessOne(json, type):
+    """
+Check the array in the json structure, if there is only one elemet, return it.
+If there are more than one elemet, ask the user to pick one.
+"""
+    print("Found %d %s entries" % (len(json), type))
+    count = len(json)
+    if 0 == count:
+        return None
+    if 1 == count:
+        print(json[0]['tittel'])
+        return json[0]
+    else:
+        n = -1
+        while -1 == n:
+            i = 0
+            for entry in json:
+                print(" %d - %s" % (i, entry['tittel']))
+                i = i + 1
+            n = int(raw_input("Select which %s you want: " % type))
+            if n < 0 or n >= count:
+                print("Invalid selection %d" % n)
+                n = -1
+            else:
+                return json[int(n)]
+
 def main():
     parser = argparse.ArgumentParser()
 #        parser.add_argument("--reference", help="connect to demo API site",
@@ -42,20 +68,21 @@ def main():
     
     (c, res) = api.json_get(fondshref)
     fondsinfo = json.loads(c)
-    print len(fondsinfo)
-    print
+    info = pickUnlessOne(fondsinfo, 'arkiv')
 
-    serieshref = objectOperation(fondsinfo[0],
-                               'http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivdel/')
+    serieshref = objectOperation(info,
+                                 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivdel/')
     print("Arkivdel %s" % serieshref)
     (c, res) = api.json_get(serieshref)
     seriesinfo = json.loads(c)
-    print len(fondsinfo)
-    print
+    info = pickUnlessOne(seriesinfo, 'arkivdel')
 
-    fileshref = objectOperation(fondsinfo[0],
+    fileshref = objectOperation(info,
                                'http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/')
     print("Mappe %s" % fileshref)
+    (c, res) = api.json_get(fileshref)
+    filessinfo = json.loads(c)
+    info = pickUnlessOne(filesinfo, 'mappe')
     
     print
 
