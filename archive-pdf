@@ -77,14 +77,14 @@ def main():
     relver = 'http://rel.kxml.no/noark5/v4/api'
     relbase = relver + '/arkivstruktur'
     parser = argparse.ArgumentParser()
-#        parser.add_argument("--reference", help="connect to demo API site",
-#                            action="store_true")
+    parser.add_argument("--verbose", help="print more debug information",
+                        action="store_true")
     parser.add_argument("pdffile", nargs='+', help="PDF file to archive")
     args = parser.parse_args()
         
     baseurl = "http://localhost:8092/noark5v4/"
     api = n5core.endpoint.Endpoint(baseurl)
-#    api.verbose = True
+    api.verbose = args.verbose
     api.login()
 
     fondshref = api.findRelation(relbase + '/arkiv/')
