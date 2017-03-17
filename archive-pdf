@@ -10,8 +10,9 @@ sys.path.append('lib')
 
 import argparse
 import json
-import n5core.endpoint
+import os
 from pyPdf import PdfFileReader
+import n5core.endpoint
 
 def objectOperation(json, relation):
     """
@@ -45,14 +46,25 @@ If there are more than one elemet, ask the user to pick one.
             for entry in json:
                 print(" %d - %s" % (i, entry['tittel']))
                 i = i + 1
-            n = int(raw_input("Select which %s you want: " % type))
-            if n < 0 or n >= count:
-                print("Invalid selection %d" % n)
-                n = -1
-            else:
-                return json[int(n)]
+            answer = raw_input("Select which %s you want (or search term): " % type)
+            try:
+                n = int(answer)
+                if n < 0 or n >= count:
+                    print("Invalid selection %d" % n)
+                    n = -1
+                else:
+                    return json[int(n)]
+            except Exception, e:
+                # FIXME search instead
+                pass
+
+def createObject(api, url, data):
+        (c, res) = api.json_post(url, data)
+        fondinfo = json.loads(c)
+        return fondinfo
 
 def main():
+    relver = 'http://rel.kxml.no/noark5/v4/api'
     parser = argparse.ArgumentParser()
 #        parser.add_argument("--reference", help="connect to demo API site",
 #                            action="store_true")
@@ -64,35 +76,66 @@ def main():
     api.verbose = True
     api.login()
 
-    fondshref = api.findRelation('http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/')
+    fondshref = api.findRelation(relver + '/arkivstruktur/arkiv/')
     
     (c, res) = api.json_get(fondshref)
     fondsinfo = json.loads(c)
     info = pickUnlessOne(fondsinfo, 'arkiv')
 
-    serieshref = objectOperation(info,
-                                 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivdel/')
+    serieshref = objectOperation(info, relver + '/arkivstruktur/arkivdel/')
     print("Arkivdel %s" % serieshref)
     (c, res) = api.json_get(serieshref)
     seriesinfo = json.loads(c)
     info = pickUnlessOne(seriesinfo, 'arkivdel')
 
-    fileshref = objectOperation(info,
-                               'http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/')
+    fileshref = objectOperation(info, relver + '/arkivstruktur/mappe/')
     print("Mappe %s" % fileshref)
     (c, res) = api.json_get(fileshref)
-    filessinfo = json.loads(c)
+    filesinfo = json.loads(c)
     info = pickUnlessOne(filesinfo, 'mappe')
-    
-    print
 
+    #
+    # Correct file located, add record, document description and
+    # document object for each file.
+    #
     for pdfname in (args.pdffile):
         print(pdfname)
-        pdf = PdfFileReader(file(pdfname, "rb"))
-        print(pdf.getDocumentInfo().title)
-        print(pdf.getDocumentInfo().producer)
-        print(pdf.getDocumentInfo().creator)
+        pdffile = file(pdfname, "rb")
+
+        pdffile.seek(0, os.SEEK_END)
+        pdfsize = pdffile.tell()
+        print "Size: ", pdfsize
+        pdffile.seek(0, os.SEEK_SET)
+        pdf = PdfFileReader(pdffile)
+        newreghref = objectOperation(info,
+                                     relver + '/arkivstruktur/ny-registrering/')
+        recordinfo = createObject(api, newreghref, { })
+
+        newdocdeschref = objectOperation(recordinfo,
+                                         relver + '/arkivstruktur/ny-dokumentbeskrivelse/')
+        docdescinfo = createObject(api, newdocdeschref, {
+            "tittel" : pdf.getDocumentInfo().title,
+        })
+
+        newdocobjhref = objectOperation(docdescinfo,
+                                        relver + '/arkivstruktur/ny-dokumentobjekt/')
+        docobjinfo = createObject(api, newdocobjhref, {
+            "versjonsnummer" : 1,
+            "variantformat"  : "Arkivformat",
+            "format"         : "PDF",
+            "mimeType"       : "application/pdf",
+            "filstoerrelse"  : pdfsize,
+        })
+
+        #print(pdf.getDocumentInfo().producer)
+        #print(pdf.getDocumentInfo().creator)
         #pdf.getDocumentInfo().creationdate ?
+
+        newfilehref = objectOperation(docobjinfo,
+                                      relver + '/arkivstruktur/fil/')
+        (c, res) = api.post(newfilehref, pdffile, 'application/pdf', length=pdfsize)
+        if 200 == res.code:
+            print("file upload ok (status == 200)")
 
 if __name__ == '__main__':
     main()
