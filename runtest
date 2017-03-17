@@ -382,9 +382,12 @@ Test basis requirements for NOARK 5 Core.
         rels = self.parselinks(docobjinfo['_links'])
         url = rels[reffilerel]
         data = "<xml></xml>"
-        (c, res) = self.post(url, data, 'application/xml')
-        self.verify(c == '', "post return nothing")
-        self.verify(200 == res.code, "file upload returned HTTP code 201")
+        try:
+            (c, res) = self.post(url, data, 'application/xml')
+            self.verify(c == '', "POST %s return nothing" % url)
+            self.verify(200 == res.code, "file upload returned HTTP code 200")
+        except urllib2.HTTPError, e:
+            print("POST %s failed: %s" % (url, e.read()))
 
     def runtests(self):
         try:
