@@ -65,6 +65,7 @@ def createObject(api, url, data):
 
 def main():
     relver = 'http://rel.kxml.no/noark5/v4/api'
+    relbase = relver + '/arkivstruktur'
     parser = argparse.ArgumentParser()
 #        parser.add_argument("--reference", help="connect to demo API site",
 #                            action="store_true")
@@ -76,19 +77,19 @@ def main():
     api.verbose = True
     api.login()
 
-    fondshref = api.findRelation(relver + '/arkivstruktur/arkiv/')
+    fondshref = api.findRelation(relbase + '/arkiv/')
     
     (c, res) = api.json_get(fondshref)
     fondsinfo = json.loads(c)
     info = pickUnlessOne(fondsinfo, 'arkiv')
 
-    serieshref = objectOperation(info, relver + '/arkivstruktur/arkivdel/')
+    serieshref = objectOperation(info, relbase + '/arkivdel/')
     print("Arkivdel %s" % serieshref)
     (c, res) = api.json_get(serieshref)
     seriesinfo = json.loads(c)
     info = pickUnlessOne(seriesinfo, 'arkivdel')
 
-    fileshref = objectOperation(info, relver + '/arkivstruktur/mappe/')
+    fileshref = objectOperation(info, relbase + '/mappe/')
     print("Mappe %s" % fileshref)
     (c, res) = api.json_get(fileshref)
     filesinfo = json.loads(c)
@@ -107,18 +108,17 @@ def main():
         print "Size: ", pdfsize
         pdffile.seek(0, os.SEEK_SET)
         pdf = PdfFileReader(pdffile)
-        newreghref = objectOperation(info,
-                                     relver + '/arkivstruktur/ny-registrering/')
+        newreghref = objectOperation(info, relbase + '/ny-registrering/')
         recordinfo = createObject(api, newreghref, { })
 
         newdocdeschref = objectOperation(recordinfo,
-                                         relver + '/arkivstruktur/ny-dokumentbeskrivelse/')
+                                         relbase + '/ny-dokumentbeskrivelse/')
         docdescinfo = createObject(api, newdocdeschref, {
             "tittel" : pdf.getDocumentInfo().title,
         })
 
         newdocobjhref = objectOperation(docdescinfo,
-                                        relver + '/arkivstruktur/ny-dokumentobjekt/')
+                                        relbase + '/ny-dokumentobjekt/')
         docobjinfo = createObject(api, newdocobjhref, {
             "versjonsnummer" : 1,
             "variantformat"  : "Arkivformat",
@@ -131,8 +131,7 @@ def main():
         #print(pdf.getDocumentInfo().creator)
         #pdf.getDocumentInfo().creationdate ?
 
-        newfilehref = objectOperation(docobjinfo,
-                                      relver + '/arkivstruktur/fil/')
+        newfilehref = objectOperation(docobjinfo, relbase + '/fil/')
         (c, res) = api.post(newfilehref, pdffile, 'application/pdf', length=pdfsize)
         if 200 == res.code:
             print("file upload ok (status == 200)")
