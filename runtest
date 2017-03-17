@@ -124,11 +124,12 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                 ctype = res.info().getheader('Content-Type')
                 if self.verify(0 == ctype.find('application/vnd.noark5-v4+json'),
                                "MIME type %s should be application/vnd.noark5-v4+json for url %s" % (ctype, url)):
-#                    print content
+                    #print "C:", content
                     baseref = json.loads(content)
-                    if '_links' not in baseref:
-                        self.failure("GET %s missing _links" % url)
-                    else:
+                    #print "J:", baseref
+                    if type(baseref) is list:
+                        self.failure("found json list in %s" % url)
+                    elif '_links' in baseref:
                         self.verifyuniquerels(baseref['_links'], url)
                         for l in baseref['_links']:
                             # Ignore non-standard relations
@@ -150,6 +151,8 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                         self.failure("unique duplicate rel %s in _links for %s" % (rel, url))
                                     else:
                                         self.rels[rel] = href
+                    else:
+                        self.failure("GET %s missing _links" % url)
                 self.urls.append(url)
             except urllib2.HTTPError, e:
                 self.failure("unable to GET %s" % url)
