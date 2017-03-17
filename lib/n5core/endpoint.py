@@ -104,7 +104,8 @@ Recursively look for relation in API.
 
     def _get(self, path, headers = None):
         url = self.expandurl(path)
-#        print(url)
+        if self.verbose:
+            print("GET %s" % url)
         request = urllib2.Request(url, None, headers)
         response = self._browser.open(request)
         content = response.read()
