@@ -73,6 +73,8 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         parser = argparse.ArgumentParser()
         parser.add_argument("--reference", help="connect to demo API site",
                             action="store_true")
+        parser.add_argument("--verbose", help="enable debug output",
+                            action="store_true")
         args = parser.parse_args()
         if args.reference:
             self.baseurl = "http://n5test.kxml.no/api/"
@@ -81,6 +83,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
         self.success_count = 0
         self.failure_count = 0
+        self.verbose = args.verbose
     def success(self, msg):
         print "success: " + msg
         self.success_count += 1
@@ -406,7 +409,6 @@ Test basis requirements for NOARK 5 Core.
                                                  self.failure_count)
 def main():
     t = Noark5Tester()
-    t.verbose = True
     t.runtests()
 
 if __name__ == '__main__':
