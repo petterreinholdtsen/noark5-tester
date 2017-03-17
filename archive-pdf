@@ -113,13 +113,17 @@ def main():
 
         pdfsize = getFileSize(pdffile)
         pdf = PdfFileReader(pdffile)
+        #print(pdf.getDocumentInfo().producer)
+        #print(pdf.getDocumentInfo().creator)
+        #pdf.getDocumentInfo().creationdate ?
+        doctitle = pdf.getDocumentInfo().title
         newreghref = objectOperation(info, relbase + '/ny-registrering/')
         recordinfo = createObject(api, newreghref, { })
 
         newdocdeschref = objectOperation(recordinfo,
                                          relbase + '/ny-dokumentbeskrivelse/')
         docdescinfo = createObject(api, newdocdeschref, {
-            "tittel" : pdf.getDocumentInfo().title,
+            "tittel" : doctitle,
         })
 
         newdocobjhref = objectOperation(docdescinfo,
@@ -131,10 +135,6 @@ def main():
             "mimeType"       : "application/pdf",
             "filstoerrelse"  : pdfsize,
         })
-
-        #print(pdf.getDocumentInfo().producer)
-        #print(pdf.getDocumentInfo().creator)
-        #pdf.getDocumentInfo().creationdate ?
 
         newfilehref = objectOperation(docobjinfo, relbase + '/fil/')
         pdffile.seek(0, os.SEEK_SET)
