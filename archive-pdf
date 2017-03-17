@@ -35,6 +35,7 @@ def main():
         
     baseurl = "http://localhost:8092/noark5v4/"
     api = n5core.endpoint.Endpoint(baseurl)
+    api.verbose = True
     api.login()
 
     fondshref = api.findRelation('http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/')
