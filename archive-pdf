@@ -32,12 +32,12 @@ def pickUnlessOne(json, type):
 Check the array in the json structure, if there is only one elemet, return it.
 If there are more than one elemet, ask the user to pick one.
 """
-    print("Found %d %s entries" % (len(json), type))
+    #print("Found %d %s entries" % (len(json), type))
     count = len(json)
     if 0 == count:
         return None
     if 1 == count:
-        print(json[0]['tittel'])
+        print("%s: %s" % (type, json[0]['tittel']))
         return json[0]
     else:
         n = -1
@@ -67,7 +67,6 @@ def getFileSize(filehandle):
     curpos = filehandle.tell()
     filehandle.seek(0, os.SEEK_END)
     size = filehandle.tell()
-    print("filesize: ", size)
     filehandle.seek(curpos, os.SEEK_SET)
     return size
 
@@ -82,7 +81,7 @@ def main():
         
     baseurl = "http://localhost:8092/noark5v4/"
     api = n5core.endpoint.Endpoint(baseurl)
-    api.verbose = True
+#    api.verbose = True
     api.login()
 
     fondshref = api.findRelation(relbase + '/arkiv/')
@@ -92,13 +91,13 @@ def main():
     info = pickUnlessOne(fondsinfo, 'arkiv')
 
     serieshref = objectOperation(info, relbase + '/arkivdel/')
-    print("Arkivdel %s" % serieshref)
+    #print("Arkivdel %s" % serieshref)
     (c, res) = api.json_get(serieshref)
     seriesinfo = json.loads(c)
     info = pickUnlessOne(seriesinfo, 'arkivdel')
 
     fileshref = objectOperation(info, relbase + '/mappe/')
-    print("Mappe %s" % fileshref)
+    #print("Mappe %s" % fileshref)
     (c, res) = api.json_get(fileshref)
     filesinfo = json.loads(c)
     info = pickUnlessOne(filesinfo, 'mappe')
@@ -108,7 +107,7 @@ def main():
     # document object for each file.
     #
     for pdfname in (args.pdffile):
-        print(pdfname)
+        print("Uploading %s" % pdfname)
         pdffile = file(pdfname, "rb")
 
         pdfsize = getFileSize(pdffile)
@@ -140,8 +139,8 @@ def main():
         pdffile.seek(0, os.SEEK_SET)
         (c, res) = api.post(newfilehref, pdffile, 'application/pdf',
                             length=pdfsize)
-        if 200 == res.code:
-            print("file upload ok (status == 200)")
+        if 200 != res.code:
+            print("upload failed (status == %d)" % res.code)
 
 if __name__ == '__main__':
     main()
