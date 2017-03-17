@@ -85,7 +85,6 @@ Recursively look for relation in API.
 
     def post(self, path, data, mimetype, length=None):
         url = self.expandurl(path)
-        print("POST %s to %s" % (mimetype, url))
         if length is None:
             length = len(data)
         headers = {
