@@ -28,15 +28,15 @@ class Endpoint:
         self.verbose = False
 
     def expandurl(self, path):
-#        print self.baseurl, path
+#        print(self.baseurl, path)
         url = urlparse.urljoin(self.baseurl, path)
         if self.verbose:
-            print url
+            print(url)
         return url
 
     def login(self, username = 'admin', password = 'password'):
         url = self.expandurl('login')
-#        print url
+#        print(url)
         self._browser.open(url)
         self._browser.select_form(nr=0)
 #        self._browser.form.set_all_readonly(False)
@@ -57,7 +57,7 @@ class Endpoint:
         response = self._browser.open(request)
         content = response.read()
         if self.verbose:
-            print content
+            print(content)
         return (content, response)
 
     def json_post(self, path, data):
@@ -66,12 +66,12 @@ class Endpoint:
 
     def _get(self, path, headers = None):
         url = self.expandurl(path)
-#        print url
+#        print(url)
         request = urllib2.Request(url, None, headers)
         response = self._browser.open(request)
         content = response.read()
         if self.verbose:
-            print content
+            print(content)
         return (content, response)
 
     def json_get(self, path):
