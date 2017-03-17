@@ -33,17 +33,20 @@ Check the array in the json structure, if there is only one elemet, return it.
 If there are more than one elemet, ask the user to pick one.
 """
     #print("Found %d %s entries" % (len(json), type))
-    count = len(json)
+    if type in json:
+        count = len(json[type])
+    else:
+        count = 0
     if 0 == count:
         return None
     if 1 == count:
-        print("%s: %s" % (type, json[0]['tittel']))
-        return json[0]
+        print("%s: %s" % (type, json[type][0]['tittel']))
+        return json[type][0]
     else:
         n = -1
         while -1 == n:
             i = 0
-            for entry in json:
+            for entry in json[type]:
                 print(" %d - %s" % (i, entry['tittel']))
                 i = i + 1
             answer = raw_input("Select which %s you want (or search term): " % type)
@@ -53,7 +56,7 @@ If there are more than one elemet, ask the user to pick one.
                     print("Invalid selection %d" % n)
                     n = -1
                 else:
-                    return json[int(n)]
+                    return json[type][int(n)]
             except Exception, e:
                 # FIXME search instead
                 pass
