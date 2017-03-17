@@ -276,6 +276,8 @@ Test basis requirements for NOARK 5 Core.
         return info
 
     def testNewDocument(self):
+        import datetime
+        now = datetime.datetime.now().isoformat()
         if not self.gotlogin:
             self.failure("not logged in, unable to test creation")
             return
@@ -283,16 +285,15 @@ Test basis requirements for NOARK 5 Core.
         createfondsrel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
         fondsdata = {
-            "tittel"          : "Title of the test fonds",
+            "tittel"          : "Title of the test fonds created %s" % now,
             "beskrivelse"     : "Description of the test fonds",
             "oppbevaringsted" : [ "location 1", "location2", "location3" ],
             "dokumentmedium"  : "Elektronisk arkiv",
         }
         fondinfo = self.createEntity('fond', createfondsrel, self.rels, fondsdata)
-        #print fondinfo
-        
+
         seriesdata = {
-            "tittel"          : "Title of the test series",
+            "tittel"          : "Title of the test series created %s" % now,
             "beskrivelse"     : "Description of the test series",
             "oppbevaringsted" : [ "location 1", "location2", "location3" ],
             "dokumentmedium"  : "Elektronisk arkiv",
@@ -302,11 +303,10 @@ Test basis requirements for NOARK 5 Core.
         serieinfo = self.createEntity('serie', createseriesrel,
                                       self.parselinks(fondinfo['_links']),
                                       seriesdata)
-        #print serieinfo
         
         filedata = {
             "mappeID"            : "2017/01",
-            "offentligTittel"    : "Public title of the test file",
+            "offentligTittel"    : "Public title of the test file created %s" % now,
             "tittel"             : "Title of the test file",
             "beskrivelse"        : "Description of the test file",
             "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
@@ -321,7 +321,7 @@ Test basis requirements for NOARK 5 Core.
 
         casefiledata = {
             "mappeID"            : "2017/1",
-            "offentligTittel"    : "Public title of the test case file",
+            "offentligTittel"    : "Public title of the test case file created %s" % now,
             "tittel"             : "Title of the test case file",
             "beskrivelse"        : "Description of the test file",
             "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
@@ -345,12 +345,11 @@ Test basis requirements for NOARK 5 Core.
         recordinfo = self.createEntity('record', createrecordrel,
                                        self.parselinks(fileinfo['_links']),
                                        recorddata)
-        #print recordinfo
 
         docdescdata = {
             "dokumenttype"    : "type dokument",
             "dokumentstatus"  : "status of document",
-            "tittel"          : "Title of the test document description",
+            "tittel"          : "Title of the test document description created %s" % now,
             "tilknyttetRegistreringSom" : "Associated with record as"
         }
         createdocdescrel = \
