@@ -45,6 +45,42 @@ class Endpoint:
         self._browser.submit()
         html = self._browser.response().read()
 
+    def findRelation(self, relation):
+        """
+Recursively look for relation in API.
+"""
+        if 'self' == relation: # Do not make sense to look for self relations
+            return None
+        urlsleft = ['.']
+        urlseen = {}
+        while 0 < len(urlsleft):
+            url = urlsleft.pop(0)
+            if url in urlseen:
+                continue
+            urlseen[url] = 1
+            try:
+                (content, res) = self.json_get(url)
+                ctype = res.info().getheader('Content-Type')
+                if 0 == ctype.find('application/vnd.noark5-v4+json'):
+                    baseref = json.loads(content)
+                    #print "J:", baseref
+                    if type(baseref) is list:
+                        pass # Ignore lists
+                    elif '_links' in baseref:
+                        for l in baseref['_links']:
+                            if 'href' in l:
+                                href = l['href']
+                                if href not in urlseen:
+                                    urlsleft.append(href)
+                                if 'rel' in l and l['rel'] != 'self' and \
+                                   l['rel'] == relation:
+                                   return href
+                    else:
+                        pass # ignore URLs without _links
+            except urllib2.HTTPError, e:
+                pass
+                self.failure("unable to GET %s" % url)
+
     def post(self, path, data, mimetype):
         url = self.expandurl(path)
         print("POST %s to %s" % (mimetype, url))
