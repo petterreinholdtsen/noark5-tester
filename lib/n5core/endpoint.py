@@ -29,6 +29,8 @@ class Endpoint:
 
     def expandurl(self, path):
 #        print(self.baseurl, path)
+        if path is None:
+            raise Exception("FIXME finn bedre exception")
         url = urlparse.urljoin(self.baseurl, path)
         if self.verbose:
             print(url)
