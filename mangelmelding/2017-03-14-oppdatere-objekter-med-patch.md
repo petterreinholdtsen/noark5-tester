@@ -104,5 +104,5 @@ OData som best practice innebærer en generell endring i hvordan CRUD er beskrev
 1. En entitet opprettes med en POST.
 2. En entitet oppdateres, i sin helhet, med en PUT.
 3. Et felt oppdateres med en PATCH.
-4. Komposisjoner nøstes ikke
+4. Komposisjoner nøstes ikke ved oppdateringer
 5. Komposisjoner knyttes til entiteter via PATCH
