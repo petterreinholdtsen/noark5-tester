@@ -310,7 +310,7 @@ Test basis requirements for NOARK 5 Core.
         filedata = {
             "mappeID"            : "2017/01",
             "offentligTittel"    : "Public title of the test file created %s" % now,
-            "tittel"             : "Title of the test file",
+            "tittel"             : "Title of the test file created %s" % now,
             "beskrivelse"        : "Description of the test file",
             "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
             "oppbevaringsted"    : [ "location 1", "location2", "location3" ],
@@ -325,7 +325,7 @@ Test basis requirements for NOARK 5 Core.
         casefiledata = {
             "mappeID"            : "2017/1",
             "offentligTittel"    : "Public title of the test case file created %s" % now,
-            "tittel"             : "Title of the test case file",
+            "tittel"             : "Title of the test case file created %s" % now,
             "beskrivelse"        : "Description of the test file",
             "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
             "oppbevaringsted"    : [ "location 1", "location2", "location3" ],
