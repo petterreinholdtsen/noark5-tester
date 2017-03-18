@@ -20,7 +20,7 @@ Return the URL/href for a given relation on the object represented by
 the json structure.
 
 """
-    if '_links' not in json:
+    if json is None or '_links' not in json:
         return None
     for l in json['_links']:
         if l['rel'] == relation:
@@ -40,14 +40,20 @@ If there are more than one elemet, ask the user to pick one.
     if 0 == count:
         return None
     if 1 == count:
-        print("%s: %s" % (type, json[type][0]['tittel']))
+        if 'tittel' in json[type][0]:
+            print("%s: %s" % (type, json[type][0]['tittel']))
+        else:
+            print("%s: %s" % (type, json[type][0]['systemID']))
         return json[type][0]
     else:
         n = -1
         while -1 == n:
             i = 0
             for entry in json[type]:
-                print(" %d - %s" % (i, entry['tittel']))
+                if 'tittel' in entry:
+                    print(" %d - %s" % (i, entry['tittel']))
+                else:
+                    print(" %d - %s systemID %s" % (i, type, entry['systemID']))
                 i = i + 1
             answer = raw_input("Select which %s you want (or search term): " % type)
             try:
