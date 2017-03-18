@@ -130,7 +130,9 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                     #print "C:", content
                     baseref = json.loads(content)
                     #print "J:", baseref
-                    if type(baseref) is list:
+                    if baseref is None:
+                        self.failure("JSON MIME type but no JSON in %s" % url)
+                    elif type(baseref) is list:
                         self.failure("found json list in %s" % url)
                     elif '_links' in baseref:
                         self.verifyuniquerels(baseref['_links'], url)
@@ -141,6 +143,10 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                 href = l['href']
                                 if href not in urlseen:
                                     urlsleft.append(href)
+                                if l['templated']:
+                                    hrefshort = href.split('{')[0]
+                                    if hrefshort not in urlseen:
+                                        urlsleft.append(hrefshort)
                                 if 'rel' in l and l['rel'] != 'self':
                                     # FIXME figure out if rels should match spec
                                     if l['rel'] in relok:
