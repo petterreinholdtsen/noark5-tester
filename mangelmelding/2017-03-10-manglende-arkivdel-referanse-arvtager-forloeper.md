@@ -10,7 +10,7 @@ Manglende beskrivelse av referanseForloeper/referanseArvtager for arkivdel
         Dokumentdel  7.2.1.2
          Sidenummer  66
         Linjenummer  n/a
-    Innsendingsdato  2017-03-10
+    Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
 Beskrivelse

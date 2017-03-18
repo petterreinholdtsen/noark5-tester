@@ -10,7 +10,7 @@ file upload as part of a transaction with documentObject
         Dokumentdel  6.1.9
          Sidenummer  25
         Linjenummer  n/a
-    Innsendingsdato  2017-03-10
+    Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
 Beskrivelse
