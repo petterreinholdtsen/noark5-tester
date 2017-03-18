@@ -108,14 +108,13 @@ def main():
     #print("Mappe %s" % fileshref)
     (c, res) = api.json_get(fileshref)
     filesinfo = json.loads(c)
-    info = pickUnlessOne(filesinfo, 'mappe')
+    fileinfo = pickUnlessOne(filesinfo, 'mappe')
 
     #
     # Correct file located, add record, document description and
     # document object for each file.
     #
     for pdfname in (args.pdffile):
-        print("Uploading %s" % pdfname)
         pdffile = file(pdfname, "rb")
 
         pdfsize = getFileSize(pdffile)
@@ -124,7 +123,11 @@ def main():
         #print(pdf.getDocumentInfo().creator)
         #pdf.getDocumentInfo().creationdate ?
         doctitle = pdf.getDocumentInfo().title
-        newreghref = objectOperation(info, relbase + '/ny-registrering/')
+        
+        print("Uploading %s\n  PDF title: %s\n  File %s: %s" % \
+              (pdfname, doctitle, fileinfo['mappeID'], fileinfo['tittel']))
+        
+        newreghref = objectOperation(fileinfo, relbase + '/ny-registrering/')
         recordinfo = createObject(api, newreghref, { })
 
         newdocdeschref = objectOperation(recordinfo,
