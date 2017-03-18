@@ -87,11 +87,16 @@ def main():
     api.verbose = args.verbose
     api.login()
 
-    fondshref = api.findRelation(relbase + '/arkiv/')
+    fondsrel = relbase + '/arkiv/'
+    fondshref = api.findRelation(fondsrel)
     
     (c, res) = api.json_get(fondshref)
     fondsinfo = json.loads(c)
     info = pickUnlessOne(fondsinfo, 'arkiv')
+    if info is None:
+        print("error: Fant intet relasjon for %s.  Tom database?" % fondsrel)
+        print("error: Kan ikke laste opp dokumenter uten definerte arkiver.")
+        return
 
     serieshref = objectOperation(info, relbase + '/arkivdel/')
     #print("Arkivdel %s" % serieshref)
