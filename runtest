@@ -143,7 +143,9 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                 href = l['href']
                                 if href not in urlseen:
                                     urlsleft.append(href)
-                                if l['templated']:
+                                if 'templated' not in l:
+                                    self.failure("_links missing templated in %s" % url)
+                                elif l['templated']:
                                     hrefshort = href.split('{')[0]
                                     if hrefshort not in urlseen:
                                         urlsleft.append(hrefshort)
