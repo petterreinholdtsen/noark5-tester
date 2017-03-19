@@ -183,7 +183,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                     elif l['rel'] + '/' in relok:
                                         self.success('rel %s is well known (missing trailing slash)' % l['rel'])
                                     else:
-                                        self.failure('rel %s should be well known' % l['rel'])
+                                        self.failure('rel %s in %s should be well known' % (l['rel'], url))
                                     rel = l['rel']
                                     # Only check non-objects for unique relations
                                     if 'systemID' not in baseref \
