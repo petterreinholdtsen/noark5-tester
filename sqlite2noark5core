@@ -3,6 +3,7 @@
 import sys
 sys.path.append('lib')
 
+import argparse
 import json
 import n5core.endpoint
 import sqlite3
@@ -108,8 +109,13 @@ Example docobjdata:
         return docobjinfo
 
 def main():
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--verbose", help="print more debug information",
+                            action="store_true")
+        args = parser.parse_args()
         baseurl = "http://localhost:8092/noark5v4/"
         e = n5core.endpoint.Endpoint(baseurl)
+        e.verbose = args.verbose
         e.login()
 
         # Mapping from agency to fond and serie
