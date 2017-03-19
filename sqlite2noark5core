@@ -15,10 +15,10 @@ def createFond(ep, fondsdata):
 Example fondsdata:
 
         fondsdata = {
-            "title"           : "Title of the test fonds",
-            "description"     : "Description of the test fonds",
+            "tittel"          : "Title of the test fonds",
+            "beskrivelse"     : "Description of the test fonds",
             "oppbevaringsted" : [ "location 1", "location2", "location3" ],
-            "documentMedium"  : "Elektronisk arkiv",
+            "dokumentmedium"  : "Elektronisk arkiv",
         }
 
 """
@@ -33,10 +33,10 @@ def createSeries(ep, fondid, seriesdata):
 Example seriesdata:
 
         seriesdata = {
-            "title"           : "Title of the test series",
-            "description"     : "Description of the test series",
+            "tittel"          : "Title of the test series",
+            "beskrivelse"     : "Description of the test series",
             "oppbevaringsted" : [ "location 1", "location2", "location3" ],
-            "documentMedium"  : "Elektronisk arkiv",
+            "dokumentmedium"  : "Elektronisk arkiv",
         }
 """
         createseriesurl = 'hateoas-api/arkivstruktur/arkiv/%s/ny-arkivdel' % fondid
@@ -49,13 +49,13 @@ def createFile(ep, serieid, filedata):
 Example filedata:
 
         filedata = {
-            "fileId"          : "2006/01",
-            "officialTitle"   : "Public title of the test file",
-            "title"           : "Title of the test file",
-            "description"     : "Description of the test file",
-            "keyword"         : ["keyword 1", "keyword 2", "keyword 3"],
+            "mappeID"         : "2006/01",
+            "offentligTittel" : "Public title of the test file",
+            "tittel"          : "Title of the test file",
+            "beskrivelse"     : "Description of the test file",
+            "noekkelord"      : ["keyword 1", "keyword 2", "keyword 3"],
             "oppbevaringsted" : [ "location 1", "location2", "location3" ],
-            "documentMedium"  : "Elektronisk arkiv",
+            "dokumentmedium"  : "Elektronisk arkiv",
         }
 """
         createfileurl = 'hateoas-api/arkivstruktur/arkivdel/%s/ny-mappe' % serieid
@@ -83,7 +83,7 @@ Example docdescdata:
         docdescdata = {
             "dokumenttype"    : "type dokument",
             "dokumentstatus"  : "status of document",
-            "title"           : "Title of the test document description",
+            "tittel"          : "Title of the test document description",
             "tilknyttetRegistreringSom" : "Associated with record as"
         }
 """
@@ -139,15 +139,15 @@ def main():
                 if agency not in fonds:
                         print "First time agency %s" % agency
                         fondsdata = {
-                                "title"           : agency,
-                                "documentMedium"  : "Elektronisk arkiv",
+                                "tittel"          : agency,
+                                "dokumentmedium"  : "Elektronisk arkiv",
                         }
                         fondinfo = createFond(e, fondsdata)
                         fondid = fondinfo['systemID']
 
                         seriesdata = {
-                                "title"           : agency,
-                                "documentMedium"  : "Elektronisk arkiv",
+                                "tittel"          : agency,
+                                "dokumentmedium"  : "Elektronisk arkiv",
                         }
                         serieinfo = createSeries(e, fondid, seriesdata)
                         serieid = serieinfo['systemID']
@@ -158,13 +158,13 @@ def main():
                         serieid = series[agency]
                 print "creating using %s and %s" % (fondid, serieid)
                 filedata = {
-                        "fileId"          : row[n['caseid']],
-                        "officialTitle"   : row[n['casedesc']],
-                        "title"           : "",
-                        "description"     : "",
-                        "keyword"         : ["keyword 1"],
+                        "mappeID"         : row[n['caseid']],
+                        "offentligTittel" : row[n['casedesc']],
+                        "tittel"          : "",
+                        "beskrivelse"     : "",
+                        "noekkelord"      : ["keyword 1"],
                         "oppbevaringsted" : [ "location 1" ],
-                        "documentMedium"  : "Elektronisk arkiv",
+                        "dokumentmedium"  : "Elektronisk arkiv",
                 }
                 fileinfo = createFile(e, serieid, filedata)
                 fileid = fileinfo['systemID']
@@ -176,7 +176,7 @@ def main():
 
                 docdescdata = {
                         "dokumenttype"    : row[n['doctype']],
-                        "title"           : row[n['docdesc']],
+                        "tittel"          : row[n['docdesc']],
                         "tilknyttetRegistreringSom" : "Associated with record as"
                 }
                 docdescinfo = createDocDesc(e, recordid, docdescdata)
