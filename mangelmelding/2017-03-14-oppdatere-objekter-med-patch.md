@@ -84,11 +84,11 @@ seg som entiteter.
 
 Nye REL som trengs da for feks klasse vil være:
 
-REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-skjerming
-REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-gradering
-REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-sletting
-REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-kassasjon
-REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-kassasjonutfoert
+  REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-skjerming  
+  REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-gradering  
+  REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-sletting  
+  REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-kassasjon  
+  REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-kassasjonutfoert  
 
 Ønsket endring
 --------------
