@@ -27,19 +27,19 @@ relasjonslenker for slike operasjoner.
 
 Slik vi forstår tjenestegrensesnittet er det mening at hele objektet
 skal lastes fram og tilbake og kjernen må ta stilling til om felter er
-blitt endret. Dette kompliseres enda mer ved at det ikke er lov å
-endre noen felter etter at objektet er opprettet/avsluttet.
+blitt endret. Dette kompliseres enda mer ved at det er endel felter
+det ikke er lov å endre etter at objektet er opprettet/avsluttet.
 
 Man løper en stor dataintegritetsrisiko hvis man tvinger klienten til
 å holde hele objektet med alle komposisjoner i minne og sende hele
-objektet tilbake til kjernen ved mindre oppdateringer. Dette mener vi er 
-unødvendig og en dårlig tilnærming. Man må huske at RA godkjenner Noark
-5 komplett/kjerne. Ikke forsystemene som skal integreres med en Noark
-5 kjerne. Et eksempel vises under.
+objektet tilbake til kjernen ved mindre oppdateringer. Dette mener vi
+er unødvendig og en dårlig tilnærming. Man må huske at Riksarkivet
+godkjenner Noark 5 komplett/kjerne. Ikke forsystemene som skal
+integreres med en Noark 5 kjerne. Et eksempel vises under.
 
 La oss anta følgende situasjon. Et fagsystem for behandling av 
 barnehagesøknader er integrert med et Noark 5 saksbehandlingsystem. 
-Søknaden motaes via postmottak og det opprettes en saksmappe. 
+Søknaden mottas via postmottak og det opprettes en saksmappe. 
 Fagsystemet går da gjennom disse saksmappene og behandler søknader. 
 Følgende data sendes fra kjernnen til fagsystemet (GET):
 
@@ -58,10 +58,11 @@ Følgende data sendes fra kjernnen til fagsystemet (GET):
   "dokumentmedium": "Elektronisk arkiv"
 }
 ```
-Fagsystemet som utgjør klienten er dårlig konfiguert. Fagsystemet har
-ingen objekt som er konfiguert til å forstå noekkelord så når JSON
-innholdet mottaes av fagsystemet forsvinner noekkelord. Fagsystemet
-senere laster opp følgende data til kjernen (PUT): 
+
+Men fagsystemet som utgjør klienten er dårlig laget. Fagsystemet er
+ikke laget for å forstå noekkelord, slik at når JSON-innholdet mottas
+av fagsystemet droppes verdien i noekkelord.  Fagsystemet laster
+senere opp følgende data til kjernen (PUT):
 
 ```
 {
@@ -77,12 +78,15 @@ senere laster opp følgende data til kjernen (PUT):
   "dokumentmedium": "Elektronisk arkiv"
 }
 ```
-Her mangler noekkelord. Kjernen har ingen grunn til å tro at det ikke 
-var meningen at noekkelord skulle forsvinne. Dette er ikke bare et problem
-for komposisjoner, men kan også gjelde felter. Poenget er at kjernen 
-tvinger klienten å være innforstått med hele Noark 5 datamodellen, noe
-som er unødvendig. RA godkjenner ikke forsystemene som skal integreres
-til en frittstående kjerne.
+
+Nå er noekkelord med tilhørende verdi forsvunnet. Kjernen har ingen
+grunn til å tro at det ikke var meningen at noekkelord skulle
+forsvinne. Dette er ikke bare et problem for komposisjoner, men kan
+også gjelde felter.  Poenget er at kjernen tvinger klienten å være
+innforstått med hele Noark 5 datamodellen, noe som er unødvendig.
+Riksarkivet godkjenner ikke forsystemene som skal integreres til en
+frittstående kjerne, slik at det ikke er åpning for riksarkivet å
+oppdage slike problemer før slike klienter tas i bruk.
 
 Et relatert eksempel er med feltet opprettetDato der opprettetDato kan
 være forskjellig for kjernen og fagsystemet. Det er legitimt at fagsystemet
@@ -103,6 +107,7 @@ fagsystemet.
   "dokumentmedium": "Elektronisk arkiv"
 }
 ```
+
 Det er ikke mulig å endre opprettetDato/av i Noark 5 så denne forespørslen 
 ville måtte avvises. Det er allikevel en del logikk som må bygges inn i kjernen
 for å sjekke hvilken felter er blitt endret og om det er lov å tillate en slik endring. 
@@ -117,8 +122,10 @@ forespørsel der kun beskrivelse inngikk.
   *"beskrivelse": "Plassen er tildelt i duestien barnehage"*,
 }
 ```
-Med en slik strategi det være mye fortere og enklere å avvise uønskete endringer
-og klienten tvinges kun til vite om de feltene den har behov for å vite noe om.
+
+Med en slik strategi det være mye fortere og enklere å avvise uønskete
+endringer og klienten tvinges kun til forholde seg til de feltene den
+har behov for å vite noe om.
 
 Tjenestegrensesnitt i sitt nåværende form virker å være utviklet
 utifra et «Noark 5 komplett» synspunkt, framfor synspunktet,
