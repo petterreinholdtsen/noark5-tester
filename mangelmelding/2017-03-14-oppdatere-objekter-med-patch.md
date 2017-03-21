@@ -32,19 +32,106 @@ endre noen felter etter at objektet er opprettet/avsluttet.
 
 Man løper en stor dataintegritetsrisiko hvis man tvinger klienten til
 å holde hele objektet med alle komposisjoner i minne og sende hele
-objektet tilbake til kjernen. Dette mener vi er unødvendig og en
-dårlig tilnærming (bad practice).
+objektet tilbake til kjernen ved mindre oppdateringer. Dette mener vi er 
+unødvendig og en dårlig tilnærming. Man må huske at RA godkjenner Noark
+5 komplett/kjerne. Ikke forsystemene som skal integreres med en Noark
+5 kjerne. Et eksempel vises under.
+
+La oss anta følgende situasjon. Et fagsystem for behandling av 
+barnehagesøknader er integrert med et Noark 5 saksbehandlingsystem. 
+Søknaden motaes via postmottak og det opprettes en saksmappe. 
+Fagsystemet går da gjennom disse saksmappene og behandler søknader. 
+Følgende data sendes fra kjernnen til fagsystemet (GET):
+
+```
+{
+  "systemId" : "ad6d2092-180f-46d7-a631-ba679f875fd0" ,
+  "opprettetDato" : "2017-03-03T13:21:34",
+  "opprettetAv" : "admin",
+  "offentligTittel": "Public title of the test file",
+  "mappeID": "2017/01",
+  "saksstatus" : "Opprettet",
+  "tittel": "Title of the test file",
+  "beskrivelse": "Søknad om bhg plass i Eksempel kommune",
+  *"noekkelord": ["keyword 1", "keyword 2","keyword 3" ],*
+  "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+  "dokumentmedium": "Elektronisk arkiv"
+}
+```
+Fagsystemet som utgjør klienten er dårlig konfiguert. Fagsystemet har
+ingen objekt som er konfiguert til å forstå noekkelord så når JSON
+innholdet mottaes av fagsystemet forsvinner noekkelord. Fagsystemet
+senere laster opp følgende data til kjernen (PUT): 
+
+```
+{
+  "systemId" : "ad6d2092-180f-46d7-a631-ba679f875fd0" ,
+  "opprettetDato" : "2017-03-03T13:21:34",
+  "opprettetAv" : "admin",
+  "offentligTittel": "Public title of the test file",
+  "mappeID": "2017/01",
+  *"saksstatus" : "Avsluttet",*
+  "tittel": "Title of the test file",
+  "beskrivelse": "Søknad om bhg plass i Eksempel kommune",
+  "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+  "dokumentmedium": "Elektronisk arkiv"
+}
+```
+Her mangler noekkelord. Kjernen har ingen grunn til å tro at det ikke 
+var meningen at noekkelord skulle forsvinne. Dette er ikke bare et problem
+for komposisjoner, men kan også gjelde felter. Poenget er at kjernen 
+tvinger klienten å være innforstått med hele Noark 5 datamodellen, noe
+som er unødvendig. RA godkjenner ikke forsystemene som skal integreres
+til en frittstående kjerne.
+
+Et relatert eksempel er med feltet opprettetDato der opprettetDato kan
+være forskjellig for kjernen og fagsystemet. Det er legitimt at fagsystemet
+velger å sette opprettetDato til tidspunktet mappen ble opprettet i 
+fagsystemet.
+
+```
+{
+  "systemId" : "ad6d2092-180f-46d7-a631-ba679f875fd0" ,
+  *"opprettetDato" : "2017-03-04T09:23:14",*
+  *"opprettetAv" : "fagsystemadmin",*
+  "offentligTittel": "Public title of the test file",
+  "mappeID": "2017/01",
+  "saksstatus" : "Opprettet",
+  "tittel": "Title of the test file",
+  *"beskrivelse": "Plassen er tildelt i duestien barnehage"*,
+  "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+  "dokumentmedium": "Elektronisk arkiv"
+}
+```
+Det er ikke mulig å endre opprettetDato/av i Noark 5 så denne forespørslen 
+ville måtte avvises. Det er allikevel en del logikk som må bygges inn i kjernen
+for å sjekke hvilken felter er blitt endret og om det er lov å tillate en slik endring. 
+En dårlig Noark 5 kjerne ville kanskje til og med tillate en slik endring!
+
+Det ville være mye enklere å be klienten angi hvilken felter som skal endres. 
+I eksemplet over er det beskrivelse som ble endret. Da kunne det være en PATCH
+forespørsel der kun beskrivelse inngikk.
+
+```
+{
+  *"beskrivelse": "Plassen er tildelt i duestien barnehage"*,
+}
+```
+Med en slik strategi det være mye fortere og enklere å avvise uønskete endringer
+og klienten tvinges kun til vite om de feltene den har behov for å vite noe om.
 
 Tjenestegrensesnitt i sitt nåværende form virker å være utviklet
 utifra et «Noark 5 komplett» synspunkt, framfor synspunktet,
 «frittstående kjerne» som kan integreres med sak/arkiv og
-fagsystemer. Det er viktig å huske at Riksarkivet godkjenner kjernen,
-ikke klienter, og vi tror det er viktig å ta inn over seg forskjellen.
+fagsystemer. Et Noark 5 komplett system vil ha full kontoll både på klienten
+og kjernen og derfor vil nok en del av problemene over ikke være relevant. 
+Riksarkivet godkjenner en kjerne/komplett, ikke klienter, og vi tror
+det er viktig å ta inn over seg forskjellen.
 Eksisterende Noark-komplett systemer blir godkjent som en helhet. En
 frittstående kjerne med integrasjoner til fagsystemer vil stå over
-mange flere utfordringer når det gjelder datakvaliteten når data
-unødvendig flyttes fram og tilbake mellom kjernen og en
-klient. Diverse klienter vil ikke nødvendigvis forstå viktigheten og
+mange flere utfordringer når det gjelder datakvaliteten hvis data
+unødvendig flyttes fram og tilbake mellom klienten og kjernen.
+Diverse klienter vil ikke nødvendigvis forstå viktigheten og
 betydningen av Noark metadata og sammenhenger mellom entiteter!
 
 For å understøtte argumentet at kjernen må støtte
