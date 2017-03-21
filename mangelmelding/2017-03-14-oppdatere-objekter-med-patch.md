@@ -152,9 +152,9 @@ du skal isolere og kun jobbe med data som trenger oppdatering, framfor
 Hvis vi forstår OData anbefalingene riktig så anbefales det følgende
 strategi.  Entiteter opprettes / oppdateres (i sin helhet) med
 POST/PUT mens felter oppdateres med en PATCH, der feltets
-attributtnavn og ny verdi angies.
+attributtnavn og ny verdi oppgis.
 
-Det må da taes stilling til hvordan komposisjoner opprettes og
+Det må da tas stilling til hvordan komposisjoner opprettes og
 oppdateres.  I tjenestegrensesnittet opprettes komposisjoner sammen
 med entiteten.
 
@@ -192,18 +192,18 @@ Nye REL som trengs da for feks klasse vil være:
 Ønsket endring
 --------------
 
-Vi ønsker at tjenestegrensesnitt følger en identifisert best-practice
-for CRUD.  Selv om tjenestegrensesnittet ikke defineres utelukkende
-som en OData kilde så kan OData standarden brukes som veiledende. Vi
-ønsker at det utvikles en beskrivelse av hvilken best-practice
-tjenestegrensesnitt forholder seg til, eventuelt om det er avvik til
-etablerte tilnærminger og hvorfor.
+Vi foreslår at tjenestegrensesnitt følger den overnevnt identifiserte
+beste praksis for CRUD.  Selv om tjenestegrensesnittet ikke defineres
+utelukkende som en OData kilde så kan OData standarden brukes som
+veiledende.  Vi foreslår at det utvikles en beskrivelse av hvilke
+beste praksis-spesifikasjoner tjenestegrensesnitt forholder seg til,
+eventuelt om det er avvik til etablerte tilnærminger og hvorfor.
 
-OData som best practice innebærer en generell endring i hvordan CRUD
+OData som beste praksis innebærer en generell endring i hvordan CRUD
 er beskrevet:
 
 1. En entitet opprettes med en POST.
 2. En entitet oppdateres, i sin helhet, med en PUT.
-3. Et felt oppdateres med en PATCH.
+3. Enkeltfelt eller utvalgte felt oppdateres med en PATCH.
 4. Komposisjoner nøstes ikke ved oppdateringer
 5. Komposisjoner knyttes til entiteter via PATCH
