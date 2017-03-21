@@ -21,9 +21,9 @@ Når det gjelder komposisjoner som er beskrevet på side 18 så står det
 hovedobjektet».
 
 Det må også være mulig å opprette/oppdatere slike komposisjoner på et
-senere tidspunkt. Valget står da mellom en PUT på hele objektet der
-objektet inngår eller at det er egne relasjonslenker for slike
-operasjoner.
+senere tidspunkt. Valget dokumentert i spesifikasjonen står da mellom
+en PUT på hele objektet der objektet inngår eller at det er egne
+relasjonslenker for slike operasjoner.
 
 Slik vi forstår tjenestegrensesnittet er det mening at hele objektet
 skal lastes fram og tilbake og kjernen må ta stilling til om felter er
@@ -36,14 +36,14 @@ objektet tilbake til kjernen. Dette mener vi er unødvendig og en
 dårlig tilnærming (bad practice).
 
 Tjenestegrensesnitt i sitt nåværende form virker å være utviklet
-utifra et "Noark 5 komplett" synspunkt, framfor synspunktet,
-"frittstående kjerne" som kan integreres med sak/arkiv og
+utifra et «Noark 5 komplett» synspunkt, framfor synspunktet,
+«frittstående kjerne» som kan integreres med sak/arkiv og
 fagsystemer. Det er viktig å huske at Riksarkivet godkjenner kjernen,
-ikke klienter. Det er en viktig forskjell som Riksarkivet bør ta
-innover seg. Eksisterende Noark-komplett systemer blir godkjent som en
-helhet. En frittstående kjerne med integrasjoner til fagsystemer vil
-stå over mange flere utfordringer når det gjelder datakvaliteten når
-data unødvendig flyttes fram og tilbake mellom kjernen og en
+ikke klienter, og vi tror det er viktig å ta inn over seg forskjellen.
+Eksisterende Noark-komplett systemer blir godkjent som en helhet. En
+frittstående kjerne med integrasjoner til fagsystemer vil stå over
+mange flere utfordringer når det gjelder datakvaliteten når data
+unødvendig flyttes fram og tilbake mellom kjernen og en
 klient. Diverse klienter vil ikke nødvendigvis forstå viktigheten og
 betydningen av Noark metadata og sammenhenger mellom entiteter!
 
