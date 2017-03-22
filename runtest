@@ -355,7 +355,9 @@ Test basis requirements for NOARK 5 Core.
             "dokumentmedium"  : "Elektronisk arkiv",
         }
         fondinfo = self.createEntity('fond', createfondsrel, self.rels, fondsdata)
-
+        if fondinfo is None:
+            return
+            
         seriesdata = {
             "tittel"          : "Title of the test series created %s" % now,
             "beskrivelse"     : "Description of the test series",
