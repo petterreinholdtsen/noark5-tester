@@ -3,12 +3,10 @@ Kommentarer og notater om spesifikasjonen for NOARK 5 tjenestegrensesnitt
 
 https://samdok.com/2016/09/20/noark5-tjenestegrensesnitt-v-1-0-beta-er-na-tilgjengelig/
 
-
--------------------------------------------------------------------------
-
-What is the copyright status of the specification document?  Is it
-covered by copyright at all?  If so, can its license status be
-documented in the text?  Perhaps something like CC-BY can be used?
+These notes will be be rewritten as defect reports like the requests
+to change the specifications handled by the Austin Group, see
+<URL: http://www.opengroup.org/austin/mantis.html > and the
+manglemelding/ subdirectory.
 
 -------------------------------------------------------------------------
 
@@ -35,12 +33,6 @@ OPTIONS at all, so no help there. :(
 
 -------------------------------------------------------------------------
 
-Det er uklart i punkt 6.1.1.3 om GET på en ny-* URL vil opprette et
-objekt med standardverdier satt, eller kun returnerer standardverdier
-som så kan brukes med en POST for å opprette et objekt.
-
--------------------------------------------------------------------------
-
 Punkt 6.1.1.9 skisserer hvordan lagre PDF og JPEG i arkivet.  Men hvor
 finnes listen over hvilke formater som er akseptert inn i arkivet og
 hvilke MIME-typer som bør brukes for disse?  Hva med RFC 822-type
@@ -48,11 +40,13 @@ epost?  SMS?  Lydfiler?
 
 Epost-ideer finnes i
 <URL: http://people.skolelinux.org/pere/blog/Hvordan_b_r_RFC_822_formattert_epost_lagres_i_en_NOARK5_database_.html >.
+
+se side 173 (format)
 -------------------------------------------------------------------------
 
-I punkt 4.1 (Autentisering) står det at 'Single Sign On bør støttes'.
-Hva betyr dette?  Er det Kerberos-autentisering ala det Microsoft
-Active Directory tilbyr, eller noe annet?
+ I punkt 4.1 (Autentisering) på side 9 står det at 'Single Sign On bør
+støttes'.  Hva betyr dette?  Er det Kerberos-autentisering ala det
+Microsoft Active Directory tilbyr, eller noe annet?
 
 Det står også at "NOARK5 kjerne må ha metoder for å autentisere
 brukere og gi de riktige tilganger til kjernen".  Hva slags
@@ -60,25 +54,7 @@ granularitet kreves?  Bør det kreves at en må kunne gi tilganger ved
 hjelp av rettighetsgrupper, for å slippe manuelt vedlikehold av
 brukerrettigheter?
 
--------------------------------------------------------------------------
-
-Et eksempel er at jeg har sett at spesifikasjonen oppgir
-relasjonsnøkler både med ut uten avsluttende skråstrek.  Tabellene har
-med skråstrek, mens det i teksten finnes noen få eksempler der de er
-oppgitt uten skråstrek (se side 12-13 og 25-26).  Skal det være
-<URL: http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil/ > eller
-<URL: http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil > eller er
-det meningen at begge skal brukes om hverandre?  Det er nok lurt om
-spesifikasjonen kun bruker en av disse, for å gjøre det enklere å
-implementere klienter til API-et.
-
--------------------------------------------------------------------------
-
-Hva sier spesifikasjonen om hva som skal returneres i _links når det
-ikke finnes noe i databasen?  F.eks. for
-relasjon <URL: http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv >
-når det ikke er opprettet noen arkiv?  Bør _links peke til en tom
-liste, inneholde 'self'-lenker, eller ikke eksistere?
+Se også side 253.
 
 -------------------------------------------------------------------------
 
@@ -98,8 +74,38 @@ to need to specify relative and/or repeating times?
 
 -------------------------------------------------------------------------
 
-I følge 'Multipl.'-feltet for flere (alle?) klasser, så er systemID et
-[0...1]-felt, mens merknaden til feltet sier systemID alltid skal
-eksistere.  Når kan feltet mangle, hvilket er slik jeg forstår [0...1]?
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ uses 'uri' in
+_links, while http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivdel/
+and the specification uses href.  Incorrect web page?
+
+-------------------------------------------------------------------------
+
+Er attributt-navn 'case-insensitive' eller ikke?  Spesifikasjonen
+omtaler 'SystemID' og 'systemID'.  Er begge riktige?  En bør ikke
+tillate miks av store og små bokstaver. Hvis en velger å akseptere
+miks, bør en dokumentere om de skal sammenlignes som store eller små
+bokstaver, da det kan ha noe å si i enkelte tilfeller og språk (tenk
+tysk ß -> SS vs. SS -> ss).  http://jsonapi.org/format/ sier at "All
+member names used in a JSON API document MUST be treated as case
+sensitive by clients and servers".
+
+-------------------------------------------------------------------------
+
+6.1.1.9 (Hente og overføre filer) på side 25-27 forklarer hvordan en
+kan bruke POST eller PUT for å laste opp en fil.  Men den sier
+ingenting om hva slaks 'content' som kan forventes?  Hvis det er '0'
+bytes i content som er riktig, så bør det skrives eksplisitt da det er
+ulikt alle andre POST, der det returneres informasjon om det
+nyopprettede objektet.
+
+-------------------------------------------------------------------------
+
+I følge Tor Kjetil Nilsen i
+https://github.com/Arkitektum/N5-net/issues/1 så er relasjon
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivskaper/ på side
+80 (7.2.1.4 Arkivskaper) i spesifikasjonen muligens feil og skal i
+stedet være
+http://rel.kxml.no/noark5/v4/api/administrasjon/ny-arkivskaper som
+blant annet er nevnt i i av http://n5test.kxml.no/api/arkivstruktur.
 
 -------------------------------------------------------------------------
