@@ -112,15 +112,15 @@ eksempler på hvordan et søkeresultat som returnerer en liste med
 objekter bør se ut.
 
 Det kan f.eks. legges inn avsnitt på slutten av punktet på side 16,
-som lyder noe ala dette:
+før "resultatkoder ned navigering/søk", som lyder noe ala dette:
 
-FIXME skriv om med konkrete formuleringer og annet format.
-
+> Et søkeresultat ser slik som følger.
+>
 > Forespørsel:
 >
-> GET http://localhost:49708/api/arkivstruktur/Mappe/
-> Content-Type: application/vnd.noark5-v4+json
-
+> GET http://localhost:49708/api/arkivstruktur/mappe/
+> Accept: application/vnd.noark5-v4+json
+> 
 > Respons:
 
 ```
