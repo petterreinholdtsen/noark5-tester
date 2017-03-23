@@ -1,5 +1,5 @@
-Beskriv hvordan lister skal formatteres (JSON og XML)
-=====================================================
+Beskriv hvordan lister skal formatteres i JSON
+==============================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -7,8 +7,8 @@ Beskriv hvordan lister skal formatteres (JSON og XML)
         Alvorlighet  kommentar
        Meldingstype  trenger klargjøring
     Brukerreferanse  thomas.sodring@hioa.no
-        Dokumentdel  n/a
-         Sidenummer  n/a
+        Dokumentdel  6.1.1.2
+         Sidenummer  16
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
@@ -17,17 +17,16 @@ Beskrivelse
 -----------
 
 Det er ingen entydig beskrivelse i spesifikasjonen hvordan resultater
-som inneholder lister skal se ut, mens relaterte nettsider viser to
-forskjellige måter dette kan løses på.
-
-Lister struktureres på tom forskjellige måter:
+som inneholder lister med objekter skal se ut.  Relaterte nettsider
+har to forskjellige måter å løse dette på.  I korte trekker dette de
+to ulike måtene:
 
   a. { "entitetsnavn": [ { obj }, { obj } ] }  
   b. [ { obj }, { obj } ]  
 
-Konkrete eksempler fra webløsningen er følgende:
-
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ genererer
+Den første måten brukes på
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/, som vise frem
+følgende:
 
 ```
 {
@@ -41,7 +40,9 @@ http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ genererer
 }
 ```
 
-http://n5test.kxml.no/api/arkivstruktur/arkiv genererer
+Den andre måten brukes på
+http://n5test.kxml.no/api/arkivstruktur/arkiv, som viser frem
+følgende.
 
 ```
 [
@@ -54,12 +55,17 @@ http://n5test.kxml.no/api/arkivstruktur/arkiv genererer
 ```
 
 Flere ulike måter å formattere lister på gjør klient-implementasjoner
-unødig komplisert. Er det en god grunn at klienten skal måtte forholde
-seg til to forskjellige måter å strukturere lister?
+unødig komplisert, da de ikke kan vite hvordan API-implementasjonen
+vil oppføre seg og må enten implementere flere måter å lese lister,
+eller kun fungere med noen av eksisterende API-implementasjoner. Er
+det en god grunn at klienten skal måtte forholde seg til to
+forskjellige måter å strukturere lister?
 
-I følge spesifikasjonens side 13 kan alle lister ha en 'next'-relasjon
-i sin liste med relasjoner.  Det står ingenting der om hvordan dette
-skal formatteres, men det virker mest rett frem å gjøre dette slik:
+Jeg mistneker alternativ (b) bør unngås, da det ikke er åpenbart
+hvordan relasjoner med operasjoner på listene skal tas med.  I følge
+spesifikasjonens side 13 kan alle lister ha en 'next'-relasjon i sin
+liste med relasjoner.  Det står ingenting der om hvordan dette skal
+formatteres, men det virker mest rett frem å gjøre dette slik:
 
 ```
 {
@@ -79,16 +85,62 @@ skal formatteres, men det virker mest rett frem å gjøre dette slik:
 }
 ```
 
+Dermed mistenker jeg at det er formatteringen på
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ som er den
+tiltenkte måten å formattere lister..  Jeg har i
+https://github.com/Arkitektum/N5-net/issues/4 spurt om det kan vises
+frem et eksempel på hvordan 'next'-relasjoner skal håndteres for
+lister.
+
+Et relatert spørsmål er om det kan være en 'self'-relasjon på lister?
+6.1.1.7 side 22 sier at alle ressurslenker med 'self'-relasjon kan
+potensielt slettes.  Det virker mest nærliggende å kreve at lister
+"slettes" ved å slette hver enkelt element i listen, og at det dermed
+ikke skal være en 'self'-relasjon for lister.
+
+Eksemplene over omtaler JSON-formattering.  Det er tilsvarende
+utfordringer for XML-formattering, og det bør beskrives entydig i
+spesifikasjonen hvordan XML-lister skal se ut, i tillegg til
+relasjonslenkeformatteringen på side 12.  Det kommer egen
+mangelmelding om dette.
+
 Ønsket endring
 --------------
 
+Teksten under 6.1.1.2 (Finne objekter (Read)) bør utvides med
+eksempler på hvordan et søkeresultat som returnerer en liste med
+objekter bør se ut.
+
+Det kan f.eks. legges inn avsnitt på slutten av punktet på side 16,
+som lyder noe ala dette:
+
 FIXME skriv om med konkrete formuleringer og annet format.
 
-1. Det utvikles en strukturbeskrivelse for resultater som inneholder lister
-2. Liste beskrivelse for objekter blir enklest mulig. Vi ønsker at følgende
-   struktur skal være gjeldende [ { obj }, { obj } ]
+> Forespørsel:
+>
+> GET http://localhost:49708/api/arkivstruktur/Mappe/
+> Content-Type: application/vnd.noark5-v4+json
 
-Respons
--------
+> Respons:
 
-Ingen respons fra arkivverket så langt.
+```
+{ "mappe" : [
+    {
+      "mappeID": "1234/2017",
+      "tittel": "testmappe 1",
+      ...
+    },
+    {
+      "mappeID": "1235/2017",
+      "tittel": "testmappe 2",
+      ...
+    }
+  ],
+  "_links" : [
+    {
+      "rel": "next",
+      "href": "..."
+    }
+  ]
+}
+```
