@@ -34,7 +34,7 @@ følgende:
    {
      "mappeID": "1234/2014",
      "tittel": "testmappe 12345",
-     .... 
+     ...
    }
  ]
 }
@@ -49,7 +49,7 @@ følgende.
   {
     tittel: "Høflig arkiv",
     beskrivelse: "lorem ipsum høflig"
-    ....
+    ...
   }
 ]
 ```
@@ -64,7 +64,7 @@ eller kun fungere med noen av eksisterende API-implementasjoner. Er
 det en god grunn at klienten skal måtte forholde seg til to
 forskjellige måter å strukturere lister?
 
-Jeg mistneker alternativ (b) bør unngås, da det ikke er åpenbart
+Jeg mistenker alternativ (b) bør unngås, da det ikke er åpenbart
 hvordan relasjoner med operasjoner på listene skal tas med.  I følge
 spesifikasjonens side 13 kan alle lister ha en 'next'-relasjon i sin
 liste med relasjoner.  Det står ingenting der om hvordan dette skal
@@ -72,17 +72,18 @@ formatteres, men det virker mest rett frem å gjøre dette slik:
 
 ```
 {
- "mappe": [
+ "data": [
    {
      "mappeID": "1234/2014",
      "tittel": "testmappe 12345",
-     .... 
-   }
+     ...
+   },
+   ...
  ],
  "_links": [
    {
      "rel": "next"
-     "href": "...",
+     "href": "http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/?top=10&skip=10",
    }
  ]
 }
@@ -107,6 +108,12 @@ spesifikasjonen hvordan XML-lister skal se ut, i tillegg til
 relasjonslenkeformatteringen på side 12.  Det kommer egen
 mangelmelding om dette.
 
+Det hadde vært nyttig om antall objekter totalt i resultatsettet var
+del av resultatet som ble returnert, dvs. å la $inlineCount-tilvalget
+i Odata være aktiv som standard.  Det gjør det enklere for en klient å
+vite hvor mange sider med resultater som finnes og dermed hvor mange
+'next'-lenker som må følges for å hente hele resultatsettet.
+
 Ønsket endring
 --------------
 
@@ -117,7 +124,7 @@ objekter bør se ut.
 Det kan f.eks. legges inn avsnitt på slutten av punktet på side 16,
 før "resultatkoder ned navigering/søk", som lyder noe ala dette:
 
-> Et søkeresultat ser slik som følger.
+> Et søkeresultat kan se ut som følger.
 >
 > Forespørsel:
 >
@@ -127,7 +134,7 @@ før "resultatkoder ned navigering/søk", som lyder noe ala dette:
 > Respons:
 
 ```
-{ "mappe" : [
+{ "data" : [
     {
       "mappeID": "1234/2017",
       "tittel": "testmappe 1",
@@ -139,6 +146,7 @@ før "resultatkoder ned navigering/søk", som lyder noe ala dette:
       ...
     }
   ],
+  "count" : 3,
   "_links" : [
     {
       "rel": "next",
