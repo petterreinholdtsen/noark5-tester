@@ -59,10 +59,10 @@ Følgende data sendes fra kjernnen til fagsystemet (GET):
 }
 ```
 
-Men fagsystemet som utgjør klienten er dårlig laget. Fagsystemet er
-ikke laget for å forstå noekkelord, slik at når JSON-innholdet mottas
-av fagsystemet droppes verdien i noekkelord.  Fagsystemet laster
-senere opp følgende data til kjernen (PUT):
+Men fagsystemet som utgjør klienten kan være dårlig laget.  Hvis
+fagsystemet ikke er laget for å forstå noekkelord, slik at når
+JSON-innholdet mottas av fagsystemet droppes verdien i noekkelord.
+Fagsystemet laster senere opp følgende data til kjernen (PUT):
 
 ```
 {
