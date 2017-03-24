@@ -60,14 +60,20 @@ Tilsvarende hvis \_links skal inneholde en "self"-relasjon:
 }
 ```
 
+For sistnevnte er det litt uklart hva en "self"-relasjon skulle peke
+til, i og med at spesifikasjonens del 6.1.1.7 side 22 sier at alle
+ressurslenker med "self"-relasjon kan potensielt slettes.  En tom
+liste kan vanskelig slettes, så det er vel et godt argument mot den
+siste ideen.
+
 Demo-nettstedet http://n5test.kxml.no/api/ har ingen «tomme» datasett
 som jeg har klart å finne , slik at det er lite hjelp å finne der om
 hvordan spesifikasjonen skal tolkes, og spesifikasjonen nevner ikke
 dette eksplisitt.
 
-Jeg foreslår at det returneres en tom \_links-liste, slik at
-API-klienter kan forvente at det alltid finnes et \_links-element.
-For JSON kan det som returneres se slik ut: «{ "\_links" : [ ] }».
+Jeg foreslår at \_links tas med men at det returneres en tom
+\_links-liste, slik at API-klienter kan forvente at det alltid finnes
+et \_links-element.
 
 Ønsket endring
 --------------
