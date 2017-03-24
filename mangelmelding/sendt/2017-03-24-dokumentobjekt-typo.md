@@ -8,15 +8,16 @@ Skrivefeil i beskrivelse av dokumentobjekt
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
         Dokumentdel  7.2.1.7
-         Sidenummer  109
+         Sidenummer  106
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-03-24
  ------------------  ---------------------------------
 
 Beskrivelse
 -----------
 
-Det er en skrivefeil i siste linje på side 106.
+Det er en skrivefeil i del 7.2.1.7 (Dokumentobjekt), på siste linje
+side 106.
 
 Ønsket endring
 --------------
