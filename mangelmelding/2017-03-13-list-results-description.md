@@ -22,7 +22,9 @@ har to forskjellige måter å løse dette på.  I korte trekker dette de
 to ulike måtene:
 
   a. { "entitetsnavn": [ { obj }, { obj } ] }  
-  b. [ { obj }, { obj } ]  
+  b. [ { obj }, { obj } ]
+
+FIXME hva er navnerommet for "entitetsnavn"?  Kanskje bruke et generisk navn 'data' eller 'resultat' i stedet?
 
 Den første måten brukes på
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/, som vise frem
