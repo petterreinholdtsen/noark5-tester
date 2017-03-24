@@ -90,7 +90,7 @@ formatteres, men det virker mest rett frem å gjøre dette slik:
 
 Dermed mistenker jeg at det er formatteringen på
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ som er den
-tiltenkte måten å formattere lister..  Jeg har i
+tiltenkte måten å formattere lister.  Jeg har i
 https://github.com/Arkitektum/N5-net/issues/4 spurt om det kan vises
 frem et eksempel på hvordan 'next'-relasjoner skal håndteres for
 lister.
