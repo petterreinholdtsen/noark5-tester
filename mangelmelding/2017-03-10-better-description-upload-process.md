@@ -7,7 +7,7 @@ Bedre beskivelse av filopplastingsprossesen
         Alvorlighet  kommentar
        Meldingstype  trenger klargjøring
     Brukerreferanse  thomas.sodring@hioa.no
-        Dokumentdel  6.1.9
+        Dokumentdel  6.1.1.9
          Sidenummer  25
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
@@ -15,6 +15,8 @@ Bedre beskivelse av filopplastingsprossesen
 
 Beskrivelse
 -----------
+
+Gjelder også 7.2.1.7 side 99.
 
 Det er uklarheter rundt filopplasting og angivelse av metadata til
 dokumentobjekt og dokumentbesrkivelse. Man må lese gjennon linjene for
@@ -51,3 +53,15 @@ FIXME formuler konkret forslag til endring i spesifikasjonsteksten.
 
 Det må komme en bedre beskrivelse av prossesen med opplasting av filer og
 angivelse av metadata verdier.
+
+Ideer til endringsforslag:
+
+ - dokumentobjekt opprettes av klient med verdier i sjekksum og
+   sjekksumAlgoritme.  Når filen så lastes opp kontrolleres
+   sjekksumverdien mot den opplastede filen i det opplastingen er
+   ferdig (dvs. 200 OK returneres for direkteopplasting eller 201
+   Created returneres for bolkopplasting).  Hvis sjekksum ikke stemmer
+   returneres en feilmelding og filopplastingen avvises.
+   
+ - når filen er opprettet returneres verdien av tilhørende
+   dokumentobjekt som respons på site POST / PUT.
