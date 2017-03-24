@@ -1,5 +1,5 @@
-file upload as part of a transaction with documentObject
-==============================================================
+Filopplasting som del av dokumentobjekt-transaksjon
+===================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -16,25 +16,28 @@ file upload as part of a transaction with documentObject
 Beskrivelse
 -----------
 
-The process of uploading a file should be seen as a transaction that includes
- documentDescrition, documentObject and the file. In the event of problems with
- the storage system, i.e. storage system is experiencing disruption, the
- documentObject may be written to the persistence layer, but the file upload
- is rejected. This will result in a 200 OK and a 50X Error message.
+Prosessen med å laste opp en fil kan ses på som en transaksjon som
+inkluderer opprettelsen av dokumentbeskrivelse, dokumentobjekt og
+selve filen.  Hvis det skulle skje at det er problemer med
+lagringssystemet, for eksempel hvis filsystemet er fullt eller
+opplever en annen forstyrrelse, så kan det hende at dokumentobjekt
+opprettes og lagres til persistent lager, men selve filopplastingen
+blir avvist.  Dette vil returnere først 200 OK for dokumentobjekt og
+deretter en 50X Error ved opplastingen.
 
- Currently there is no mechanism to delete the documentObject from the client
- side in such a scenario.
+Det er uklart fra spesifikasjonen hva som skal gjøres i et slikt
+tilfelle, og det er ingen dokumentert mekanisme for klienten å be om
+at det filløse dokumentobjekt-instansen slettes når det skjer.  Det er
+dermed ikke mulig for klienten å rydde opp.
 
 Ønsket endring
 --------------
 
-This issue needs further attention. One solution may be to create a call to the
-core that includes documentDescription, documentObject and the file. With this
- solution, if one of the steps fail, all steps fail and the client is notified
- appropriately
+FIXME formuler konkret forslag til endring.
 
-
-Respons
--------
-
-Ingen respons fra arkivverket så langt.
+Dette tilfellet trenger en avklaring.  En mulig løsning er å lage et
+API-kall til kjernen der dokumentbeskrivelse, dokumentobjekt og selve
+filen lastes opp sammen.  En slik løsning gjør det mulig for kjernen å
+behandle opprettelsen som en transaksjon og la alle tre stegene feile
+hvis en av dem feiler.  Dermed kan klienten vite om hele transaksjonen
+var vellykket og filen er lagret slik den skal.
