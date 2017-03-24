@@ -150,7 +150,7 @@ før "resultatkoder ned navigering/søk", som lyder noe ala dette:
   "_links" : [
     {
       "rel": "next",
-      "href": "..."
+      "href": "http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/?top=2&skip=2",
     }
   ]
 }
