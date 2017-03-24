@@ -1,5 +1,5 @@
-Should the core reject certain file uploads
-==============================================================
+Bør kjernen avvise filopplastinger med lengde 0 eller lengdeavvik?
+========================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -16,18 +16,13 @@ Should the core reject certain file uploads
 Beskrivelse
 -----------
 
-A core that receives a file of 0 length. Should this file be rejected and
-and rejection message sent to client? Similarly, if the client sets
-content-length to a certain value (e.g. 54321), but the actual length of the
-file that is uploaded is different (e.g. 18365), should this result in a
-rejection of the file?
+Hvis API-et mottar en fil med lengde 0, bør filen avvises og
+avvisningmeldingen sendes til klienten?  Tilsvarende, hvis en klient
+setter Content-Length til en bestemt verdi (f.eks. 54321), mens den
+faktiske lengden på filen som blir lastet opp ikke er det samme
+(f.eks. 18365), bør dette resultere i at filopplastingen avvises?
 
 Ønsket endring
 --------------
-Further clarification is required.
 
-
-Respons
--------
-
-Ingen respons fra arkivverket så langt.
+FIXME lag konkret endringsorslag.
