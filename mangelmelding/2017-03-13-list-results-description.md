@@ -24,8 +24,6 @@ to ulike måtene:
   a. { "entitetsnavn": [ { obj }, { obj } ] }  
   b. [ { obj }, { obj } ]
 
-FIXME hva er navnerommet for "entitetsnavn"?  Kanskje bruke et generisk navn 'data' eller 'resultat' i stedet?
-
 Den første måten brukes på
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/, som vise frem
 følgende:
@@ -56,7 +54,10 @@ følgende.
 ]
 ```
 
-Flere ulike måter å formattere lister på gjør klient-implementasjoner
+Vi ser det er også mulig å enten bruke entitetsnavn eller et mer generisk 
+navn som 'data' eller 'liste'. Fordelen med å bruke et generisk navn 
+som 'liste' er å forenkle klientutvikling. Flere ulike måter å formattere
+lister på gjør klient-implementasjoner
 unødig komplisert, da de ikke kan vite hvordan API-implementasjonen
 vil oppføre seg og må enten implementere flere måter å lese lister,
 eller kun fungere med noen av eksisterende API-implementasjoner. Er
