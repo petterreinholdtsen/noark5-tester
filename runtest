@@ -312,8 +312,7 @@ Test basis requirements for NOARK 5 Core.
             self.failure("unable to create a new %s, no %s entry discovered even if logged in" % (name, rel))
             return
         url = rels[rel]
-        if False: # FIXME Enable when defaults are sane
-          try:
+        try:
             (gc, gres) = self.json_get(url)
             default = json.loads(gc)
             print("GET %s returned %s" % (url, default))
@@ -322,7 +321,7 @@ Test basis requirements for NOARK 5 Core.
                 if not k == '_links' and k not in data:
                     data[k] = default[k]
             self.success("GET %s worked" % url)
-          except urllib2.HTTPError, e:
+        except urllib2.HTTPError, e:
             self.failure('unable to GET %s' % url)
         print("POST %s: %s" % (url, data))
         try:
@@ -349,20 +348,20 @@ Test basis requirements for NOARK 5 Core.
         createfondsrel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
         fondsdata = {
-            "tittel"          : "Title of the test fonds created %s" % now,
-            "beskrivelse"     : "Description of the test fonds",
-            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
-            "dokumentmedium"  : "Elektronisk arkiv",
+#            "tittel"          : "Title of the test fonds created %s" % now,
+#            "beskrivelse"     : "Description of the test fonds",
+#            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+#            "dokumentmedium"  : "Elektronisk arkiv",
         }
         fondinfo = self.createEntity('fond', createfondsrel, self.rels, fondsdata)
         if fondinfo is None:
             return
             
         seriesdata = {
-            "tittel"          : "Title of the test series created %s" % now,
-            "beskrivelse"     : "Description of the test series",
-            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
-            "dokumentmedium"  : "Elektronisk arkiv",
+#            "tittel"          : "Title of the test series created %s" % now,
+#            "beskrivelse"     : "Description of the test series",
+#            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+#            "dokumentmedium"  : "Elektronisk arkiv",
         }
         createseriesrel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
@@ -371,13 +370,13 @@ Test basis requirements for NOARK 5 Core.
                                       seriesdata)
         
         filedata = {
-            "mappeID"            : "2017/01",
-            "offentligTittel"    : "Public title of the test file created %s" % now,
-            "tittel"             : "Title of the test file created %s" % now,
-            "beskrivelse"        : "Description of the test file",
-            "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
-            "oppbevaringsted"    : [ "location 1", "location2", "location3" ],
-            "dokumentmedium"     : "Elektronisk arkiv",
+#            "mappeID"            : "2017/01",
+#            "offentligTittel"    : "Public title of the test file created %s" % now,
+#            "tittel"             : "Title of the test file created %s" % now,
+#            "beskrivelse"        : "Description of the test file",
+#            "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
+#            "oppbevaringsted"    : [ "location 1", "location2", "location3" ],
+#            "dokumentmedium"     : "Elektronisk arkiv",
         }
         createfilerel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/'
@@ -386,17 +385,17 @@ Test basis requirements for NOARK 5 Core.
                                      filedata)
 
         casefiledata = {
-            "mappeID"            : "2017/1",
-            "offentligTittel"    : "Public title of the test case file created %s" % now,
-            "tittel"             : "Title of the test case file created %s" % now,
-            "beskrivelse"        : "Description of the test file",
-            "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
-            "oppbevaringsted"    : [ "location 1", "location2", "location3" ],
-            "dokumentmedium"     : "Elektronisk arkiv",
-            "saksdato"           : "2016-10-04",
-            "administrativEnhet" : "The administrative unit",
-            "saksansvarlig"      : "Joe the case handler",
-            "saksstatus"         : "Opprettet",
+#            "mappeID"            : "2017/1",
+#            "offentligTittel"    : "Public title of the test case file created %s" % now,
+#            "tittel"             : "Title of the test case file created %s" % now,
+#            "beskrivelse"        : "Description of the test file",
+#            "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
+#            "oppbevaringsted"    : [ "location 1", "location2", "location3" ],
+#            "dokumentmedium"     : "Elektronisk arkiv",
+#            "saksdato"           : "2016-10-04",
+#            "administrativEnhet" : "The administrative unit",
+#            "saksansvarlig"      : "Joe the case handler",
+#            "saksstatus"         : "Opprettet",
         }
         createcasefilerel = \
             'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-saksmappe/'
@@ -413,10 +412,10 @@ Test basis requirements for NOARK 5 Core.
                                        recorddata)
 
         docdescdata = {
-            "dokumenttype"    : "type dokument",
-            "dokumentstatus"  : "status of document",
-            "tittel"          : "Title of the test document description created %s" % now,
-            "tilknyttetRegistreringSom" : "Associated with record as"
+#            "dokumenttype"    : "type dokument",
+#            "dokumentstatus"  : "status of document",
+#            "tittel"          : "Title of the test document description created %s" % now,
+#            "tilknyttetRegistreringSom" : "Associated with record as"
         }
         createdocdescrel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentbeskrivelse/'
@@ -425,13 +424,14 @@ Test basis requirements for NOARK 5 Core.
                                         self.parselinks(recordinfo['_links']),
                                         docdescdata)
 
+        xmldata = "<xml></xml>"
         docobjdata = {
-            "versjonsnummer"  : 1,
-            "variantformat"   : "Arkivformat",
-            "format"          : "PDF",
-            "formatDetaljer"  : "PDF/A PDFv1.4",
-            "filstoerrelse"   : 11,
-            "mimeType"       : "application/xml", 
+#            "versjonsnummer"  : 1,
+#            "variantformat"   : "Arkivformat",
+#            "format"          : "PDF",
+#            "formatDetaljer"  : "PDF/A PDFv1.4",
+            "filstoerrelse"   : len(xmldata),
+#            "mimeType"       : "application/xml", 
         }
         createdocobjrel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentobjekt/'
@@ -446,9 +446,8 @@ Test basis requirements for NOARK 5 Core.
                     "_links in response from %s rel should include '%s' rel" % (createdocobjrel, reffilerel))
         rels = self.parselinks(docobjinfo['_links'])
         url = rels[reffilerel]
-        data = "<xml></xml>"
         try:
-            (c, res) = self.post(url, data, 'application/xml')
+            (c, res) = self.post(url, xmldata, 'application/xml')
             self.verify(c == '', "POST %s return nothing" % url)
             self.verify(200 == res.code, "file upload returned HTTP code 200")
         except urllib2.HTTPError, e:
