@@ -29,14 +29,13 @@ http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/, som viser frem
 følgende:
 
 ```
-{
- "mappe": [
-   {
-     "mappeID": "1234/2014",
-     "tittel": "testmappe 12345",
-     ...
-   }
- ]
+{ "mappe": [
+    {
+      "mappeID": "1234/2014",
+      "tittel": "testmappe 12345",
+      ...
+    }
+  ]
 }
 ```
 
@@ -46,8 +45,7 @@ følgende:
 
 ```
 [
-  {
-    tittel: "Høflig arkiv",
+  { tittel: "Høflig arkiv",
     beskrivelse: "lorem ipsum høflig"
     ...
   }
@@ -84,21 +82,18 @@ liste med relasjoner.  Det står ingenting der om hvordan dette skal
 formatteres, men det virker mest rett frem å gjøre dette slik:
 
 ```
-{
- "results": [
-   {
-     "mappeID": "1234/2014",
-     "tittel": "testmappe 12345",
-     ...
-   },
-   ...
- ],
- "_links": [
-   {
-     "rel": "next"
-     "href": "http://localhost/noark5v4/api/arkivstruktur/mappe/?top=10&skip=10",
-   }
- ]
+{ "results": [
+    { "mappeID": "1234/2014",
+      "tittel": "testmappe 12345",
+      ...
+    },
+    ...
+  ],
+  "_links": [
+    { "rel": "next"
+      "href": "http://localhost/noark5v4/api/arkivstruktur/mappe/?top=10&skip=10",
+    }
+  ]
 }
 ```
 
@@ -151,21 +146,18 @@ før "resultatkoder ned navigering/søk", som lyder noe ala dette:
 > 
 > ```
 > { "results" : [
->     {
->       "mappeID": "1234/2017",
+>     { "mappeID": "1234/2017",
 >       "tittel": "testmappe 1",
 >       ...
 >     },
->     {
->       "mappeID": "1235/2017",
+>     { "mappeID": "1235/2017",
 >       "tittel": "testmappe 2",
 >       ...
 >     }
 >   ],
 >   "count" : 3,
 >   "_links" : [
->     {
->       "rel": "next",
+>     { "rel": "next",
 >       "href": "http://localhost/noark5v4/api/arkivstruktur/mappe/?top=2&skip=2",
 >     }
 >   ]
