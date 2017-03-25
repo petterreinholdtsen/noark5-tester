@@ -18,14 +18,14 @@ Beskrivelse
 
 Det er ingen entydig beskrivelse i spesifikasjonen hvordan resultater
 som inneholder lister med objekter skal se ut.  Relaterte nettsider
-har to forskjellige måter å løse dette på.  I korte trekker dette de
+har to forskjellige måter å løse dette på.  I korte trekker er dette de
 to ulike måtene:
 
   a. { "entitetsnavn": [ { obj }, { obj } ] }  
   b. [ { obj }, { obj } ]
 
 Den første måten brukes på
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/, som vise frem
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/, som viser frem
 følgende:
 
 ```
@@ -42,7 +42,7 @@ følgende:
 
 Den andre måten brukes på
 http://n5test.kxml.no/api/arkivstruktur/arkiv, som viser frem
-følgende.
+følgende:
 
 ```
 [
@@ -53,16 +53,22 @@ følgende.
   }
 ]
 ```
+Er det en god grunn at klienten skal måtte forholde seg til to
+forskjellige måter å strukturere lister? Flere ulike måter å 
+formattere lister på gjør klient-implementasjoner unødig komplisert.
+Slik situasjonen er i dag må klient-implementasjoner enten 
+implementere flere måter å lese lister, eller bli hemmet 
+(fra et interoperabilitets perspeketiv) med integrasjoner
+til Noark 5 kjerner fra forskjellige leverandører. Dette bety at klienter
+kun fungerer med noen få API-implementasjoner.
 
-Vi ser det er også mulig å enten bruke entitetsnavn eller et mer generisk 
-navn som 'data' eller 'liste'. Fordelen med å bruke et generisk navn 
-som 'liste' er å forenkle klientutvikling. Flere ulike måter å formattere
-lister på gjør klient-implementasjoner
-unødig komplisert, da de ikke kan vite hvordan API-implementasjonen
-vil oppføre seg og må enten implementere flere måter å lese lister,
-eller kun fungere med noen av eksisterende API-implementasjoner. Er
-det en god grunn at klienten skal måtte forholde seg til to
-forskjellige måter å strukturere lister?
+Vi ser det er også mulig å enten bruke entitetsnavn eller et mer
+generisk navn som 'data' eller 'liste'. Fordelen med å bruke et generisk
+navn som 'liste' er å forenkle klientutvikling. 
+
+Noe annet som det bør taes høyde for når dere beslutter dette er at
+{ objekt } ligner litt på JavaScript og kanskje skape problemer mens
+{ "entitetsnavn": [ { obj }, { obj } ] ungår dette.
 
 Jeg mistenker alternativ (b) bør unngås, da det ikke er åpenbart
 hvordan relasjoner med operasjoner på listene skal tas med.  I følge
@@ -134,7 +140,7 @@ før "resultatkoder ned navigering/søk", som lyder noe ala dette:
 > Respons:
 
 ```
-{ "data" : [
+{ "result" : [
     {
       "mappeID": "1234/2017",
       "tittel": "testmappe 1",
