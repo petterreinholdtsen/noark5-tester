@@ -96,7 +96,7 @@ formatteres, men det virker mest rett frem å gjøre dette slik:
  "_links": [
    {
      "rel": "next"
-     "href": "http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/?top=10&skip=10",
+     "href": "http://localhost/noark5v4/api/arkivstruktur/mappe/?top=10&skip=10",
    }
  ]
 }
@@ -104,7 +104,7 @@ formatteres, men det virker mest rett frem å gjøre dette slik:
 
 Dermed mistenker jeg at det er formatteringen på
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ som er den
-tiltenkte måten å formattere lister.  Jeg har i
+tiltenkte måten å formattere lister.  Det er i
 https://github.com/Arkitektum/N5-net/issues/4 spurt om det kan vises
 frem et eksempel på http://n5test.kxml.no/ på hvordan
 'next'-relasjoner skal håndteres for lister.
@@ -122,11 +122,11 @@ relasjonslenkeformatteringen på side 12.  Dette fortjener
 mangelmelding og er ikke videre omtalt her.
 
 Det hadde vært nyttig om antall objekter totalt i resultatsettet var
-del av resultatet som ble returnert, dvs. å la $inlineCount-tilvalget
+del av resultatet som ble returnert, dvs. å la \$inlineCount-tilvalget
 i Odata være aktiv som standard.  Det gjør det mulig for en klient å
 vite hvor mange sider med resultater som finnes og dermed hvor mange
 'next'-lenker som må følges for å hente hele resultatsettet, uten å
-måtte gjøre et ekstra kall med Odata-argumentet $count.  Det er flere
+måtte gjøre et ekstra kall med Odata-argumentet \$count.  Det er flere
 måter å gjøre dette på.  Vi foreslår at antallet returneres i et
 'count'-felt.
 
@@ -166,7 +166,7 @@ før "resultatkoder ned navigering/søk", som lyder noe ala dette:
 >   "_links" : [
 >     {
 >       "rel": "next",
->       "href": "http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/?top=2&skip=2",
+>       "href": "http://localhost/noark5v4/api/arkivstruktur/mappe/?top=2&skip=2",
 >     }
 >   ]
 > }
