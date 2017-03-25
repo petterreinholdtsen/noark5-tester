@@ -78,7 +78,7 @@ tom liste kan vanskelig slettes, så det er vel et godt argument mot
 den siste ideen.
 
 Demo-nettstedet http://n5test.kxml.no/api/ har ingen «tomme» datasett
-som jeg har klart å finne , slik at det er lite hjelp å finne der om
+som jeg har klart å finne, slik at det er lite hjelp der å finne 
 hvordan spesifikasjonen skal tolkes, og spesifikasjonen nevner ikke
 dette eksplisitt.
 
