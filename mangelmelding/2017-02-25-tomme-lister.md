@@ -15,27 +15,34 @@ Klargjør hva som skal returneres når database eller lister er tomme
 
 Denne mangelmeldingen er veldig avhengig av hvordan mangelmeldingen
 2017-03-13-list-result-description.md blir besvart.  Den
-mangelmeldingen bør nok sendes til arkivverket før denne.
+mangelmeldingen bør derfor sendes til Arkivverket før denne.
 
 Beskrivelse
 -----------
 
-Det er ikke klart fra spesifikasjonen hvilke relasjonsnøkler som skal
-returneres i \_links hvis databasen ikke inneholder objekter av en
-bestemt type, eller hvis et søk ikke returnerer noen treff.  To
-eksempler er oppslag som pekes til av relasjonsnøkkel
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/ og
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentbeskrivelse/ .
+Det er ikke klart fra spesifikasjonen hva slags JSON som skal
+returneres for tomme lister.  Delvis er det uklart hvilke
+relasjonsnøkler som skal returneres i \_links hvis databasen ikke
+inneholder objekter av en bestemt type, eller hvis et søk ikke
+returnerer noen treff, og delvis er det uklart hvordan selve
+resultatsettet skal returneres når det er tomt.
+
+To eksempler er oppslag som pekes til av relasjonsnøkkelen for arkiv
+og dokumentbeskrivelse:
+
+* http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/
+* http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentbeskrivelse/
+
 Bør \_links-elementet ikke eksistere, være en tom liste, eller
-inneholde «self»-lenke?
+inneholde «self»-lenke?  Hva med resultatsettet?
 
 Hvis \_links ikke skal eksistere så kan det for eksempel se slik ut
-når gjør oppslag i URLen som som pekes til av relasjonsnøkkel
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/:
+når gjør oppslag i URLen som som pekes til av relasjonsnøkkelen for
+arkiv:
 
 ```
 {
-  "arkiv": [],
+  "results": [],
 }
 ```
 
@@ -43,7 +50,7 @@ Tilsvarende hvis \_links skal være en tom liste:
 
 ```
 {
-  "arkiv": [],
+  "results": [],
   "_links" : []
 }
 ```
@@ -52,7 +59,7 @@ Tilsvarende hvis \_links skal inneholde en "self"-relasjon:
 
 ```
 {
-  "arkiv": [],
+  "results": [],
   "_links" : [
     "rel": "self",
     "href": "..."
@@ -60,11 +67,15 @@ Tilsvarende hvis \_links skal inneholde en "self"-relasjon:
 }
 ```
 
-For sistnevnte er det litt uklart hva en "self"-relasjon skulle peke
-til, i og med at spesifikasjonens del 6.1.1.7 side 22 sier at alle
-ressurslenker med "self"-relasjon kan potensielt slettes.  En tom
-liste kan vanskelig slettes, så det er vel et godt argument mot den
-siste ideen.
+I samtlige eksempler er det tatt utgangspunkt i at resultatsettet skal
+være inkludert og være tomt.  Hvis ikke kan «"results": [],» fjernes
+fra eksemplene over.
+
+For sistnevnte eksempel er det litt uklart hva en "self"-relasjon
+skulle peke til, i og med at spesifikasjonens del 6.1.1.7 side 22 sier
+at alle ressurslenker med «self»-relasjon kan potensielt slettes.  En
+tom liste kan vanskelig slettes, så det er vel et godt argument mot
+den siste ideen.
 
 Demo-nettstedet http://n5test.kxml.no/api/ har ingen «tomme» datasett
 som jeg har klart å finne , slik at det er lite hjelp å finne der om
@@ -84,5 +95,10 @@ F.eks. ved å legge inn et avsnitt ala dette på slutten av del 6.1.1.1
 på side 13:
 
 > Når den forespurte typen ressurser mangler i databasen returneres
-> det et tomt dokument med tom liste med lenker, som kan se slik ut:
-> «{ "arkiv": [], "\_links" : [] }»
+> det et tomt resultatsett med tom liste med lenker:
+>
+> ```
+> { "results": [],
+>   "_links" : []
+> }
+> ```
