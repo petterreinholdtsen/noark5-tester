@@ -118,17 +118,17 @@ ikke skal være en 'self'-relasjon for lister.
 Eksemplene over omtaler JSON-formattering.  Det er tilsvarende
 utfordringer for XML-formattering, og det bør beskrives entydig i
 spesifikasjonen hvordan XML-lister skal se ut, i tillegg til
-relasjonslenkeformatteringen på side 12.  Dette fortjener
+relasjonslenkeformatteringen på side 12.  Dette fortjener egen
 mangelmelding og er ikke videre omtalt her.
 
 Det hadde vært nyttig om antall objekter totalt i resultatsettet var
-del av resultatet som ble returnert, dvs. å la \$inlineCount-tilvalget
-i Odata være aktiv som standard.  Det gjør det mulig for en klient å
-vite hvor mange sider med resultater som finnes og dermed hvor mange
-'next'-lenker som må følges for å hente hele resultatsettet, uten å
-måtte gjøre et ekstra kall med Odata-argumentet \$count.  Det er flere
-måter å gjøre dette på.  Vi foreslår at antallet returneres i et
-'count'-felt.
+del av resultatet som ble returnert, tilsvarende å la
+\$inlineCount-tilvalget i Odata være aktiv som standard.  Det gjør det
+mulig for en klient å vite hvor mange sider med resultater som finnes
+og dermed hvor mange 'next'-lenker som må følges for å hente hele
+resultatsettet, uten å måtte gjøre et ekstra kall med Odata-argumentet
+\$count.  Det er flere måter å gjøre dette på.  Vi foreslår at
+antallet returneres i et 'count'-felt.
 
 Ønsket endring
 --------------
