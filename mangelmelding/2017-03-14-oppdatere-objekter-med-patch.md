@@ -53,12 +53,10 @@ Følgende data sendes fra kjernnen til fagsystemet (GET):
   "saksstatus" : "Opprettet",
   "tittel": "Title of the test file",
   "beskrivelse": "Søknad om bhg plass i Eksempel kommune",
-  *"noekkelord": ["keyword 1", "keyword 2","keyword 3" ],*
-  "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+  "noekkelord": ["keyword 1", "keyword 2","keyword 3" ],
   "dokumentmedium": "Elektronisk arkiv"
 }
 ```
-
 Men fagsystemet som utgjør klienten kan være dårlig laget.  Hvis
 fagsystemet ikke er laget for å forstå noekkelord, slik at når
 JSON-innholdet mottas av fagsystemet droppes verdien i noekkelord.
@@ -71,14 +69,12 @@ Fagsystemet laster senere opp følgende data til kjernen (PUT):
   "opprettetAv" : "admin",
   "offentligTittel": "Public title of the test file",
   "mappeID": "2017/01",
-  *"saksstatus" : "Avsluttet",*
+  "saksstatus" : "Avsluttet",  
   "tittel": "Title of the test file",
-  "beskrivelse": "Søknad om bhg plass i Eksempel kommune",
-  "oppbevaringsted" : [ "location 1", "location2", "location3" ],
+  "beskrivelse": "Søknad om bhg plass i Eksempel kommune",  
   "dokumentmedium": "Elektronisk arkiv"
 }
 ```
-
 Nå er noekkelord med tilhørende verdi forsvunnet. Kjernen har ingen
 grunn til å tro at det ikke var meningen at noekkelord skulle
 forsvinne. Dette er ikke bare et problem for komposisjoner, men kan
@@ -96,18 +92,17 @@ fagsystemet.
 ```
 {
   "systemId" : "ad6d2092-180f-46d7-a631-ba679f875fd0" ,
-  *"opprettetDato" : "2017-03-04T09:23:14",*
-  *"opprettetAv" : "fagsystemadmin",*
+  "opprettetDato" : "2017-03-04T09:23:14",
+  "opprettetAv" : "fagsystemadmin",
   "offentligTittel": "Public title of the test file",
   "mappeID": "2017/01",
   "saksstatus" : "Opprettet",
   "tittel": "Title of the test file",
-  *"beskrivelse": "Plassen er tildelt i duestien barnehage"*,
+  "beskrivelse": "Plassen er tildelt i duestien barnehage",
   "oppbevaringsted" : [ "location 1", "location2", "location3" ],
   "dokumentmedium": "Elektronisk arkiv"
 }
 ```
-
 Det er ikke mulig å endre opprettetDato/av i Noark 5 så denne forespørslen 
 ville måtte avvises. Det er allikevel en del logikk som må bygges inn i kjernen
 for å sjekke hvilken felter er blitt endret og om det er lov å tillate en slik endring. 
@@ -117,23 +112,33 @@ Det ville være mye enklere å be klienten angi hvilken felter som skal endres.
 I eksemplet over er det beskrivelse som ble endret. Da kunne det være en PATCH
 forespørsel der kun beskrivelse inngikk.
 
+En PATCH forespørsel for å endre beskrivelse for følgende mappe
+
+   [contextPath][api]/arkivstruktur/mappe/ad6d2092-180f-46d7-a631-ba679f875fd0  
+
+ville da bestå av følgende JSON
+
 ```
-{
-  *"beskrivelse": "Plassen er tildelt i duestien barnehage"*,
-}
+{ "op": "replace", "path": "/beskrivelse", "value": "Plassen er tildelt i duestien barnehage" }
 ```
 
-Med en slik strategi det være mye fortere og enklere å avvise uønskete
-endringer og klienten tvinges kun til forholde seg til de feltene den
+
+Dette er en veldig tydelig og ryddig måte å angi hva som skal endres og med
+en slik strategi vil det være mye fortere og enklere å avvise uønskete
+endringer samtidig klienten tvinges kun til forholde seg til de feltene den
 har behov for å vite noe om.
+
+IETF har stanadardisert PATCH forespørlser og dette er noe som med fordel kunne 
+brukes i [tjenestegrensesnittet](https://tools.ietf.org/html/rfc6902).
 
 Tjenestegrensesnitt i sitt nåværende form virker å være utviklet
 utifra et «Noark 5 komplett» synspunkt, framfor synspunktet,
 «frittstående kjerne» som kan integreres med sak/arkiv og
 fagsystemer. Et Noark 5 komplett system vil ha full kontoll både på klienten
 og kjernen og derfor vil nok en del av problemene over ikke være relevant. 
-Riksarkivet godkjenner en kjerne/komplett, ikke klienter, og vi tror
-det er viktig å ta inn over seg forskjellen.
+Når det gjeler en Noark 5 kjerne med integrasjoner til fagsystem vil Riksarkivet
+kun godkjenne kjernen, ikke klienter, og vi tror det er viktig å ta inn over
+seg forskjellen.
 Eksisterende Noark-komplett systemer blir godkjent som en helhet. En
 frittstående kjerne med integrasjoner til fagsystemer vil stå over
 mange flere utfordringer når det gjelder datakvaliteten hvis data
@@ -175,18 +180,11 @@ står det følgende:
 > The entity MUST NOT contain related entities as inline content. It
 > MAY contain binding information for navigation properties.
 
-Tjenestegrensesnittet nøster komposisjoner. Det er litt uklart om
-anbefalinger over også gjelder for disse eller bare arkivenhetene
-(arkivdel, mappe osv).
-
-Hvis komposisjoner også omfattes av OData anbefalingene så må det
+Hvis komposisjoner skal omfattes av OData anbefalingene så må det
 utvikles nye relasjons-URL-er for alle entiteter med
 komposisjoner. Slik vi forstår det, vil en tilknytting av en
 komposisjon til en entitet være en oppdatering av entiteten og da vil
 det måtte brukes en PATCH forespørsel.
-
-Vi antar at dette ikke gjelder kodelister, selv om kodelister også
-oppfører seg som entiteter.
 
 Nye REL som trengs da for feks klasse vil være:
 
@@ -198,13 +196,18 @@ Nye REL som trengs da for feks klasse vil være:
 
 Ønsket endring
 --------------
-
-Vi foreslår at tjenestegrensesnitt følger den overnevnt identifiserte
-beste praksis for CRUD.  Selv om tjenestegrensesnittet ikke defineres
-utelukkende som en OData kilde så kan OData standarden brukes som
-veiledende.  Vi foreslår at det utvikles en beskrivelse av hvilke
-beste praksis-spesifikasjoner tjenestegrensesnitt forholder seg til,
-eventuelt om det er avvik til etablerte tilnærminger og hvorfor.
+Det er altfor omfattende å skrive et ord-for-ord beskrivelse av alle
+endringene som skal til for dette. 
+ 
+Den første endringen vi ønsker er at tjenestegrensesnittet bruker PATCH
+og tillater felt oppdateringer. Den andre er at rfc6902 brukes som metode
+for å støtte oppdateringer. Den tredje endringen er at tjenestegrensesnitt
+følger den overnevnt identifiserte beste praksis for CRUD.  Selv om
+tjenestegrensesnittet ikke defineres utelukkende som en OData kilde så
+kan OData standarden brukes som veiledende. Vi foreslår at det utvikles
+en beskrivelse av hvilke beste praksis-spesifikasjoner tjenestegrensesnitt 
+forholder seg til, eventuelt om det er avvik til etablerte tilnærminger
+og hvorfor.
 
 OData som beste praksis innebærer en generell endring i hvordan CRUD
 er beskrevet:
@@ -214,3 +217,4 @@ er beskrevet:
 3. Enkeltfelt eller utvalgte felt oppdateres med en PATCH.
 4. Komposisjoner nøstes ikke ved oppdateringer
 5. Komposisjoner knyttes til entiteter via PATCH
+
