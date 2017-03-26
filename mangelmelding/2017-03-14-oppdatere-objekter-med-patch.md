@@ -119,7 +119,7 @@ Det ville være mye enklere å be klienten angi hvilken felter som skal
 endres.  I eksemplet over er det beskrivelse som ble endret. Da kunne
 det være en PATCH forespørsel der kun beskrivelse inngikk.
 
-En PATCH forespørsel for å endre beskrivelse for følgende mappe
+En PATCH forespørsel for å endre «beskrivelse» for følgende mappe
 
   [contextPath][api]/arkivstruktur/mappe/ad6d2092-180f-46d7-a631-ba679f875fd0  
 
@@ -132,7 +132,7 @@ ville da bestå av følgende JSON
 
 Dette er en veldig tydelig og ryddig måte å angi hva som skal endres
 og med en slik strategi vil det være mye fortere og enklere å avvise
-uønskete endringer samtidig klienten tvinges kun til forholde seg til
+uønskete endringer samtidig som klienten tvinges kun til forholde seg til
 de feltene den har behov for å vite noe om.
 
 IETF har standardisert PATCH forespørsler og dette er noe som med
@@ -144,7 +144,7 @@ utifra et «Noark 5-komplett»-synspunkt, framfor synspunktet,
 «frittstående kjerne» som kan integreres med sak/arkiv og
 fagsystemer. Et Noark 5-komplett system vil ha full kontoll både på
 klienten og kjernen og derfor vil nok en del av problemene over ikke
-være relevant.  Når det gjeler en Noark 5 kjerne med integrasjoner til
+være relevant.  Når det gjelder en Noark 5 kjerne med integrasjoner til
 fagsystem vil Riksarkivet kun godkjenne kjernen, ikke klienter, og vi
 tror det er viktig å ta inn over seg forskjellen.  Eksisterende Noark
 5-komplett systemer blir godkjent som en helhet. En frittstående
@@ -210,7 +210,7 @@ endringene som trengs.  Vi nøyer oss derfor i denne omgang med en kort
 oppsummering.
  
 Den første endringen vi ønsker er at tjenestegrensesnittet bruker
-PATCH og tillater feltoppdateringer. Den andre er at RFC-6902 brukes
+PATCH og tillater feltoppdateringer. Den andre endringen er at RFC-6902 brukes
 som metode for å støtte oppdateringer. Den tredje endringen er at
 tjenestegrensesnitt følger den overnevnt identifiserte beste praksis
 for CRUD.  Selv om tjenestegrensesnittet ikke defineres utelukkende
