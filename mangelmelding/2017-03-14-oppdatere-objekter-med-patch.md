@@ -1,4 +1,4 @@
-Følge OData anbefalinger for CRUD - Update
+Tillate oppdatering av entiter med PATCH
 ==========================================
 
  ------------------  ---------------------------------
