@@ -10,7 +10,7 @@ Tillate oppdatering av entiteter med PATCH
         Dokumentdel  6.1.1.5
          Sidenummer  19
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-03-26
  ------------------  ---------------------------------
 
 Beskrivelse
@@ -42,7 +42,7 @@ La oss anta følgende situasjon. Et fagsystem for behandling av
 barnehagesøknader er integrert med et Noark 5 saksbehandlingsystem. 
 Søknaden mottas via postmottak og det opprettes en saksmappe. 
 Fagsystemet går da gjennom disse saksmappene og behandler søknader. 
-Følgende data sendes fra kjernnen til fagsystemet (GET):
+Følgende data sendes fra kjernen til fagsystemet (GET):
 
 ```
 {
@@ -119,7 +119,8 @@ Det ville være mye enklere å be klienten angi hvilken felter som skal
 endres.  I eksemplet over er det beskrivelse som ble endret. Da kunne
 det være en PATCH forespørsel der kun beskrivelse inngikk.
 
-En PATCH forespørsel for å endre «beskrivelse» for følgende mappe
+En PATCH forespørsel for å endre «beskrivelse» for følgende
+mappe-instans
 
   [contextPath][api]/arkivstruktur/mappe/ad6d2092-180f-46d7-a631-ba679f875fd0  
 
@@ -131,26 +132,26 @@ ville da bestå av følgende JSON
 ```
 
 Dette er en veldig tydelig og ryddig måte å angi hva som skal endres
-og med en slik strategi vil det være mye fortere og enklere å avvise
+og med en slik strategi vil det være mye raskere og enklere å avvise
 uønskete endringer samtidig som klienten tvinges kun til forholde seg til
 de feltene den har behov for å vite noe om.
 
-IETF har standardisert PATCH forespørsler og dette er noe som med
-fordel kunne brukes i
-[tjenestegrensesnittet](https://tools.ietf.org/html/rfc6902).
+IETF har [standardisert PATCH-forespørsler av JSON i RFC
+6902](https://tools.ietf.org/html/rfc6902) og dette er noe som med
+fordel kunne brukes i tjenestegrensesnittet.
 
 Tjenestegrensesnitt i sitt nåværende form virker å være utviklet
 utifra et «Noark 5-komplett»-synspunkt, framfor synspunktet,
 «frittstående kjerne» som kan integreres med sak/arkiv og
 fagsystemer. Et Noark 5-komplett system vil ha full kontoll både på
 klienten og kjernen og derfor vil nok en del av problemene over ikke
-være relevant.  Når det gjelder en Noark 5 kjerne med integrasjoner til
+være relevant.  Når det gjelder en Noark 5-kjerne med integrasjoner til
 fagsystem vil Riksarkivet kun godkjenne kjernen, ikke klienter, og vi
 tror det er viktig å ta inn over seg forskjellen.  Eksisterende Noark
 5-komplett systemer blir godkjent som en helhet. En frittstående
 kjerne med integrasjoner til fagsystemer vil stå over mange flere
 utfordringer når det gjelder datakvaliteten hvis data unødvendig
-flyttes fram og tilbake mellom klienten og kjernen.  Diverse klienter
+flyttes fram og tilbake mellom klienten og kjernen.  Ulike klienter
 vil ikke nødvendigvis forstå viktigheten og betydningen av Noark
 5-metadata og sammenhenger mellom entiteter!
 
@@ -196,11 +197,13 @@ det måtte brukes en PATCH forespørsel.
 
 Nye REL som trengs da for feks klasse vil være:
 
-  REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-skjerming
-  REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-gradering
-  REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-sletting
-  REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-kassasjon
-  REST_REL http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-kassasjonutfoert
+|----------|-------------------------------------------------------------------|
+| REST_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-skjerming       |
+| REST_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-gradering       |
+| REST_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-sletting        |
+| REST_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-kassasjon       |
+| REST_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-kassasjonutfoert|
+
 
 Ønsket endring
 --------------
@@ -210,17 +213,17 @@ endringene som trengs.  Vi nøyer oss derfor i denne omgang med en kort
 oppsummering.
  
 Den første endringen vi ønsker er at tjenestegrensesnittet bruker
-PATCH og tillater feltoppdateringer. Den andre endringen er at RFC-6902 brukes
-som metode for å støtte oppdateringer. Den tredje endringen er at
-tjenestegrensesnitt følger den overnevnt identifiserte beste praksis
-for CRUD.  Selv om tjenestegrensesnittet ikke defineres utelukkende
-som en OData kilde så kan OData-standarden brukes som veiledende. Vi
-foreslår at det utvikles en beskrivelse av hvilke beste
+PATCH og tillater feltoppdateringer. Den andre endringen er at
+RFC-6902 brukes som metode for å støtte oppdateringer. Den tredje
+endringen er at tjenestegrensesnitt følger den overnevnt identifiserte
+beste praksis for CRUD.  Selv om tjenestegrensesnittet ikke defineres
+utelukkende som en OData kilde så kan OData-standarden brukes som
+veiledende. Vi foreslår at det utvikles en beskrivelse av hvilke beste
 praksis-spesifikasjoner tjenestegrensesnitt forholder seg til,
 eventuelt om det er avvik til etablerte tilnærminger og hvorfor.
 
-OData som beste praksis innebærer en generell endring i hvordan CRUD
-er beskrevet:
+OData som beste praksis gir en generell endring i hvordan CRUD
+beskrives:
 
 1. En entitet opprettes med en POST.
 2. En entitet oppdateres, i sin helhet, med en PUT.
