@@ -1,4 +1,4 @@
-Tillate oppdatering av entiter med PATCH
+Tillate oppdatering av entiteter med PATCH
 ==========================================
 
  ------------------  ---------------------------------
