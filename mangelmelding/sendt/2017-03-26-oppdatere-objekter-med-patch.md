@@ -230,3 +230,8 @@ beskrives:
 3. Enkeltfelt eller utvalgte felt oppdateres med en PATCH.
 4. Komposisjoner nøstes ikke ved oppdateringer
 5. Komposisjoner knyttes til entiteter via PATCH
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
