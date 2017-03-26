@@ -34,8 +34,9 @@ Man løper en stor dataintegritetsrisiko hvis man tvinger klienten til
 å holde hele objektet med alle komposisjoner i minne og sende hele
 objektet tilbake til kjernen ved mindre oppdateringer. Dette mener vi
 er unødvendig og en dårlig tilnærming. Man må huske at Riksarkivet
-godkjenner Noark 5 komplett/kjerne. Ikke forsystemene som skal
-integreres med en Noark 5 kjerne. Et eksempel vises under.
+godkjenner Noark 5 komplett/kjerne, ikke forsystemene som skal
+integreres med en Noark 5 kjerne. Her er et eksempel for å forklare
+problemet.
 
 La oss anta følgende situasjon. Et fagsystem for behandling av 
 barnehagesøknader er integrert med et Noark 5 saksbehandlingsystem. 
@@ -57,10 +58,13 @@ Følgende data sendes fra kjernnen til fagsystemet (GET):
   "dokumentmedium": "Elektronisk arkiv"
 }
 ```
-Men fagsystemet som utgjør klienten kan være dårlig laget.  Hvis
-fagsystemet ikke er laget for å forstå noekkelord, slik at når
-JSON-innholdet mottas av fagsystemet droppes verdien i noekkelord.
-Fagsystemet laster senere opp følgende data til kjernen (PUT):
+
+Men fagsystemet som utgjør klienten er dårlig laget.  Fagsystemet er
+ikke er i stand til å forstå feltet «noekkelord», som fører til at når
+JSON-innholdet mottas av fagsystemet så droppes feltet «noekkelord»
+med tilhørende verdi.  Senere laster fagsystemet opp følgende data til
+kjernen med PUT:
+
 
 ```
 {
@@ -75,19 +79,20 @@ Fagsystemet laster senere opp følgende data til kjernen (PUT):
   "dokumentmedium": "Elektronisk arkiv"
 }
 ```
-Nå er noekkelord med tilhørende verdi forsvunnet. Kjernen har ingen
-grunn til å tro at det ikke var meningen at noekkelord skulle
+
+Nå er feltet «noekkelord» med tilhørende verdi forsvunnet. Kjernen har
+ingen grunn til å tro at det ikke var meningen at «noekkelord» skulle
 forsvinne. Dette er ikke bare et problem for komposisjoner, men kan
 også gjelde felter.  Poenget er at kjernen tvinger klienten å være
-innforstått med hele Noark 5 datamodellen, noe som er unødvendig.
+inneforstått med hele datamodellen til Noark 5, noe som er unødvendig.
 Riksarkivet godkjenner ikke forsystemene som skal integreres til en
 frittstående kjerne, slik at det ikke er åpning for riksarkivet å
 oppdage slike problemer før slike klienter tas i bruk.
 
-Et relatert eksempel er med feltet opprettetDato der opprettetDato kan
-være forskjellig for kjernen og fagsystemet. Det er legitimt at fagsystemet
-velger å sette opprettetDato til tidspunktet mappen ble opprettet i 
-fagsystemet.
+Et relatert eksempel er med feltet «opprettetDato» der «opprettetDato»
+kan være forskjellig for kjernen og fagsystemet. Det er legitimt at
+fagsystemet velger å sette «opprettetDato» til tidspunktet mappen ble
+opprettet i fagsystemet.
 
 ```
 {
@@ -103,52 +108,55 @@ fagsystemet.
   "dokumentmedium": "Elektronisk arkiv"
 }
 ```
-Det er ikke mulig å endre opprettetDato/av i Noark 5 så denne forespørslen 
-ville måtte avvises. Det er allikevel en del logikk som må bygges inn i kjernen
-for å sjekke hvilken felter er blitt endret og om det er lov å tillate en slik endring. 
-En dårlig Noark 5 kjerne ville kanskje til og med tillate en slik endring!
 
-Det ville være mye enklere å be klienten angi hvilken felter som skal endres. 
-I eksemplet over er det beskrivelse som ble endret. Da kunne det være en PATCH
-forespørsel der kun beskrivelse inngikk.
+Det er ikke mulig å endre «opprettetDato» og «opprettetDatoAv» i Noark
+5 så denne forespørslen ville måtte avvises. Det er allikevel en del
+logikk som må bygges inn i kjernen for å sjekke hvilken felter er
+blitt endret og om det er lov å tillate en slik endring.  En dårlig
+Noark 5 kjerne ville kanskje til og med tillate en slik endring!
+
+Det ville være mye enklere å be klienten angi hvilken felter som skal
+endres.  I eksemplet over er det beskrivelse som ble endret. Da kunne
+det være en PATCH forespørsel der kun beskrivelse inngikk.
 
 En PATCH forespørsel for å endre beskrivelse for følgende mappe
 
-   [contextPath][api]/arkivstruktur/mappe/ad6d2092-180f-46d7-a631-ba679f875fd0  
+  [contextPath][api]/arkivstruktur/mappe/ad6d2092-180f-46d7-a631-ba679f875fd0  
 
 ville da bestå av følgende JSON
 
 ```
-{ "op": "replace", "path": "/beskrivelse", "value": "Plassen er tildelt i duestien barnehage" }
+{ "op": "replace", "path": "/beskrivelse",
+  "value": "Plassen er tildelt i duestien barnehage" }
 ```
 
+Dette er en veldig tydelig og ryddig måte å angi hva som skal endres
+og med en slik strategi vil det være mye fortere og enklere å avvise
+uønskete endringer samtidig klienten tvinges kun til forholde seg til
+de feltene den har behov for å vite noe om.
 
-Dette er en veldig tydelig og ryddig måte å angi hva som skal endres og med
-en slik strategi vil det være mye fortere og enklere å avvise uønskete
-endringer samtidig klienten tvinges kun til forholde seg til de feltene den
-har behov for å vite noe om.
-
-IETF har stanadardisert PATCH forespørlser og dette er noe som med fordel kunne 
-brukes i [tjenestegrensesnittet](https://tools.ietf.org/html/rfc6902).
+IETF har standardisert PATCH forespørsler og dette er noe som med
+fordel kunne brukes i
+[tjenestegrensesnittet](https://tools.ietf.org/html/rfc6902).
 
 Tjenestegrensesnitt i sitt nåværende form virker å være utviklet
-utifra et «Noark 5 komplett» synspunkt, framfor synspunktet,
+utifra et «Noark 5-komplett»-synspunkt, framfor synspunktet,
 «frittstående kjerne» som kan integreres med sak/arkiv og
-fagsystemer. Et Noark 5 komplett system vil ha full kontoll både på klienten
-og kjernen og derfor vil nok en del av problemene over ikke være relevant. 
-Når det gjeler en Noark 5 kjerne med integrasjoner til fagsystem vil Riksarkivet
-kun godkjenne kjernen, ikke klienter, og vi tror det er viktig å ta inn over
-seg forskjellen.
-Eksisterende Noark-komplett systemer blir godkjent som en helhet. En
-frittstående kjerne med integrasjoner til fagsystemer vil stå over
-mange flere utfordringer når det gjelder datakvaliteten hvis data
-unødvendig flyttes fram og tilbake mellom klienten og kjernen.
-Diverse klienter vil ikke nødvendigvis forstå viktigheten og
-betydningen av Noark metadata og sammenhenger mellom entiteter!
+fagsystemer. Et Noark 5-komplett system vil ha full kontoll både på
+klienten og kjernen og derfor vil nok en del av problemene over ikke
+være relevant.  Når det gjeler en Noark 5 kjerne med integrasjoner til
+fagsystem vil Riksarkivet kun godkjenne kjernen, ikke klienter, og vi
+tror det er viktig å ta inn over seg forskjellen.  Eksisterende Noark
+5-komplett systemer blir godkjent som en helhet. En frittstående
+kjerne med integrasjoner til fagsystemer vil stå over mange flere
+utfordringer når det gjelder datakvaliteten hvis data unødvendig
+flyttes fram og tilbake mellom klienten og kjernen.  Diverse klienter
+vil ikke nødvendigvis forstå viktigheten og betydningen av Noark
+5-metadata og sammenhenger mellom entiteter!
 
-For å understøtte argumentet at kjernen må støtte
-PATCH. Tjenestegrensesnittet sier selv at noen steder bygges det på
-OData. [OData-retningslinjene](https://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398329)
+For å understøtte argumentet at kjernen må støtte PATCH.
+Tjenestegrensesnittet sier selv at noen steder bygges det på OData.
+[OData-retningslinjene](https://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398329)
 sier følgende for oppdateringer:
 
 > Update an Entity
@@ -196,18 +204,20 @@ Nye REL som trengs da for feks klasse vil være:
 
 Ønsket endring
 --------------
-Det er altfor omfattende å skrive et ord-for-ord beskrivelse av alle
-endringene som skal til for dette. 
+
+Det er veldig omfattende å skrive et ord-for-ord beskrivelse av alle
+endringene som trengs.  Vi nøyer oss derfor i denne omgang med en kort
+oppsummering.
  
-Den første endringen vi ønsker er at tjenestegrensesnittet bruker PATCH
-og tillater felt oppdateringer. Den andre er at rfc6902 brukes som metode
-for å støtte oppdateringer. Den tredje endringen er at tjenestegrensesnitt
-følger den overnevnt identifiserte beste praksis for CRUD.  Selv om
-tjenestegrensesnittet ikke defineres utelukkende som en OData kilde så
-kan OData standarden brukes som veiledende. Vi foreslår at det utvikles
-en beskrivelse av hvilke beste praksis-spesifikasjoner tjenestegrensesnitt 
-forholder seg til, eventuelt om det er avvik til etablerte tilnærminger
-og hvorfor.
+Den første endringen vi ønsker er at tjenestegrensesnittet bruker
+PATCH og tillater feltoppdateringer. Den andre er at RFC-6902 brukes
+som metode for å støtte oppdateringer. Den tredje endringen er at
+tjenestegrensesnitt følger den overnevnt identifiserte beste praksis
+for CRUD.  Selv om tjenestegrensesnittet ikke defineres utelukkende
+som en OData kilde så kan OData-standarden brukes som veiledende. Vi
+foreslår at det utvikles en beskrivelse av hvilke beste
+praksis-spesifikasjoner tjenestegrensesnitt forholder seg til,
+eventuelt om det er avvik til etablerte tilnærminger og hvorfor.
 
 OData som beste praksis innebærer en generell endring i hvordan CRUD
 er beskrevet:
@@ -217,4 +227,3 @@ er beskrevet:
 3. Enkeltfelt eller utvalgte felt oppdateres med en PATCH.
 4. Komposisjoner nøstes ikke ved oppdateringer
 5. Komposisjoner knyttes til entiteter via PATCH
-
