@@ -29,3 +29,8 @@ Endre
 til
 
 > M707 filstoerrelse: Kan ikke endres
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
