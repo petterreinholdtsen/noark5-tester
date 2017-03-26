@@ -15,8 +15,7 @@ Klargjør hva som skal returneres når database eller lister er tomme
 
 Denne mangelmeldingen er veldig avhengig av hvordan mangelmeldingen
 `Beskriv hvordan lister skal formatteres i JSON`
-(2017-03-13-list-result-description.md) blir besvart.  Den
-mangelmeldingen bør derfor sendes til Arkivverket før denne.
+(2017-03-13-list-result-description.md) blir besvart.
 
 Beskrivelse
 -----------
