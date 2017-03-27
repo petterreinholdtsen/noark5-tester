@@ -46,5 +46,5 @@ forespørsler med JSON kodet som ISO-8859-1 ville ha
 Det legges inn et nytt avsnitt under tabell over Innholdstype
 (Content-Type) med følgende innhold:
 
-> Overføring av JSON og XML skal UTF-8-koding i tråd med ISO/IEC
+> Overføring av JSON og XML skal UTF-8-kodes i tråd med ISO/IEC
 > 10646.
