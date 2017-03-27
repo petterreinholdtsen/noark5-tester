@@ -1,5 +1,5 @@
-Legg inn linjenummer i margen på alle sider
-===========================================
+Linjenummer i tekstmargen vil forenkle henvisninger
+===================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -19,7 +19,10 @@ Beskrivelse
 Det ville være enklere å referere til bestemte deler i spesifikasjonen
 hvis teksten hadde linjenummer i margen.  Da slapp en å telle avsnitt
 og setninger, og kunne nøye seg med å opplyse om sidetall og
-linjenummer.
+linjenummer.  Dette gjelder også JSON- og XML-eksempler, som bør kunne
+refereres til med linjenummer.  Endel av disse eksemplene er i dag
+tatt inn i dokumentet som bilder, hvilket gjør at en må skrive av
+eksemplene med tilhørende fare for stavefeil.
 
 Ønsket endring
 --------------
