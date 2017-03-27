@@ -17,9 +17,11 @@ Beskrivelse
 -----------
 
 Spesifikasjonen nevner ikke hvilket tegnsett og tegnreportoar som skal
-brukes i JSON-feltverdier eller XML-filer.  I sin ytterste konsekvens
-betyr det at klient og tjener må være forberedt på å ta imot ethvert
-tegnsett, det være seg EBCDIC, ISO-8859-1, UTF-8 eller UTF-32.
+brukes i JSON-feltverdier eller XML-filer.  Det burde nevnes i del
+6.1.1.8 om overføringsformat.  I sin ytterste konsekvens betyr det at
+tegnsett ikke nevnes at klient og tjener må være forberedt på å ta
+imot ethvert tegnsett, det være seg EBCDIC, ISO-8859-1, UTF-8 eller
+UTF-32.
 
 For XML er det veldefinert hvordan en spesifiserer hvilket tegnsett
 som brukes, selv om fil-innhold og Content-Type bør stemme overens,
@@ -43,8 +45,9 @@ forespørsler med JSON kodet som ISO-8859-1 ville ha
 Ønsket endring
 --------------
 
-Det legges inn et nytt avsnitt under tabell over Innholdstype
-(Content-Type) med følgende innhold:
+Det legges inn et nytt avsnitt i del 6.1.1.8 (Overføringsformat) på
+side 25 under tabell over «Innholdstype (Content-Type)» med følgende
+innhold:
 
 > Overføring av JSON og XML skal UTF-8-kodes i tråd med ISO/IEC
 > 10646.
