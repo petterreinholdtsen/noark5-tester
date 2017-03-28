@@ -163,3 +163,8 @@ før "resultatkoder ned navigering/søk", som lyder noe ala dette:
 >   ]
 > }
 > ```
+
+Respons
+-------
+
+Henvendelsen er gitt saksnummer 2017/5964 hos Arkivverket.
