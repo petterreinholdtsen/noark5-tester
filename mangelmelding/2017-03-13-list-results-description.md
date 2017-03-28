@@ -10,7 +10,7 @@ Beskriv hvordan lister skal formatteres i JSON
         Dokumentdel  6.1.1.2
          Sidenummer  16
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-03-28
  ------------------  ---------------------------------
 
 Beskrivelse
@@ -75,7 +75,7 @@ skal returneres i JSON er at { objekt } ligner litt på JavaScript og
 kan skape problemer, mens strukturen { "entitetsnavn": [ { obj }, {
 obj } ] unngår dette.
 
-Jeg mistenker alternativ (b) bør unngås, da det ikke er åpenbart
+Vi mistenker alternativ (b) bør unngås, da det ikke er åpenbart
 hvordan relasjoner med operasjoner på listene skal tas med.  I følge
 spesifikasjonens side 13 kan alle lister ha en 'next'-relasjon i sin
 liste med relasjoner.  Det står ingenting der om hvordan dette skal
@@ -97,12 +97,12 @@ formatteres, men det virker mest rett frem å gjøre dette slik:
 }
 ```
 
-Dermed mistenker jeg at det er formatteringen på
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ som er den
-tiltenkte måten å formattere lister.  Det er i
-https://github.com/Arkitektum/N5-net/issues/4 spurt om det kan vises
-frem et eksempel på http://n5test.kxml.no/ på hvordan
-'next'-relasjoner skal håndteres for lister.
+Dermed mistenker vi at det er den overnevnte formatteringen på
+http://rel.kxml.no/ som er den tiltenkte måten å formattere lister.  I
+https://github.com/Arkitektum/N5-net/issues/4 er det spurt om det kan
+lages et eksempel under http://n5test.kxml.no/ på hvordan
+'next'-relasjoner skal håndteres for lister, for å få disse
+utviklernes syn på hvordan dette skal se ut.
 
 Et relatert spørsmål er om det kan være en 'self'-relasjon på lister?
 6.1.1.7 side 22 sier at alle ressurslenker med 'self'-relasjon kan
