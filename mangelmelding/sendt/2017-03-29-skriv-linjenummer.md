@@ -10,7 +10,7 @@ Linjenummer i tekstmargen vil forenkle henvisninger
         Dokumentdel  hele dokumentet
          Sidenummer  n/a
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-03-29
  ------------------  ---------------------------------
 
 Beskrivelse
@@ -21,7 +21,8 @@ hvis teksten hadde linjenummer i margen.  Da slapp en å telle avsnitt
 og setninger, og kunne nøye seg med å opplyse om sidetall og
 linjenummer.  Dette gjelder også JSON- og XML-eksempler, som bør kunne
 refereres til med linjenummer.  Endel av disse eksemplene er i dag
-tatt inn i dokumentet som bilder, hvilket gjør at en må skrive av
+tatt inn i dokumentet som bilder.  Det at de er bilder, gjør i tillegg
+at hvis en trenger å hente ut deler av et eksempel så må en skrive av
 eksemplene med tilhørende fare for stavefeil.
 
 Ønsket endring
@@ -31,4 +32,5 @@ Tekstmalen som brukes til spesifikasjonen bør endres slik at alle
 sider har linjenummer i marken.
 
 Et eksempel på en oppskrift for Microsoft Word 2013 finnes på
-https://www.howtogeek.com/170789/how-to-number-lines-in-the-margins-in-word-2013/ .
+
+* https://www.howtogeek.com/170789/how-to-number-lines-in-the-margins-in-word-2013/
