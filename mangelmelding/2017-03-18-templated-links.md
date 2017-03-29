@@ -28,8 +28,8 @@ http://n5test.kxml.no/api/ .  Men feltet eksisterer ikke i
 eksempelresponsen vist frem på
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ .  Der finnes
 det derimot et felt som heter «*templatedSpecified*».  Mens hvis en
-besøkerhttp://rel.kxml.no/noark5/v4/api/arkivstruktur/ så er det både
-satte «*templated*» og «*templatedSpecified*».  Er sistnevnte en
+besøker http://rel.kxml.no/noark5/v4/api/arkivstruktur/ så eksisterer
+både «*templated*» og «*templatedSpecified*».  Er sistnevnte en
 skrivefeil for «*templated*»?  Jeg finner ikke «*templatedSpecified*»
 omtalt i spesifikasjonen.
 
