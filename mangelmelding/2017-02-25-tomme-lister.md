@@ -23,7 +23,7 @@ Beskrivelse
 Det er ikke klart fra spesifikasjonen hva slags JSON som skal
 returneres for tomme lister.  Delvis er det uklart hvilke
 relasjonsnøkler som skal returneres i \_links hvis databasen ikke
-inneholder objekter av en bestemt type, eller hvis et søk ikke
+inneholder enkeltentiteter (feks en bestemt mappe), eller hvis et søk ikke
 returnerer noen treff, og delvis er det uklart hvordan selve
 resultatsettet skal returneres når det er tomt.
 
