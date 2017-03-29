@@ -18,8 +18,13 @@ Beskrivelse
 
 Spesifikasjonen nevner ikke hvilket tegnsett og tegnreportoar som skal
 brukes i JSON-feltverdier eller XML-filer.  Det burde nevnes i del
-6.1.1.8 om overføringsformat.  I sin ytterste konsekvens betyr det at
-tegnsett ikke nevnes at klient og tjener må være forberedt på å ta
+6.1.1.8 om overføringsformat.  JSON defineres i [RFC 4627](https://www.ietf.org/rfc/rfc4627.txt) som sier at 
+en streng er definert som " A string is a sequence of zero or more Unicode characters". 
+Dette innebærer at en Noark 5 kjerne må kunne motta UTF-8, UTF-16 eller
+UTF-32 når JSON brukes som overføringsformat. Når det gjelder 
+XML overføringer innebærer det at kjernen må støtte alle tegnsett som
+støttes av [XML](https://www.w3.org/TR/REC-xml/#charencoding) og ytterste
+konsekvens betyr det at klient og tjener må være forberedt på å ta
 imot ethvert tegnsett, det være seg EBCDIC, ISO-8859-1, UTF-8 eller
 UTF-32.
 
@@ -41,6 +46,11 @@ tillate andre tegnsett i unntakstilfeller.  Slike unntakstilfeller bør
 i så fall oppgi tegnsett i tråd med RFC 2616, dvs. slik at
 forespørsler med JSON kodet som ISO-8859-1 ville ha
 «application/vnd.noark5-v4+json; charset=ISO-8859-1» som Content-Type.
+
+Videre argumenteres det at Krav 5.12.4 i Noark standarden angir at UTF-8 
+er ensete gydlig tegnsett som kan brukes for uttrekk. Derfor åpner 
+tjenestegrensesnittet for dyr og unødvendig satsvis konvertering av data 
+fra forskejllige tegnsett til UTF-8.
 
 Ønsket endring
 --------------
