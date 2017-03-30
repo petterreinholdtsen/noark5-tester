@@ -34,3 +34,8 @@ sider har linjenummer i marken.
 Et eksempel på en oppskrift for Microsoft Word 2013 finnes på
 
 * https://www.howtogeek.com/170789/how-to-number-lines-in-the-margins-in-word-2013/
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
