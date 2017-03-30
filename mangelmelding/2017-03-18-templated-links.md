@@ -46,5 +46,5 @@ etter «De ressurser som støtter filter skal annonserer dette under
 _links med «templated=true» og parametre som kan brukes til dette i
 «href» » som lyder:
 
-> Feltet «templated» er valgfritt og antas å være «false» hvis den
+> Feltet «templated» er valgfritt og antas å være «false» hvis det
 > ikke finnes.
