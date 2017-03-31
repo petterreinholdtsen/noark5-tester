@@ -16,14 +16,14 @@ Forbedre beskivelse av filopplastingsprossesen
 Beskrivelse
 -----------
 
-Gjelder også 7.2.1.7 side 99.
+Gjelder også side 26 og del 7.2.1.7 på side 99-105.
 
 Det er uklarheter rundt filopplasting og angivelse av metadata til
 dokumentobjekt og dokumentbesrkivelse. Man må lese gjennon linjene for
 å forstå hvordan dette henger sammen.
 
 Opprettelse av Noark objekter (arkiv, mappe osv) er ganske enkel da
-avhengigheten mellom entiter angies i HTTP-requesten. Når det gjelder
+avhengigheten mellom entiter angis i HTTP-requesten. Når det gjelder
 filopplasting så er det en slags transaksjon som må skje.
 
 En mulig tolkning er at først oppretter man dokumentobjekt og angir
@@ -50,10 +50,18 @@ til 0 eller bulkopplasting med PUT som returnerer 201 Created).
 Når det gjelder håndtering av sjekksum og filstørrelse så ser vi en
 interessant bi-effekt.  Hvis klienten angir sin sjekksum og
 filstørrelse i innkommende dokumentobjekt så kan serveren sjekke dette
-og hvis det ikke stemmer kan klienten få tilbakemelding at noe er
-galt.  Det samme kan skje kjernen returnerer tilhørende dokumentobjekt
-som svar til en filopplasting.  Da kan klienten sjekke at filen som er
-lagret er det samme som den som ble lastet opp.
+og hvis en av dem ikke stemmer kan opplastingen avvises og klienten få
+tilbakemelding at noe er galt.
+
+Klienten kan tilsvarnede oppdage at noe er galt hvis kjernen
+returnerer tilhørende dokumentobjekt som svar til en filopplasting.
+Responsen kan klienten sammenligne med sin kopi av dokumentobjekt for
+å sikre at resultatet tilsvarer den som ble laget før filopplastingen.
+
+Skal det være tillatt å laste opp en tom fil, dvs. en med filstørrelse
+satt til 0?  Det virker ikke å gi mening å laste opp en slik fil til
+arkivet, og det mest fornuftige er antagelig å avvise oppretting av
+dokumentobjekt hvis fillengden er null.
 
 Ønsket endring
 --------------
@@ -86,3 +94,10 @@ I del 7.2.1.7 på side 102-205, endre «Multipl.»-verdi for feltene
 «filstørrelse» fra «[0..1]» til «[1..1]» for å gjøre det klart at
 disse verdiene alltid skal fylles inn ved oppretting av et
 dokumentobjekt.
+
+På side 105 endres definisjonen av filstørrelse fra «Definisjon:
+Størrelsen på fila i antall bytes oppgitt med desimaltall» til
+
+> «Definisjon: Størrelsen på fila i antall bytes oppgitt med
+> desimaltall.  Filstørrelse skal være et positivt heltall større enn
+> 0.»
