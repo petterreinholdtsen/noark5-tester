@@ -42,6 +42,11 @@ Epost-ideer finnes i
 <URL: http://people.skolelinux.org/pere/blog/Hvordan_b_r_RFC_822_formattert_epost_lagres_i_en_NOARK5_database_.html >.
 
 se side 173 (format)
+
+Noark 5 krav 8.1.8 (side 197) sier at epost skal lagres i et enhetlig,
+samlet format som gjengir både e-posthode og e-postmelding, men
+forklarer ikke hvordan det skal gjøres.
+
 -------------------------------------------------------------------------
 
  I punkt 4.1 (Autentisering) på side 9 står det at 'Single Sign On bør
@@ -91,15 +96,6 @@ sensitive by clients and servers".
 
 -------------------------------------------------------------------------
 
-6.1.1.9 (Hente og overføre filer) på side 25-27 forklarer hvordan en
-kan bruke POST eller PUT for å laste opp en fil.  Men den sier
-ingenting om hva slaks 'content' som kan forventes?  Hvis det er '0'
-bytes i content som er riktig, så bør det skrives eksplisitt da det er
-ulikt alle andre POST, der det returneres informasjon om det
-nyopprettede objektet.
-
--------------------------------------------------------------------------
-
 I følge Tor Kjetil Nilsen i
 https://github.com/Arkitektum/N5-net/issues/1 så er relasjon
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivskaper/ på side
@@ -107,5 +103,11 @@ http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivskaper/ på side
 stedet være
 http://rel.kxml.no/noark5/v4/api/administrasjon/ny-arkivskaper som
 blant annet er nevnt i i av http://n5test.kxml.no/api/arkivstruktur.
+
+-------------------------------------------------------------------------
+
+Spesifikasjonen bruker feltnavnet 'filstørrelse' i dokumentobjekt og
+foto, mens det antagelig skulle vært 'filstoerrelse' for å stemme over
+ens med XSD-filer.
 
 -------------------------------------------------------------------------
