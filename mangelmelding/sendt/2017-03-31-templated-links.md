@@ -59,3 +59,8 @@ dette i «href» » føyes det til følgende setning:
 
 > «Feltet «templated» er valgfritt og antas å være «false» hvis det
 > ikke finnes.»
+
+Respons
+-------
+
+Henvendelsen er gitt saksnummer 2017/5964 hos Arkivverket.
