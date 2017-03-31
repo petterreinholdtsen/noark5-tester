@@ -37,15 +37,14 @@ class Endpoint:
         return url
 
     def login(self, username = 'admin', password = 'password'):
-        url = self.expandurl('login')
-#        print(url)
-        self._browser.open(url)
-        self._browser.select_form(nr=0)
-#        self._browser.form.set_all_readonly(False)
-        self._browser['username'] = username
-        self._browser['password'] = password
-        self._browser.submit()
-        html = self._browser.response().read()
+        data = {
+            'username': username,
+            'password': password,
+        }
+        jsondata = json.dumps(data)
+        (c,r) = self.post('auth', jsondata, 'application/json', length=None)
+        j = json.loads(c)
+        self.token = j['token']
 
     def findRelation(self, relation):
         """
@@ -92,6 +91,8 @@ Recursively look for relation in API.
             'Content-Type': mimetype,
             'Content-Length' : length,
         }
+        if hasattr(self, 'token'):
+            headers['Authorization'] = self.token
         if self.verbose:
             print("POST %s: %s" % (url, headers))
         request = urllib2.Request(url, data, headers)
@@ -109,6 +110,10 @@ Recursively look for relation in API.
         url = self.expandurl(path)
         if self.verbose:
             print("GET %s" % url)
+        if headers is None:
+            headers = {}
+        if hasattr(self, 'token'):
+            headers['Authorization'] = self.token
         request = urllib2.Request(url, None, headers)
         response = self._browser.open(request)
         content = response.read()
