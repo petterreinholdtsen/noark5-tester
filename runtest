@@ -225,6 +225,21 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         for rel in sorted(self.rels.keys()):
             if self.verbose:
                 print("mapping %s to %s" % (rel, self.rels[rel]))
+
+    def verifyAuthentication(self):
+        """
+level 0 authentication.  Verify that a URL requiring login
+will contain the WWW-Authenticate header and return HTTP
+code 401 before logging in.
+"""
+        try:
+            # FIXME figure out a way avoid hardcoding this URL
+            url = "arkivstruktur/arkiv/"
+            (content, res) = self.json_get(url)
+            self.failure("level 0 accessing %s before login do not ask for basic authentication" % url)
+        except urllib2.HTTPError, e:
+            self.verify(401 == e.code and 'www-authenticate' in e.hdrs,
+                        "level 0 API should support support Basic access authentication")
         
     def verifyXML(self, prefix, xmlreq, xmlcontent):
         validlinktags = {
@@ -269,6 +284,9 @@ Test basis requirements for NOARK 5 Core.
             self.failure("level 0 CORS - HTTP OPTTIONS request not working")
         except urllib2.URLError:
             self.failure("level 0 CORS - unable to connect via HTTP")
+
+        self.verifyAuthentication()
+
         # Verify ability to produce XML output
         try:
             (content, res) = self.xml_get(".")
