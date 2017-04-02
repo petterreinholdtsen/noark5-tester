@@ -116,7 +116,7 @@ på side 13:
 >   "results": [],
 >   "_links" : [
 >     "rel": "self",
->     "href": "..."
+>     "href": "http://localhost/api/arkivstruktur/arkiv/"
 >   ]
 > }
 > ```
