@@ -110,13 +110,13 @@ på side 13:
 
 > Når en forespurt listeressurs fra databasen er tom skal følgende
 > JSON-struktur returneres:
-
-```
-{
-  "results": [],
-  "_links" : [
-    "rel": "self",
-    "href": "..."
-  ]
-}
-```
+> 
+> ```
+> {
+>   "results": [],
+>   "_links" : [
+>     "rel": "self",
+>     "href": "..."
+>   ]
+> }
+> ```
