@@ -13,9 +13,10 @@ Klargjør JSON-respons når database eller lister er tomme
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
-Denne mangelmeldingen er veldig avhengig av svaret på mangelmelding
+Denne mangelmeldingen bør ses i sammenheng med med mangelmelding
 `Beskriv hvordan lister skal formatteres i JSON` som ble sendt inn
-2017-03-28.
+2017-03-28, og hva en velger her er avhengig av hvordan en velger å
+beskrive listeformattering generelt.
 
 Beskrivelse
 -----------
@@ -77,7 +78,16 @@ For sistnevnte eksempel er det litt uklart hva en "self"-relasjon
 skulle peke til hvis den var satt, i og med at spesifikasjonens del
 6.1.1.7 side 22 sier at alle ressurslenker med «self»-relasjon kan
 potensielt slettes.  En tom liste kan vanskelig slettes, så det er vel
-et godt argument mot den siste ideen.
+et godt argument mot den siste ideen.  Men på den annen side sier jo
+punkt 5.13.23 på side 89 følgende:
+
+> Det bør være mulig å slette mange dokumentvarianter samtidig,
+> f.eks. alle dokumentvarianter som er funnet etter et søk.
+
+Dette tyder jo på at det skal være mulig å slette alle elementene i en
+liste i en operasjon, i hvert fall for noen objekttyper, og det er et
+godt argument for å ha en self-lenke i resultatet til ethvert søk,
+også de med tomt resultat.
 
 Demo-nettstedet http://n5test.kxml.no/api/ har ingen «tomme» datasett
 som jeg har klart å finne, slik at det er lite hjelp der å finne
