@@ -10,29 +10,6 @@ manglemelding/ subdirectory.
 
 -------------------------------------------------------------------------
 
-The specification refer to
-<URL: http://rel.kxml.no/noark5/konformitetsniva/ > defining what
-features must be present for an implementation to be conforming.  But
-that list is a bit short.  Is there some more details available
-anywhere?
-
-I suspect Nikita already fill the basic level 0 requirements except the
-XML one, but it is unclear to me exactly what each requirement mean.
-
-The list is simply
-
- * CORS Cross-origin resource sharing
- * authentication is required
- * json format is supported
- * xml format is supported
-
-For example, for CORS, is it enough to be able to do a OPTIONS request,
-or should the requests and answers have particular content?  Anyone
-know?  The test server on "http://n5test.kxml.no/api/" do not support
-OPTIONS at all, so no help there. :(
-
--------------------------------------------------------------------------
-
 Punkt 6.1.1.9 skisserer hvordan lagre PDF og JPEG i arkivet.  Men hvor
 finnes listen over hvilke formater som er akseptert inn i arkivet og
 hvilke MIME-typer som bør brukes for disse?  Hva med RFC 822-type
