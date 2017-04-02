@@ -108,5 +108,15 @@ hvis en type objekter mangler i databasen eller søkeresultatet.
 F.eks. ved å legge inn et avsnitt ala dette på slutten av del 6.1.1.1
 på side 13:
 
-> Når den forespurte typen ressurser mangler i databasen returneres
-> det en tom JSON-struktur, dvs. «{}»
+> Når en forespurt listeressurs fra databasen er tom skal følgende
+> JSON-struktur returneres:
+
+```
+{
+  "results": [],
+  "_links" : [
+    "rel": "self",
+    "href": "..."
+  ]
+}
+```
