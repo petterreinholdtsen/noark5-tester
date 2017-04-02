@@ -120,3 +120,6 @@ på side 13:
 >   ]
 > }
 > ```
+>
+> Verdien i 'href' vil variere etter hva slags listeressurs / søk som
+> ble forespurt.
