@@ -88,3 +88,8 @@ til
 
 * «http://rel.kxml.no/noark5/v4/arkivstruktur/fil/» og
 * «http://rel.kxml.no/noark5/v4/arkivstruktur/dokumentobjekt/»
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
