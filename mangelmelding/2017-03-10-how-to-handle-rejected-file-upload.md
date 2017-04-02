@@ -28,7 +28,11 @@ deretter en 50X Error ved opplastingen.
 Det er uklart fra spesifikasjonen hva som skal gjøres i et slikt
 tilfelle, og det er ingen dokumentert mekanisme for klienten å be om
 at det filløse dokumentobjekt-instansen slettes når det skjer.  Det er
-dermed ikke mulig for klienten å rydde opp.
+dermed ikke mulig for klienten å rydde opp etter seg når feilen
+oppstår.  Den eneste muligheten for klienten er å forsøkte opplasting
+på nytt og på nytt frem til den lykkes, og det er ikke alltid mulig
+for en klient å fortsette til evig tid.  Det er bedre om klienten kan
+rydde opp og så forsøke på nytt når det passer.
 
 Ønsket endring
 --------------
