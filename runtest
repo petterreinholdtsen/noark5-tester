@@ -180,9 +180,10 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                 href = l['href']
                                 if href not in urlseen:
                                     urlsleft.append(href)
-                                if 'templated' not in l:
-                                    self.failure("_links missing templated in %s" % url)
-                                elif l['templated']:
+                                # The spec do not say if 'templated' is required or not
+                                #if 'templated' not in l:
+                                #    self.failure("_links missing templated in %s" % url)
+                                if 'templated' in l and l['templated']:
                                     hrefshort = href.split('{')[0]
                                     if hrefshort not in urlseen:
                                         urlsleft.append(hrefshort)
@@ -466,7 +467,8 @@ Test basis requirements for NOARK 5 Core.
         url = rels[reffilerel]
         try:
             (c, res) = self.post(url, xmldata, 'application/xml')
-            self.verify(c == '', "POST %s return nothing" % url)
+            # The spec is not clear on what is returned from file upload
+            #self.verify(c == '', "POST %s return nothing" % url)
             self.verify(200 == res.code, "file upload returned HTTP code 200")
         except urllib2.HTTPError, e:
             print("POST %s failed: %s" % (url, e.read()))
