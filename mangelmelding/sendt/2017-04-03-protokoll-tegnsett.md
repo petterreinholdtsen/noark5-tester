@@ -10,13 +10,17 @@ Klargjør standard tegnsett og om flere tegnsett aksepteres
         Dokumentdel  6.1.1.8
          Sidenummer  25
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-04-03
  ------------------  ---------------------------------
+
+Denne teksten er del av en samling innspill til NOARK5-standarden
+tilgjengelig fra
+[https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
 Beskrivelse
 -----------
 
-Spesifikasjonen nevner ikke hvilket tegnsett og tegnreportoar som skal
+Spesifikasjonen nevner ikke hvilket tegnsett og tegnrepertoar som skal
 brukes i JSON-feltverdier eller XML-filer.  Det burde vel nevnes i del
 6.1.1.8 om overføringsformat.  En anerkjent definisjon av
 JSON-formatet finnes i [RFC
@@ -44,15 +48,17 @@ Content-Type er definert i [IETFs RFC 2616 del
 
 Det blir enklere å lage både klient- og tjenerimplementasjoner hvis
 tegnsett brukt i protokollen begrenses, og helst reduseres til et
-tegnsett og reportoar.  Listen over obligatoriske og anbefalte
-IT-standarder som gjelder for offentlig sektor sier at datasystemer
-[skal bruke UTF-8](https://www.difi.no/artikkel/2015/10/tegnsett) med
-mindre det er gode grunner til å bruke noe annet.  Det virker dermed
-naturlig å la UTF-8 være utgangspunktet, og eventuelt vurdere å
-tillate andre tegnsett i unntakstilfeller.
+tegnsett og repertoar.  Listen over obligatoriske og anbefalte
+IT-standarder som gjelder for offentlig sektor sier at nye
+datasystemer [skal bruke
+UTF-8](https://www.difi.no/artikkel/2015/10/tegnsett) med mindre det
+er gode grunner til å bruke noe annet.  Det virker dermed naturlig å
+la UTF-8 være utgangspunktet, og eventuelt vurdere å tillate andre
+tegnsett i unntakstilfeller.  UTF-8 er beskrevet i [IETF RFC
+3629](https://tools.ietf.org/html/rfc3629) og ISO/IEC 10636.
 
 For bruk av JSON i slike unntakstilfeller bør en i så fall nevne i
-spesifikasjonen at tegnsett skal oppgis i tråd med RFC 2616, dvs. slik
+spesifikasjonen at tegnsett skal oppgis i tråd med IETF RFC 2616, dvs. slik
 at forespørsler med JSON kodet som ISO-8859-1 ville ha
 «application/vnd.noark5-v4+json; charset=ISO-8859-1» som Content-Type.
 
@@ -69,5 +75,10 @@ Det legges inn et nytt avsnitt i del 6.1.1.8 (Overføringsformat) på
 side 25 under tabell over «Innholdstype (Content-Type)» med følgende
 innhold:
 
-> Tjenestegrensesnittet skal bruke UTF-8 i tråd med ISO/IEC 10646
-> (Unicode) i alle REST-forespørsler, både for JSON og XML.
+> Tjenestegrensesnittet skal bruke UTF-8 som beskrevet i IETF RFC 3629
+> i alle REST-forespørsler, både for JSON og XML.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
