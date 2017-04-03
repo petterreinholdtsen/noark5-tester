@@ -489,9 +489,10 @@ Test basis requirements for NOARK 5 Core.
         finally:
             print "%d successes, %d failures" % (self.success_count,
                                                  self.failure_count)
+        return not (0 == self.failure_count)
 def main():
     t = Noark5Tester()
-    t.runtests()
+    return t.runtests()
 
 if __name__ == '__main__':
-    main()
+    exit(main())
