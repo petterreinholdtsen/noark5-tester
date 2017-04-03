@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 
-Upload PDF to Noark 5 API for archiving.
+Upload file to Noark 5 API for archiving.
 
 """
 
@@ -13,6 +13,47 @@ import json
 import os
 from pyPdf import PdfFileReader
 import n5core.endpoint
+
+class pdfReader():
+    def __init__(self, fh):
+        """
+Extract document information from PDF.  Must read every value in the
+constructor, to avoid moving the file handle pointer for others later.
+"""
+        reader = PdfFileReader(fh)
+        self.doctitle = reader.getDocumentInfo().title
+        self.producer = reader.getDocumentInfo().producer
+        self.creator = reader.getDocumentInfo().creator
+        #reader.getDocumentInfo().creationdate ?
+        print self.doctitle
+    def getTitle(self):
+        return self.doctitle
+
+class jpegReader():
+    pass
+
+# Mapping from magic string to Noark 5 format info
+# Based on the spec list of formats on page 173.
+formatlist = {
+    # PDF/A - ISO 19005 1:205
+    'PDF document, ': {
+        'mimetype':   'application/pdf',
+        'format':     'PDF',
+        'inforeader': pdfReader,
+        },
+    # JPEG (ISO 10918-1:1994)
+    'JPEG image data, ': {
+        'mimetype':   'image/jpeg',
+        'format':     'JPEG',
+        'inforeader': jpegReader,
+    },
+    # Ren text
+    # TIFF versjon 6
+    # XML v1
+    # SOSI v2.2 (1995 el. nyere)
+    # MPEG-2 (ISO 13818-2)
+    # MP3 (ISO 11172-3 PCM eller PCM-basert)
+}
 
 def objectOperation(json, relation):
     """
@@ -81,12 +122,11 @@ def getFileSize(filehandle):
     return size
 
 def main():
-    relver = 'http://rel.kxml.no/noark5/v4/api'
-    relbase = relver + '/arkivstruktur'
+    relbase = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur'
     parser = argparse.ArgumentParser()
     parser.add_argument("--verbose", help="print more debug information",
                         action="store_true")
-    parser.add_argument("pdffile", nargs='+', help="PDF file to archive")
+    parser.add_argument("filename", nargs='+', help="file to archive")
     args = parser.parse_args()
         
     baseurl = "http://localhost:8092/noark5v4/"
@@ -121,22 +161,42 @@ def main():
     # Correct file located, add record, document description and
     # document object for each file.
     #
-    for pdfname in (args.pdffile):
-        pdffile = file(pdfname, "rb")
+    for filename in (args.filename):
+        format = None
+        mimetype = None
+        inforeader = None
+        fh = file(filename, "rb")
 
-        pdfsize = getFileSize(pdffile)
-        pdf = PdfFileReader(pdffile)
-        #print(pdf.getDocumentInfo().producer)
-        #print(pdf.getDocumentInfo().creator)
-        #pdf.getDocumentInfo().creationdate ?
-        doctitle = pdf.getDocumentInfo().title
+        import magic
+        m = magic.open(magic.NONE)
+        m.load()
+        filetype = m.file(filename)
+        for fdesc in formatlist.keys():
+            if 0 == filetype.find(fdesc):
+                format = formatlist[fdesc]['format']
+                mimetype = formatlist[fdesc]['mimetype']
+                inforeader = formatlist[fdesc]['inforeader']
+        if format is None:
+            print("Unknown mime type %s, skipping" % filetype)
+            continue
         
-        print("Uploading %s\n  PDF title: %s\n  File %s: %s" % \
-              (pdfname, doctitle, fileinfo['mappeID'], fileinfo['tittel']))
+        filesize = getFileSize(fh)
+        r = inforeader(fh)
+        doctitle = r.getTitle()
+        variantformat = "Arkivformat"
+        fh.seek(0, os.SEEK_SET)
+        
+        print("Uploading %s\n  Document title: %s\n  File %s: %s" % \
+              (filename, doctitle, fileinfo['mappeID'], fileinfo['tittel']))
         
         newreghref = objectOperation(fileinfo, relbase + '/ny-registrering/')
         recordinfo = createObject(api, newreghref, { })
 
+        # adding documentbeskrivelse between registrering av
+        # dokumentobject might be optional, but skipping it is not
+        # implemented by Nikita 2017-03-22.  Once it is implemented,
+        # consier replacing 'docdescifo' with 'recordinfo' in the next
+        # call to objectOperation().
         newdocdeschref = objectOperation(recordinfo,
                                          relbase + '/ny-dokumentbeskrivelse/')
         docdescinfo = createObject(api, newdocdeschref, {
@@ -147,16 +207,14 @@ def main():
                                         relbase + '/ny-dokumentobjekt/')
         docobjinfo = createObject(api, newdocobjhref, {
             "versjonsnummer" : 1,
-            "variantformat"  : "Arkivformat",
-            "format"         : "PDF",
-            "mimeType"       : "application/pdf",
-            "filstoerrelse"  : pdfsize,
+            "variantformat"  : variantformat,
+            "format"         : format,
+            "mimeType"       : mimetype,
+            "filstoerrelse"  : filesize,
         })
 
         newfilehref = objectOperation(docobjinfo, relbase + '/fil/')
-        pdffile.seek(0, os.SEEK_SET)
-        (c, res) = api.post(newfilehref, pdffile, 'application/pdf',
-                            length=pdfsize)
+        (c, res) = api.post(newfilehref, fh, mimetype, length=filesize)
         if 200 != res.code:
             print("upload failed (status == %d)" % res.code)
 
