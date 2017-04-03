@@ -1,5 +1,5 @@
-Forbedre beskivelse av filopplastingsprossesen
-==============================================
+Forbedre beskrivelse av filopplastingsprossesen
+===============================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -53,7 +53,7 @@ filstørrelse i innkommende dokumentobjekt så kan serveren sjekke dette
 og hvis en av dem ikke stemmer kan opplastingen avvises og klienten få
 tilbakemelding at noe er galt.
 
-Klienten kan tilsvarnede oppdage at noe er galt hvis kjernen
+Klienten kan tilsvarede oppdage at noe er galt hvis kjernen
 returnerer tilhørende dokumentobjekt som svar til en filopplasting.
 Responsen kan klienten sammenligne med sin kopi av dokumentobjekt for
 å sikre at resultatet tilsvarer den som ble laget før filopplastingen.
@@ -62,6 +62,31 @@ Skal det være tillatt å laste opp en tom fil, dvs. en med filstørrelse
 satt til 0?  Det virker ikke å gi mening å laste opp en slik fil til
 arkivet, og det mest fornuftige er antagelig å avvise oppretting av
 dokumentobjekt hvis fillengden er null.
+
+### Filopplasting som del av dokumentobjekt-transaksjon
+
+En annen særlig utfordring er klienthåndtering av feil på
+mottakersiden av tjenestegrensesnittet.  Prosessen med å laste opp en
+fil kan ses på som en transaksjon som inkluderer opprettelsen av
+dokumentbeskrivelse, dokumentobjekt og selve filen.  Hvis det skulle
+skje at det er problemer med lagringssystemet til
+tjenestegrensesnittet, for eksempel hvis filsystemet er fullt eller
+tjenesten opplever en annen forstyrrelse, så kan det hende at
+dokumentobjekt opprettes og lagres til persistent lager, men selve
+filopplastingen blir avvist.  Dette vil returnere først 200 OK for
+dokumentbeskrivlese og dokumentobjekt og deretter en 50X Error ved
+opplastingen.
+
+Det er uklart fra spesifikasjonen hva som skal gjøres i et slikt
+tilfelle, og det er ingen dokumentert mekanisme for klienten å be om
+at det filløse dokumentobjekt-instansen slettes når det skjer.  Det er
+dermed ikke mulig for klienten å rydde opp etter seg når feilen
+oppstår.  Den eneste muligheten for klienten er å forsøkte opplasting
+på nytt og på nytt frem til den lykkes, og det er ikke alltid mulig
+for en klient å fortsette til evig tid.  Det er bedre om klienten kan
+fjerne de "ubrukelige" dokumentbeskrivelse og
+dokumentobjekt-oppføringene, gi en feilmelding til brukeren som
+forsøker å arkivere en fil og forsøke på nytt senere når det passer.
 
 Ønsket endring
 --------------
@@ -101,3 +126,16 @@ Størrelsen på fila i antall bytes oppgitt med desimaltall» til
 > «Definisjon: Størrelsen på fila i antall bytes oppgitt med
 > desimaltall.  Filstørrelse skal være et positivt heltall større enn
 > 0.»
+
+### Filopplasting som del av dokumentobjekt-transaksjon
+
+FIXME foreslå konkret forslag til endring for å beskrive hvordan feil
+på tjenersiden ved filopplasting bør håndteres?
+
+Dette tilfellet trenger en avklaring.  En mulig løsning er å bytte ut
+de tre API-kallene med ett API-kall til kjernen der
+dokumentbeskrivelse, dokumentobjekt og selve filen lastes opp sammen.
+En slik løsning gjør det mulig for kjernen å behandle opprettelsen som
+en transaksjon og la alle tre stegene feile hvis en av dem feiler.
+Dermed kan klienten vite om hele transaksjonen var vellykket og filen
+er lagret slik den skal.
