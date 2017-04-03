@@ -16,7 +16,9 @@ Forbedre beskrivelse av filopplastingsprossesen
 Beskrivelse
 -----------
 
-Gjelder også side 26 og del 7.2.1.7 på side 99-105.
+Gjelder også side 26 samt del 6.1.1.7 (Slette objekter (Delete)) på
+side 22, del 7.2.1.6 (Dokumentbeskrivelse) på side 89-98 og 7.2.1.7
+(Dokumentobjekt) på side 99-105.
 
 Det er uklarheter rundt filopplasting og angivelse av metadata til
 dokumentobjekt og dokumentbesrkivelse. Man må lese gjennon linjene for
@@ -139,3 +141,9 @@ En slik løsning gjør det mulig for kjernen å behandle opprettelsen som
 en transaksjon og la alle tre stegene feile hvis en av dem feiler.
 Dermed kan klienten vite om hele transaksjonen var vellykket og filen
 er lagret slik den skal.
+
+En annen mulig løsning er å tillate sletting av egenproduserte
+dokumentobjekt- og dokumentbeskrivelse-oppføringer frem til de er
+knyttet til en opplastet fil, eller når de har fått satt variantformat
+til arkivformat.  Det er uklart fra del 6.1.1.7 (Slette objekter
+(Delete)) om dette er tillatt eller ikke.
