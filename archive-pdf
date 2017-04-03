@@ -188,8 +188,11 @@ def main():
             continue
         
         filesize = getFileSize(fh)
+        basename = os.path.basename(filename)
         r = inforeader(fh)
         doctitle = r.getTitle()
+        if doctitle is None or '' == doctitle:
+            doctitle = basename
         variantformat = "Arkivformat"
         fh.seek(0, os.SEEK_SET)
         
@@ -218,7 +221,7 @@ def main():
             "format"         : format,
             "mimeType"       : mimetype,
             "filstoerrelse"  : filesize,
-            "filnavn"        : os.path.basename(filename),
+            "filnavn"        : basename,
             "sjekksum"       : hash,
             "sjekksumAlgoritme" : hashalg,
         })
