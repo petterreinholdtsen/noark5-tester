@@ -11,6 +11,7 @@ sys.path.append('lib')
 import argparse
 import json
 import os
+from hashlib import sha256
 from pyPdf import PdfFileReader
 import n5core.endpoint
 
@@ -167,6 +168,12 @@ def main():
         inforeader = None
         fh = file(filename, "rb")
 
+        hashalg = "SHA256"
+        hasher = sha256()
+        for chunk in iter(lambda: fh.read(8192), b''): 
+            hasher.update(chunk)
+        hash = hasher.hexdigest()
+
         import magic
         m = magic.open(magic.NONE)
         m.load()
@@ -211,6 +218,8 @@ def main():
             "format"         : format,
             "mimeType"       : mimetype,
             "filstoerrelse"  : filesize,
+            "sjekksum"       : hash,
+            "sjekksumAlgoritme" : hashalg,
         })
 
         newfilehref = objectOperation(docobjinfo, relbase + '/fil/')
