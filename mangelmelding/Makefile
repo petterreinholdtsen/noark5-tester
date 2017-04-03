@@ -20,3 +20,9 @@ clean:
 	$(RM) mangler-liste.xml *~
 distclean: clean
 	$(RM) mangler.pdf
+
+stats:
+	@printf "Unsent defect reports: "
+	@ls *-*.md |wc -l
+	@printf "Sent defect reports: "
+	@ls sendt/*-*.md |wc -l
