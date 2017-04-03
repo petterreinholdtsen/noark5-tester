@@ -218,6 +218,7 @@ def main():
             "format"         : format,
             "mimeType"       : mimetype,
             "filstoerrelse"  : filesize,
+            "filnavn"        : os.path.basename(filename),
             "sjekksum"       : hash,
             "sjekksumAlgoritme" : hashalg,
         })
