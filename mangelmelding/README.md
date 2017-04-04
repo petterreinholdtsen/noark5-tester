@@ -42,3 +42,7 @@ Felt som ikke er aktuelle eller relevant gis verdien 'n/a'.
 Mangelmeldingene sendes på epost til post (at) arkivverket.no.  Husk å
 be om å få vite hvilket saksnummer henvendelsen har fått, slik at
 henvendelsen dokumenter kan følges i de offentlige postjournalene.
+
+Så langt har en del av de innsendte mangelmeldingene fått [saksnummer
+2017/5964 hos
+Arkivverket](https://oep.no/search/result.html?period=none&dateType=documentDate&descType=both&caseNumber=2017%2F5964&senderType=both&documentType=all&list2=159&searchType=advanced&Search=Search+in+records).
