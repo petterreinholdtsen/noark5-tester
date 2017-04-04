@@ -26,20 +26,6 @@ forklarer ikke hvordan det skal gjøres.
 
 -------------------------------------------------------------------------
 
- I punkt 4.1 (Autentisering) på side 9 står det at 'Single Sign On bør
-støttes'.  Hva betyr dette?  Er det Kerberos-autentisering ala det
-Microsoft Active Directory tilbyr, eller noe annet?
-
-Det står også at "NOARK5 kjerne må ha metoder for å autentisere
-brukere og gi de riktige tilganger til kjernen".  Hva slags
-granularitet kreves?  Bør det kreves at en må kunne gi tilganger ved
-hjelp av rettighetsgrupper, for å slippe manuelt vedlikehold av
-brukerrettigheter?
-
-Se også side 253.
-
--------------------------------------------------------------------------
-
 Is there ever going to be a need for future "generic" timestamps in a
 NOARK5 archive?  Section 6.1.1.8 in the specification state that dates
 should be according to http://www.w3.org/TR/NOTE-datetime, and this note
