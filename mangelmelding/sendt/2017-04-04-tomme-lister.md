@@ -10,7 +10,7 @@ Klargjør JSON-respons når database eller lister er tomme
         Dokumentdel  6.1.1.1
          Sidenummer  13
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-04-04
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
@@ -127,3 +127,8 @@ på slutten av del 6.1.1.1, like før del 6.1.1.2 starter på side 13:
 >
 > Verdien i 'href' vil variere etter hva slags listeressurs / søk som
 > ble forespurt.
+
+Respons
+-------
+
+Ingen respons fra Arkivverket så langt.
