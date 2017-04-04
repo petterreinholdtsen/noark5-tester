@@ -13,13 +13,16 @@ Klargjør JSON-respons når database eller lister er tomme
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
-Denne mangelmeldingen bør ses i sammenheng med med mangelmelding
-`Beskriv hvordan lister skal formatteres i JSON` som ble sendt inn
-2017-03-28, og hva en velger her er avhengig av hvordan en velger å
-beskrive listeformattering generelt.
+Denne teksten er del av en samling innspill til NOARK5-standarden
+tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
 Beskrivelse
 -----------
+
+Denne mangelmeldingen bør ses i sammenheng med med mangelmelding
+`Beskriv hvordan lister skal formatteres i JSON` som ble sendt inn
+2017-03-28, og hva en velger for tomme lister er avhengig av hvordan
+en velger å beskrive listeformattering generelt.
 
 Det er ikke klart fra spesifikasjonen hva slags JSON som skal
 returneres for tomme lister.  Delvis er det uklart hvilke
@@ -28,8 +31,8 @@ inneholder enkeltentiteter (for eksempel en bestemt mappe), eller hvis
 et søk ikke returnerer noen treff, og delvis er det uklart hvordan
 selve resultatsettet skal returneres når det er tomt.
 
-To eksempler er oppslag som pekes til av relasjonsnøkkelen for arkiv
-og dokumentbeskrivelse:
+To eksempler der dette er relevant er oppslag som pekes til av
+relasjonsnøkkelen for arkiv og dokumentbeskrivelse:
 
 * http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/
 * http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentbeskrivelse/
@@ -74,7 +77,7 @@ mening å ikke returnere resultatsettet overhode i slike tilfeller, for
 å spare båndbredde.  I så tilfelle kan «"results": [],» fjernes fra
 eksemplene over.
 
-For sistnevnte eksempel er det litt uklart hva en "self"-relasjon
+For sistnevnte eksempel er det litt uklart hva en «self»-relasjon
 skulle peke til hvis den var satt, i og med at spesifikasjonens del
 6.1.1.7 side 22 sier at alle ressurslenker med «self»-relasjon kan
 potensielt slettes.  En tom liste kan vanskelig slettes, så det er vel
@@ -86,13 +89,14 @@ punkt 5.13.23 på side 89 følgende:
 
 Dette tyder jo på at det skal være mulig å slette alle elementene i en
 liste i en operasjon, i hvert fall for noen objekttyper, og det er et
-godt argument for å ha en self-lenke i resultatet til ethvert søk,
+godt argument for å ha en «self»-lenke i resultatet til ethvert søk,
 også de med tomt resultat.
 
 Demo-nettstedet http://n5test.kxml.no/api/ har ingen «tomme» datasett
 som jeg har klart å finne, slik at det er lite hjelp der å finne
 hvordan spesifikasjonen skal tolkes, og spesifikasjonen nevner ikke
-dette eksplisitt.
+dette eksplisitt.  Det bør forklares i spesifikasjonen slik at alle
+implementasjoner håndterer dette likt.
 
 Det svaret som vil forbruke minst båndbredde er jo et enkelt «{}», som
 jo ganske klart representerer et tomt svar.  Alternativt kunne en
@@ -103,10 +107,10 @@ resultatene.
 Ønsket endring
 --------------
 
-Del 6.1.1.1 bør utvides til å forklare hva slags JSON som returneres
-hvis en type objekter mangler i databasen eller søkeresultatet.
-F.eks. ved å legge inn et avsnitt ala dette på slutten av del 6.1.1.1
-på side 13:
+Del 6.1.1.1 på side 13 bør utvides til å forklare hva slags JSON som
+returneres hvis en type objekter mangler i databasen eller
+søkeresultatet.  Det kan for eksempel legges inn et avsnitt ala dette
+på slutten av del 6.1.1.1, like før del 6.1.1.2 starter på side 13:
 
 > Når en forespurt listeressurs fra databasen er tom skal følgende
 > JSON-struktur returneres:
