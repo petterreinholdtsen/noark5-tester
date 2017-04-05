@@ -1,5 +1,5 @@
-Klargjør om feltnavn og identifikatorer skiller mellom store og små bokstaver
-=============================================================================
+Klargjør om store og små bokstaver er like i feltnavn og identifikatorer
+========================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -20,7 +20,7 @@ Det er uklart fra spesifikasjonen om feltnavn og andre identifikatorer
 har entydig form eller om det kan blandes store og små tegn om
 hverandre.  Et eksempel er at spesifikasjonen omtaler 'SystemID',
 'systemID' og 'systemid' (f.eks. teksten i 6.3 (Identifikatorer) side
-28 og 7.2.1.16 (Mappe) side 141).  Er alle riktige?  
+28 og 7.2.1.16 (Mappe) side 141).  Er alle riktige?
 
 Det er enklere å implementere en API-klient hvis alle feltnavn og
 andre identifikatorer er entydig definert og tegnsekvensen som
@@ -36,14 +36,16 @@ effekter for klientimplementasjonen, så må spesifikasjonen dokumentere
 om de skal sammenlignes som store eller små bokstaver, og hvilke
 språkspesifikke regler som skal brukes for å endre mellom store og små
 bokstaver.  Dette for å sikre at en unngår uklarheter som endel språk
-har (for eksempel på tysk er bokstaven «ß» overført til store blitt
-til «SS» mens «SS» overført til små bokstaver blitt til «ss», de
-finnes flere tilsvarende eksempler).
+har (For eksempel på tysk er bokstaven «ß» overført til store blitt
+til «SS» mens «SS» overført til små bokstaver blitt til «ss», mens
+tyrkisk «i» som stor bokstav blir I med prikk på tyrkisk, mens den
+blir «I» (uten prikk) på norsk.  Det finnes flere tilsvarende
+eksempler).
 
 Når en vurderer dette er det greit å ha i bakhodet at
 [JSON-spesifikasjonen](http://jsonapi.org/format/) sier at «All member
 names used in a JSON API document MUST be treated as case sensitive by
-clients and servers».  
+clients and servers».
 
 Ønsket endring
 --------------
