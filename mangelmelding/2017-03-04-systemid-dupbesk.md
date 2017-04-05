@@ -13,6 +13,9 @@ Fjern duplisert beskrivelse av SystemID
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
+Denne teksten er del av en samling innspill til NOARK5-standarden
+tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
+
 Beskrivelse
 -----------
 
@@ -43,8 +46,3 @@ til
 > elevant for arkivenhet.
 
 Skriv om merknad på side 77 til å også henvise til SystemID-beskrivelse.
-
-Respons
--------
-
-Ingen respons fra arkivverket så langt.

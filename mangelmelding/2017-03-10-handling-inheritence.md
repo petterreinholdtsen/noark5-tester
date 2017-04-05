@@ -13,6 +13,9 @@ Discrepancy in handling inheritance
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
+Denne teksten er del av en samling innspill til NOARK5-standarden
+tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
+
 Beskrivelse
 -----------
 
@@ -69,8 +72,3 @@ personal opinion is to drop the "utvid-til-" strategy and force the client to
  møtemappe. If the "utvid-til-" strategy is to be continued, RA need to provide
  documentation how this is handled with classificationsystems assigned to
  arkivdeler.
-
-Respons
--------
-
-Ingen respons fra arkivverket så langt.

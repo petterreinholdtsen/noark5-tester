@@ -13,6 +13,9 @@ Manglende beskrivelse av referanseForloeper/referanseArvtager for arkivdel
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
+Denne teksten er del av en samling innspill til NOARK5-standarden
+tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
+
 Beskrivelse
 -----------
 Det mangler rel beskrivelser for referanseForloeper/referanseArvtager i tabellen
@@ -38,8 +41,3 @@ Videre bør det spesifiseres om koblingen framover/tilbake utføres automatisk
 
 dvs hvis jeg kobler A til B, der A er forløper, skal kjernen automatisk koble
 B til A.
-
-Respons
--------
-
-Ingen respons fra arkivverket så langt.

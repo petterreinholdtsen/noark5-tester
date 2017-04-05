@@ -13,6 +13,9 @@ Avklar når det kreves SystemID
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
+Denne teksten er del av en samling innspill til NOARK5-standarden
+tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
+
 Beskrivelse
 -----------
 
@@ -41,8 +44,3 @@ Legg inn SystemID i atributtlisten under punkt 7.2.1.4 (Arkivskaper)
 og andre objekter der det mangler.
 
 FIXME lag komplett liste med forslag til endringer?
-
-Respons
--------
-
-Ingen respons fra arkivverket så langt.
