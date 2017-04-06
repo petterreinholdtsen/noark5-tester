@@ -10,6 +10,14 @@ import sqlite3
 
 #class Nokark5Client(n5core.endpoint.Endpoint):
 
+def parselinks(links):
+        rels = {}
+        for l in links:
+                if 'href' in l and 'rel' in l:
+                        rels[l['rel']] = l['href']
+        return rels
+
+
 def createFond(ep, fondsdata):
         """
 
@@ -23,12 +31,13 @@ Example fondsdata:
         }
 
 """
-        createfondsurl = 'hateoas-api/arkivstruktur/ny-arkiv'
+        fondsrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
+        createfondsurl = ep.findRelation(fondsrel)
         (c, res) = ep.json_post(createfondsurl, fondsdata)
         fondinfo = json.loads(c)
         return fondinfo
 
-def createSeries(ep, fondid, seriesdata):
+def createSeries(ep, fondinfo, seriesdata):
         """
 
 Example seriesdata:
@@ -40,12 +49,14 @@ Example seriesdata:
             "dokumentmedium"  : "Elektronisk arkiv",
         }
 """
-        createseriesurl = 'hateoas-api/arkivstruktur/arkiv/%s/ny-arkivdel' % fondid
+        createseriesrel = \
+            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
+        createseriesurl = parselinks(fondinfo['_links'])[createseriesrel]
         (c, res) = ep.json_post(createseriesurl, seriesdata)
-        serieinfo = json.loads(c)
-        return serieinfo
+        seriesinfo = json.loads(c)
+        return seriesinfo
 
-def createFile(ep, serieid, filedata):
+def createFile(ep, seriesinfo, filedata):
         """
 Example filedata:
 
@@ -59,24 +70,28 @@ Example filedata:
             "dokumentmedium"  : "Elektronisk arkiv",
         }
 """
-        createfileurl = 'hateoas-api/arkivstruktur/arkivdel/%s/ny-mappe' % serieid
+        filerel = \
+                'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/'
+        createfileurl = parselinks(seriesinfo['_links'])[filerel]
         (c, res) = ep.json_post(createfileurl, filedata)
         fileinfo = json.loads(c)
         return fileinfo
 
-def createRecord(ep, fileid, recorddata):
+def createRecord(ep, fileinfo, recorddata):
         """
 Example recorddata:
 
         recorddata = {
         }
 """
-        createrecordurl = 'hateoas-api/arkivstruktur/mappe/%s/ny-registrering' % fileid
+        createrecordrel = \
+           'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering/'
+        createrecordurl = parselinks(fileinfo['_links'])[createrecordrel]
         (c, res) = ep.json_post(createrecordurl, recorddata)
         recordinfo = json.loads(c)
         return recordinfo
 
-def createDocDesc(ep, recordid, docdescdata):
+def createDocDesc(ep, recordinfo, docdescdata):
         """
 
 Example docdescdata:
@@ -88,12 +103,14 @@ Example docdescdata:
             "tilknyttetRegistreringSom" : "Associated with record as"
         }
 """
-        createdocdescurl = 'hateoas-api/arkivstruktur/registrering/%s/ny-dokumentbeskrivelse' % recordid
+        createdocdescrel = \
+           'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentbeskrivelse/'
+        createdocdescurl = parselinks(recordinfo['_links'])[createdocdescrel]
         (c, res) = ep.json_post(createdocdescurl, docdescdata)
         docdescinfo = json.loads(c)
         return docdescinfo
 
-def createDocObject(ep, docdescid, docobjdata):
+def createDocObject(ep, docdescinfo, docobjdata):
         """
 Example docobjdata:
         docobjdata = {
@@ -103,7 +120,9 @@ Example docobjdata:
             "formatDetaljer"  : "PDF/A PDFv1.4",
         }
 """
-        createdocobjurl = 'hateoas-api/arkivstruktur/dokumentbeskrivelse/%s/ny-dokumentobjekt' % docdescid
+        createdocobjrel = \
+           'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentobjekt/'
+        createdocobjurl = parselinks(docdescinfo['_links'])[createdocobjrel]
         (c, res) = ep.json_post(createdocobjurl, docobjdata)
         docobjinfo = json.loads(c)
         return docobjinfo
@@ -125,8 +144,8 @@ def main():
         conn = sqlite3.connect('postliste-oslo-havn.sqlite')
         c = conn.cursor()
         c.execute('select * from swdata order by docdate')
-        print c.description
-        print c.rowcount
+#        print c.description
+#        print c.rowcount
         i = 0
         n = {}
         for f in c.description:
@@ -141,28 +160,28 @@ def main():
                 # recipient, recorddate, scrapedurl, scrapestamputc,
                 # sender
 
+                # FIXME should search for agency to avoid duplicates
+
                 agency = row[n['agency']]
                 if agency not in fonds:
-                        print "First time agency %s" % agency
+                        print("info: First time agency %s" % agency)
                         fondsdata = {
                                 "tittel"          : agency,
                                 "dokumentmedium"  : "Elektronisk arkiv",
                         }
                         fondinfo = createFond(e, fondsdata)
-                        fondid = fondinfo['systemID']
 
                         seriesdata = {
                                 "tittel"          : agency,
                                 "dokumentmedium"  : "Elektronisk arkiv",
                         }
-                        serieinfo = createSeries(e, fondid, seriesdata)
-                        serieid = serieinfo['systemID']
-                        fonds[agency] = fondid
-                        series[agency] = serieid
+                        seriesinfo = createSeries(e, fondinfo, seriesdata)
+                        fonds[agency] = fondinfo
+                        series[agency] = seriesinfo
                 else:
-                        fondid = fonds[agency]
-                        serieid = series[agency]
-                print "creating using %s and %s" % (fondid, serieid)
+                        fondinfo = fonds[agency]
+                        seriesinfo = series[agency]
+                print("info: Creating using fonds:%s and series:%s" % (fondinfo['tittel'], seriesinfo['tittel']))
                 filedata = {
                         "mappeID"         : row[n['caseid']],
                         "offentligTittel" : row[n['casedesc']],
@@ -172,21 +191,18 @@ def main():
                         "oppbevaringsted" : [ "location 1" ],
                         "dokumentmedium"  : "Elektronisk arkiv",
                 }
-                fileinfo = createFile(e, serieid, filedata)
-                fileid = fileinfo['systemID']
+                fileinfo = createFile(e, seriesinfo, filedata)
 
                 recorddata = {
                 }
-                recordinfo = createRecord(e, fileid, recorddata)
-                recordid = recordinfo['systemID']
+                recordinfo = createRecord(e, fileinfo, recorddata)
 
                 docdescdata = {
                         "dokumenttype"    : row[n['doctype']],
                         "tittel"          : row[n['docdesc']],
                         "tilknyttetRegistreringSom" : "Associated with record as"
                 }
-                docdescinfo = createDocDesc(e, recordid, docdescdata)
-                docdescid = docdescinfo['systemID']
+                docdescinfo = createDocDesc(e, recordinfo, docdescdata)
         print "Added %d entries" % i
 if __name__ == '__main__':
     main()
