@@ -37,6 +37,10 @@ en UUID.  Det kan være problematisk å avlede systemID fra verdier i
 objektet den omhandler hvis objekter med samme innhold skal ha ulik
 systemID.
 
+Hvis ikke UUID foreslås, så bør det beskrives en annen metode som
+sikrer at leverandører er i stand til å velge unike ID-er som ikke gir
+ID-kollisjoner.
+
 Ønsket endring
 --------------
 
