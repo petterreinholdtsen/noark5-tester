@@ -20,21 +20,30 @@ Beskrivelse
 -----------
 
 I følge del 6.3 (Identifikatorer) skal arkivkjernen sørge for at
-SystemID blir en unik og persistent identifikator på tvers av andre
-systemer.  Hva menes her?  Hvordan koordineres ID-tildeling på tvers
-av leverandører slik at en unngår ID-kollisjoner?  En enkelt
-leverandør kan jo ikke garantere at ingen andre lager ID-er som får
-samme verdi som det leverandøræn selv lager.  Holder det at det liten
-sjanse for kollisjoner, ved å bruke noe ala UUID?  Kan en for eksempel
-bruke en tilfeldig UUID slik det er definert i [IETF RFC
+systemID blir en unik og persistent identifikator på tvers av andre
+systemer.  Men hvordan skal dette gjøres uten sentral koordinering?
+En enkelt leverandør kan jo ikke garantere at ingen andre lager ID-er
+som får samme verdi som det leverandøræn selv lager.  Er det meningen
+at leverandørene skal koordinere seg imellom for å unngå
+ID-kollisjoner uten sentralisert styring?  Holder det at det liten
+sjanse for kollisjoner, ved å bruke for eksempel tilfeldig UUID slik
+det er definert i [IETF RFC
 4122](http://www.ietf.org/rfc/rfc4122.txt)?
 
-Bør SystemID avledes fra verdier i objektet det henviser til, eller
-bør det være frakoblet dette?  Svaret på dette spørsmålet avgjør
-hvilken algoritme fra RHC 4122 som er aktuell hvis en skal lage en
-UUID.
+I så fall, bør systemID avledes fra verdier i objektet det henviser
+til, eller bør det være frakoblet dette?  Svaret på dette spørsmålet
+avgjør hvilken algoritme fra RHC 4122 som er aktuell hvis en skal lage
+en UUID.  Det kan være problematisk å avlede systemID fra verdier i
+objektet den omhandler hvis objekter med samme innhold skal ha ulik
+systemID.
 
 Ønsket endring
 --------------
 
-FIXME Hva kan foreslås her?  Kan en bruke UUID?
+Foreslå tilfeldig UUID som akseptabel systemID-verdi ved å legge inn
+følgende under 6.3 på side 28:
+
+> En mulig måte å lage SystemID-verdier er å følge UUID-algoritmen
+> beskrevet i [IETF RFC 4122](http://www.ietf.org/rfc/rfc4122.txt).
+> Slike UUID-verdier bør være frakoblet verdiene i objektet det
+> henviser til.
