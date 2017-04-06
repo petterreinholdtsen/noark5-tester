@@ -65,6 +65,8 @@ The notion of "utvid-til-saksmappe", may not be compatible with the current way
 Ønsket endring
 --------------
 
+FIXME Konkret forslag til formuleringer?  Oversett.
+
 This issue needs further attention. From an implementation point-of-view, my
 personal opinion is to drop the "utvid-til-" strategy and force the client to
  to make an active decision about what it wants to create.

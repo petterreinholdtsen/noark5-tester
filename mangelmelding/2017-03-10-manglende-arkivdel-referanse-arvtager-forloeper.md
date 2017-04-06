@@ -18,12 +18,17 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 
 Beskrivelse
 -----------
+
 Det mangler rel beskrivelser for referanseForloeper/referanseArvtager i tabellen
 relasjonsnøkler på side 66.
+
+FIXME Hvorfor tror vi det?
 
 
 Ønsket endring
 --------------
+
+FIXME flytt alternativer til beskrivelse og gi konkret anbefaing?
 
 Denne operasjonen kan utføres på to måter:
 
