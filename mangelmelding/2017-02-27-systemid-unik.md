@@ -32,7 +32,7 @@ det er definert i [IETF RFC
 
 I så fall, bør systemID avledes fra verdier i objektet det henviser
 til, eller bør det være frakoblet dette?  Svaret på dette spørsmålet
-avgjør hvilken algoritme fra RHC 4122 som er aktuell hvis en skal lage
+avgjør hvilken algoritme fra RFC 4122 som er aktuell hvis en skal lage
 en UUID.  Det kan være problematisk å avlede systemID fra verdier i
 objektet den omhandler hvis objekter med samme innhold skal ha ulik
 systemID.
@@ -43,7 +43,7 @@ systemID.
 Foreslå tilfeldig UUID som akseptabel systemID-verdi ved å legge inn
 følgende under 6.3 på side 28:
 
-> En mulig måte å lage SystemID-verdier er å følge UUID-algoritmen
+> En mulig måte å lage systemID-verdier er å følge UUID-algoritmen
 > beskrevet i [IETF RFC 4122](http://www.ietf.org/rfc/rfc4122.txt).
 > Slike UUID-verdier bør være frakoblet verdiene i objektet det
 > henviser til.
