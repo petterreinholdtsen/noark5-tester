@@ -9,8 +9,8 @@ Hvordan gjøres SystemdID unik og persistent på tvers av andre systemer?
     Brukerreferanse  pere@hungry.com
         Dokumentdel  6.3
          Sidenummer  28
-        Linjenummer  ?
-    Innsendingsdato  ikke sendt inn
+        Linjenummer  n/a
+    Innsendingsdato  2017-04-06
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
