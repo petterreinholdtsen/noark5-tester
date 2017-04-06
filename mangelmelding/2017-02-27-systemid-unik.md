@@ -27,8 +27,8 @@ som får samme verdi som det leverandøræn selv lager.  Er det meningen
 at leverandørene skal koordinere seg imellom for å unngå
 ID-kollisjoner uten sentralisert styring?  Holder det at det liten
 sjanse for kollisjoner, ved å bruke for eksempel tilfeldig UUID slik
-det er definert i [IETF RFC
-4122](http://www.ietf.org/rfc/rfc4122.txt)?
+det er definert i [IETF RFC 4122](http://www.ietf.org/rfc/rfc4122.txt),
+ISO/IEC 9834-8:2004 og ITU-T Rec. X.667?
 
 I så fall, bør systemID avledes fra verdier i objektet det henviser
 til, eller bør det være frakoblet dette?  Svaret på dette spørsmålet
@@ -44,6 +44,6 @@ Foreslå tilfeldig UUID som akseptabel systemID-verdi ved å legge inn
 følgende under 6.3 på side 28:
 
 > En mulig måte å lage systemID-verdier er å følge UUID-algoritmen
-> beskrevet i [IETF RFC 4122](http://www.ietf.org/rfc/rfc4122.txt).
-> Slike UUID-verdier bør være frakoblet verdiene i objektet det
-> henviser til.
+> beskrevet i [IETF RFC 4122](http://www.ietf.org/rfc/rfc4122.txt),
+> ISO/IEC 9834-8:2004 og ITU-T Rec. X.667.  Slike UUID-verdier bør
+> være frakoblet verdiene i objektet det henviser til.
