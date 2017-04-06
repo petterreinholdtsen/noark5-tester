@@ -364,6 +364,16 @@ Test basis requirements for NOARK 5 Core.
             self.failure("not logged in, unable to test creation")
             return
 
+        createrecordcreatorrel = \
+            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivskaper/'
+        recordcreatordata = {
+        }
+        recordcreatorinfo = self.createEntity('recordcreator',
+                                            createrecordcreatorrel, self.rels,
+                                            recordcreatordata)
+        if recordcreatorinfo is None:
+            return
+            
         createfondsrel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
         fondsdata = {
@@ -372,7 +382,9 @@ Test basis requirements for NOARK 5 Core.
 #            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
 #            "dokumentmedium"  : "Elektronisk arkiv",
         }
-        fondinfo = self.createEntity('fond', createfondsrel, self.rels, fondsdata)
+        fondinfo = self.createEntity('fonds', createfondsrel,
+                                     self.parselinks(recordcreatorinfo['_links']),
+                                     fondsdata)
         if fondinfo is None:
             return
             
