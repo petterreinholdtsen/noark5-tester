@@ -23,9 +23,9 @@ I følge del 6.3 (Identifikatorer) skal arkivkjernen sørge for at
 systemID blir en unik og persistent identifikator på tvers av andre
 systemer.  Men hvordan skal dette gjøres uten sentral koordinering?
 En enkelt leverandør kan jo ikke garantere at ingen andre lager ID-er
-som får samme verdi som det leverandøræn selv lager.  Er det meningen
+som får samme verdi som det leverandøren selv lager.  Er det meningen
 at leverandørene skal koordinere seg imellom for å unngå
-ID-kollisjoner uten sentralisert styring?  Holder det at det liten
+ID-kollisjoner uten sentralisert styring?  Holder det at det er liten
 sjanse for kollisjoner, ved å bruke for eksempel tilfeldig UUID slik
 det er definert i [IETF RFC 4122](http://www.ietf.org/rfc/rfc4122.txt),
 ISO/IEC 9834-8:2004 og ITU-T Rec. X.667?
