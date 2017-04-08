@@ -213,8 +213,8 @@ def main():
         # adding documentbeskrivelse between registrering av
         # dokumentobject might be optional, but skipping it is not
         # implemented by Nikita 2017-03-22.  Once it is implemented,
-        # consier replacing 'docdescifo' with 'recordinfo' in the next
-        # call to objectOperation().
+        # consier replacing 'docdescifo' with 'recordinfo' in the
+        # ny-dokumentobject call to objectOperation().
         newdocdeschref = objectOperation(recordinfo,
                                          relbase + '/ny-dokumentbeskrivelse/')
         docdescinfo = createObject(api, newdocdeschref, {
