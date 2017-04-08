@@ -36,6 +36,12 @@ class imageReader():
     def getTitle(self):
         return None
 
+class rfc822Reader():
+    def __init__(self, fh):
+        return
+    def getTitle(self):
+        return None
+
 # Mapping from magic string to Noark 5 format info
 # Based on the spec list of formats on page 173.
 formatlist = {
@@ -56,12 +62,19 @@ formatlist = {
         'mimetype':   'image/tiff',
         'format':     'TIFF',
         'inforeader': imageReader,
-    }
+    },
     # Ren text
     # XML v1
     # SOSI v2.2 (1995 el. nyere)
     # MPEG-2 (ISO 13818-2)
     # MP3 (ISO 11172-3 PCM eller PCM-basert)
+
+    # Unofficial types:
+    'SMTP mail, ': {
+        'mimetype':   'message/rfc822',
+        'format':     'RFC822',
+        'inforeader': rfc822Reader,
+    },
 }
 
 def objectOperation(json, relation):
