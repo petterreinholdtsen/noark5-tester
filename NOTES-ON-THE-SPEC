@@ -42,12 +42,6 @@ to need to specify relative and/or repeating times?
 
 -------------------------------------------------------------------------
 
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ uses 'uri' in
-_links, while http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivdel/
-and the specification uses href.  Incorrect web page?
-
--------------------------------------------------------------------------
-
 I følge Tor Kjetil Nilsen i
 https://github.com/Arkitektum/N5-net/issues/1 så er relasjon
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivskaper/ på side
