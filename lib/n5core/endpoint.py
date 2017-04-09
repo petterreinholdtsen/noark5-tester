@@ -42,7 +42,8 @@ class Endpoint:
             'password': password,
         }
         jsondata = json.dumps(data)
-        (c,r) = self.post('auth', jsondata, 'application/json', length=None)
+        url = self.findRelation("http://nikita.arkivlab.no/noark5/v4/login/rfc7519/")
+        (c,r) = self.post(url, jsondata, 'application/json', length=None)
         j = json.loads(c)
         self.token = j['token']
 
