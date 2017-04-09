@@ -498,6 +498,7 @@ Test basis requirements for NOARK 5 Core.
                 self.failure("unable to log in, operating in read only mode: %s" % e)
             self.recursiveHateoas()
             self.testNewDocument()
+            self.testNewDocument()
         finally:
             print "%d successes, %d failures" % (self.success_count,
                                                  self.failure_count)
