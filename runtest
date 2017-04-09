@@ -455,7 +455,7 @@ Test basis requirements for NOARK 5 Core.
                                         self.parselinks(recordinfo['_links']),
                                         docdescdata)
 
-        xmldata = "<xml></xml>"
+        xmldata = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml></xml>\n"
         docobjdata = {
 #            "versjonsnummer"  : 1,
 #            "variantformat"   : "Arkivformat",
