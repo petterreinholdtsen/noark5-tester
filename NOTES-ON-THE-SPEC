@@ -41,9 +41,3 @@ Is this going to be a problem with the NOARK 5 API?  Are we ever going
 to need to specify relative and/or repeating times?
 
 -------------------------------------------------------------------------
-
-Spesifikasjonen bruker feltnavnet 'filstørrelse' i dokumentobjekt og
-foto, mens det antagelig skulle vært 'filstoerrelse' for å stemme over
-ens med XSD-filer.
-
--------------------------------------------------------------------------
