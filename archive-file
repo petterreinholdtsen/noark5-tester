@@ -38,9 +38,19 @@ class imageReader():
 
 class rfc822Reader():
     def __init__(self, fh):
+        self.subject = None
+        fh.seek(0, os.SEEK_SET)
+        for line in fh:
+            if 0 == line.find('Subject: '):
+                if self.subject is None:
+                    self.subject = line.split(':')[1].lstrip().rstrip()
+                else:
+                    print("error: found several Subject lines in header, picking the first")
+            if '' == line.strip():
+                break
         return
     def getTitle(self):
-        return None
+        return self.subject
 
 # Mapping from magic string to Noark 5 format info
 # Based on the spec list of formats on page 173.
