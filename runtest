@@ -118,16 +118,18 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         else:
             self.baseurl = "http://localhost:8092/noark5v4/"
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
-        self.success_count = 0
-        self.failure_count = 0
         self.verbose = args.verbose
+        self.failures = {}
+        self.successes = {}
     def success(self, msg):
-        print "success: " + msg
-        self.success_count += 1
+        if msg not in self.successes:
+            self.successes[msg] = 1
+            print "success: " + msg
         return True
     def failure(self, msg):
-        print "failure: " + msg
-        self.failure_count += 1
+        if msg not in self.failures:
+            self.failures[msg] = 1
+            print "failure: " + msg
         return False
     def verify(self, check, msg):
         if (check):
@@ -501,9 +503,9 @@ Test basis requirements for NOARK 5 Core.
             self.recursiveHateoas()
             self.testNewDocument()
         finally:
-            print "%d successes, %d failures" % (self.success_count,
-                                                 self.failure_count)
-        return not (0 == self.failure_count)
+            print "%d successes, %d failures" % (len(self.successes.keys()),
+                                                 len(self.failures.keys()))
+        return not (0 == len(self.failures.keys()))
 def main():
     t = Noark5Tester()
     return t.runtests()
