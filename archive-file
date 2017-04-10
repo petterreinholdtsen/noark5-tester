@@ -133,7 +133,7 @@ If there are more than one elemet, ask the user to pick one.
             try:
                 n = int(answer)
                 if n < 0 or n >= count:
-                    print("Invalid selection %d" % n)
+                    print("error: Invalid selection %d" % n)
                     n = -1
                 else:
                     return json[type][int(n)]
@@ -189,6 +189,27 @@ def main():
     filesinfo = json.loads(c)
     fileinfo = pickUnlessOne(filesinfo, 'mappe')
 
+    # Test if it is possible to reach a dokumentobject by following
+    # the relations from the top.
+    if False:
+        fileshref = objectOperation(fileinfo, relbase + '/registrering/')
+        #print("Registrering %s" % fileshref)
+        (c, res) = api.json_get(fileshref)
+        filesinfo = json.loads(c)
+        reginfo = pickUnlessOne(filesinfo, 'registrering')
+
+        fileshref = objectOperation(reginfo, relbase + '/dokumentbeskrivelse/')
+        #print("Dokumentbeskrivelse %s" % fileshref)
+        (c, res) = api.json_get(fileshref)
+        filesinfo = json.loads(c)
+        docdescinfo = pickUnlessOne(filesinfo, 'dokumentbeskrivelse')
+
+        fileshref = objectOperation(docdescinfo, relbase + '/dokumentobjekt/')
+        #print("Dokumentobjekt %s" % fileshref)
+        (c, res) = api.json_get(fileshref)
+        filesinfo = json.loads(c)
+        docobjinfo = pickUnlessOne(filesinfo, 'dokumentobjekt')
+
     #
     # Correct file located, add record, document description and
     # document object for each file.
@@ -215,7 +236,7 @@ def main():
                 mimetype = formatlist[fdesc]['mimetype']
                 inforeader = formatlist[fdesc]['inforeader']
         if format is None:
-            print("Unknown mime type %s, skipping" % filetype)
+            print("error: Unknown mime type %s, skipping" % filetype)
             continue
         
         filesize = getFileSize(fh)
@@ -260,7 +281,7 @@ def main():
         newfilehref = objectOperation(docobjinfo, relbase + '/fil/')
         (c, res) = api.post(newfilehref, fh, mimetype, length=filesize)
         if 200 != res.code:
-            print("upload failed (status == %d)" % res.code)
+            print("error: upload failed (status == %d)" % res.code)
 
 if __name__ == '__main__':
     main()
