@@ -120,6 +120,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
         self.verbose = args.verbose
         self.failures = {}
+        self.xfailures = {}
         self.successes = {}
     def success(self, msg):
         if msg not in self.successes:
@@ -136,6 +137,16 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             return self.success(msg)
         else:
             return self.failure(msg)
+    def xfailure(self, msg):
+        if msg not in self.xfailures:
+            self.xfailures[msg] = 1
+            print "xfailure: " + msg
+        return False
+    def xverify(self, check, msg):
+        if (check):
+            return self.success(msg)
+        else:
+            return self.xfailure(msg)
 
     def verifyuniquerels(self, links, url):
         currels = {}
@@ -241,7 +252,7 @@ code 401 before logging in.
             (content, res) = self.json_get(url)
             self.failure("level 0 accessing %s before login do not ask for basic authentication" % url)
         except urllib2.HTTPError, e:
-            self.verify(401 == e.code and 'www-authenticate' in e.hdrs,
+            self.xverify(401 == e.code and 'www-authenticate' in e.hdrs,
                         "level 0 API should support support Basic access authentication")
         
     def verifyXML(self, prefix, xmlreq, xmlcontent):
@@ -262,7 +273,7 @@ code 401 before logging in.
             self.success(prefix + ' - correct Content-Type for base')
             root = xml.etree.ElementTree.fromstring(xmlcontent)
             #print root.tag, root.attrib
-            if self.verify("{http://www.kxml.no/rest/1.0}Links" == root.tag, "root XML tag should be <Links xmlns=\"http://www.kxml.no/rest/1.0\" ...>"):
+            if self.xverify("{http://www.kxml.no/rest/1.0}Links" == root.tag, "root XML tag should be <Links xmlns=\"http://www.kxml.no/rest/1.0\" ...>"):
                 for child in root:
                     if self.verify("{http://www.kxml.no/rest/1.0}Links" == child.tag, "first child XML tag should be <Links xmlns=\"http://www.kxml.no/rest/1.0\">"):
                         for subchild in child:
@@ -503,8 +514,10 @@ Test basis requirements for NOARK 5 Core.
             self.recursiveHateoas()
             self.testNewDocument()
         finally:
-            print "%d successes, %d failures" % (len(self.successes.keys()),
-                                                 len(self.failures.keys()))
+            print("%d successes, %d failures, %d expected failures"
+                  % (len(self.successes.keys()),
+                     len(self.failures.keys()),
+                     len(self.xfailures.keys())))
         return not (0 == len(self.failures.keys()))
 def main():
     t = Noark5Tester()
