@@ -80,8 +80,8 @@ Recursively look for relation in API.
                     else:
                         pass # ignore URLs without _links
             except urllib2.HTTPError, e:
+                # Ignore errors from GET, we only try to locate links, not detect problems.
                 pass
-                self.failure("unable to GET %s" % url)
 
     def post(self, path, data, mimetype, length=None):
         url = self.expandurl(path)
