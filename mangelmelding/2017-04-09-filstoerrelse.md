@@ -45,7 +45,8 @@ tjenestegrensesnitt-definisjonen hatt foto definert? Kanskje eksemplet
 på side 29 bør endres til å kun bruke datatyper som er definert i
 spesifikasjonen?
 
-Attributten er ikke brukt på demonettstedet
+Attributten er ikke brukt i Noark 5 standarden eller tilhørende XSD-filer.
+Attributten er heller ikke brukt på demonettstedet
 http://n5test.kxml.no/api/arkivstruktur/dokumentobjekt, slik at det
 ikke er noe hjelp å få der med tolkingen.
 
@@ -72,9 +73,20 @@ Korriger
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentobjekt/ slik at
 den viser riktig datastruktur.
 
+
+Når det gjelder problemene beskrevet på side 29, ser vi to måter
+å løse dette på.
+
+1. Forklar at klassediagramet har ingenting med Noark å gjøre
+
 Legg til setning på side 29, etter «For kompliserte modeller (som
 NOARK-modellen) trengs flere klassediagram for å vise hele modellen.»
 som forklarer at eksemplet ikke har noe med Noark 5 å gjøre:
 
 > «UML-eksemplet til venstre inneholder ikke klasser som finnes i
 > NOARK-modellen.»
+
+2. Kun bruke gyldige Noark eksemspler
+
+Diagramet på side 29 erstates av et nytt diagram som er relavant for
+Noark. Dette er foretrukket endring.
