@@ -1,4 +1,5 @@
 Klargjør om attributtnavn «filstørrelse» er korrekt
+og relatert feil på demosiden
 ===================================================
 
  ------------------  ---------------------------------
@@ -52,7 +53,7 @@ ikke er noe hjelp å få der med tolkingen.
 
 Den er heller ikke omtalt på
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentobjekt/, som
-ser ut til å vise frem feil datastruktur (mappe) i stedet for
+forøvrig ser ut til å vise frem feil datastruktur (mappe) i stedet for
 dokumentobjekt.
 
 Ønsket endring
@@ -69,10 +70,9 @@ der det brukes i spesifikasjonen:
 Legg inn attributt med størrelse på opplastet fil på
 http://n5test.kxml.no/api/arkivstruktur/dokumentobjekt .
 
-Korriger
+Når det gjelder feil på demo-siden foreslår vi å korrigere
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentobjekt/ slik at
 den viser riktig datastruktur.
-
 
 Når det gjelder problemene beskrevet på side 29, ser vi to måter
 å løse dette på.
