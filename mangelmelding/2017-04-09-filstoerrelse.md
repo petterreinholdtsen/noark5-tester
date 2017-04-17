@@ -71,3 +71,10 @@ http://n5test.kxml.no/api/arkivstruktur/dokumentobjekt .
 Korriger
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentobjekt/ slik at
 den viser riktig datastruktur.
+
+Legg til setning på side 29, etter «For kompliserte modeller (som
+NOARK-modellen) trengs flere klassediagram for å vise hele modellen.»
+som forklarer at eksemplet ikke har noe med Noark 5 å gjøre:
+
+> «UML-eksemplet til venstre inneholder ikke klasser som finnes i
+> NOARK-modellen.»
