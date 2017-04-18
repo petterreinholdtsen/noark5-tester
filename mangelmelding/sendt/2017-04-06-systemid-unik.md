@@ -13,9 +13,6 @@ Hvordan gjøres SystemdID unik og persistent på tvers av andre systemer?
     Innsendingsdato  2017-04-06
  ------------------  ---------------------------------
 
-Denne teksten er del av en samling innspill til NOARK5-standarden
-tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
-
 Beskrivelse
 -----------
 
