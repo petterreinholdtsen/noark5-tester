@@ -13,9 +13,6 @@ Legg inn opphavsrettslig status og bruksvilkår i spesifikasjonsteksten
     Innsendingsdato  2017-03-16
  ------------------  ---------------------------------
 
-Denne teksten er del av en samling innspill til NOARK5-standarden
-tilgjengelig fra https://github.com/petterreinholdtsen/noark5-tester/ .
-
 Beskrivelse
 -----------
 

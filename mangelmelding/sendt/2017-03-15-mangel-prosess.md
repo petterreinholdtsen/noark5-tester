@@ -13,9 +13,6 @@ Prosessen for å melde feil og uklarheter i beskrivelse av NOARK 5 Tjenestegrese
     Innsendingsdato  2017-03-15
  ------------------  ---------------------------------
 
-Denne teksten er del av en samling innspill til NOARK5-standarden
-tilgjengelig fra https://github.com/petterreinholdtsen/noark5-tester/ .
-
 Beskrivelse
 -----------
 

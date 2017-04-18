@@ -13,9 +13,6 @@ Klargjør JSON-respons når database eller lister er tomme
     Innsendingsdato  2017-04-04
  ------------------  ---------------------------------
 
-Denne teksten er del av en samling innspill til NOARK5-standarden
-tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
-
 Beskrivelse
 -----------
 
