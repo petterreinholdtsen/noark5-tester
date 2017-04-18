@@ -93,3 +93,8 @@ http://n5test.kxml.no/api/arkivstruktur/dokumentobjekt .
 Når det gjelder feil på demo-siden foreslår vi å endre
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentobjekt/ slik at
 den viser datastruktur for dokumentobjekt og ikke mappe.
+
+Respons
+-------
+
+Ingen respons fra Arkivverket så langt.
