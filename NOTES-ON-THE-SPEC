@@ -25,19 +25,3 @@ samlet format som gjengir både e-posthode og e-postmelding, men
 forklarer ikke hvordan det skal gjøres.
 
 -------------------------------------------------------------------------
-
-Is there ever going to be a need for future "generic" timestamps in a
-NOARK5 archive?  Section 6.1.1.8 in the specification state that dates
-should be according to http://www.w3.org/TR/NOTE-datetime, and this note
-specifies that all time stamps including the hour of day should also
-include a numeric time zone.
-
-But to specify 12 noon two months from now, it is in general unknown
-here in Norway if the timezone for this day is timezone +01 or +02,
-because of daylight savings.  If daylight savings are introduced or
-dropped in the two month period, the timezone changes.
-
-Is this going to be a problem with the NOARK 5 API?  Are we ever going
-to need to specify relative and/or repeating times?
-
--------------------------------------------------------------------------
