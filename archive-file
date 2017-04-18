@@ -15,42 +15,51 @@ from hashlib import sha256
 from pyPdf import PdfFileReader
 import n5core.endpoint
 
-class pdfReader():
-    def __init__(self, fh):
+class infoReader():
+    def __init__(self, fh, filepath):
+        self.title = None
+        self.filename = os.path.basename(filepath)
+    def getTitle(self): return self.title
+    def getFilename(self): return self.filename
+
+class pdfReader(infoReader):
+    def __init__(self, fh, filepath):
         """
 Extract document information from PDF.  Must read every value in the
 constructor, to avoid moving the file handle pointer for others later.
 """
+        infoReader.__init__(self, fh, filepath)
         reader = PdfFileReader(fh)
-        self.doctitle = reader.getDocumentInfo().title
+        self.title = reader.getDocumentInfo().title
         self.producer = reader.getDocumentInfo().producer
         self.creator = reader.getDocumentInfo().creator
         #reader.getDocumentInfo().creationdate ?
-        print self.doctitle
-    def getTitle(self):
-        return self.doctitle
+        print self.title
 
-class imageReader():
-    def __init__(self, fh):
+class imageReader(infoReader):
+    def __init__(self, fh, filepath):
+        infoReader.__init__(self, fh, filepath)
         return
-    def getTitle(self):
-        return None
 
-class rfc822Reader():
-    def __init__(self, fh):
-        self.subject = None
+class rfc822Reader(infoReader):
+    def __init__(self, fh, filepath):
+        infoReader.__init__(self, fh, filepath)
+        self.filename = None
         fh.seek(0, os.SEEK_SET)
         for line in fh:
-            if 0 == line.find('Subject: '):
-                if self.subject is None:
-                    self.subject = line.split(':')[1].lstrip().rstrip()
+            if 0 == line.lower().find('message-id: '):
+                if self.filename is None:
+                    self.filename = line.split(':')[1].lstrip().rstrip()
+                else:
+                    print("error: found several Message-ID lines in header, picking the first")
+            if 0 == line.lower().find('subject: '):
+                if self.title is None:
+                    self.title = line.split(':')[1].lstrip().rstrip()
                 else:
                     print("error: found several Subject lines in header, picking the first")
             if '' == line.strip():
                 break
         return
-    def getTitle(self):
-        return self.subject
 
 # Mapping from magic string to Noark 5 format info
 # Based on the spec list of formats on page 173.
@@ -240,9 +249,9 @@ def main():
             continue
         
         filesize = getFileSize(fh)
-        basename = os.path.basename(filename)
-        r = inforeader(fh)
+        r = inforeader(fh, filename)
         doctitle = r.getTitle()
+        basename = r.getFilename()
         if doctitle is None or '' == doctitle:
             doctitle = basename
         variantformat = "Arkivformat"
