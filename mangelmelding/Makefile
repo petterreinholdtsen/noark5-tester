@@ -22,10 +22,12 @@ distclean: clean
 	$(RM) mangler.pdf
 
 stats:
-	@printf "Unsent defect reports: "
-	@ls *-*.md |wc -l
+	@printf "Unsent defect reports (ready): "
+	@for f in *-*.md; do if ! grep -q FIXME $$f ; then echo $$f; fi; done |wc -l
+	@printf "Unsent defect reports (not ready): "
+	@for f in *-*.md; do if grep -q FIXME $$f ; then echo $$f; fi; done |wc -l
 	@printf "Sent defect reports: "
 	@ls sendt/*-*.md |wc -l
 
 ready:
-	@for f in 2*.md; do if ! grep -q FIXME $$f ; then echo $$f; fi; done
+	@for f in *-*.md; do if ! grep -q FIXME $$f ; then echo $$f; fi; done
