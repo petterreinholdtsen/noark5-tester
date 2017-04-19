@@ -26,3 +26,6 @@ stats:
 	@ls *-*.md |wc -l
 	@printf "Sent defect reports: "
 	@ls sendt/*-*.md |wc -l
+
+ready:
+	@for f in 2*.md; do if ! grep -q FIXME $$f ; then echo $$f; fi; done
