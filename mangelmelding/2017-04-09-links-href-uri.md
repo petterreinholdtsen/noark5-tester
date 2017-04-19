@@ -1,5 +1,5 @@
-Når skal det brukes 'uri' i stedet for 'href' _links?
-=====================================================
+Når skal det brukes 'uri' i stedet for 'href' \_links?
+======================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -10,7 +10,7 @@ Når skal det brukes 'uri' i stedet for 'href' _links?
         Dokumentdel  http://rel.kxml.no/noark5/
          Sidenummer  n/a
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-04-19
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
@@ -19,11 +19,11 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-I spesifikasjonens 6.1.1.1 (Oppkobling og ressurslenker) side på side
+I spesifikasjonens 6.1.1.1 (Oppkobling og ressurslenker) på side
 11 og 12 skal relasjonnøkler oppgis med 'href' og 'rel'.  Dette blir
 ikke gjort for eksempel i
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ som bruker 'uri'
-i _links i stedet for href.  Andre deler av nettstedet, for eksempel i
+i \_links i stedet for href.  Andre deler av nettstedet, for eksempel i
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivdel/ som bruker
 'href'.  Er det feil i nettsiden?  I motsatt tilfelle bør
 spesifikasjonen utvides til å forklare når 'uri' skal brukes i stedet
@@ -33,7 +33,8 @@ jeg kan se tre tilfeller.
 Ønsket endring
 --------------
 
-Endre 'url' til 'href' i _links-responsen på følgende nettsider:
+Endre 'url' til 'href' i \_links-responsen som vises frem på disse
+nettsidene:
 
  * http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentobjekt/
  * http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/
