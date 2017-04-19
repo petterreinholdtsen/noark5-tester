@@ -1,5 +1,5 @@
-Klargjør om store og små bokstaver er like i feltnavn og identifikatorer
-========================================================================
+Klargjør om store og små bokstaver er like i feltnavn og relasjoner
+===================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -28,7 +28,7 @@ hverandre.  Et eksempel er at spesifikasjonen omtaler 'SystemID',
 Det er enklere å implementere en API-klient hvis alle feltnavn og
 andre identifikatorer er entydig definert og tegnsekvensen som
 identifiserer disse er det samme for alle implementasjoner av
-tjenestegrensesnittet.  Jeg anbefaler derfor at det klargjøres hvordan
+tjenestegrensesnittet.  Det er dermed lurt å klargjøre hvordan
 feltnavn og andre identifikatorer skal skrives og at det nevnes at en
 ikke kan behandle små og store bokstaver som like når slike skal
 sammenlignes.  Dette gjelder ikke bare feltnavn i JSON, men også for
@@ -53,9 +53,11 @@ clients and servers».
 Ønsket endring
 --------------
 
-Det enkleste er antagelig å beskrive dette under punkt 6.1.1 (REST
-tjenestene), der følgende setning kan legges inn:
+Det enkleste er antagelig å forklare eksplisitt at det skilles mellom
+store og små bokstaver under punkt 6.1.1 (REST tjenestene), der
+følgende setning kan legges inn:
 
-> Det skilles mellom små og store tegn i alle JSON-medlemsnavn og
-> HATEOS-relasjoner, slik at disse er entydig definert uten
-> konvertering mellom små og store tegn.
+> Det skilles mellom små og store tegn i alle XML- og JSON-attributter
+> og HATEOS-relasjoner, slik at disse har entydig definerte navn som
+> ikke er avhengig av språkspesifikke regler for konvertering mellom
+> små og store tegn.
