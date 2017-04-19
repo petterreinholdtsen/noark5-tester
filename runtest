@@ -234,6 +234,11 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                 self.urls.append(url)
             except urllib2.HTTPError, e:
                 self.failure("unable to GET %s" % url)
+            try:
+                # Check if CORS can work for the URL
+                (ocontent, ores) = self.options(url)
+            except urllib2.HTTPError, e:
+                self.failure("unable to OPTIONS %s" % url)
         for url in sorted(self.urls):
             self.success("found %s" % url)
         for rel in sorted(self.rels.keys()):
