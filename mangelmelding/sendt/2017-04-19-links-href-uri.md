@@ -39,3 +39,8 @@ nettsidene:
  * http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentobjekt/
  * http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/
  * http://rel.kxml.no/noark5/v4/api/arkivstruktur/registrering/
+
+Respons
+-------
+
+Ingen respons fra Arkivverket så langt.
