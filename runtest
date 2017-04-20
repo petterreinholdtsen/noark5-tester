@@ -232,13 +232,13 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                                 #self.failure("Found new link %s" % href)
                                                 urlsleft.append(href)
                 self.urls.append(url)
+                try:
+                    # Check if CORS can work for the URL
+                    (ocontent, ores) = self.options(url)
+                except urllib2.HTTPError, e:
+                    self.failure("unable to OPTIONS %s" % url)
             except urllib2.HTTPError, e:
                 self.failure("unable to GET %s" % url)
-            try:
-                # Check if CORS can work for the URL
-                (ocontent, ores) = self.options(url)
-            except urllib2.HTTPError, e:
-                self.failure("unable to OPTIONS %s" % url)
         for url in sorted(self.urls):
             self.success("found %s" % url)
         for rel in sorted(self.rels.keys()):
@@ -358,15 +358,15 @@ Test basis requirements for NOARK 5 Core.
                 if not k == '_links' and k not in data:
                     data[k] = default[k]
             self.success("GET %s worked" % url)
+            try:
+                # Verify OPTIONS announce POST support 
+                (ocontent, ores) = self.options(url)
+                allow = ores.info().getheader('Allow').split(',')
+                self.verify(-1 != allow.index('POST'), 'OPTIONS header Allow should include POST for %s' % url)
+            except urllib2.HTTPError, e:
+                self.failure('unable to OPTIONS %s' % url)
         except urllib2.HTTPError, e:
             self.failure('unable to GET %s' % url)
-        try:
-            # Verify OPTIONS announce POST support 
-            (ocontent, ores) = self.options(url)
-            allow = ores.info().getheader('Allow').split(',')
-            self.verify(-1 != allow.index('POST'), 'OPTIONS header Allow should include POST for %s' % url)
-        except urllib2.HTTPError, e:
-            self.failure('unable to OPTIONS %s' % url)
         print("POST %s: %s" % (url, data))
         try:
             (c, res) = self.json_post(url, data)
