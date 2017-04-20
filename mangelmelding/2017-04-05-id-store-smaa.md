@@ -21,9 +21,15 @@ Beskrivelse
 
 Det er uklart fra spesifikasjonen om feltnavn og andre identifikatorer
 har entydig form eller om det kan blandes store og små tegn om
-hverandre.  Et eksempel er at spesifikasjonen omtaler 'SystemID',
-'systemID' og 'systemid' (f.eks. teksten i 6.3 (Identifikatorer) side
-28 og 7.2.1.16 (Mappe) side 141).  Er alle riktige?
+hverandre.
+
+Et eksempel er at spesifikasjonen omtaler «SystemID», «systemID» og
+«systemid» (f.eks. teksten i 6.3 (Identifikatorer) side 28 og 7.2.1.16
+(Mappe) side 141).  Er alle riktige?  Det kan se ut til at «SystemID»
+er ment å være typenavn, mens «systemID» er ment å være attributtnavn,
+men bruken av «systemid» gjør det vanskelig å være sikker.  Hvis det
+er tilfelle bør det kanskje nevnes eksplisitt i spesifikasjonen for
+hver klasse/attributt?
 
 Det er enklere å implementere en API-klient hvis alle feltnavn og
 andre identifikatorer er entydig definert og tegnsekvensen som
@@ -64,3 +70,7 @@ tjenestene) på side 11:
 > og HATEOS-relasjoner, slik at disse har entydig definerte navn som
 > ikke er avhengig av språkspesifikke regler for konvertering mellom
 > små og store tegn.
+
+Bør også endre 'systemid' til 'systemID' på side 141, 148, 253, 258
+and 263, hvis de er ment å være attributtnavn og ikke typenavn.  Har
+kun lett etter 'systemid'-inkonsistenser.  Det kan være flere.
