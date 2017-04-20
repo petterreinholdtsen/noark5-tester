@@ -360,6 +360,13 @@ Test basis requirements for NOARK 5 Core.
             self.success("GET %s worked" % url)
         except urllib2.HTTPError, e:
             self.failure('unable to GET %s' % url)
+        try:
+            # Verify OPTIONS announce POST support 
+            (ocontent, ores) = self.options(url)
+            allow = ores.info().getheader('Allow').split(',')
+            self.verify(-1 != allow.index('POST'), 'OPTIONS header Allow should include POST for %s' % url)
+        except urllib2.HTTPError, e:
+            self.failure('unable to OPTIONS %s' % url)
         print("POST %s: %s" % (url, data))
         try:
             (c, res) = self.json_post(url, data)
