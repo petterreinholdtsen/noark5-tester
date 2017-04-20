@@ -8,7 +8,7 @@ Kreves stabil rekkefølge på listene i \_links?
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
         Dokumentdel  6.1.1.2
-         Sidenummer  
+         Sidenummer  13
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
@@ -28,16 +28,21 @@ spesifikasjonen om rekkefølgen er stabil eller ikke.
 For å sikre forutsigbare resultater fra API-et, og gjøre det enklere å
 teste om API-et er korrekt (en kan sammenligne resultatet med
 forhåndslagrede resultater i stedet for å måtte sammenligne
-individuelle elementer i returnerte lister), så foreslår jeg at det
-kreves stabil rekkefølge på listene i \_links.
+individuelle elementer i returnerte lister), er det best om det kreves
+stabil rekkefølge på listene i \_links.
+
+Da «href»-verdiene ikke er definert i spesifikasjonen, mens
+«rel»-verdiene er standardiserte, er det antagelig best å sortere på
+«rel»-verdiene.
+
+Hvis verdiene ikke skal ha forutsigbar rekkefølge, så er det fint om
+dette nevnes eksplisitt i spesifikasjonsteksten.
 
 Ønsket endring
 --------------
 
-Legg inn en setning i første avsnitt av 6.1.1.2 (Finne objekter
-(Read)) på side 13, som lyder:
+Legg inn en setning på slutten av første avsnitt av 6.1.1.2 (Finne
+objekter (Read)) på side 13:
 
-> Ressurslisten i _links skal være alfabetisk sortert på 'rel'-feltet
-> for å sikre samme rekkefølge hos alle implementasjoner.
-
-FIXME bedre formulering?
+> Ressurslisten i _links er alfabetisk sortert på «rel»-feltet i
+> henhold til ASCII-verdi.
