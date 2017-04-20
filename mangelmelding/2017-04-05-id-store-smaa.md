@@ -37,25 +37,28 @@ relasjons-navn (URL-er).
 Hvis slik blanding av store og små skal tillates uten å gi udefinerte
 effekter for klientimplementasjonen, så må spesifikasjonen dokumentere
 om de skal sammenlignes som store eller små bokstaver, og hvilke
-språkspesifikke regler som skal brukes for å endre mellom store og små
-bokstaver.  Dette for å sikre at en unngår uklarheter som endel språk
-har (For eksempel på tysk er bokstaven «ß» overført til store blitt
-til «SS» mens «SS» overført til små bokstaver blitt til «ss», mens
-tyrkisk «i» som stor bokstav blir I med prikk på tyrkisk, mens den
-blir «I» (uten prikk) på norsk.  Det finnes flere tilsvarende
-eksempler).
+språkspesifikke regler som skal brukes for å navnene gjøres om til
+store eller små bokstaver.  Dette for å sikre at en unngår uklarheter
+som endel språk har.  Et eksempel er tysk, der bokstaven «ß» overført
+til store blir til «SS» mens «SS» overført til små bokstaver blitt til
+«ss».  Et annet eksempel er tyrkisk «i» som overført til stor bokstav
+blir «İ» (I med prikk), mens den blir «I» (uten prikk) på norsk.  Det
+finnes flere tilsvarende eksempler for andre språk.
 
-Når en vurderer dette er det greit å ha i bakhodet at
-[JSON-spesifikasjonen](http://jsonapi.org/format/) sier at «All member
-names used in a JSON API document MUST be treated as case sensitive by
-clients and servers».
+Når en vurderer hva som bør gjøres i spesifikasjonen er det greit å ha
+i bakhodet at [JSON-spesifikasjonen](http://jsonapi.org/format/) sier
+at «All member names used in a JSON API document MUST be treated as
+case sensitive by clients and servers».
+
+Det enkleste er antagelig å forklare eksplisitt at det skilles mellom
+store og små bokstaver, for å unngå problemet med språkspesifikk
+omforming til store eller små bokstaver.
 
 Ønsket endring
 --------------
 
-Det enkleste er antagelig å forklare eksplisitt at det skilles mellom
-store og små bokstaver under punkt 6.1.1 (REST tjenestene), der
-følgende setning kan legges inn:
+Foreslår at følgende setning legges inn under punkt 6.1.1 (REST
+tjenestene) på side 11:
 
 > Det skilles mellom små og store tegn i alle XML- og JSON-attributter
 > og HATEOS-relasjoner, slik at disse har entydig definerte navn som
