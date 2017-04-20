@@ -10,7 +10,7 @@ Klargjør om store og små bokstaver er like i feltnavn og relasjoner
         Dokumentdel  6.1.1
          Sidenummer  11
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-04-20
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
@@ -18,6 +18,8 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 
 Beskrivelse
 -----------
+
+Gjelder også side 141, 148, 253, 258 og 263.
 
 Det er uklart fra spesifikasjonen om feltnavn og andre identifikatorer
 har entydig form eller om det kan blandes store og små tegn om
@@ -47,14 +49,15 @@ språkspesifikke regler som skal brukes for å navnene gjøres om til
 store eller små bokstaver.  Dette for å sikre at en unngår uklarheter
 som endel språk har.  Et eksempel er tysk, der bokstaven «ß» overført
 til store blir til «SS» mens «SS» overført til små bokstaver blitt til
-«ss».  Et annet eksempel er tyrkisk «i» som overført til stor bokstav
-blir «İ» (I med prikk), mens den blir «I» (uten prikk) på norsk.  Det
-finnes flere tilsvarende eksempler for andre språk.
+«ss».  Et annet eksempel er «i» som overført til stor bokstav på
+tyrkisk blir «İ» (I med prikk), mens den blir «I» (uten prikk) på
+norsk.  Det finnes tilsvarende eksempler for andre språk.
 
-Når en vurderer hva som bør gjøres i spesifikasjonen er det greit å ha
-i bakhodet at [JSON-spesifikasjonen](http://jsonapi.org/format/) sier
-at «All member names used in a JSON API document MUST be treated as
-case sensitive by clients and servers».
+Når en vurderer hva som bør gjøres i
+tjenestegrensesnitt-spesifikasjonen er det greit å ha i bakhodet at
+[JSON-spesifikasjonen](http://jsonapi.org/format/) sier at «All member
+names used in a JSON API document MUST be treated as case sensitive by
+clients and servers».
 
 Det enkleste er antagelig å forklare eksplisitt at det skilles mellom
 store og små bokstaver, for å unngå problemet med språkspesifikk
@@ -64,13 +67,14 @@ omforming til store eller små bokstaver.
 --------------
 
 Foreslår at følgende setning legges inn under punkt 6.1.1 (REST
-tjenestene) på side 11:
+tjenestene) på side 11 for å gjøre det klart hvordan alle navn skal
+håndteres:
 
 > Det skilles mellom små og store tegn i alle XML- og JSON-attributter
 > og HATEOS-relasjoner, slik at disse har entydig definerte navn som
 > ikke er avhengig av språkspesifikke regler for konvertering mellom
 > små og store tegn.
 
-Bør også endre 'systemid' til 'systemID' på side 141, 148, 253, 258
-and 263, hvis de er ment å være attributtnavn og ikke typenavn.  Har
-kun lett etter 'systemid'-inkonsistenser.  Det kan være flere.
+I tillegg bør 'systemid' endres til 'systemID' på side 141, 148, 253,
+258 og 263, hvis de er ment å være attributtnavn og ikke typenavn.
+Har kun lett etter 'systemid'-inkonsistenser.  Det kan være flere.
