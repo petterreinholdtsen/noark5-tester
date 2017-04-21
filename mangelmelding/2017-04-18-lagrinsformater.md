@@ -29,7 +29,7 @@ se side 173 (format)
 Hva skal gjøres når det trengs å arkiveres formater som ikke er på listen?
 
 Epost-ideer finnes i
-<URL: http://people.skolelinux.org/pere/blog/Hvordan_b_r_RFC_822_formattert_epost_lagres_i_en_NOARK5_database_.html >.
+&gt;URL: http://people.skolelinux.org/pere/blog/Hvordan_b_r_RFC_822_formattert_epost_lagres_i_en_NOARK5_database_.html >.
 
 Noark 5 krav 8.1.8 (side 197) sier at epost skal lagres i et enhetlig,
 samlet format som gjengir både e-posthode og e-postmelding, men
