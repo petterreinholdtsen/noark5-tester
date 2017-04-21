@@ -78,3 +78,8 @@ håndteres:
 I tillegg bør 'systemid' endres til 'systemID' på side 141, 148, 253,
 258 og 263, hvis de er ment å være attributtnavn og ikke typenavn.
 Har kun lett etter 'systemid'-inkonsistenser.  Det kan være flere.
+
+Respons
+-------
+
+Ingen respons fra Arkivverket så langt.
