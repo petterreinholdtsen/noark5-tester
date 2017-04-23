@@ -1,3 +1,5 @@
+Forslag til
+
 Hvordan lagre epost i en Noark 5-struktur
 =========================================
 
@@ -58,37 +60,45 @@ etter om eposten skal være journalført eller ikke.  Feltet 'forfatter'
 registreres ikke i basisregistreringsdelen, for å unngå
 dobbeltregistrering i korrespondansepart og dokumentbeskrivelse.
 
+```
 registrering / basisregistrering / journalpost: {
-	    # registrering
-	    
-            # basisregistrering / journalpost
-            "tittel"         : subject,
-	    "oppbevaringssted" til første message-id i References?
+  # registrering
 
-	    # Journalpost
-	    "dokumentDato"   : date
+  # basisregistrering / journalpost
+  "tittel"         : subject,
+  "oppbevaringssted" til første message-id i References?
+
+  # Journalpost
+  "dokumentDato"   : date
 }
+```
 
 For Journalpost registreres det en korrespondansepart for hver adresse
 oppgitt i From/Reply-To/Sender, To og Cc.
 
+```
 korrespondansepart: {
-	    "korrespondansepartType" : 'avsender' / 'mottaker' / 'kopimottaker' / ...
-	    "navn" : from / to / cc / reply-to / sender
-	    "kontaktinformasjon.epostadresse" : from / to / cc / reply-to / sender
+  "korrespondansepartType" : 'avsender' / 'mottaker' / 'kopimottaker' / ...
+  "navn" : from / to / cc / reply-to / sender
+  "kontaktinformasjon.epostadresse" : from / to / cc / reply-to / sender
 }
+```
 
+```
 dokumentbeskrivelse: {
-            "tittel"         : subject,
-	    "forfatter"      : from / sender / reply-to,
-	    "tilknyttetRegistreringSom" : "Hoveddkokument"
+  "tittel"         : subject,
+  "forfatter"      : from / sender / reply-to,
+  "tilknyttetRegistreringSom" : "Hoveddkokument"
 }
+```
 
+```
 dokumentobjekt: {
-            "format"         : 'RFC822',
-            "mimeType"       : 'message/rfc822',
-            "filnavn"        : message-id,
+  "format"         : 'RFC822',
+  "mimeType"       : 'message/rfc822',
+  "filnavn"        : message-id,
 }
+```
 
 Hvis eposten består av flere vedlegg, så bør det lages separate
 dokumentbeskrivelse-/dokumentobjekt-instanser for vedleggene.  Det bør
