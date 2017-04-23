@@ -74,13 +74,45 @@ registrering / basisregistrering / journalpost: {
 ```
 
 For Journalpost registreres det en korrespondansepart for hver adresse
-oppgitt i From/Reply-To/Sender, To og Cc.
+oppgitt i From/Reply-To/Sender, To og Cc.  Epostadressedelen (dvs. det
+mellom &lt; og &gt;) legges i epostadresse-attributtet til
+kontaktinformasjons-feltet, mens adressens tilknyttede navn legges inn
+i feltet "navn".
+
+Når det gjelder avsender er det flere eposthodefelt som er aktuelle.
+Den første med verdi av følgende felt legges inn med
+korrespondansetype 'avsender: Sender, From:
 
 ```
 korrespondansepart: {
-  "korrespondansepartType" : 'avsender' / 'mottaker' / 'kopimottaker' / ...
-  "navn" : from / to / cc / reply-to / sender
-  "kontaktinformasjon.epostadresse" : from / to / cc / reply-to / sender
+  "korrespondansepartType" : 'avsender'
+  "navn" : sender / from
+  "kontaktinformasjon.epostadresse" : sender / from
+}
+```
+
+Når det gjelder mottaker, så er det et eposthodefelt som er aktuelt,
+'To'.  Dette feltet kan inneholde flere epostadresser oppdelt med
+komma.  Det lages en korrespondansepart for hver epostadresse:
+
+```
+korrespondansepart: {
+  "korrespondansepartType" : 'mottaker'
+  "navn" : to
+  "kontaktinformasjon.epostadresse" : to
+}
+```
+
+Når det gjelder kopimottaker, er det også bare ett eposthodefelt som
+er aktuelt, 'Cc'.  Dette feltet kan inneholde flere epostadresser
+oppdelt med komma.  Det lages en korrespondansepart for hver
+epostadresse:
+
+```
+korrespondansepart: {
+  "korrespondansepartType" : 'kopimottaker'
+  "navn" : cc
+  "kontaktinformasjon.epostadresse" : cc
 }
 ```
 
