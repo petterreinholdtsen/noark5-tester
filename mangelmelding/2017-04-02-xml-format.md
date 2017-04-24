@@ -21,13 +21,14 @@ Beskrivelse
 
 Spesifikasjonen mangler en klar beskrivelse av hvordan
 REST-forespørsler som bruker XML skal se ut, og hvilket resultat de
-skal få tilbake.  Det eneste eksempelet er på side 12, som viser
-hvordan relasjonslenker skal formatteres.
+skal få tilbake.  Det eneste eksempelet er i del 6.1.1.1 (Oppkobling
+og ressurslenker) på side 12, som viser hvordan relasjonslenker skal
+formatteres som XML.
 
-Men spesifikasjon og XML-eksempel på http://rel.kxml.no/noark5/v4/api/
-er ikke enige om hvordan XML-lister med relasjoner skal se ut.
-Demotjenesten på http://n5test.kxml.no/api/ ser derimot ut som
-eksemplet i spesifikasjonen.
+Men spesifikasjon, demotjenesten på http://n5test.kxml.no/api/ og
+XML-eksempel på http://rel.kxml.no/noark5/v4/api/ er ikke enige om
+hvordan XML-lister med relasjoner skal se ut.  Spesifikasjon og
+demotjeneste er like, mens XML-eksempelet er forskjellig fra dem.
  
 Slik ser eksempelet på side 12 og http://n5test.kxml.no/api/ ut:
 
@@ -56,10 +57,12 @@ Slik ser eksempelet på side 12 og http://n5test.kxml.no/api/ ut:
 > &lt;/Links&gt;
 
 Merk hvordan denne har to identiske XML-tagger (Links) inne i
-hverandre.  Det fremstår som redundant.
+hverandre.  Hva er årsaken til at det brukes to identiske XML-tagger
+slik?  En skulle tro det holder med et nivå.
 
-eksempelet på http://rel.kxml.no/noark5/v4/api/ bruker derimot
-LinkListe som ytre XML-tag i stedet for Links:
+Eksempelet på http://rel.kxml.no/noark5/v4/api/ har ikke
+duplikat-tagger, men derimot LinkListe som ytre XML-tag i stedet for
+Links:
 
 > &lt;LinkListe
 > xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -91,6 +94,24 @@ LinkListe som ytre XML-tag i stedet for Links:
 > &lt;/_links&gt;
 > &lt;/LinkListe&gt;
 
+Hvilke av disse variantene er korrekte?  Den med duplikatlenker eller
+den uten?
+
+Spesifikasjonen mangler beskrivelse av hvordan objekter og lister skal
+formatteres i XML.  Det er dermed uklart for de som skal utvikle
+REST-klienter og -tjenester hvordan informasjonen som skal utveksles
+skal være.
+
+Enten bør spesifikasjonen beskrive hvordan alle objekter og lister av
+objekter skal formateres i XML, eller så bør den inneholde en
+forklaring på hvordan JSON-strukturer kan omdannes til XML.  Gitt at
+XML-formatteringen nok trenger navnerom-informasjon, mens
+JSON-formatteringen ikke trenger tilsvarende, så vil det ikke være
+mulig å automatisk omforme JSON til XML uten at det tilføres ekstra
+informasjon.  Hvorvidt det er praktisk gjennomførbart eller ikke
+kommer an på hvor mange ulike navnerom som forventes brukt i
+XML-formatteringen.
+
 FIXME beskriv behovet for informasjon om formattering av objekter og
 lister.
 
@@ -100,3 +121,6 @@ lister.
 FIXME foreslå formuleringer som beskriver formattering av objekter og
 lister, f.eks. ved å beskrive hvordan JSON-eksempler kan gjøres om til
 XML-eksempler (for å slippe doble eksempler i hele dokumentet).
+
+Eksemplene på http://rel.kxml.no/noark5/ bør endres til å stemme
+overens med spesifikasjonen.
