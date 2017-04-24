@@ -2,6 +2,8 @@ Forslag til
 
 # Hvordan lagre epost i en Noark 5-struktur
 
+av Petter Reinholdtsen.
+
 Her følger en beskrivelse om hvordan epost kan lagres i en Noark
 5-struktur via et Noark 5 Tjenstegrensesnitt på en slik måte at en kan
 gjenskape eposttråder og sjekke kryptosignaturer basert på S/MIME
@@ -55,12 +57,15 @@ Epost inneholder følgende hodefelter relevant for lagring i Noark 5:
  * Message-ID:
 
 For a kunne effektivt finne alle epostene i en eposttråd er det lurt å
-ta gjøre det mulig å søke ut epost basert på på Message-ID for starten
-av tråden, dvs. den Message-ID-verdien som ligger først i References
-der dette feltet finnes, og i Message-ID for første melding i en tråd.
-Det er ikke noe åpenbart felt i Noark 5 for å lagre denne verdien.  En
-ide er å bruke 'oppbevaringssted tilhørende basisregistrering og
-journalpost, da dette feltet er ubrukt for elektroniske dokumenter.
+ta gjøre det mulig å søke ut epost basert på Message-ID-verdien som
+var i eposten som startet tråden.  Dette er den Message-ID-verdien som
+ligger først i References i epost der dette feltet finnes og i
+In-Reply-To-verdien for epost som er svar på første epost.  Det er
+desverre ikke noe åpenbart felt i Noark 5 for å lagre denne verdien
+for å søke den ut senere. Mitt forslag er å bruke 'oppbevaringssted
+tilhørende basisregistrering og journalpost, da dette feltet er ubrukt
+for elektroniske dokumenter, og en kan tenke seg at epost er lagret
+bak stedet merket med Message-ID-verdien.
 
 FIXME: Bestem og beskriv hvordan epost skal lagres:
 
@@ -170,6 +175,9 @@ Bob-Jonny.  Vi gleder oss alle til å bli hans lojale undersotter.
 Vennlig hilsen
 Ola Nordmann
 ```
+
+Har her droppet alle eposthodefelter som ikke er releante for dette
+forslaget.  Svareposten ser så slik ut:
 
 ```
 From: Bob-Jonny Nordmann <bob@example.com>
