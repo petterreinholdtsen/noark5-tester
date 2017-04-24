@@ -52,3 +52,8 @@ objekter (Read)) på side 13:
 
 > Ressurslisten i _links er alfabetisk sortert på «rel»-feltet i
 > henhold til ASCII-verdi.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
