@@ -1,7 +1,6 @@
 Forslag til
 
-Hvordan lagre epost i en Noark 5-struktur
-=========================================
+# Hvordan lagre epost i en Noark 5-struktur
 
 Her følger en beskrivelse om hvordan epost kan lagres i en Noark
 5-struktur via et Noark 5 Tjenstegrensesnitt på en slik måte at en kan
@@ -150,11 +149,9 @@ være mulig å angi av det av disse vedleggene som er følgebrevet /
 selve meldingen får tilknyttetRegistreringSom "Hoveddokument".
 
 
-Eksempel
---------
+## Eksempler
 
-Eksempel uten vedlegg
-~~~~~~~~~~~~~~~~~~~~~
+### Eksempel uten vedlegg
 
 Her er to eksempel-epost med henvisning som utgjør en liten eposttråd.
 
@@ -279,7 +276,6 @@ dokumentobjekt: {
 }
 ```
 
-Eksempel med vedlegg
-~~~~~~~~~~~~~~~~~~~~
+### Eksempel med vedlegg
 
 FIXME fyll inn vedleggseksempel
