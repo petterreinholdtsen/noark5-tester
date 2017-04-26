@@ -6,6 +6,9 @@ it over as a mbox file to the mail program.
 
 """
 
+__license__ = 'GNU General Public License v2 or later at users choice'
+__author__ = 'Petter Reinholdtsen'
+
 import sys
 sys.path.append('lib')
 

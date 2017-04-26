@@ -5,6 +5,9 @@ Upload file to Noark 5 API for archiving.
 
 """
 
+__license__ = 'GNU General Public License v2 or later at users choice'
+__author__ = 'Petter Reinholdtsen'
+
 import sys
 sys.path.append('lib')
 
