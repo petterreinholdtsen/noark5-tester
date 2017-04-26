@@ -1,0 +1,167 @@
+#!/usr/bin/python
+"""
+
+Extract all emails in a Noark 5 file/mappe from the archive and hand
+it over as a mbox file to the mail program.
+
+"""
+
+import sys
+sys.path.append('lib')
+
+import argparse
+import json
+import os
+import subprocess
+import tempfile
+
+import n5core.endpoint
+
+mailer = 'mutt'
+
+def objectOperation(json, relation):
+    """
+Return the URL/href for a given relation on the object represented by
+the json structure.
+
+"""
+    if json is None or '_links' not in json:
+        return None
+    for l in json['_links']:
+        if l['rel'] == relation:
+            return l['href']
+    return None
+
+def pickUnlessOne(json, type):
+    """
+Check the array in the json structure, if there is only one elemet, return it.
+If there are more than one elemet, ask the user to pick one.
+"""
+    #print("Found %d %s entries" % (len(json), type))
+    if 'results' in json:
+        count = len(json['results'])
+    else:
+        count = 0
+    if 0 == count:
+        return None
+    if 1 == count:
+        if 'tittel' in json['results'][0]:
+            print("using %s: %s" % (type, json['results'][0]['tittel']))
+        else:
+            print("using %s: %s" % (type, json['results'][0]['systemID']))
+        return json['results'][0]
+    else:
+        print("")
+        n = -1
+        while -1 == n:
+            i = 0
+            for entry in json['results']:
+                if 'tittel' in entry:
+                    print(" %d - %s" % (i, entry['tittel']))
+                else:
+                    print(" %d - %s systemID %s" % (i, type, entry['systemID']))
+                i = i + 1
+            answer = raw_input("Select which %s you want (or search term): " % type)
+            try:
+                n = int(answer)
+                if n < 0 or n >= count:
+                    print("error: Invalid selection %d" % n)
+                    n = -1
+                else:
+                    return json['results'][int(n)]
+            except Exception, e:
+                # FIXME search instead
+                pass
+
+def main():
+    relbase = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur'
+    baseurl = "http://localhost:8092/noark5v4/"
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--verbose", help="print more debug information",
+                        action="store_true")
+    args = parser.parse_args()
+
+    (mailfh, mailpath) = tempfile.mkstemp(suffix='.mbox', text=True)
+    mailfile = os.fdopen(mailfh, 'w')
+        
+    api = n5core.endpoint.Endpoint(baseurl)
+    api.verbose = args.verbose
+    api.login()
+    
+    # Extract all emails from file, fake non-email as email with the
+    # reported content type, and format emails as mbox file.
+    fondsrel = relbase + '/arkiv/'
+    fondshref = api.findRelation(fondsrel)
+    (c, res) = api.json_get(fondshref)
+    fondsinfo = json.loads(c)
+    info = pickUnlessOne(fondsinfo, 'arkiv')
+    serieshref = objectOperation(info, relbase + '/arkivdel/')
+    
+    #print("Arkivdel %s" % serieshref)
+    (c, res) = api.json_get(serieshref)
+    seriesinfo = json.loads(c)
+    info = pickUnlessOne(seriesinfo, 'arkivdel')
+
+    fileshref = objectOperation(info, relbase + '/mappe/')
+    #print("Mappe %s" % fileshref)
+    (c, res) = api.json_get(fileshref)
+    filesinfo = json.loads(c)
+    fileinfo = pickUnlessOne(filesinfo, 'mappe')
+
+    fileshref = objectOperation(fileinfo, relbase + '/registrering/')
+    #print("Registrering %s" % fileshref)
+    (c, res) = api.json_get(fileshref)
+    reginfos = json.loads(c)
+
+    
+    if 'results' in reginfos:
+        for reginfo in reginfos['results']:
+            docdeschref = objectOperation(reginfo, relbase + '/dokumentbeskrivelse/')
+            #print("Dokumentbeskrivelse %s" % docdeschref)
+            (c, res) = api.json_get(docdeschref)
+            docdescinfos = json.loads(c)
+            if 'results' in docdescinfos:
+                for docdescinfo in docdescinfos['results']:
+                    #print docdescinfo
+                    fileshref = objectOperation(docdescinfo,
+                                                relbase + '/dokumentobjekt/')
+                    #print("Dokumentobjekt %s" % fileshref)
+                    (c, res) = api.json_get(fileshref)
+                    docobjinfos = json.loads(c)
+                    if 'results' in docobjinfos:
+                        for docobjinfo in docobjinfos['results']:
+                            print docobjinfo['format'], docobjinfo['mimeType']
+                            contenthref = \
+                                objectOperation(docobjinfo,
+                                                relbase + '/fil/')
+                            (c, res) = api._get(contenthref, {'Accept' : '*/*'})
+                            if 'message/rfc822' == \
+                               res.info().getheader('Content-Type'):
+                                print "Writing email"
+                                mailfile.write("From nikita Fri Jul  8 12:08:34 2011\n") # FIXME
+                                mailfile.write(c)
+                                mailfile.write("\n\n") # FIXME
+                            else:
+                                print "Writing non-email"
+                                mailfile.write("From nikita Fri Jul  8 12:08:34 2011\n") # FIXME
+                                mailfile.write("Content-type: %s"
+                                               % res.info().getheader('Content-Type'))
+                                mailfile.write("\n")
+                                mailfile.write(c)
+                                mailfile.write("\n\n") # FIXME
+                                
+    mailfile.close()
+    print mailpath
+
+    # Start mailer with MAIL environment set to the mbox file 
+    child_env = os.environ.copy()
+    child_env['MAIL'] = mailpath
+    p = subprocess.Popen([mailer], env=child_env)
+    p.wait()
+    
+    # remove the mbox file
+    os.unlink(mailpath)
+
+if __name__ == '__main__':
+    main()
