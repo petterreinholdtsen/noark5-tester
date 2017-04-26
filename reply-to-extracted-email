@@ -13,10 +13,12 @@ import sys
 sys.path.append('lib')
 
 import argparse
+import email.utils
 import json
 import os
 import subprocess
 import tempfile
+from time import strftime, gmtime, time
 
 import n5core.endpoint
 
@@ -72,7 +74,7 @@ If there are more than one elemet, ask the user to pick one.
                     n = -1
                 else:
                     return json['results'][int(n)]
-            except Exception, e:
+            except Exception as e:
                 # FIXME search instead
                 pass
 
@@ -83,10 +85,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--verbose", help="print more debug information",
                         action="store_true")
+    parser.add_argument("--keep", help="keep mbox file after execution",
+                        action="store_true")
     args = parser.parse_args()
 
     (mailfh, mailpath) = tempfile.mkstemp(suffix='.mbox', text=True)
     mailfile = os.fdopen(mailfh, 'w')
+
+    first=True
         
     api = n5core.endpoint.Endpoint(baseurl)
     api.verbose = args.verbose
@@ -116,7 +122,6 @@ def main():
     #print("Registrering %s" % fileshref)
     (c, res) = api.json_get(fileshref)
     reginfos = json.loads(c)
-
     
     if 'results' in reginfos:
         for reginfo in reginfos['results']:
@@ -134,28 +139,29 @@ def main():
                     docobjinfos = json.loads(c)
                     if 'results' in docobjinfos:
                         for docobjinfo in docobjinfos['results']:
-                            print docobjinfo['format'], docobjinfo['mimeType']
+                            print(docobjinfo['format'], docobjinfo['mimeType'])
                             contenthref = \
                                 objectOperation(docobjinfo,
                                                 relbase + '/fil/')
                             (c, res) = api._get(contenthref, {'Accept' : '*/*'})
+                            # FIXME use timestamp from database?
+                            fromdate = strftime("%a %b %d %H:%M:%S %Y",
+                                                gmtime(time()))
+                            if not first:
+                                mailfile.write("\n\n")
+                            mailfile.write("From nikita %s\n" % fromdate)
                             if 'message/rfc822' == \
                                res.info().getheader('Content-Type'):
-                                print "Writing email"
-                                mailfile.write("From nikita Fri Jul  8 12:08:34 2011\n") # FIXME
-                                mailfile.write(c)
-                                mailfile.write("\n\n") # FIXME
+                                print("Writing email")
                             else:
-                                print "Writing non-email"
-                                mailfile.write("From nikita Fri Jul  8 12:08:34 2011\n") # FIXME
+                                print("Writing non-email")
                                 mailfile.write("Content-type: %s"
                                                % res.info().getheader('Content-Type'))
                                 mailfile.write("\n")
-                                mailfile.write(c)
-                                mailfile.write("\n\n") # FIXME
+                            mailfile.write(c)
+                            first=False
                                 
     mailfile.close()
-    print mailpath
 
     # Start mailer with MAIL environment set to the mbox file 
     child_env = os.environ.copy()
@@ -164,7 +170,10 @@ def main():
     p.wait()
     
     # remove the mbox file
-    os.unlink(mailpath)
+    if not args.keep:
+        os.unlink(mailpath)
+    else:
+        print("Did not remove %s" % mailpath)
 
 if __name__ == '__main__':
     main()
