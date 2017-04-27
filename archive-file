@@ -280,7 +280,7 @@ def main():
         newdocobjhref = objectOperation(docdescinfo,
                                         relbase + '/ny-dokumentobjekt/')
         docobjinfo = createObject(api, newdocobjhref, {
-            "versjonsnummer" : 1,
+            "versjonsnummer" : 0,
             "variantformat"  : variantformat,
             "format"         : format,
             "mimeType"       : mimetype,
