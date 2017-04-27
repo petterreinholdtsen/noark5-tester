@@ -22,8 +22,6 @@ from time import strftime, gmtime, time
 
 import n5core.endpoint
 
-mailer = 'mutt'
-
 def objectOperation(json, relation):
     """
 Return the URL/href for a given relation on the object represented by
@@ -87,7 +85,12 @@ def main():
                         action="store_true")
     parser.add_argument("--keep", help="keep mbox file after execution",
                         action="store_true")
+    parser.add_argument("--mailer", default="mutt",
+                        help="mail program to use (default is mutt)")
     args = parser.parse_args()
+
+    if args.mailer is not None:
+        mailer=args.mailer
 
     (mailfh, mailpath) = tempfile.mkstemp(suffix='.mbox', text=True)
     mailfile = os.fdopen(mailfh, 'w')
