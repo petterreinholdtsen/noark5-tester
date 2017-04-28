@@ -174,6 +174,8 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             urlseen[url] = 1
             try:
                 (content, res) = self.json_get(url)
+                allow = res.info().getheader('Allow')
+                self.verify(allow is not None, "GET header should include Allow for %s" % url)
                 ctype = res.info().getheader('Content-Type')
                 if self.verify(0 == ctype.find('application/vnd.noark5-v4+json'),
                                "MIME type %s should be application/vnd.noark5-v4+json for url %s" % (ctype, url)):
