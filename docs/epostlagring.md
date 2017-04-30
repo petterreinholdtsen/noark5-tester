@@ -22,7 +22,15 @@ epostens kropp/innhold.  Epostenkroppens format og tegnsett er oppgitt
 i hodet.  Tegnsett for tittelfeltet (Subject) er oppgitt som del av
 tittelfeltet.  Epostens kropp kan bestå av flere deler (såkalte
 MIME-vedlegg), som kan hentes ut separat og ha hvert sitt format og
-tegnsett.
+tegnsett.  MIME-vedlegg er standardisert og beskrevet i utvidelser til
+IETF RFC 5322, se
+[IETF RFC 2045](https://tools.ietf.org/html/rfc2045),
+[IETF RFC 2046](https://tools.ietf.org/html/rfc2046),
+[IETF RFC 2047](https://tools.ietf.org/html/rfc2047),
+[IETF RFC 2049](https://tools.ietf.org/html/rfc2049),
+[IETF RFC 4288](https://tools.ietf.org/html/rfc4288) og
+[IETF RFC 4289](https://tools.ietf.org/html/rfc4289) henvist til i
+IETF RFC 5322.
 
 En mye brukt måte å lagre epost på er som en fil per epost, slik for
 eksempel [Maildir-](https://en.wikipedia.org/wiki/Maildir) og
@@ -162,14 +170,15 @@ Her er to eksempel-epost med henvisning som utgjør en liten eposttråd.
 
 ```
 From: Ola Nordmann <ola@example.com>
-Subject: Valg av ny konge
+Subject: =?iso-8859-1?q?Valg=20av=20ny=20konge,=20=F8nsker=20ny=20konge=20velkommen?=
 To: Kari Nordmann <kari@example.com>
 Cc: Bob-Jonny Nordmann <bob@example.com>
 Date: Sun, 1 Jan 2017 12:30:00 +0100
+Content-Type: text/plain; charset="UTF-8"
 Message-ID: <20170101123000.AB23269@example.com>
 
 Som avtalt i Storskogen har vi vurdert og valgt ny konge.  Det ble
-Bob-Jonny.  Vi gleder oss alle til å bli hans lojale undersotter.
+Bob-Jonny.  Vi gleder oss alle til å bli hans lojale undersåtter.
 
 -- 
 Vennlig hilsen
@@ -181,12 +190,13 @@ forslaget.  Svareposten ser så slik ut:
 
 ```
 From: Bob-Jonny Nordmann <bob@example.com>
-Subject: Re: Valg av ny konge
+Subject: Re: =?iso-8859-1?q?Valg=20av=20ny=20konge,=20=F8nsker=20ny=20konge=20velkommen?=
 To: Ola Nordmann <ola@example.com>
 Cc: Kari Nordmann <kari@example.com>
 Date: Mon, 2 Jan 2017 09:00:00 +0100
 In-Reply-To: <20170101123000.AB23269@example.com>
 References: <20170101123000.AB23269@example.com>
+Content-Type: text/plain; charset="UTF-8"
 Message-ID: <20170102090000.AB23269@example.com>
 
 Jeg takker for tilliten dere viser meg ved valget, og ble veldig glad
@@ -197,14 +207,17 @@ Vennlig hilsen
 Bob-Jonny Nordmann
 ```
 
-FIXME vurder om oppbevaringssted skal brukes.
+FIXME vurder om oppbevaringssted skal brukes til første References-verdi og/eller In-Reply-To.
 
 Disse to epostene legges inn i tjenestegresesnittet på følgende måte.
-Først den første eposten:
+Det er viktig her å huske at eventuell koding av ikke-ASCII-tegn i
+tittelen må oversettes til UTF-8 før lagring i tråd med beskrivelsen i
+[IETF RFC 2047](https://tools.ietf.org/html/rfc2047).  Først den
+første eposten:
 
 ```
 registrering / basisregistrering / journalpost: {
-  "tittel"         : "Valg av ny konge",
+  "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
   "dokumentDato"   : "2017-01-01T12:30+0100"
 }
 
@@ -227,7 +240,7 @@ korrespondansepart: {
 }
 
 dokumentbeskrivelse: {
-  "tittel"         : "Valg av ny konge",
+  "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
   "forfatter"      : "Ola Nordmann"
   "tilknyttetRegistreringSom" : "Hoveddkokument"
 }
@@ -243,13 +256,15 @@ Selve eposten med hode og kropp lastes så opp som del av
 dokumentobjekt.  Har her ignorert filstoerrelse og andre felt som ikke
 er spesielt for epostarkivering.
 
-Arkivering av svar-eposten ser så slik ut.  Merk at den
-RFC-standardiserte subject-prefix 'Re:' fjernes fra tittelen.
+Arkivering av svar-eposten ser så slik ut.  Merk at det RFC
+5322-standardiserte (del 3.6.4) subject-prefikset 'Re: ' fjernes fra
+tittelen
+
 
 
 ```
 registrering / basisregistrering / journalpost: {
-  "tittel"         : "Valg av ny konge",
+  "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
   "dokumentDato"   : "2017-01-02T09:00+0100"
 }
 
@@ -261,7 +276,7 @@ korrespondansepart: {
 
 korrespondansepart: {
   "korrespondansepartType" : "mottaker"
-  "navn" : "Ola Nordmann",
+   "navn" : "Ola Nordmann",
   "kontaktinformasjon.epostadresse" : "ola@example.com"
 }
 
@@ -272,7 +287,7 @@ korrespondansepart: {
 }
 
 dokumentbeskrivelse: {
-  "tittel"         : "Valg av ny konge",
+  "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
   "forfatter"      : "Bob-Jonny Nordmann",
   "tilknyttetRegistreringSom" : "Hoveddkokument"
 }
@@ -286,4 +301,62 @@ dokumentobjekt: {
 
 ### Eksempel med vedlegg
 
-FIXME fyll inn vedleggseksempel
+Her er en eksempel-epost med vedlegg.
+
+```
+From: Ola Nordmann <ola@example.com>
+Subject: =?iso-8859-1?q?Valg=20av=20ny=20konge,=20=F8nsker=20ny=20konge=20velkommen?=
+To: Kari Nordmann <kari@example.com>
+Cc: Bob-Jonny Nordmann <bob@example.com>
+Date: Sun, 1 Jan 2017 12:30:00 +0100
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_0BF562E34FB3"
+Message-ID: <20170101123000.AB23342@example.com>
+
+This is a multipart message in MIME format.
+
+------=_NextPart_000_0BF562E34FB3
+Content-Type: text/plain;
+	charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Som avtalt i Storskogen har vi vurdert og valgt ny konge.  Det ble
+Bob-Jonny.  Vi gleder oss alle til å bli hans lojale undersåtter.
+Valgresultatet er vedlagt.
+
+-- 
+Vennlig hilsen
+Ola Nordmann
+------=_NextPart_000_0BF562E34FB3
+Content-Type: application/xml;
+	name="voteringsresultat.xml"
+Content-Disposition: attachment;
+	filename="voteringsresultat.xml"
+
+<?xml version='1.0' encoding='UTF-8' ?>
+<votes>
+  <candidate name="Albert Nordengen" count="1">
+  <candidate name="Harald" count="5">
+  <candidate name="Bob-Jonny Nordmann" count="4829492">
+</votes>
+------=_NextPart_000_0000_01D2B7B6.BFD90F10--
+```
+
+Denne eposten består av to deler, først tekst/følgebrev, og deretter
+et XML-vedlegg.  Her lagres begge vedleggene ut som separate
+vedleggsdokumenter i Noark 5-strukturen i tillegg til eposten i RFC
+822-format.
+
+Merk at ved bruk av Content-Type multipart/alternative skal det være
+flere ulike varianter av samme innhold i eposten, slik at en henter ut
+den av variantene for lagring som dokumentvedlegg i Noark 5-strukturen
+som er mest egnet for arkivering (f.eks. text/plain i stedet for
+text/html).  Ofte har dog de ulike "variantene" ikke samme innhold,
+f.eks. er det ikke uvanlig at text/plain-utgaven ber leseren om å se
+på text/html-utgaven, der epostens innhold befinner seg.  I slike
+tilfeller er det HTML-utgaven som bør hentes ut som vedleggsdokument.
+
+FIXME Vis innholdet i Noark 5-strukturen for eposten med vedlegg
+
+
