@@ -4,6 +4,11 @@ Forslag til
 
 av Petter Reinholdtsen.
 
+Denne beskrivelsen er basert på spesifikasjonen for [Noark 5 versjon
+3.1](http://www.arkivverket.no/arkivverket/Offentleg-forvalting/Noark/Noark-5)
+og [Noark 5 Tjenestegresesnitt versjon 1.0
+beta](https://samdok.com/leveranser/leveranser-2016/noark5-tjenestegrensesnitt-v-1-0-beta/).
+
 Her følger en beskrivelse om hvordan epost kan lagres i en Noark
 5-struktur via et Noark 5 Tjenstegrensesnitt på en slik måte at en kan
 gjenskape eposttråder og sjekke kryptosignaturer basert på S/MIME
@@ -435,3 +440,6 @@ jamfør XML-eksempelet over?
 FIXME bør tekst-vedlegget arve tittel fra subjekt, eller få en annen
 tittel?  Kanskje hente fra MIME-feltet Content-Description?  Eller bør
 det inn i dokumentbeskrivelses-feltet 'beskrivelse'?
+
+FIXME hvordan identifiseres hovedvedlegget i en rekursiv
+MIME-struktur?  Kun se på første nivå?
