@@ -308,7 +308,7 @@ From: Ola Nordmann <ola@example.com>
 Subject: =?iso-8859-1?q?Valg=20av=20ny=20konge,=20=F8nsker=20ny=20konge=20velkommen?=
 To: Kari Nordmann <kari@example.com>
 Cc: Bob-Jonny Nordmann <bob@example.com>
-Date: Sun, 1 Jan 2017 12:30:00 +0100
+Date: Sun, 1 Jan 2017 12:40:00 +0100
 MIME-Version: 1.0
 Content-Type: multipart/mixed;
 	boundary="----=_NextPart_000_0BF562E34FB3"
@@ -357,6 +357,81 @@ f.eks. er det ikke uvanlig at text/plain-utgaven ber leseren om å se
 på text/html-utgaven, der epostens innhold befinner seg.  I slike
 tilfeller er det HTML-utgaven som bør hentes ut som vedleggsdokument.
 
-FIXME Vis innholdet i Noark 5-strukturen for eposten med vedlegg
+Der vedlegget er sendt ved bruk av Content-Transfer-Encoding
+(f.eks. base64 eller quoted-printable) så skal innholdet "pakkes ut"
+slik at innholdet i vedlegget lagres uten innpakking.
+
+Noark 5-strukturen for denne eposten blir da slik:
 
 
+```
+registrering / basisregistrering / journalpost: {
+  "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
+  "dokumentDato"   : "2017-01-01T12:40+0100"
+}
+
+korrespondansepart: {
+  "korrespondansepartType" : "avsender"
+  "navn" : "Ola Nordmann",
+  "kontaktinformasjon.epostadresse" : "ola@example.com"
+}
+
+korrespondansepart: {
+  "korrespondansepartType" : "mottaker"
+  "navn" : "Kari Nordmann",
+  "kontaktinformasjon.epostadresse" : "kari@example.com"
+}
+
+korrespondansepart: {
+  "korrespondansepartType" : "kopimottaker"
+  "navn" : "Bob-Jonny Nordmann"
+  "kontaktinformasjon.epostadresse" : "bob@example.com"
+}
+```
+
+Deretter følger eposten i RFC822-format som hoveddokument, og de to
+MIME-vedleggene som separate vedlegg med dokumentbeskrivelse og
+dokumentobjekt:
+
+```
+dokumentbeskrivelse: {
+  "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
+  "forfatter"      : "Ola Nordmann"
+  "tilknyttetRegistreringSom" : "Hoveddkokument"
+}
+
+dokumentobjekt: {
+  "format"         : "RFC822",
+  "mimeType"       : "message/rfc822",
+  "filnavn"        : "<20170101123000.AB23342@example.com>",
+}
+
+dokumentbeskrivelse: {
+  "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
+  "forfatter"      : "Ola Nordmann"
+  "tilknyttetRegistreringSom" : "Vedlegg"
+}
+
+dokumentobjekt: {
+  "format"         : "TXT",
+  "mimeType"       : "text/plain; charset=\"UTF-8\"",
+}
+
+dokumentbeskrivelse: {
+  "tittel"         : "voteringsresultat.xml",
+  "tilknyttetRegistreringSom" : "Vedlegg"
+}
+
+dokumentobjekt: {
+  "format"         : "XML",
+  "mimeType"       : "application/xml",
+  "filnavn"        : "voteringsresultat.xml",
+}
+```
+
+FIXME hva bør tittel for formater som ikke inneholder en tittel være,
+jamfør XML-eksempelet over?
+
+FIXME bør tekst-vedlegget arve tittel fra subjekt, eller få en annen
+tittel?  Kanskje hente fra MIME-feltet Content-Description?  Eller bør
+det inn i dokumentbeskrivelses-feltet 'beskrivelse'?
