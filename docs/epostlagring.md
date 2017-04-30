@@ -68,6 +68,9 @@ Epost inneholder følgende hodefelter relevant for lagring i Noark 5:
  * In-Reply-To:
  * References:
  * Message-ID:
+ * Content-Type:
+ * Content-Transfer-Encoding:
+ * Content-Disposition:
 
 For a kunne effektivt finne alle epostene i en eposttråd er det lurt å
 ta gjøre det mulig å søke ut epost basert på Message-ID-verdien som
