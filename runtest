@@ -460,6 +460,12 @@ Test basis requirements for NOARK 5 Core.
         casefileinfo = self.createEntity('casefile', createcasefilerel,
                                          self.parselinks(serieinfo['_links']),
                                          casefiledata)
+        casefileurl = self.parselinks(casefileinfo['_links'])['self']
+        try:
+            self.delete(casefileurl)
+            self.success("able to DELETE %s" % casefileurl)
+        except urllib2.HTTPError as e:
+            self.failure("unable to DELETE %s" % casefileurl)
 
         recorddata = {
         }
