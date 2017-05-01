@@ -79,7 +79,7 @@ Recursively look for relation in API.
                                    return href
                     else:
                         pass # ignore URLs without _links
-            except urllib2.HTTPError, e:
+            except urllib2.HTTPError as e:
                 # Ignore errors from GET, we only try to locate links, not detect problems.
                 pass
 
