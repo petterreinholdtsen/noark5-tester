@@ -13,6 +13,7 @@ sys.path.append('lib')
 
 import argparse
 import json
+import email
 import os
 from hashlib import sha256
 from pyPdf import PdfFileReader
@@ -49,19 +50,15 @@ class rfc822Reader(infoReader):
         infoReader.__init__(self, fh, filepath)
         self.filename = None
         fh.seek(0, os.SEEK_SET)
-        for line in fh:
-            if 0 == line.lower().find('message-id: '):
-                if self.filename is None:
-                    self.filename = line.split(':')[1].lstrip().rstrip()
-                else:
-                    print("error: found several Message-ID lines in header, picking the first")
-            if 0 == line.lower().find('subject: '):
-                if self.title is None:
-                    self.title = line.split(':')[1].lstrip().rstrip()
-                else:
-                    print("error: found several Subject lines in header, picking the first")
-            if '' == line.strip():
-                break
+        msg = email.message_from_file(fh)
+        if 'subject' in msg:
+            subject, encoding = \
+                email.Header.decode_header(msg.get('subject'))[0]
+            if encoding!=None:
+                self.title = subject.decode(encoding)
+            print("S: %s" % self.title)
+        if 'message-id' in msg:
+            self.filename = msg['message-id']
         return
 
 # Mapping from magic string to Noark 5 format info
