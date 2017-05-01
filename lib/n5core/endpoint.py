@@ -145,7 +145,7 @@ Recursively look for relation in API.
         return (content, response)
 
     def options(self, path):
-        self._http_simple_request(path, 'OPTIONS'):
+        self._http_simple_request(path, 'OPTIONS')
 
     def delete(self, path):
-        self._http_simple_request(path, 'DELETE'):
+        self._http_simple_request(path, 'DELETE')
