@@ -17,6 +17,7 @@ import argparse
 import json
 import email
 import os
+import magic
 from hashlib import sha256
 import n5core.endpoint
 try:
@@ -242,7 +243,6 @@ def main():
             hasher.update(chunk)
         hash = hasher.hexdigest()
 
-        import magic
         m = magic.open(magic.NONE)
         m.load()
         filetype = m.file(filename)
