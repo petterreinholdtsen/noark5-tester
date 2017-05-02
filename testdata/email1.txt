@@ -1,0 +1,14 @@
+Return-Path: <ola@example.com>
+From: Ola Nordmann <ola@example.com>
+Subject: =?iso-8859-1?q?Valg=20av=20ny=20konge,=20=F8nsker=20ny=20konge=20velkommen?=
+To: Kari Nordmann <kari@example.com>
+Cc: Bob-Jonny Nordmann <bob@example.com>
+Date: Sun, 1 Jan 2017 12:30:00 +0100
+Message-ID: <20170101123000.AB23269@example.com>
+
+Som avtalt i Storskogen har vi vurdert og valgt ny konge.  Det ble
+Bob-Jonny.  Vi gleder oss alle til å bli hans lojale undersåtter.
+
+-- 
+Vennlig hilsen
+Ola Nordmann
