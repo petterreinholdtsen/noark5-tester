@@ -5,6 +5,8 @@ Upload file to Noark 5 API for archiving.
 
 """
 
+from __future__ import print_function
+
 __license__ = 'GNU General Public License v2 or later at users choice'
 __author__ = 'Petter Reinholdtsen'
 
@@ -16,8 +18,12 @@ import json
 import email
 import os
 from hashlib import sha256
-from pyPdf import PdfFileReader
 import n5core.endpoint
+try:
+    # Python 3
+    from PyPDF2 import PdfFileReader
+except:
+    from pyPdf import PdfFileReader
 
 class infoReader():
     def __init__(self, fh, filepath):
@@ -38,7 +44,7 @@ constructor, to avoid moving the file handle pointer for others later.
         self.producer = reader.getDocumentInfo().producer
         self.creator = reader.getDocumentInfo().creator
         #reader.getDocumentInfo().creationdate ?
-        print self.title
+        print(self.title)
 
 class imageReader(infoReader):
     def __init__(self, fh, filepath):
@@ -146,7 +152,7 @@ If there are more than one elemet, ask the user to pick one.
                     n = -1
                 else:
                     return json['results'][int(n)]
-            except Exception, e:
+            except Exception as e:
                 # FIXME search instead
                 pass
 
