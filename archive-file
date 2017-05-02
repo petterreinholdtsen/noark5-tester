@@ -175,7 +175,8 @@ def main():
                         action="store_true")
     parser.add_argument("filename", nargs='+', help="file to archive")
     args = parser.parse_args()
-        
+
+    retval = 0
     baseurl = "http://localhost:8092/noark5v4/"
     api = n5core.endpoint.Endpoint(baseurl)
     api.verbose = args.verbose
@@ -297,6 +298,8 @@ def main():
         (c, res) = api.post(newfilehref, fh, mimetype, length=filesize)
         if 200 != res.code:
             print("error: upload failed (status == %d)" % res.code)
+            retval = 1
+    return retval
 
 if __name__ == '__main__':
-    main()
+    exit(main())
