@@ -135,17 +135,20 @@ Recursively look for relation in API.
         }
         return self._get(path, headers)
 
-    def _http_simple_request(self, path, method):
+    def options(self, path):
         url = self.expandurl(path)
         opener = urllib2.build_opener(urllib2.HTTPHandler)
         request = urllib2.Request(url)
-        request.get_method = lambda: method
+        request.get_method = lambda: 'OPTIONS'
         response = opener.open(request)
         content = response.read()
         return (content, response)
 
-    def options(self, path):
-        self._http_simple_request(path, 'OPTIONS')
-
     def delete(self, path):
-        self._http_simple_request(path, 'DELETE')
+        url = self.expandurl(path)
+        opener = urllib2.build_opener(urllib2.HTTPHandler)
+        request = urllib2.Request(url)
+        request.get_method = lambda: 'DELETE'
+        response = opener.open(request)
+        content = response.read()
+        return (content, response)
