@@ -146,7 +146,7 @@ def main():
                     docobjinfos = json.loads(c)
                     if 'results' in docobjinfos:
                         for docobjinfo in docobjinfos['results']:
-                            print(docobjinfo['format'], docobjinfo['mimeType'])
+                            #print(docobjinfo['format'], docobjinfo['mimeType'])
                             contenthref = \
                                 objectOperation(docobjinfo,
                                                 relbase + '/fil/')
@@ -157,13 +157,12 @@ def main():
                             if not first:
                                 mailfile.write("\n\n")
                             mailfile.write("From nikita %s\n" % fromdate)
-                            if 'message/rfc822' == \
-                               res.info().getheader('Content-Type'):
-                                print("Writing email")
+                            ct = res.info().getheader('Content-Type')
+                            if 'message/rfc822' == ct:
+                                print("Received email from API (Content-Type %s)" % ct)
                             else:
-                                print("Writing non-email")
-                                mailfile.write("Content-type: %s"
-                                               % res.info().getheader('Content-Type'))
+                                print("Received non-email from API (Content-Type %s)" % ct)
+                                mailfile.write("Content-type: %s" % ct)
                                 mailfile.write("\n")
                             mailfile.write(c)
                             first=False
