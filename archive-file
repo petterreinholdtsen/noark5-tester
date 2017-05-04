@@ -171,14 +171,18 @@ def getFileSize(filehandle):
 
 def main():
     relbase = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur'
+    baseurl = "http://localhost:8092/noark5v4/"
     parser = argparse.ArgumentParser()
+    parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
     parser.add_argument("--verbose", help="print more debug information",
                         action="store_true")
     parser.add_argument("filename", nargs='+', help="file to archive")
     args = parser.parse_args()
 
+    if args.baseurl:
+        baseurl = args.baseurl
+
     retval = 0
-    baseurl = "http://localhost:8092/noark5v4/"
     api = n5core.endpoint.Endpoint(baseurl)
     api.verbose = args.verbose
     api.login()
