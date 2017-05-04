@@ -388,7 +388,14 @@ Test basis requirements for NOARK 5 Core.
         linkrefs = self.parselinks(info['_links'])
         self.verify('self' in linkrefs, "_links in response from %s creation should include 'self' reference" % name)
         if 'self' in linkrefs:
-            self.created.append(self.parselinks(info['_links'])['self'])
+            selfurl = self.parselinks(info['_links'])['self']
+            self.created.append(selfurl)
+            # Make sure the 'self' url is GET-able
+            try:
+                extrainfo = self.json_get(selfurl)
+                self.success("able to GET self url %s" % selfurl)
+            except urllib2.HTTPError as e:
+                self.failure("unable to GET self url %s" % selfurl)
         return info
     def deleteCreated(self):
         for entityurl in self.created[::-1]:
