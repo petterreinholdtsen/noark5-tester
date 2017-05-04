@@ -446,6 +446,13 @@ Test basis requirements for NOARK 5 Core.
                                      self.parselinks(serieinfo['_links']),
                                      filedata)
 
+        recorddata = {
+        }
+        createrecordrel = \
+            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering/'
+        recordinfo = self.createEntity('record', createrecordrel,
+                                       self.parselinks(fileinfo['_links']),
+                                       recorddata)
         casefiledata = {
 #            "mappeID"            : "2017/1",
 #            "offentligTittel"    : "Public title of the test case file created %s" % now,
@@ -465,19 +472,21 @@ Test basis requirements for NOARK 5 Core.
                                          self.parselinks(serieinfo['_links']),
                                          casefiledata)
         casefileurl = self.parselinks(casefileinfo['_links'])['self']
+
+        journalentrydata = {
+        }
+        # FIXME figure out how the spec expect us to add journalpost
+        createjournalentryrel = \
+            'http://nikita.arkivlab.no/noark5/v4/ny-journalpost/'
+        journalentryinfo = self.createEntity('journalentry',
+                                             createjournalentryrel,
+                                             self.parselinks(casefileinfo['_links']),
+                                             journalentrydata)
         try:
             self.delete(casefileurl)
             self.success("able to DELETE %s" % casefileurl)
         except urllib2.HTTPError as e:
             self.failure("unable to DELETE %s" % casefileurl)
-
-        recorddata = {
-        }
-        createrecordrel = \
-            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering/'
-        recordinfo = self.createEntity('record', createrecordrel,
-                                       self.parselinks(fileinfo['_links']),
-                                       recorddata)
 
         docdescdata = {
 #            "dokumenttype"    : "type dokument",
