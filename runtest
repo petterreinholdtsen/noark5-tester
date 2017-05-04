@@ -118,6 +118,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         else:
             self.baseurl = "http://localhost:8092/noark5v4/"
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
+        self.created = []
         self.verbose = args.verbose
         self.failures = {}
         self.xfailures = {}
@@ -386,7 +387,16 @@ Test basis requirements for NOARK 5 Core.
         self.verifyuniquerels(info['_links'], url)
         linkrefs = self.parselinks(info['_links'])
         self.verify('self' in linkrefs, "_links in response from %s creation should include 'self' reference" % name)
+        if 'self' in linkrefs:
+            self.created.append(self.parselinks(info['_links'])['self'])
         return info
+    def deleteCreated(self):
+        for entityurl in self.created[::-1]:
+            try:
+                self.delete(entityurl)
+                self.success("able to DELETE %s" % entityurl)
+            except urllib2.HTTPError as e:
+                self.failure("unable to DELETE %s" % entityurl)
 
     def testNewDocument(self):
         import datetime
@@ -482,11 +492,6 @@ Test basis requirements for NOARK 5 Core.
                                              createjournalentryrel,
                                              self.parselinks(casefileinfo['_links']),
                                              journalentrydata)
-        try:
-            self.delete(casefileurl)
-            self.success("able to DELETE %s" % casefileurl)
-        except urllib2.HTTPError as e:
-            self.failure("unable to DELETE %s" % casefileurl)
 
         docdescdata = {
 #            "dokumenttype"    : "type dokument",
@@ -546,6 +551,7 @@ Test basis requirements for NOARK 5 Core.
             self.testNewDocument()
             self.recursiveHateoas()
             self.testNewDocument()
+            self.deleteCreated()
         finally:
             print("%d successes, %d failures, %d expected failures"
                   % (len(self.successes.keys()),
