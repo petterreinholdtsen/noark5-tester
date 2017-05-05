@@ -405,20 +405,34 @@ Test basis requirements for NOARK 5 Core.
             except urllib2.HTTPError as e:
                 self.failure("unable to DELETE %s" % entityurl)
 
-    def modifyFirstCreated(self):
-        url = self.created[1]
-        (infostr, res) = self.json_get(url)
-        info = json.loads(infostr)
-        # FIXME
-        etag = res.info().getheader('ETag').strip('"')
-        print info
-        info.pop('_links', None)
-        info.pop('arkivskaper', None) # FIXME figure out why this must be removed
-        info['tittel'] = info['tittel'] + ' modified'
-        infostr = json.dumps(info)
-        putinfo = self.put(url, infostr, 'application/vnd.noark5-v4+json',
-                           etag=etag)
-        print putinfo
+    def modifyAllCreated(self):
+        url = self.created[1] # FIXME
+        for url in self.created:
+            try:
+                (infostr, res) = self.json_get(url)
+                info = json.loads(infostr)
+                # FIXME remove strip() workaround for
+                # https://github.com/HiOA-ABI/nikita-noark5-core/issues/77
+                # when it is fixed.
+                etag = res.info().getheader('ETag').strip('"')
+                for key in info.keys():
+                    if list == type(info[key]):
+                        # list members are modified using other accessors
+                        print("removing key %s" % key)
+                        info.pop(key, None)
+                if 'tittel' in info:
+                    info['tittel'] = info['tittel'] + ' modified'
+                else:
+                    self.failure('unable to find anything to modify among %s' % info.keys())
+                    print info
+                infostr = json.dumps(info)
+                putinfo = self.put(url, infostr,
+                                   'application/vnd.noark5-v4+json',
+                                   etag=etag)
+                print putinfo
+                self.success("able to modify %s" % url)
+            except urllib2.HTTPError as e:
+                self.failure("unable to modify %s" % url)
 
     def testNewDocument(self):
         import datetime
@@ -574,7 +588,7 @@ Test basis requirements for NOARK 5 Core.
             self.recursiveHateoas()
             self.testNewDocument()
             self.deleteCreated()
-            self.modifyFirstCreated()
+            self.modifyAllCreated()
         finally:
             print("%d successes, %d failures, %d expected failures"
                   % (len(self.successes.keys()),
