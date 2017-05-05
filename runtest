@@ -405,6 +405,21 @@ Test basis requirements for NOARK 5 Core.
             except urllib2.HTTPError as e:
                 self.failure("unable to DELETE %s" % entityurl)
 
+    def modifyFirstCreated(self):
+        url = self.created[1]
+        (infostr, res) = self.json_get(url)
+        info = json.loads(infostr)
+        # FIXME
+        etag = res.info().getheader('ETag').strip('"')
+        print info
+        info.pop('_links', None)
+        info.pop('arkivskaper', None) # FIXME figure out why this must be removed
+        info['tittel'] = info['tittel'] + ' modified'
+        infostr = json.dumps(info)
+        putinfo = self.put(url, infostr, 'application/vnd.noark5-v4+json',
+                           etag=etag)
+        print putinfo
+
     def testNewDocument(self):
         import datetime
         now = datetime.datetime.now().isoformat()
@@ -559,6 +574,7 @@ Test basis requirements for NOARK 5 Core.
             self.recursiveHateoas()
             self.testNewDocument()
             self.deleteCreated()
+            self.modifyFirstCreated()
         finally:
             print("%d successes, %d failures, %d expected failures"
                   % (len(self.successes.keys()),
