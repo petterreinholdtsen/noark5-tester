@@ -416,8 +416,14 @@ Test basis requirements for NOARK 5 Core.
                 # when it is fixed.
                 etag = res.info().getheader('ETag').strip('"')
                 for key in info.keys():
-                    if list == type(info[key]):
-                        # list members are modified using other accessors
+                    keytype = type(info[key])
+                    if list == keytype or dict == keytype:
+                        # list members are modified using other
+                        # accessors.
+                        # FIXME figure out if this also is the case
+                        # for dict.  At least some of the 'dict'
+                        # values (like arkiv.arkivskaper) are rejected
+                        # by the API.
                         print("removing key %s" % key)
                         info.pop(key, None)
                 if 'tittel' in info:
