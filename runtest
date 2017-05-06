@@ -242,8 +242,10 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                 try:
                     # Check if CORS can work for the URL
                     (ocontent, ores) = self.options(url)
+                    allow = ores.info().getheader('Allow').split(',')
+                    self.verify(-1 != allow.index('GET'), 'OPTIONS header Allow should include GET for %s' % url)
                 except urllib2.HTTPError, e:
-                    self.failure("unable to OPTIONS %s" % url)
+                    self.failure("unable to OPTIONS %s: %s" % (url, str(e)))
             except urllib2.HTTPError, e:
                 self.failure("unable to GET %s" % url)
         for url in sorted(self.urls):
@@ -370,6 +372,7 @@ Test basis requirements for NOARK 5 Core.
                 (ocontent, ores) = self.options(url)
                 allow = ores.info().getheader('Allow').split(',')
                 self.verify(-1 != allow.index('POST'), 'OPTIONS header Allow should include POST for %s' % url)
+                self.verify(-1 != allow.index('GET'), 'OPTIONS header Allow should include GET for %s' % url)
             except urllib2.HTTPError, e:
                 self.failure('unable to OPTIONS %s' % url)
         except urllib2.HTTPError, e:
