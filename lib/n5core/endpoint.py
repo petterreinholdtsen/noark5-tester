@@ -107,6 +107,31 @@ Recursively look for relation in API.
         jsondata = json.dumps(data)
         return self.post(path, jsondata, 'application/vnd.noark5-v4+json')
 
+    def put(self, path, data, mimetype, length=None, etag=None):
+        url = self.expandurl(path)
+        if length is None:
+            length = len(data)
+        headers = {
+            'Accept' : 'application/vnd.noark5-v4+json',
+            'Content-Type': mimetype,
+            'Content-Length' : length,
+        }
+        if hasattr(self, 'token'):
+            headers['Authorization'] = self.token
+        if etag is not None:
+            headers['ETag'] = etag
+        if self.verbose:
+            print("PUT %s: %s" % (url, headers))
+        if self.verbose:
+            print(headers)
+        request = urllib2.Request(url, data, headers)
+        request.get_method = lambda: 'PUT'
+        response = self._browser.open(request)
+        content = response.read()
+        if self.verbose:
+            print(content)
+        return (content, response)
+
     def _get(self, path, headers = None):
         url = self.expandurl(path)
         if self.verbose:
@@ -144,10 +169,14 @@ Recursively look for relation in API.
         content = response.read()
         return (content, response)
 
-    def delete(self, path):
+    def delete(self, path, headers = None):
         url = self.expandurl(path)
         opener = urllib2.build_opener(urllib2.HTTPHandler)
-        request = urllib2.Request(url)
+        if headers is None:
+            headers = {}
+        if hasattr(self, 'token'):
+            headers['Authorization'] = self.token
+        request = urllib2.Request(url, None, headers)
         request.get_method = lambda: 'DELETE'
         response = opener.open(request)
         content = response.read()
