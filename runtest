@@ -438,7 +438,7 @@ Test basis requirements for NOARK 5 Core.
                 if 'tittel' in info:
                     info['tittel'] = info['tittel'] + ' modified'
                 else:
-                    self.failure('unable to find anything to modify among %s' % info.keys())
+                    self.xfailure('unable to find anything to modify among %s' % info.keys())
                     print info
                 infostr = json.dumps(info)
                 putinfo = self.put(url, infostr,
