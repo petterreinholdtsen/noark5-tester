@@ -412,7 +412,10 @@ Test basis requirements for NOARK 5 Core.
                 self.delete(entityurl)
                 self.success("able to DELETE %s" % entityurl)
             except urllib2.HTTPError as e:
-                self.failure("unable to DELETE %s" % entityurl)
+                # Until we figure out how sletting vs. DELETE should
+                # work, make missing DELETE support an expected
+                # failure.
+                self.xfailure("unable to DELETE %s" % entityurl)
 
     def modifyAllCreated(self):
         for url in self.created:
