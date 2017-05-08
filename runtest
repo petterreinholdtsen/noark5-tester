@@ -541,7 +541,7 @@ Test basis requirements for NOARK 5 Core.
         }
         # FIXME figure out how the spec expect us to add journalpost
         createjournalentryrel = \
-            'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-journalpost/'
+            'http://nikita.arkivlab.no/noark5/v4/ny-journalpost/'
         journalentryinfo = self.createEntity('journalentry',
                                              createjournalentryrel,
                                              self.parselinks(casefileinfo['_links']),
