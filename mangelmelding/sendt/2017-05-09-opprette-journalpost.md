@@ -10,7 +10,7 @@ Uklar beskrivelse om opprettelse av journalpost og bruken av arv
        Dokumentdel 7.2.3.11
         Sidenummer 239
        Linjenummer n/a
-   Innsendingsdato ikke sendt inn
+   Innsendingsdato 20177-05-09
 ------------------ ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
@@ -62,6 +62,7 @@ Hvordan arv håndteres blir enda mer uklart ved at
 relasjon for å opprette registrering og basisregistrering.
 
 `http://rel.kxml.no/noark5/v4/ny-registrering`
+
 `http://rel.kxml.no/noark5/v4/ny-basisregistrering`
 
 Her brukes ikke utvid-til-* metoden for å opprette basisregistrering
@@ -122,3 +123,7 @@ til
 
 `http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-journalpost/`
 
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
