@@ -68,27 +68,21 @@ Her brukes ikke utvid-til-* metoden for å opprette basisregistrering
 eller eventuelt journalpost.
 
 Det er ingen informasjon på
-http://rel.kxml.no/noark5/v4/api/sakarkiv/journalpost/ og heller noe
+http://rel.kxml.no/noark5/v4/api/sakarkiv/journalpost/ og heller ingen
 informasjon på
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/registrering/ om dette.
-
-FIXME _KOMMENTAR Petter. Kanskje problemet de støtter på her er at de
-vil ha en ren arkivstruktur sett av relasjon og en ren sett av
-sakarkiv rel. Men dette ser du i Noark 5-standarden også hvis jeg
-husker rett.  sakarkiv er definert i ytre kjerne men nevnt i indre
-kjerne._
 
 Vi forstår at dette er noe som kanskje er litt komplisert å få til da
 grensesnittene for arkivstruktur og sakarkiv vil overlappe hverandre.
 Dette ser vi også i `Noark 5 Standard for elektronisk arkiv`, versjon
 5v4. `Del 5.4 Mappe` (sidenummer mangler i standarden).
 
-Slik vi tolker Tjenestegrensesnitt-spesifikasjonen er det ikke i dag
+Slik vi tolker Tjenestegrensesnitt-spesifikasjonen er det i dag
 ikke spesifisert hvordan en kan opprette en journalpost koblet til en
 saksmappe.  Det er viktig at det finnes en tydelig beskrivelse i
 spesifikasjonen om hvordan en saksmappe og en journalpost skal
 opprettes.  Det er fordeler og ulemper med utvid-til-* metoden, men
-det ville gjøre tjenestegrensesnittet enklere å utvikle hvis det varn
+det ville gjøre tjenestegrensesnittet enklere å utvikle hvis det var
 mulig å opprette en saksmappe uten `utvid-til-saksmappe`. Det vil
 imidlertid kreve at arkivdel og klasse får en relasjon til
 
@@ -128,5 +122,3 @@ til
 
 `http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-journalpost/`
 
-FIXME _KOMMENTAR Petter. Det er kanskje litt mer vi må be de legge
-til.  Skal tenke litt mer på det_
