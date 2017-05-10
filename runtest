@@ -605,8 +605,8 @@ Test basis requirements for NOARK 5 Core.
             self.testNewDocument()
             self.recursiveHateoas()
             self.testNewDocument()
-            self.deleteCreated()
             self.modifyAllCreated()
+            self.deleteCreated()
         finally:
             print("%d successes, %d failures, %d expected failures"
                   % (len(self.successes.keys()),
