@@ -195,20 +195,36 @@ def main():
     info = pickUnlessOne(fondsinfo, 'arkiv')
     if info is None:
         print("error: Fant intet relasjon for %s.  Tom database?" % fondsrel)
-        print("error: Kan ikke laste opp dokumenter uten definerte arkiver.")
+        print("error: Kan ikke laste opp dokumenter uten definert arkiv.")
         return
 
-    serieshref = objectOperation(info, relbase + '/arkivdel/')
-    #print("Arkivdel %s" % serieshref)
+    seriesrel = relbase + '/arkivdel/'
+    serieshref = objectOperation(info, seriesrel)
+    if serieshref is None:
+        print("error: Fant ingen relasjon for %s.  Tom database?" % seriesrel)
+        print("error: Kan ikke laste opp dokumenter uten definert arkivdel.")
+        return
     (c, res) = api.json_get(serieshref)
     seriesinfo = json.loads(c)
     info = pickUnlessOne(seriesinfo, 'arkivdel')
+    if info is None:
+        print("error: Fant ingen arkivdel.  Tom database?")
+        print("error: Kan ikke laste opp dokumenter uten definert arkivdel.")
+        return
 
-    fileshref = objectOperation(info, relbase + '/mappe/')
-    #print("Mappe %s" % fileshref)
+    filesrel = relbase + '/mappe/'
+    fileshref = objectOperation(info, filesrel)
+    if fileshref is None:
+        print("error: Fant intet relasjon for %s.  Tom database?" % filesrel)
+        print("error: Kan ikke laste opp dokumenter uten definert mappe.")
+        return
     (c, res) = api.json_get(fileshref)
     filesinfo = json.loads(c)
     fileinfo = pickUnlessOne(filesinfo, 'mappe')
+    if fileinfo is None:
+        print("error: Fant ingen mappe.  Tom database?")
+        print("error: Kan ikke laste opp dokumenter uten definert mappe.")
+        return
 
     # Test if it is possible to reach a dokumentobject by following
     # the relations from the top.
