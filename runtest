@@ -467,6 +467,9 @@ Test basis requirements for NOARK 5 Core.
         createrecordcreatorrel = \
             'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivskaper/'
         recordcreatordata = {
+            #'arkivskaperID' : '123456789',
+            #'arkivskaperNavn': 'Mr. arkivskaper',
+            #'beskrivelse': 'fin fyr',
         }
         recordcreatorinfo = self.createEntity('recordcreator',
                                             createrecordcreatorrel, self.rels,
