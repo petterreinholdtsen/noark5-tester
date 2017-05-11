@@ -113,19 +113,27 @@ class Noark5Tester (n5core.endpoint.Endpoint):
     ]
     verbose = False
     def __init__(self):
+        baseurl = 'http://localhost:8092/noark5v4/'
+        refurl = 'http://n5test.kxml.no/api/'
         parser = argparse.ArgumentParser()
-        parser.add_argument("--reference", help="connect to demo API site",
+        parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
+        parser.add_argument("--reference", help="set baseurl to to demo API site (override --baseurl)",
                             action="store_true")
         parser.add_argument("--verbose", help="enable debug output",
                             action="store_true")
+        parser.add_argument("--keep", help="do not delete created objects",
+                            action="store_true")
         args = parser.parse_args()
         if args.reference:
-            self.baseurl = "http://n5test.kxml.no/api/"
+            args.baseurl = refurl
+        if args.baseurl:
+            self.baseurl = args.baseurl
         else:
-            self.baseurl = "http://localhost:8092/noark5v4/"
+            self.baseurl = baseurl
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
         self.created = []
         self.verbose = args.verbose
+        self.keeptestdata = args.keep
         self.failures = {}
         self.xfailures = {}
         self.successes = {}
@@ -606,7 +614,8 @@ Test basis requirements for NOARK 5 Core.
             self.recursiveHateoas()
             self.testNewDocument()
             self.modifyAllCreated()
-            self.deleteCreated()
+            if not self.keeptestdata:
+                self.deleteCreated()
         finally:
             print("%d successes, %d failures, %d expected failures"
                   % (len(self.successes.keys()),
