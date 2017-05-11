@@ -190,6 +190,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             try:
                 (content, res) = self.json_get(url)
                 allow = res.info().getheader('Allow')
+                self.success("GET worked for URL %s" % url)
                 self.verify(allow is not None, "GET header should include Allow for %s" % url)
                 ctype = res.info().getheader('Content-Type')
                 if self.verify(0 == ctype.find('application/vnd.noark5-v4+json'),
@@ -212,15 +213,13 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                             elif 'href' in l and \
                                  -1 != l['rel'].find("//rel.kxml.no/noark5/"):
                                 href = l['href']
-                                if href not in urlseen:
-                                    urlsleft.append(href)
                                 # The spec do not say if 'templated' is required or not
                                 #if 'templated' not in l:
                                 #    self.failure("_links missing templated in %s" % url)
                                 if 'templated' in l and l['templated']:
-                                    hrefshort = href.split('{')[0]
-                                    if hrefshort not in urlseen:
-                                        urlsleft.append(hrefshort)
+                                    href = href.split('{')[0]
+                                if href not in urlseen:
+                                    urlsleft.append(href)
                                 if 'rel' in l and l['rel'] != 'self':
                                     # FIXME figure out if rels should match spec
                                     if l['rel'] in relok:
@@ -259,11 +258,9 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                     allow = ores.info().getheader('Allow').split(',')
                     self.verify(-1 != allow.index('GET'), 'OPTIONS header Allow should include GET for %s' % url)
                 except urllib2.HTTPError, e:
-                    self.failure("unable to OPTIONS %s: %s" % (url, str(e)))
+                    self.failure("OPTIONS failed for URL %s: %s" % (url, str(e)))
             except urllib2.HTTPError, e:
                 self.failure("unable to GET %s" % url)
-        for url in sorted(self.urls):
-            self.success("found %s" % url)
         for rel in sorted(self.rels.keys()):
             if self.verbose:
                 print("mapping %s to %s" % (rel, self.rels[rel]))
