@@ -598,7 +598,7 @@ Test basis requirements for NOARK 5 Core.
                 self.login()
                 self.gotlogin = True
                 self.success("able to log in using admin/password")
-            except urllib2.HTTPError, e:
+            except n5core.endpoint.LoginFailure as e:
                 self.gotlogin = False
                 self.failure("unable to log in, operating in read only mode: %s" % e)
             self.recursiveHateoas()

@@ -21,6 +21,10 @@ import mechanize
 import urllib2
 import urlparse
 
+class LoginFailure(RuntimeError):
+    """Report a login failure"""
+    pass
+
 class Endpoint:
     def __init__(self, baseurl):
         self.baseurl = baseurl
@@ -43,9 +47,16 @@ class Endpoint:
         }
         jsondata = json.dumps(data)
         url = self.findRelation("http://nikita.arkivlab.no/noark5/v4/login/rfc7519/")
-        (c,r) = self.post(url, jsondata, 'application/json', length=None)
-        j = json.loads(c)
-        self.token = j['token']
+        if url is not None:
+            try:
+                (c,r) = self.post(url, jsondata, 'application/json',
+                                  length=None)
+            except urllib2.HTTPError as e:
+                raise LoginFailure("Posting to login relation %s failed: %s" % url, e)
+            j = json.loads(c)
+            self.token = j['token']
+        else:
+            raise LoginFailure("Unable to find login relation")
 
     def findRelation(self, relation):
         """
