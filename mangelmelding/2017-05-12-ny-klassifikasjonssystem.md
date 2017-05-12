@@ -20,20 +20,21 @@ Beskrivelse
 -----------
 
 Spesifikasjonens del 7.2.1.13 (Klassifikasjonssystem) på side 122
-lister opp relasjonsnøklene
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-klassifikasjonssystem/
-og
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/klassifikasjonssystem/
-og gir dermed inntryk av at det skal være mulig å lage et
-underklassifikasjonssystem knyttet til et eksisterende
-klassifikasjonssystem og liste opp de tilknyttede
-klassifikasjonssystemene.
+lister opp to relasjonsnøkler som gir inntrykk av at det skal være
+mulig å lage et underklassifikasjonssystem knyttet til et eksisterende
+klassifikasjonssystem samt liste opp de tilknyttede
+underklassifikasjonssystemene:
+
+ * http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-klassifikasjonssystem/
+ * http://rel.kxml.no/noark5/v4/api/arkivstruktur/klassifikasjonssystem/
 
 Men det er så vidt jeg kan se ingenting i Noark 5-standarden som
 indikerer at det skal være mulig å ha et "under"-klassifikasjonssystem
-i klassifikasjonsstrukturen, så dette virker å være en skrivefeil i
-tjenestegrensesnittet. Dette videre bekreftes i [arkivstruktur.xsd] (http://arkivverket.no/arkivverket/content/download/21276/191603/version/1/file/arkivstruktur.xsd) 
-der elementet klassifikasjonssystem ikke har støtte for underklassifikasjonssystem.
+i klassifikasjonsstrukturen. Dermed virker dette å være en skrivefeil
+i tjenestegrensesnittet.  Dette synet styrkes når en ser i
+[arkivstruktur.xsd](http://arkivverket.no/arkivverket/content/download/21276/191603/version/1/file/arkivstruktur.xsd)
+der elementet klassifikasjonssystem ikke har støtte for
+underklassifikasjonssystem.
 
 De to relasjonene er allerede listed opp under del 7.2.1.2 (Arkivdel),
 der de virker å høre hjemme i henhold til Noark 5-standarden.
@@ -41,7 +42,7 @@ der de virker å høre hjemme i henhold til Noark 5-standarden.
 Ønsket endring
 --------------
 
-Endre side 122, fjern relasjonsnøklene
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-klassifikasjonssystem/
-og
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/klassifikasjonssystem/ .
+Endre relasjonsnøkkel-listen på side 122, fjern disse relasjonene:
+
+ * http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-klassifikasjonssystem/
+ * http://rel.kxml.no/noark5/v4/api/arkivstruktur/klassifikasjonssystem/
