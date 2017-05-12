@@ -29,6 +29,7 @@ import sys
 sys.path.append('lib')
 
 import argparse
+import datetime
 import json
 import mechanize
 import re
@@ -569,7 +570,6 @@ Test basis requirements for NOARK 5 Core.
                 self.failure("unable to modify %s" % url)
 
     def testNewDocument(self):
-        import datetime
         now = datetime.datetime.now().isoformat()
         if not self.gotlogin:
             self.failure("not logged in, unable to test creation")
