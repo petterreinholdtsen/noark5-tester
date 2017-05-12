@@ -31,6 +31,7 @@ sys.path.append('lib')
 import argparse
 import json
 import mechanize
+import re
 import urlparse
 import urllib2
 import xml.etree.ElementTree
@@ -111,6 +112,106 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'http://rel.kxml.no/noark5/v4/api/sakarkiv/sekundaerklassifikasjon/',
         'self',
     ]
+    knownmissingregex = [
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkiv/[-0-9a-z]+/arkiv/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkiv/[-0-9a-z]+/arkivskaper/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkiv/[-0-9a-z]+/ny-underarkiv/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkiv/[-0-9a-z]+/underarkiv/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/arkiv/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/forloeper/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/gradering/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/kassasjon/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/klassifikasjonssystem/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-arvtager/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-forloeper/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-gradering/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-kassasjon/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-oppbevaringsted/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-oppbevaringsteder/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-registrering/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-skjerming/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-sletting/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-utfoertKassasjon/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/oppbevaringsted/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/referanseArvtager/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/saksmappe/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/skjerming/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/sletting/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/utfoertKassasjon/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/basisregistrering/[-0-9a-z]+/ny-forfatter/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/basisregistrering/[-0-9a-z]+/ny-kryssreferanse/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/basisregistrering/[-0-9a-z]+/ny-merknad/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/basisregistrering/[-0-9a-z]+/ny-noekkelord/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/basisregistrering/[-0-9a-z]+/ny-oppbevaringsted/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/forfatter/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/merknad/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-forfatter/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-gradering/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-kassasjon/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-merknad/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-oppbevaringsted/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-skjerming/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-sletting/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-utfoertKassasjon/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/oppbevaringsted/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/registrering/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/dokumentbeskrivelse/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/elektronisksignatur/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/konvertering/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/ny-elektronisksignatur/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/ny-konvertering/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/referanseFil/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/registrering/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/arkivdel/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/avslutt-mappe/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/basisregistrering/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/kryssreferanse/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/merknad/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-klassereferanse/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-klassifikasjonssystem/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-kryssreferanse/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-merknad/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-undermappe/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/referanseKlasse/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/sekundaerklassifikasjon/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/undermappe/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/utvid-til-moetemappe/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/utvid-til-saksmappe/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/dokumentobjekt/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/gradering/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/kassasjon/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-gradering/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-kassasjon/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-referanseArkivdel/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-skjerming/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-sletting/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-utfoertKassasjon/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/referanseArkivdel/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/registrering/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/skjerming/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/sletting/?',
+        'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/utfoertKassasjon/?',
+        'http://localhost:8092/noark5v4/hateoas-api/metadata/arkivstatus/?',
+        'http://localhost:8092/noark5v4/hateoas-api/metadata/dokumentstatus/?',
+        'http://localhost:8092/noark5v4/hateoas-api/metadata/dokumenttype/?',
+        'http://localhost:8092/noark5v4/hateoas-api/metadata/format/?',
+        'http://localhost:8092/noark5v4/hateoas-api/metadata/variantformat/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/avskrivning/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/dokumentflyt/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/elektronisksignatur/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/korrespondansepart/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/ny-dokumentflyt/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/ny-elektronisksignatur/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/ny-korrespondansepart/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/ny-presedens/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/presedens/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/journalpost/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-klasse/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-presedens/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-sakspart/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-saksstatus/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-sekundaerklassifikasjon/?',
+    ]
     verbose = False
     def __init__(self):
         baseurl = 'http://localhost:8092/noark5v4/'
@@ -162,6 +263,12 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             return self.success(msg)
         else:
             return self.xfailure(msg)
+
+    def isknownmissing(self, url):
+        for pattern in self.knownmissingregex:
+            if re.match(pattern, url) is not None:
+                return True
+        return False
 
     def verifyuniquerels(self, links, url):
         currels = {}
@@ -257,10 +364,14 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                     (ocontent, ores) = self.options(url)
                     allow = ores.info().getheader('Allow').split(',')
                     self.verify(-1 != allow.index('GET'), 'OPTIONS header Allow should include GET for %s' % url)
-                except urllib2.HTTPError, e:
+                except urllib2.HTTPError as e:
                     self.failure("OPTIONS failed for URL %s: %s" % (url, str(e)))
-            except urllib2.HTTPError, e:
-                self.failure("unable to GET %s" % url)
+            except urllib2.HTTPError as e:
+                if self.isknownmissing(url):
+                    self.xfailure("unable to GET %s" % url)
+                else:
+                    self.failure("unable to GET %s" % url)
+
         for rel in sorted(self.rels.keys()):
             if self.verbose:
                 print("mapping %s to %s" % (rel, self.rels[rel]))
