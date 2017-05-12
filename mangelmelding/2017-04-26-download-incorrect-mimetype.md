@@ -41,9 +41,8 @@ Skal filen returneres, eller skal det returneres en feilmelding?
 Alternativt, skal bruken av Accept-hodefeltet i dette API-kallet
 forbys?
 
-[IETF RFC
-2616](https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html) sier at
-at Accept-hodefeltet er frivillig, men hvis det finnes og
+[IETF RFC 2616](https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html)
+sier at at Accept-hodefeltet er frivillig, men hvis det finnes og
 tjenermaskinen ikke kan sende en akseptabel respons så skal statuskode
 406 (not acceptable) returneres.
 
