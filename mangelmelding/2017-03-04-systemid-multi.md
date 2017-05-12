@@ -36,7 +36,8 @@ Tilsvarende gjelder for andre objektbeskrivelser.
 --------------
 
 Gjør det klart at alle unike dataenheter skal ha SystemID, og endre
-UML-diagram fra 'systemID: SystemID [0..1]' til 'systemID: SystemID'.
+aktuelle UML-diagram fra 'systemID: SystemID [0..1]' til 'systemID:
+SystemID'.
 
 Endre "Multipl." felt i tabell på side 77 fra '[0..1] til '[1].
 
