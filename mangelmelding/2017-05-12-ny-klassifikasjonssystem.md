@@ -32,7 +32,8 @@ klassifikasjonssystemene.
 Men det er så vidt jeg kan se ingenting i Noark 5-standarden som
 indikerer at det skal være mulig å ha et "under"-klassifikasjonssystem
 i klassifikasjonsstrukturen, så dette virker å være en skrivefeil i
-tjenestegrensesnittet.
+tjenestegrensesnittet. Dette videre bekreftes i [arkivstruktur.xsd] (http://arkivverket.no/arkivverket/content/download/21276/191603/version/1/file/arkivstruktur.xsd) 
+der elementet klassifikasjonssystem ikke har støtte for underklassifikasjonssystem.
 
 De to relasjonene er allerede listed opp under del 7.2.1.2 (Arkivdel),
 der de virker å høre hjemme i henhold til Noark 5-standarden.
