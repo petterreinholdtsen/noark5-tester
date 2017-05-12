@@ -561,8 +561,15 @@ Test basis requirements for NOARK 5 Core.
                         # by the API.
                         print("removing key %s" % key)
                         info.pop(key, None)
-                if 'tittel' in info:
-                    info['tittel'] = info['tittel'] + ' modified'
+                modkey = None
+                for keycandidate in ('tittel',
+                                     'arkivskaperNavn',
+                                     'mimeType',
+                                     'arkivertAv'):
+                    if keycandidate in info:
+                        modkey = keycandidate
+                if modkey:
+                    info[modkey] = info[modkey] + ' modified'
                 else:
                     self.xfailure('unable to find anything to modify among %s' % info.keys())
                     print info
