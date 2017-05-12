@@ -198,6 +198,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'http://localhost:8092/noark5v4/hateoas-api/metadata/dokumenttype/?',
         'http://localhost:8092/noark5v4/hateoas-api/metadata/format/?',
         'http://localhost:8092/noark5v4/hateoas-api/metadata/variantformat/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/ny-avskrivning/',
         'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/avskrivning/?',
         'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/dokumentflyt/?',
         'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/elektronisksignatur/?',
