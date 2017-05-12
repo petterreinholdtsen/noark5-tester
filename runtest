@@ -304,8 +304,12 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                 ctype = res.info().getheader('Content-Type')
                 if self.verify(0 == ctype.find('application/vnd.noark5-v4+json'),
                                "MIME type %s should be application/vnd.noark5-v4+json for url %s" % (ctype, url)):
-                    #print "C:", content
-                    baseref = json.loads(content)
+                    print "C:", content
+                    try:
+                        baseref = json.loads(content)
+                    except ValueError as e:
+                        self.failure('non-JSON content returned for %s' % url)
+                        baseref = None
                     #print "J:", baseref
                     if baseref is None:
                         self.failure("JSON MIME type but no JSON in %s" % url)
