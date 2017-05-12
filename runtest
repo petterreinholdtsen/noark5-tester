@@ -349,8 +349,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                     if baseref is not None and type(baseref) is not list:
                         for basekey in baseref.keys():
                             if basekey != '_links' and type(baseref[basekey]) is list:
-                                if 0 < len(baseref[basekey]):
-                                    element = baseref[basekey][0]
+                                for element in baseref[basekey]:
                                     #print(element)
                                     if '_links' in element and len(element['_links']) > 0:
                                         self.verifyuniquerels(element['_links'], url)
