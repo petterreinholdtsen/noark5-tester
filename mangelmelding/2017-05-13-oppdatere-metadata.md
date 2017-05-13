@@ -38,7 +38,11 @@ http://localhost:8092/noark5v4/hateoas-api/arkivstruktur , der det
 finnes en .../ny-arkivskaper/- og .../ny-arkiv/-relasjon for å lage
 nye oppføringer i disse listene.  Dvs. å definiere en ny relasjon
 http://rel.kxml.no/noark5/v4/api/metadata/ der alle ny-*-relasjonene
-for oppretting av nye metadataoppføringer lages.
+for oppretting av nye metadataoppføringer listes opp.  Slike
+ny-*-relasjoner vil kun være synlige for priviligerte brukere som har
+rett til å opprette nye listemedlemmer.  I tillegg til POST vil i
+hvert fall operasjonene GET og OPTIONS fungere på disse
+ny-*-oppføringene, tilsvarende for andre ny-*-operasjoner.
 
 En tilsvarende ide for oppdatering og sletting er å gi hver
 metadata-oppføring en SystemID og 'self'-relasjon med href til
