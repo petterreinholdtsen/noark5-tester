@@ -730,6 +730,30 @@ Test basis requirements for NOARK 5 Core.
                                              createjournalentryrel,
                                              self.parselinks(casefileinfo['_links']),
                                              journalentrydata)
+        # FIXME should test both KorrespondansepartEnhet and
+        # KorrespondansepartPerson instead of the base class
+        # Korrespondansepart
+        corrpartrel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepart/'
+        for code in ('EA', 'EM', 'EK', 'GM', 'IA', 'IM', 'IK'):
+            corrdata = {
+                'korrespondanseparttype' : {
+                    'kode' : code
+                },
+                # FIXME korrespondansepartNavn is called navn in the
+                # spec, and only present in KorrespondansepartEnhet
+                # and KorrespondansepartPerson, not
+                # KorrespondansepartIntern.
+                'korrespondansepartNavn' : 'Eksempel %s' % code,
+            }
+            corrinfo = self.createEntity('correspondance part',
+                                         corrpartrel,
+                                         self.parselinks(journalentryinfo['_links']),
+                                         corrdata)
+            if 'korrespondansepartType' in corrinfo:
+                self.verify(corrinfo['korrespondanseType']['kode'] == code,
+                            'created korrespondansepart should have kode=%s' % code)
+            else:
+                self.failure('response for %s missing field korrespondansepartType' % corrpartrel)
 
         docdescdata = {
 #            "dokumenttype"    : "type dokument",
