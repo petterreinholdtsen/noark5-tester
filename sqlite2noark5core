@@ -7,8 +7,13 @@ import argparse
 import json
 import n5core.endpoint
 import sqlite3
+import urllib2
 
-#class Nokark5Client(n5core.endpoint.Endpoint):
+createfondsrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
+createseriesrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
+createcasefilerel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-saksmappe/'
+createrecordrel = 'http://nikita.arkivlab.no/noark5/v4/ny-journalpost/'
+createdocdescrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentbeskrivelse/'
 
 def parselinks(links):
         rels = {}
@@ -17,122 +22,36 @@ def parselinks(links):
                         rels[l['rel']] = l['href']
         return rels
 
-
-def createFond(ep, fondsdata):
-        """
-
-Example fondsdata:
-
-        fondsdata = {
-            "tittel"          : "Title of the test fonds",
-            "beskrivelse"     : "Description of the test fonds",
-            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
-            "dokumentmedium"  : "Elektronisk arkiv",
-        }
-
-"""
-        fondsrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
-        createfondsurl = ep.findRelation(fondsrel)
-        (c, res) = ep.json_post(createfondsurl, fondsdata)
-        fondinfo = json.loads(c)
-        return fondinfo
-
-def createSeries(ep, fondinfo, seriesdata):
-        """
-
-Example seriesdata:
-
-        seriesdata = {
-            "tittel"          : "Title of the test series",
-            "beskrivelse"     : "Description of the test series",
-            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
-            "dokumentmedium"  : "Elektronisk arkiv",
-        }
-"""
-        createseriesrel = \
-            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
-        createseriesurl = parselinks(fondinfo['_links'])[createseriesrel]
-        (c, res) = ep.json_post(createseriesurl, seriesdata)
-        seriesinfo = json.loads(c)
-        return seriesinfo
-
-def createFile(ep, seriesinfo, filedata):
-        """
-Example filedata:
-
-        filedata = {
-            "mappeID"         : "2006/01",
-            "offentligTittel" : "Public title of the test file",
-            "tittel"          : "Title of the test file",
-            "beskrivelse"     : "Description of the test file",
-            "noekkelord"      : ["keyword 1", "keyword 2", "keyword 3"],
-            "oppbevaringsted" : [ "location 1", "location2", "location3" ],
-            "dokumentmedium"  : "Elektronisk arkiv",
-        }
-"""
-        filerel = \
-                'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/'
-        createfileurl = parselinks(seriesinfo['_links'])[filerel]
-        (c, res) = ep.json_post(createfileurl, filedata)
-        fileinfo = json.loads(c)
-        return fileinfo
-
-def createRecord(ep, fileinfo, recorddata):
-        """
-Example recorddata:
-
-        recorddata = {
-        }
-"""
-        createrecordrel = \
-           'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering/'
-        createrecordurl = parselinks(fileinfo['_links'])[createrecordrel]
-        (c, res) = ep.json_post(createrecordurl, recorddata)
-        recordinfo = json.loads(c)
-        return recordinfo
-
-def createDocDesc(ep, recordinfo, docdescdata):
-        """
-
-Example docdescdata:
-
-        docdescdata = {
-            "dokumenttype"    : "type dokument",
-            "dokumentstatus"  : "status of document",
-            "tittel"          : "Title of the test document description",
-            "tilknyttetRegistreringSom" : "Associated with record as"
-        }
-"""
-        createdocdescrel = \
-           'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentbeskrivelse/'
-        createdocdescurl = parselinks(recordinfo['_links'])[createdocdescrel]
-        (c, res) = ep.json_post(createdocdescurl, docdescdata)
-        docdescinfo = json.loads(c)
-        return docdescinfo
-
-def createDocObject(ep, docdescinfo, docobjdata):
-        """
-Example docobjdata:
-        docobjdata = {
-            "versjonsnummer"  : 1,
-            "variantformat"   : "Arkivformat",
-            "format"          : "PDF",
-            "formatDetaljer"  : "PDF/A PDFv1.4",
-        }
-"""
-        createdocobjrel = \
-           'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentobjekt/'
-        createdocobjurl = parselinks(docdescinfo['_links'])[createdocobjrel]
-        (c, res) = ep.json_post(createdocobjurl, docobjdata)
-        docobjinfo = json.loads(c)
-        return docobjinfo
+def createEntity(ep, name, rel, rels, data):
+        if rel not in rels:
+                raise Exception("unable to find %s in provided relations" % rel)
+        url = rels[rel]
+        try:
+            (gc, gres) = ep.json_get(url)
+            default = json.loads(gc)
+            for k in default.keys():
+                if not k == '_links' and k not in data:
+                    data[k] = default[k]
+        except urllib2.HTTPError, e:
+                pass
+        try:
+            (c, res) = ep.json_post(url, data)
+        except urllib2.HTTPError, e:
+            raise
+        info = json.loads(c)
+        linkrefs = parselinks(info['_links'])
+        return info
 
 def main():
+        baseurl = "http://localhost:8092/noark5v4/"
         parser = argparse.ArgumentParser()
+        parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
         parser.add_argument("--verbose", help="print more debug information",
                             action="store_true")
         args = parser.parse_args()
-        baseurl = "http://localhost:8092/noark5v4/"
+        if args.baseurl:
+                baseurl = args.baseurl
+                
         e = n5core.endpoint.Endpoint(baseurl)
         e.verbose = args.verbose
         e.login()
@@ -153,11 +72,12 @@ def main():
                 i += 1
         i = 0
         for row in c:
+                #print row
                 i += 1
-                # accesscode, agency, casedesc, casedocseq, caseid,
-                # caseseqnr, caseyear, docdate, docdesc, doctype,
-                # exemption, journalid, journalseqnr, journalyear,
-                # recipient, recorddate, scrapedurl, scrapestamputc,
+                # accesscode, *agency, *casedesc, *casedocseq, *caseid,
+                # *caseseqnr, *caseyear, *docdate, *docdesc, *doctype,
+                # exemption, journalid, *journalseqnr, *journalyear,
+                # recipient, *recorddate, scrapedurl, scrapestamputc,
                 # sender
 
                 # FIXME should search for agency to avoid duplicates
@@ -166,43 +86,64 @@ def main():
                 if agency not in fonds:
                         print("info: First time agency %s" % agency)
                         fondsdata = {
-                                "tittel"          : agency,
-                                "dokumentmedium"  : "Elektronisk arkiv",
+                                "tittel"       : agency,
                         }
-                        fondinfo = createFond(e, fondsdata)
+                        createfondsurl = e.findRelation(createfondsrel)
+                        (c, res) = e.json_post(createfondsurl, fondsdata)
+                        fondsinfo = json.loads(c)
 
-                        seriesdata = {
+                        # FIXME figure out better series?
+                        seriesdata =  {
                                 "tittel"          : agency,
                                 "dokumentmedium"  : "Elektronisk arkiv",
                         }
-                        seriesinfo = createSeries(e, fondinfo, seriesdata)
-                        fonds[agency] = fondinfo
+                        seriesinfo = createEntity(e, 'series', createseriesrel,
+                                                  parselinks(fondsinfo['_links']),
+                                                  seriesdata)
+                        fonds[agency] = fondsinfo
                         series[agency] = seriesinfo
                 else:
-                        fondinfo = fonds[agency]
+                        fondsinfo = fonds[agency]
                         seriesinfo = series[agency]
-                print("info: Creating using fonds:%s and series:%s" % (fondinfo['tittel'], seriesinfo['tittel']))
-                filedata = {
-                        "mappeID"         : row[n['caseid']],
-                        "offentligTittel" : row[n['casedesc']],
-                        "tittel"          : "",
-                        "beskrivelse"     : "",
-                        "noekkelord"      : ["keyword 1"],
-                        "oppbevaringsted" : [ "location 1" ],
-                        "dokumentmedium"  : "Elektronisk arkiv",
+                print("info: Creating using fonds:%s and series:%s" % (fondsinfo['tittel'], seriesinfo['tittel']))
+                casefiledata = {
+                        "mappeID"              : row[n['caseid']],
+                        "saksaar"              : row[n['caseyear']],
+                        "sakssekvensnummer"    : row[n['caseseqnr']],
+                        "offentligTittel"      : row[n['casedesc']],
+                        "tittel"               : row[n['casedesc']],
+                        "beskrivelse"          : None,
+                        "administrativEnhet"   : None,
+                        "saksansvarlig"        : None,
                 }
-                fileinfo = createFile(e, seriesinfo, filedata)
+                casefileinfo = createEntity(e, 'file', createcasefilerel,
+                                            parselinks(seriesinfo['_links']),
+                                            casefiledata)
 
-                recorddata = {
+                registryentrydata = {
+                        "tittel"               : row[n['docdesc']],
+                        "beskrivelse"          : None,
+                        "dokumentetsDato"      : row[n['docdate']],
+                        "journaldato"          : row[n['recorddate']],
+                        "journalaar"           : row[n['journalyear']],
+                        "journalsekvensnummer" : row[n['journalseqnr']],
+                        "journalpostnummer"    : row[n['casedocseq']],
+
                 }
-                recordinfo = createRecord(e, fileinfo, recorddata)
+                registryentryinfo = createEntity(e, 'journalpost',
+                                                 createrecordrel,
+                                                 parselinks(casefileinfo['_links']),
+                                                 registryentrydata)
 
                 docdescdata = {
                         "dokumenttype"    : row[n['doctype']],
                         "tittel"          : row[n['docdesc']],
                         "tilknyttetRegistreringSom" : "Associated with record as"
                 }
-                docdescinfo = createDocDesc(e, recordinfo, docdescdata)
+
+                docdescinfo = createEntity(e, 'docdesc', createdocdescrel,
+                                           parselinks(registryentryinfo['_links']),
+                                           docdescdata)
         print "Added %d entries" % i
 if __name__ == '__main__':
     main()
