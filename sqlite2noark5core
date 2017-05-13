@@ -13,6 +13,7 @@ createfondsrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
 createseriesrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
 createcasefilerel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-saksmappe/'
 createrecordrel = 'http://nikita.arkivlab.no/noark5/v4/ny-journalpost/'
+corrpartrel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepart/'
 createdocdescrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentbeskrivelse/'
 
 def parselinks(links):
@@ -35,7 +36,9 @@ def createEntity(ep, name, rel, rels, data):
         except urllib2.HTTPError, e:
                 pass
         try:
-            (c, res) = ep.json_post(url, data)
+                if ep.verbose:
+                        print("POST: %s" % data)
+                (c, res) = ep.json_post(url, data)
         except urllib2.HTTPError, e:
             raise
         info = json.loads(c)
@@ -134,6 +137,31 @@ def main():
                                                  createrecordrel,
                                                  parselinks(casefileinfo['_links']),
                                                  registryentrydata)
+
+                # FIXME should sort entries in KorrespondansepartEnhet
+                # and KorrespondansepartPerson.
+                if row[n['sender']]:
+                        code = 'EA'
+                        corr = row[n['sender']]
+                if row[n['recipient']]:
+                        code = 'EM'
+                        corr = row[n['recipient']]
+                else:
+                        code = None
+                        corr = None
+                if corr:
+                        # FIXME korrespondansepartNavn is called navn in the spec.
+                        for entry in corr.split(','):
+                                corrdata = {
+                                        'korrespondanseparttype' : {
+                                                'kode' : code
+                                        },
+                                        'korrespondansepartNavn' : entry,
+                                }
+                                corrinfo = createEntity(e, 'korrespondansepart',
+                                                        corrpartrel,
+                                                        parselinks(registryentryinfo['_links']),
+                                                        corrdata)
 
                 docdescdata = {
                         "dokumenttype"    : row[n['doctype']],
