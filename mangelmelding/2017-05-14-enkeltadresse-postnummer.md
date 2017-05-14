@@ -39,6 +39,15 @@ Det er heller ikke omtalt i spesifikasjonen hva Land-kodelisten skal
 inneholde, hverken på klasseoversikten på side 165 og side 199 eller i
 del 7.2.2.18 (Land) på side 179.
 
+En kan laste ned lister med norske postnummer fra
+http://www.bring.no/radgivning/sende-noe/adressetjenester/postnummer.
+Listene som er tilgjengelig uten bruksbetaling inneholder postnummer,
+poststed, kommunekode (fylke 2 + kommune 2), kommunenavn og kategori.
+
+Geoposisjon kan fås fra
+http://www.erikbolstad.no/geo/noreg/postnummer/ eller kjøpes fra
+Posten.
+
 Ønsket endring
 --------------
 
@@ -48,6 +57,10 @@ Forklar hvordan utenlandske adresser med ikke-norske postnummer skal
 lagres i databasen.
 
 Forklar hvilke felter som skal være i postnummer-kodelisten.  I
-tillegg til nummer og sted, hva med kommune og geografisk plassering?
+tillegg til nummer og sted, hva med land, kommune og geografisk
+plassering?
 
 Forklar hvilke felter som skal være i land-kodelisten.
+
+Adressen til postens postnummerliste på side 185 bør endres til
+http://www.bring.no/radgivning/sende-noe/adressetjenester/postnummer .
