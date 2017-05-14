@@ -579,6 +579,9 @@ Test basis requirements for NOARK 5 Core.
                 self.success("able to GET self url %s" % selfurl)
             except urllib2.HTTPError as e:
                 self.failure("unable to GET self url %s" % selfurl)
+        for k in data.keys():
+            self.verify(k in info and info[k] == data[k],
+                        "POST %s response for '%s' should match '%s'" % (url, k, data[k]))
         return info
     def deleteCreated(self):
         for entityurl in self.created[::-1]:
