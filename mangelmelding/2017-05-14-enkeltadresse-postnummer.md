@@ -48,6 +48,13 @@ Geoposisjon kan fås fra
 http://www.erikbolstad.no/geo/noreg/postnummer/ eller kjøpes fra
 Posten.
 
+På side 212 er poststed definert som [1..1] så det er obligatorisk.
+Det finnes mange land i verden som ikke har postnummer og å tvinge
+et postnummer vil føre til "søppel" som blir introdusert i kjernen
+for dette feltet. Problemet kan delvis løses ved at poststed blir [0..1], 
+valgfri. Men det bør også vurderes om å lage en UtenlandsAdresse entitet
+som er litt mer fleksibel. 
+
 Ønsket endring
 --------------
 
