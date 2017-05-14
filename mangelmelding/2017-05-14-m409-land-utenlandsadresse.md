@@ -31,6 +31,7 @@ riktige?
 
 I metadatakatalog.xsdl står M409 som land.  Kanskje utenlandsadresse
 burde få et annet metadatanummer?
+Dette er også synlig på side 36 av [metadatakatalogen](http://arkivverket.no/arkivverket/content/download/20785/188326/version/1/file/pdf.pdf)
 
 Ønsket endring
 --------------
