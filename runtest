@@ -246,7 +246,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/skjerming/?',
         'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/sletting/?',
         'http://localhost:8092/noark5v4/hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/utfoertKassasjon/?',
-        'http://localhost:8092/noark5v4/hateoas-api/metadata/arkivstatus/?',
         'http://localhost:8092/noark5v4/hateoas-api/metadata/dokumentstatus/?',
         'http://localhost:8092/noark5v4/hateoas-api/metadata/dokumenttype/?',
         'http://localhost:8092/noark5v4/hateoas-api/metadata/format/?',
@@ -615,6 +614,7 @@ Test basis requirements for NOARK 5 Core.
                         info.pop(key, None)
                 modkey = None
                 for keycandidate in ('tittel',
+                                     'korrespondansepartNavn',
                                      'arkivskaperNavn',
                                      'mimeType',
                                      'arkivertAv'):
