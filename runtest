@@ -352,7 +352,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             try:
                 (content, res) = self.json_get(url)
                 allow = res.info().getheader('Allow')
-                self.success("GET worked for URL %s" % url)
+                self.success("GET %s worked with code %d"  % (url, res.code))
                 self.verify(allow is not None, "GET header should include Allow for %s" % url)
                 ctype = res.info().getheader('Content-Type')
                 if self.verify(0 == ctype.find('application/vnd.noark5-v4+json'),
@@ -546,7 +546,7 @@ Test basis requirements for NOARK 5 Core.
             for k in default.keys():
                 if not k == '_links' and k not in data:
                     data[k] = default[k]
-            self.success("GET %s worked" % url)
+            self.success("GET %s worked with code %d"  % (url, gres.code))
             try:
                 # Verify OPTIONS announce POST support 
                 (ocontent, ores) = self.options(url)
@@ -566,7 +566,7 @@ Test basis requirements for NOARK 5 Core.
         info = json.loads(c)
         id = info['systemID']
         self.verify(id is not None, "created %s" % name)
-        self.verify(201 == res.code, "%s creationg returned HTTP code 201" % name)
+        self.verify(201 == res.code, "%s creation returned HTTP code 201" % name)
         self.verifyuniquerels(info['_links'], url)
         linkrefs = self.parselinks(info['_links'])
         self.verify('self' in linkrefs, "_links in response from %s creation should include 'self' reference" % name)
