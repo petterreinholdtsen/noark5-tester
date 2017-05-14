@@ -752,12 +752,6 @@ Test basis requirements for NOARK 5 Core.
                                          corrpartrel,
                                          self.parselinks(journalentryinfo['_links']),
                                          corrdata)
-            if 'korrespondansepartType' in corrinfo:
-                self.verify(corrinfo['korrespondanseType']['kode'] == code,
-                            'created korrespondansepart should have kode=%s' % code)
-            else:
-                self.failure('response for %s missing field korrespondansepartType' % corrpartrel)
-
         docdescdata = {
 #            "dokumenttype"    : "type dokument",
 #            "dokumentstatus"  : "status of document",
