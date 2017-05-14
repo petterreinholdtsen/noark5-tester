@@ -1,0 +1,53 @@
+Hvordan håndterer EnkeltAdresse utenlandske adresser?
+=====================================================
+
+ ------------------  ---------------------------------
+           Prosjekt  NOARK 5 Tjenestegresesnitt
+           Kategori  Versjon 1.0 beta
+        Alvorlighet  
+       Meldingstype  
+    Brukerreferanse  pere@hungry.com
+        Dokumentdel  
+         Sidenummer  199
+        Linjenummer  n/a
+    Innsendingsdato  ikke sendt inn
+ ------------------  ---------------------------------
+
+Denne teksten er del av en samling innspill til NOARK5-standarden
+tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
+
+Beskrivelse
+-----------
+
+I følge klasseoversikten på side 199 har datatypen EnkeltAdresse
+feltet postnr av typen Postnummer og landkode av typen Land.
+
+Men Postnummer-typen er basert på kodelisten Postnummer, som skal
+fylles med informasjon fra posten.no.  Det vil dermed mangle
+utenlandske postnummer i den kodelisten.
+
+Tilsvarende står i del 7.2.3.3 (EnkeltAdresse) på side 212, med
+referanse til metadatalistene
+http://rel.kxml.no/noark5/v4/api/metadata/land/ og
+http://rel.kxml.no/noark5/v4/api/metadata/postnummer/.
+
+Det er ikke omtalt i spesifikasjonen hva Postnummer-kodelisten skal
+inneholde, hverken på klasseoversikten på side 165 og side 199 eller i
+del 7.2.2.25 (Postnummer) på side 185.
+
+Det er heller ikke omtalt i spesifikasjonen hva Land-kodelisten skal
+inneholde, hverken på klasseoversikten på side 165 og side 199 eller i
+del 7.2.2.18 (Land) på side 179.
+
+Ønsket endring
+--------------
+
+FIXME mer konkret beskrivelse
+
+Forklar hvordan utenlandske adresser med ikke-norske postnummer skal
+lagres i databasen.
+
+Forklar hvilke felter som skal være i postnummer-kodelisten.  I
+tillegg til nummer og sted, hva med kommune og geografisk plassering?
+
+Forklar hvilke felter som skal være i land-kodelisten.
