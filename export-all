@@ -1,0 +1,103 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import sys
+sys.path.append('lib')
+
+import argparse
+import json
+import os
+import urllib2
+import n5core.endpoint
+
+class ContentDumper(n5core.endpoint.Endpoint):
+    def __init__(self):
+        self.baseurl = 'http://localhost:8092/noark5v4/'
+        self.savedir = "tmp"
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--baseurl", help="(default is %s)" % self.baseurl)
+        parser.add_argument("--savedir", help="(default is %s)" % self.savedir)
+        parser.add_argument("--verbose", help="enable debug output",
+                            action="store_true")
+        args = parser.parse_args()
+        if args.baseurl:
+            self.baseurl = args.baseurl
+        if args.savedir:
+            self.savedir = args.savedir
+        self.verbose = args.verbose
+        n5core.endpoint.Endpoint.__init__(self,self.baseurl)
+        
+    def _mkdir_recursive(self, path):
+        sub_path = os.path.dirname(path)
+        if "" != sub_path and not os.path.exists(sub_path):
+            self._mkdir_recursive(sub_path)
+        if not os.path.exists(path):
+            os.mkdir(path)
+                
+    def recurse(self):
+        try:
+            self.login()
+        except n5core.endpoint.LoginFailure:
+            pass
+        print("Saving to %s" % self.savedir)
+        urlsleft = ['.']
+        urlseen = {}
+        while 0 < len(urlsleft):
+            url = urlsleft.pop(0)
+            if url in urlseen:
+                continue
+            urlseen[url] = 1
+            
+            path = os.path.join(self.savedir, url.replace(self.baseurl, ""))
+            path = path.rstrip('/').replace('/.', '/index')
+            path = path + ".json"
+            
+            try:
+                print("info: Fetching %s" % url)
+                (content, res) = self.json_get(url)
+
+                dir = os.path.dirname(path)
+                self._mkdir_recursive(dir)
+                f = open(path, 'w')
+                f.write(content)
+                f.close()
+                
+                ctype = res.info().getheader('Content-Type')
+                if 0 != ctype.find('application/vnd.noark5-v4+json'):
+                    print("info: ignoring %s" % url)
+                else:
+                    try:
+                        baseref = json.loads(content)
+                    except ValueError as e:
+                        print('error: non-JSON content returned for %s' % url)
+                        baseref = None
+                    if baseref is None:
+                        print("error: JSON MIME type but no JSON in %s" % url)
+                    elif type(baseref) is list:
+                        print("error: found json list in %s" % url)
+                    elif '_links' in baseref:
+                        for l in baseref['_links']:
+                            if 'href' in l:
+                                href = l['href']
+                                if 'templated' in l and l['templated']:
+                                    href = href.split('{')[0]
+                                if href not in urlseen:
+                                    urlsleft.append(href)
+                    if baseref is not None and type(baseref) is not list:
+                        for basekey in baseref.keys():
+                            if basekey != '_links' and type(baseref[basekey]) is list:
+                                for element in baseref[basekey]:
+                                    if '_links' in element and len(element['_links']) > 0:
+                                        for l in element['_links']:
+                                            href = l['href']
+                                            if href not in urlseen:
+                                                urlsleft.append(href)
+            except urllib2.HTTPError as e:
+                pass
+
+def main():
+    t = ContentDumper()
+    return t.recurse()
+
+if __name__ == '__main__':
+    exit(main())
