@@ -52,3 +52,8 @@ Endre relasjonsnøkkel-listen på side 122, fjern disse relasjonene:
 
  * http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-klassifikasjonssystem/
  * http://rel.kxml.no/noark5/v4/api/arkivstruktur/klassifikasjonssystem/
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
