@@ -1,5 +1,5 @@
-Klassifikasjonssystem uten relasjonsnøkler (ny-)klassifikasjonssystem?
-======================================================================
+Skal klassifikasjonssystem ha relasjonsnøklene (ny-)klassifikasjonssystem?
+==========================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -10,7 +10,7 @@ Klassifikasjonssystem uten relasjonsnøkler (ny-)klassifikasjonssystem?
         Dokumentdel  7.2.1.13
          Sidenummer  122
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-05-15
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
@@ -28,16 +28,22 @@ underklassifikasjonssystemene:
  * http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-klassifikasjonssystem/
  * http://rel.kxml.no/noark5/v4/api/arkivstruktur/klassifikasjonssystem/
 
-Men det er så vidt jeg kan se ingenting i Noark 5-standarden som
-indikerer at det skal være mulig å ha et "under"-klassifikasjonssystem
-i klassifikasjonsstrukturen. Dermed virker dette å være en skrivefeil
-i tjenestegrensesnittet.  Dette synet styrkes når en ser i
+Tilsvarende relasjon i for eksempel Arkiv for å lage Arkivdel
+(ny-arkivdel), og i Arkivdel for å lage mappe (ny-mappe) og
+registrering (ny-registrering) og der er det mer åpenbart hva
+relasjonene betyr.
+
+Det er så vidt jeg kan se ingenting i Noark 5-standarden som indikerer
+at det skal være mulig å ha et "under"-klassifikasjonssystem i
+klassifikasjonsstrukturen. Dermed virker dette å være en skrivefeil i
+tjenestegrensesnittet.  Dette synet styrkes når en ser i
 [arkivstruktur.xsd](http://arkivverket.no/arkivverket/content/download/21276/191603/version/1/file/arkivstruktur.xsd)
 der elementet klassifikasjonssystem ikke har støtte for
 underklassifikasjonssystem.
 
-De to relasjonene er allerede listed opp under del 7.2.1.2 (Arkivdel),
-der de virker å høre hjemme i henhold til Noark 5-standarden.
+De to relasjonene for å lage nytt og liste opp klassifikasjonssystem
+er allerede listed opp under del 7.2.1.2 (Arkivdel), der de virker å
+høre hjemme i henhold til Noark 5-standarden.
 
 Ønsket endring
 --------------
