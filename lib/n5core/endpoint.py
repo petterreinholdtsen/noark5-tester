@@ -36,8 +36,6 @@ class Endpoint:
         if path is None:
             raise ValueError("asked to expand undefined URL path")
         url = urlparse.urljoin(self.baseurl, path)
-        if self.verbose:
-            print(url)
         return url
 
     def login(self, username = 'admin', password = 'password'):
