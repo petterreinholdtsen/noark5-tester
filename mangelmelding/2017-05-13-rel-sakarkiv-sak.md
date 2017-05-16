@@ -23,8 +23,8 @@ Dette gjelder del 7.2.3.10 (Presedens) på side 231.
 
 Der er det ført opp en relasjonsnøkkel
 http://rel.kxml.no/noark5/v4/api/sakarkiv/sak/ uten nærmere forklaring
-og beskrivelse.  Jeg finner heller ikke noen som ligner beskrevet
-under 6.2.6 (Presedens) i Noark 5-standarden, og det er ikke noen
+og beskrivelse.  Jeg finner heller ikke noe som ligner beskrevet
+under 6.2.6 (Presedens) i Noark 5-standarden, og det er ikke noe
 andre eksempler på denne nøkkelen i spesifikasjonen.  Er det
 skrivefeil for ../saksmappe/?  Det virker mest nærliggende å tro.
 
