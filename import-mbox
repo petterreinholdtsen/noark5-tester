@@ -1,0 +1,278 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+from __future__ import print_function
+
+import sys
+sys.path.append('lib')
+
+import argparse
+import email
+import json
+import mailbox
+import urllib2
+
+import n5core.endpoint
+
+relbase = 'http://rel.kxml.no/noark5/v4/api'
+
+def decodeheader(s):
+    if s is None:
+        return s
+    ret, encoding = email.Header.decode_header(s)[0]
+    if encoding!=None:
+        try:
+            ret = ret.decode(encoding)
+        except UnicodeDecodeError:
+            pass # Ignore bogus headers, store them raw
+    return ret
+
+def parselinks(links):
+    rels = {}
+    for l in links:
+        if 'href' in l and 'rel' in l:
+            rels[l['rel']] = l['href']
+    return rels
+
+class MboxImporter(n5core.endpoint.Endpoint):
+    def __init__(self):
+        self.baseurl = 'http://localhost:8092/noark5v4/'
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--baseurl", help="(default is %s)" % self.baseurl)
+        parser.add_argument("--verbose", help="enable debug output",
+                            action="store_true")
+        args = parser.parse_args()
+        if args.baseurl:
+            self.baseurl = args.baseurl
+        self.docobjurl = None
+        n5core.endpoint.Endpoint.__init__(self,self.baseurl)
+        self.verbose = args.verbose
+
+    def objectOperation(self, json, relation):
+        """
+Return the URL/href for a given relation on the object represented by
+the json structure.
+
+    """
+        if json is None or '_links' not in json:
+            return None
+        for l in json['_links']:
+            if l['rel'] == relation:
+                return l['href']
+        return None
+
+    def pickUnlessOne(self, json, type):
+        """
+Check the array in the json structure, if there is only one
+elemet, return it.  If there are more than one elemet, ask the
+user to pick one.
+        """
+        #print("Found %d %s entries" % (len(json), type))
+        if 'results' in json:
+            count = len(json['results'])
+        else:
+            count = 0
+        if 0 == count:
+            return None
+        if 1 == count:
+            if 'tittel' in json['results'][0]:
+                print("using %s: %s" % (type, json['results'][0]['tittel']))
+            else:
+                print("using %s: %s" % (type, json['results'][0]['systemID']))
+            return json['results'][0]
+        else:
+            print("")
+            n = -1
+            while -1 == n:
+                i = 0
+                for entry in json['results']:
+                    if 'tittel' in entry:
+                        print(" %d - %s" % (i, entry['tittel']))
+                    else:
+                        print(" %d - %s systemID %s" % (i, type, entry['systemID']))
+                    i = i + 1
+                answer = raw_input("Select which %s you want (or search term): " % type)
+                try:
+                    n = int(answer)
+                    if n < 0 or n >= count:
+                        print("error: Invalid selection %d" % n)
+                        n = -1
+                    else:
+                        return json['results'][int(n)]
+                except Exception as e:
+                    # FIXME search instead
+                    pass
+
+    def createEntity(self, name, rel, rels, data):
+        if rel not in rels:
+            raise Exception("unable to find %s in provided relations" % rel)
+        url = rels[rel]
+        try:
+            if self.verbose:
+                print("GET %s" % url)
+            (gc, gres) = self.json_get(url)
+            default = json.loads(gc)
+            for k in default.keys():
+                if not k == '_links' and k not in data:
+                    data[k] = default[k]
+        except urllib2.HTTPError, e:
+            pass
+        try:
+            if self.verbose:
+                print("POST: %s" % data)
+            (c, res) = self.json_post(url, data)
+        except urllib2.HTTPError, e:
+            raise
+        info = json.loads(c)
+        return info
+
+    def getDocObjUrl(self):
+        if not self.docobjurl:
+            self.docobjurl = self.findRelation(relbase + '/arkivstruktur/dokumentobjekt/')
+        return self.docobjurl
+
+    def findSeries(self):
+        """
+Figure out which series to use when creating one file per mail thread.
+
+Store the URL for the serie in self.seriesinfo
+"""
+        fondshref = self.findRelation(relbase + '/arkivstruktur/arkiv/')
+        (c, res) = self.json_get(fondshref)
+        fondsinfo = json.loads(c)
+        info = self.pickUnlessOne(fondsinfo, 'arkiv')
+        if info is None:
+            return None
+
+        serieshref = self.objectOperation(info,
+                                          relbase + '/arkivstruktur/arkivdel/')
+        (c, res) = self.json_get(serieshref)
+        seriesinfo = json.loads(c)
+        print()
+        print(seriesinfo)
+        self.seriesinfo = self.pickUnlessOne(seriesinfo, 'arkivdel')
+        return self.seriesinfo
+
+    def alreadySaved(self, message):
+        """
+Look up email Message-Id in dokumentobjekt.filename, and return true
+if a match is found.
+        """
+        self.getDocObjUrl()
+        messageid = message['message-id']
+        print("Looking for msgid: %s" % messageid)
+        (s, res) = self.json_get(self.docobjurl)
+        docobjsinfo = json.loads(s)
+        for d in docobjsinfo['results']:
+            if 'filnavn' in d:
+                print("ID: %s" % d['filnavn'])
+                if  d['filnavn'] == messageid:
+                      print("found message-id %s" % messageid)
+                      return d
+        return None
+
+    def findThreadFile(self, message):
+        """
+Look up if any of the previous messages in a thread (using in-reply-to
+and references) are already stored, and if so, return the file they
+are in.
+"""
+        self.getDocObjUrl()
+        thread = []
+        if 'in-reply-to' in message:
+            thread.append(message['in-reply-to'])
+        if 'references' in message:
+            for msgid in message['references'].replace("\n", " ").split(" "):
+                if msgid != "":
+                    thread.append(msgid)
+        print(thread)
+        (s, res) = self.json_get(self.docobjurl)
+        docobjsinfo = json.loads(s)
+        matches = []
+        for d in docobjsinfo['results']:
+            if 'filnavn' in d:
+                for messageid in thread:
+                    if  d['filnavn'] == messageid:
+                        print("found message-id %s" % messageid)
+                    matches.append(d)
+        for d in matches:
+            print(d)
+        # FIXME find file from docobj
+        return None
+
+    def createNewFile(self, message):
+        # FIXME should it be mappe or saksmappe?
+        filedata = {
+            'tittel' : decodeheader(message['subject'])
+        }
+        filerel = relbase + '/arkivstruktur/ny-mappe/'
+        fileinfo = self.createEntity('mappe', filerel,
+                                     parselinks(self.seriesinfo['_links']),
+                                     filedata)
+        return fileinfo
+
+    def addMessageToFile(self, fileinfo, message):
+        recordrel = relbase + '/arkivstruktur/ny-basisregistrering/'
+        docdescrel = relbase + '/arkivstruktur/ny-dokumentbeskrivelse/'
+        docobjrel = relbase + '/arkivstruktur/ny-dokumentobjekt/'
+
+        messagelen = len(str(message))
+
+        recorddata = {
+            'tittel' : decodeheader(message['subject']),
+            'beskrivelse' : None,
+        }
+        recordinfo = self.createEntity('basisregistrering', recordrel,
+                                       parselinks(fileinfo['_links']),
+                                       recorddata)
+        # FIXME consider journalpost and korrespondansepart (from to/from/cc)
+        docdescdata = {
+            'tittel' : decodeheader(message['subject'])
+        }
+        docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
+                                       parselinks(recordinfo['_links']),
+                                        docdescdata)
+        docobjdata = {
+            "versjonsnummer"  : str(0),
+            "variantformat"   : "Produksjonsformat",
+            "format"          : "RFC822",
+
+        "filstoerrelse"   : str(messagelen),
+            "filnavn"         : message['message-id'],       
+            "mimeType"       : "message/rfc822", 
+        }
+        docobjinfo = self.createEntity('dokumentobjekt', docobjrel,
+                                       parselinks(docdescinfo['_links']),
+                                       docobjdata)
+
+        # FIXME add content upload, preferably with attachments as
+        # separeate files.
+        #return docobjinfo
+
+    def uploadEmail(self, message):
+        docobjinfo = self.alreadySaved(message)
+        if docobjinfo:
+            print("email already part of archive")
+            return
+        threadfile = self.findThreadFile(message)
+        if not threadfile:
+            # create new file
+            threadfile = self.createNewFile(message)
+        # Add to existing file
+        self.addMessageToFile(threadfile, message)
+
+    def loadMbox(self, filename):
+        mbox = mailbox.mbox(filename)
+        for message in mbox:
+            self.uploadEmail(message)
+
+def main():
+    t = MboxImporter()
+    t.login()
+    if t.findSeries() is None:
+        print("error: unable to find arkivdel to use")
+        return 1
+    return t.loadMbox("inbox.mbox")
+
+if __name__ == '__main__':
+    exit(main())
