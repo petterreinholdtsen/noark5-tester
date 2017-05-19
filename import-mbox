@@ -43,13 +43,17 @@ def parselinks(links):
 class MboxImporter(n5core.endpoint.Endpoint):
     def __init__(self):
         self.baseurl = 'http://localhost:8092/noark5v4/'
+        self.input = 'input.mbox'
         parser = argparse.ArgumentParser()
         parser.add_argument("--baseurl", help="(default is %s)" % self.baseurl)
+        parser.add_argument("--input", help="(default is %s)" % self.input)
         parser.add_argument("--verbose", help="enable debug output",
                             action="store_true")
         args = parser.parse_args()
         if args.baseurl:
             self.baseurl = args.baseurl
+        if args.input:
+            self.input = args.input
         self.docobjurl = None
         self.parentmap = {}
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
@@ -331,8 +335,8 @@ are in.
         # Add to existing file
         return self.addMessageToFile(threadfile, message)
 
-    def loadMbox(self, filename):
-        mbox = mailbox.mbox(filename)
+    def loadMbox(self):
+        mbox = mailbox.mbox(self.input)
         for message in mbox:
             if not self.uploadEmail(message):
                 print("error: failed to load email")
@@ -343,7 +347,7 @@ def main():
     if t.findSeries() is None:
         print("error: unable to find arkivdel to use")
         return 1
-    return t.loadMbox("inbox.mbox")
+    return t.loadMbox()
 
 if __name__ == '__main__':
     exit(main())
