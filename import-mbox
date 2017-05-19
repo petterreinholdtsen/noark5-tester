@@ -216,7 +216,9 @@ are in.
         docdescrel = relbase + '/arkivstruktur/ny-dokumentbeskrivelse/'
         docobjrel = relbase + '/arkivstruktur/ny-dokumentobjekt/'
 
-        messagelen = len(str(message))
+        content = str(message)
+        messagelen = len(content)
+        mimetype = "message/rfc822"
 
         recorddata = {
             'tittel' : decodeheader(message['subject']),
@@ -236,18 +238,21 @@ are in.
             "versjonsnummer"  : str(0),
             "variantformat"   : "Produksjonsformat",
             "format"          : "RFC822",
-
-        "filstoerrelse"   : str(messagelen),
+            "filstoerrelse"   : str(messagelen),
             "filnavn"         : message['message-id'],       
-            "mimeType"       : "message/rfc822", 
+            "mimeType"       : mimetype, 
         }
         docobjinfo = self.createEntity('dokumentobjekt', docobjrel,
                                        parselinks(docdescinfo['_links']),
                                        docobjdata)
 
-        # FIXME add content upload, preferably with attachments as
-        # separeate files.
-        #return docobjinfo
+        newfilehref = self.objectOperation(docobjinfo,
+                                           relbase + '/arkivstruktur/fil/')
+        (c, res) = self.post(newfilehref, content, mimetype, length=messagelen)
+        if 200 != res.code:
+            print("error: upload failed (status == %d)" % res.code)
+            return False # FIXME, should all the entities be removed?
+        return True
 
     def uploadEmail(self, message):
         docobjinfo = self.alreadySaved(message)
