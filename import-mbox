@@ -233,7 +233,8 @@ are in.
     def createNewFile(self, message):
         # FIXME should it be mappe or saksmappe?
         filedata = {
-            'tittel' : decodeheader(message['subject'])
+            'tittel' : decodeheader(message['subject']),
+            'beskrivelse' : None,
         }
         filerel = relbase + '/arkivstruktur/ny-mappe/'
         fileinfo = self.createEntity('mappe', filerel,
