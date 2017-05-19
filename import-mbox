@@ -159,8 +159,8 @@ Store the URL for the serie in self.seriesinfo
                                           relbase + '/arkivstruktur/arkivdel/')
         (c, res) = self.json_get(serieshref)
         seriesinfo = json.loads(c)
-        print()
-        print(seriesinfo)
+        #print()
+        #print(seriesinfo)
         self.seriesinfo = self.pickUnlessOne(seriesinfo, 'arkivdel')
         return self.seriesinfo
 
@@ -203,13 +203,13 @@ are in.
                     thread.append(msgid)
         if 0 == len(thread):
             return  None
-        print(thread)
+        #print(thread)
         
         matches = []
         for messageid in thread:
             searchurl = self.docobjurl + '?filter=' +\
                 urllib.quote_plus("filnavn eq '%s'" % messageid)
-            print(searchurl)
+            #print(searchurl)
         
             (s, res) = self.json_get(searchurl)
             docobjsinfo = json.loads(s)
@@ -235,7 +235,7 @@ are in.
             filehref = fileids[fileids.keys()[0]]
             (fc, fres) = self.json_get(filehref)
             fileinfo = json.loads(fc)
-            print(fileinfo)
+            #print(fileinfo)
             return fileinfo
         return None
 
@@ -320,6 +320,7 @@ are in.
             for e in created[::-1]:
                 self.delete(e)
             return False
+        # FIXME upload attachments separately
         return True
 
     def uploadEmail(self, message):
