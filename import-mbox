@@ -192,18 +192,25 @@ are in.
                 if msgid != "":
                     thread.append(msgid)
         print(thread)
-        (s, res) = self.json_get(self.docobjurl)
-        docobjsinfo = json.loads(s)
+        
         matches = []
-        for d in docobjsinfo['results']:
-            if 'filnavn' in d:
-                for messageid in thread:
+        for messageid in thread:
+            searchurl = self.docobjurl + '?filter=' +\
+                urllib.quote_plus("filnavn eq '%s'" % messageid)
+            print(searchurl)
+        
+            (s, res) = self.json_get(searchurl)
+            docobjsinfo = json.loads(s)
+            for d in docobjsinfo['results']:
+                if 'filnavn' in d:
                     if  d['filnavn'] == messageid:
                         print("found message-id %s" % messageid)
-                    matches.append(d)
+                        matches.append(d)
+
+        # FIXME Look up mappe/saksmappe containing docobj entries
         for d in matches:
-            print(d)
-        # FIXME find file from docobj
+            #print(d)
+            print(d['systemID'])
         return None
 
     def createNewFile(self, message):
@@ -265,10 +272,13 @@ are in.
         if docobjinfo:
             print("email already part of archive")
             return
-        threadfile = self.findThreadFile(message)
+        threadfiles = self.findThreadFile(message)
         if not threadfile:
             # create new file
             threadfile = self.createNewFile(message)
+
+        # FIXME what if there are several files?
+        
         # Add to existing file
         self.addMessageToFile(threadfile, message)
 
