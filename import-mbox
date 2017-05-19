@@ -10,6 +10,7 @@ import argparse
 import email
 import json
 import mailbox
+import urllib
 import urllib2
 
 import n5core.endpoint
@@ -161,6 +162,11 @@ if a match is found.
         self.getDocObjUrl()
         messageid = message['message-id']
         print("Looking for msgid: %s" % messageid)
+
+        searchurl = self.docobjurl + '?filter=' +\
+            urllib.quote_plus("filnavn eq '%s'" % messageid)
+        print(searchurl)
+        
         (s, res) = self.json_get(self.docobjurl)
         docobjsinfo = json.loads(s)
         for d in docobjsinfo['results']:
