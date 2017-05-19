@@ -29,7 +29,7 @@ beskrives som «land», den andre i del 6.2.4 (Sakspart) under «Metadata
 for Sakspart» der den beskrives som «utenlandsadresse».  Kan begge
 være riktige?
 
-I metadatakatalog.xsdl s er M409 oppført som land.  Dette er også
+I metadatakatalog.xsdl er M409 oppført som land.  Dette er også
 tilfelle på side 36 av
 [metadatakatalogen](http://arkivverket.no/arkivverket/content/download/20785/188326/version/1/file/pdf.pdf),
 der den har definsjonen «Land dersom adressen er i utlandet».
@@ -41,5 +41,5 @@ meningen at teksten under 6.2.4 skulle vært 'land'?  Jeg mistenker at
 Ønsket endring
 --------------
 
-Endre under del 6.2.4 (Sakspart) side 138, bytt ut 'M409
+Endre i del 6.2.4 (Sakspart) side 138, bytt ut 'M409
 utenlandsadresse' med 'M409 land'.
