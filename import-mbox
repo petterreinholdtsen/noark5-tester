@@ -253,7 +253,9 @@ are in.
         docdescrel = relbase + '/arkivstruktur/ny-dokumentbeskrivelse/'
         docobjrel = relbase + '/arkivstruktur/ny-dokumentobjekt/'
 
-        content = str(message)
+        created = []
+        content = message.as_string()
+        
         messagelen = len(content)
         mimetype = "message/rfc822"
 
@@ -264,6 +266,7 @@ are in.
         recordinfo = self.createEntity('basisregistrering', recordrel,
                                        parselinks(fileinfo['_links']),
                                        recorddata)
+        created.append(parselinks(recordinfo['_links'])['self'])
         self.recordMapping(fileinfo, recordinfo, 'basisregistrering')
         
         # FIXME consider journalpost and korrespondansepart (from to/from/cc)
@@ -273,6 +276,7 @@ are in.
         docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
                                        parselinks(recordinfo['_links']),
                                         docdescdata)
+        created.append(parselinks(docdescinfo['_links'])['self'])
         self.recordMapping(recordinfo, docdescinfo, 'dokumentbeskrivelse')
         
         docobjdata = {
@@ -286,33 +290,47 @@ are in.
         docobjinfo = self.createEntity('dokumentobjekt', docobjrel,
                                        parselinks(docdescinfo['_links']),
                                        docobjdata)
+        created.append(parselinks(docobjinfo['_links'])['self'])
         self.recordMapping(docdescinfo, docobjinfo, 'dokumentobjekt')
 
         newfilehref = self.objectOperation(docobjinfo,
                                            relbase + '/arkivstruktur/fil/')
-        (c, res) = self.post(newfilehref, content, mimetype, length=messagelen)
+        # Make sure all parts going into the POST are type str by
+        # converting newfilehref to str.  This avoid a
+        # UnicodeDecodeError when the content is not UTF-8.
+        try:
+            (c, res) = self.post(str(newfilehref), content, mimetype,
+                                 length=messagelen)
+        except:
+            print("error: upload threw exception")
+            for e in created[::-1]:
+                self.delete(e)
+            return False
         if 200 != res.code:
             print("error: upload failed (status == %d)" % res.code)
-            return False # FIXME, should all the entities be removed?
+            for e in created[::-1]:
+                self.delete(e)
+            return False
         return True
 
     def uploadEmail(self, message):
         docobjinfo = self.alreadySaved(message)
         if docobjinfo:
             print("email already part of archive")
-            return
+            return False
         threadfile = self.findThreadFile(message)
         if not threadfile:
             # create new file
             threadfile = self.createNewFile(message)
 
         # Add to existing file
-        self.addMessageToFile(threadfile, message)
+        return self.addMessageToFile(threadfile, message)
 
     def loadMbox(self, filename):
         mbox = mailbox.mbox(filename)
         for message in mbox:
-            self.uploadEmail(message)
+            if not self.uploadEmail(message):
+                print("error: failed to load email")
 
 def main():
     t = MboxImporter()
