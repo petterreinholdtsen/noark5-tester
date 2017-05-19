@@ -46,6 +46,7 @@ class MboxImporter(n5core.endpoint.Endpoint):
         if args.baseurl:
             self.baseurl = args.baseurl
         self.docobjurl = None
+        self.parentmap = {}
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
         self.verbose = args.verbose
 
@@ -191,6 +192,8 @@ are in.
             for msgid in message['references'].replace("\n", " ").split(" "):
                 if msgid != "":
                     thread.append(msgid)
+        if 0 == len(thread):
+            return  None
         print(thread)
         
         matches = []
@@ -205,12 +208,26 @@ are in.
                 if 'filnavn' in d:
                     if  d['filnavn'] == messageid:
                         print("found message-id %s" % messageid)
-                        matches.append(d)
+                        matches.append(d['systemID'])
 
         # FIXME Look up mappe/saksmappe containing docobj entries
-        for d in matches:
-            #print(d)
-            print(d['systemID'])
+        fileids = {}
+        for docobjid in matches:
+            if docobjid in self.parentmap:
+                (docdescid, childtype, docdeschref) = self.parentmap[docobjid]
+                if docdescid in self.parentmap:
+                    (recordid, childtype, recordhref) = self.parentmap[docdescid]
+                    if recordid in self.parentmap:
+                        (fileid, childtype, filehref) = self.parentmap[recordid]
+                        fileids[fileid] = filehref
+        print("MappeID: ", fileids.keys())
+        if 0 < len(fileids.keys()):
+            # FIXME what if there are several files?
+            filehref = fileids[fileids.keys()[0]]
+            (fc, fres) = self.json_get(filehref)
+            fileinfo = json.loads(fc)
+            print(fileinfo)
+            return fileinfo
         return None
 
     def createNewFile(self, message):
@@ -223,6 +240,12 @@ are in.
                                      parselinks(self.seriesinfo['_links']),
                                      filedata)
         return fileinfo
+    
+    def recordMapping(self, parentinfo, childinfo, type):
+        childid = childinfo['systemID']
+        parentid = parentinfo['systemID']
+        parenthref = parselinks(parentinfo['_links'])['self']
+        self.parentmap[childid] = (parentid, type, parenthref)
 
     def addMessageToFile(self, fileinfo, message):
         recordrel = relbase + '/arkivstruktur/ny-basisregistrering/'
@@ -240,6 +263,8 @@ are in.
         recordinfo = self.createEntity('basisregistrering', recordrel,
                                        parselinks(fileinfo['_links']),
                                        recorddata)
+        self.recordMapping(fileinfo, recordinfo, 'basisregistrering')
+        
         # FIXME consider journalpost and korrespondansepart (from to/from/cc)
         docdescdata = {
             'tittel' : decodeheader(message['subject'])
@@ -247,6 +272,8 @@ are in.
         docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
                                        parselinks(recordinfo['_links']),
                                         docdescdata)
+        self.recordMapping(recordinfo, docdescinfo, 'dokumentbeskrivelse')
+        
         docobjdata = {
             "versjonsnummer"  : str(0),
             "variantformat"   : "Produksjonsformat",
@@ -258,6 +285,7 @@ are in.
         docobjinfo = self.createEntity('dokumentobjekt', docobjrel,
                                        parselinks(docdescinfo['_links']),
                                        docobjdata)
+        self.recordMapping(docdescinfo, docobjinfo, 'dokumentobjekt')
 
         newfilehref = self.objectOperation(docobjinfo,
                                            relbase + '/arkivstruktur/fil/')
@@ -272,13 +300,11 @@ are in.
         if docobjinfo:
             print("email already part of archive")
             return
-        threadfiles = self.findThreadFile(message)
+        threadfile = self.findThreadFile(message)
         if not threadfile:
             # create new file
             threadfile = self.createNewFile(message)
 
-        # FIXME what if there are several files?
-        
         # Add to existing file
         self.addMessageToFile(threadfile, message)
 
