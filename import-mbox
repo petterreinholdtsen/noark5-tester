@@ -167,7 +167,7 @@ if a match is found.
             urllib.quote_plus("filnavn eq '%s'" % messageid)
         print(searchurl)
         
-        (s, res) = self.json_get(self.docobjurl)
+        (s, res) = self.json_get(searchurl)
         docobjsinfo = json.loads(s)
         for d in docobjsinfo['results']:
             if 'filnavn' in d:
