@@ -20,13 +20,18 @@ relbase = 'http://rel.kxml.no/noark5/v4/api'
 def decodeheader(s):
     if s is None:
         return s
-    ret, encoding = email.Header.decode_header(s)[0]
-    if encoding!=None:
-        try:
-            ret = ret.decode(encoding)
-        except UnicodeDecodeError:
-            pass # Ignore bogus headers, store them raw
-    return ret
+    retval = None
+    for ret, encoding in email.Header.decode_header(s):
+        if encoding!=None:
+            try:
+                ret = ret.decode(encoding)
+            except UnicodeDecodeError:
+                pass # Ignore bogus headers, store them raw
+        if retval is None:
+            retval = ret
+        else:
+            retval += " " + ret
+    return retval
 
 def parselinks(links):
     rels = {}
