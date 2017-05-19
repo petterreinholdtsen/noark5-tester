@@ -12,6 +12,10 @@ To connect the script to this demonstration API, run it like this::
 
   ./runtest --reference
 
+When using the API, it is also useful to read [the Noark 5
+standard](https://www.arkivverket.no/arkivverket/Offentleg-forvalting/Noark/Noark-5/Standarden),
+available from Arkivverket.
+
 This test suite was written to test the code in 
 https://github.com/HiOA-ABI/nikita-noark5-core .
 
