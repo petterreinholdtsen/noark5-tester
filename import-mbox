@@ -268,8 +268,17 @@ are in.
         messagelen = len(content)
         mimetype = "message/rfc822"
 
+        threadstarterid = None
+        if 'references' in message:
+            threadstarterid = message['references'].strip().split()[0]
+        elif 'in-reply-to' in message:
+            threadstarterid = message['in-reply-to']
+        else:
+            threadstarterid = message['message-id']
+
         recorddata = {
             'tittel' : decodeheader(message['subject']),
+            #"dokumentDato"   : message['date'], # FIXME convert date format
             'beskrivelse' : None,
         }
         recordinfo = self.createEntity('basisregistrering', recordrel,
@@ -277,10 +286,11 @@ are in.
                                        recorddata)
         created.append(parselinks(recordinfo['_links'])['self'])
         self.recordMapping(fileinfo, recordinfo, 'basisregistrering')
-        
-        # FIXME consider journalpost and korrespondansepart (from to/from/cc)
+
         docdescdata = {
-            'tittel' : decodeheader(message['subject'])
+            'tittel' : decodeheader(message['subject']),
+            # FIXME remove [] when the API is fixed
+            'oppbevaringssted' : [ threadstarterid ],
         }
         docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
                                        parselinks(recordinfo['_links']),
