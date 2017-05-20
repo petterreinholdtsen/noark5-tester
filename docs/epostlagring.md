@@ -14,47 +14,63 @@ Her følger en beskrivelse om hvordan epost kan lagres i en Noark
 gjenskape eposttråder og sjekke kryptosignaturer basert på S/MIME
 eller OpenPGP er brukt, samt kontrollere [Domain Keys Identified
 Message](http://dkim.org/)-signaturer ([IETF RFC
-6376](https://tools.ietf.org/html/rfc4180)).
+6376](https://tools.ietf.org/html/rfc4180)).  Merk at epost pr.
+2017-05-20 ikke er på [listen over godkjente
+arkivformater](https://lovdata.no/forskrift/1999-12-01-1566/§8-17) i
+[Riksarkivarens
+forskrift](http://www.arkivverket.no/arkivverket/Offentleg-forvalting/Regelverk/Lov-og-forskrift/Riksarkivaren-si-forskrift).
+NUUG sendte 2017-04-28 inn [forslag om at epostformatet tas inn på
+listen](https://www.nuug.no/news/NUUGs_h_ringuttalelse_til_Riksarkivarens_forskrift.shtml)
+i høringen om ny forskrift.
 
 Epostformatet er standardisert i [IETC RFC
 822](https://tools.ietf.org/html/rfc822) og etterfølgende RFCer ([RFC
 2822](https://tools.ietf.org/html/rfc2822) og [RFC
 5322](https://tools.ietf.org/html/rfc5322)).  Jeg bruker videre i
-teksten RFC 822 om dette formatet, for enkelhets skyld.  En epost
-består i grove trekk av tekstlinjer, først tekstlinjer som utgjør
-epostens hode/metadata, så en blank linje og tekstlinjer som utgjør
-epostens kropp/innhold.  Epostenkroppens format og tegnsett er oppgitt
+teksten RFC 822 om dette formatet, for enkelhets skyld, da det er
+navnet som normalt brukes om Internettepost.  En epost består i grove
+trekk av tekstlinjer, først tekstlinjer som utgjør epostens
+metadata/hode, så en blank linje og deretter tekstlinjer som utgjør
+epostens innhold/kropp.  Epostenkroppens format og tegnsett er oppgitt
 i hodet.  Tegnsett for tittelfeltet (Subject) er oppgitt som del av
 tittelfeltet.  Epostens kropp kan bestå av flere deler (såkalte
 MIME-vedlegg), som kan hentes ut separat og ha hvert sitt format og
 tegnsett.  MIME-vedlegg er standardisert og beskrevet i utvidelser til
-IETF RFC 5322, se
-[IETF RFC 2045](https://tools.ietf.org/html/rfc2045),
-[IETF RFC 2046](https://tools.ietf.org/html/rfc2046),
-[IETF RFC 2047](https://tools.ietf.org/html/rfc2047),
-[IETF RFC 2049](https://tools.ietf.org/html/rfc2049),
-[IETF RFC 4288](https://tools.ietf.org/html/rfc4288) og
-[IETF RFC 4289](https://tools.ietf.org/html/rfc4289) henvist til i
-IETF RFC 5322.
+IETF RFC 5322, se [IETF RFC
+2045](https://tools.ietf.org/html/rfc2045), [IETF RFC
+2046](https://tools.ietf.org/html/rfc2046), [IETF RFC
+2047](https://tools.ietf.org/html/rfc2047), [IETF RFC
+2049](https://tools.ietf.org/html/rfc2049), [IETF RFC
+4288](https://tools.ietf.org/html/rfc4288) og [IETF RFC
+4289](https://tools.ietf.org/html/rfc4289) henvist til i IETF RFC
+5322.
 
-En mye brukt måte å lagre epost på er som en fil per epost, slik for
-eksempel [Maildir-](https://en.wikipedia.org/wiki/Maildir) og
-[MH-lagringsformatene](https://en.wikipedia.org/wiki/MH_Message_Handling_System)
-gjør.  En annen mye brukt lagringsmåte er flere epost i samme fil slik
-for eksempel [mbox-formatet](https://en.wikipedia.org/wiki/Mbox)
-([IETC RFC 4155](https://tools.ietf.org/html/rfc4155)) gjør.  I bunnen
-av alle disse lagringsformatene ligger formatbeskrivelsen fra RFC 822,
-som er det et epostprogram er laget for å tolke.
+En mye brukt måte å lagre epost på er å lagre en epost per fil.  Mye
+brukte eksempler på lagringsformater som gjør dette er
+[Maildir](https://en.wikipedia.org/wiki/Maildir) og
+[MH](https://en.wikipedia.org/wiki/MH_Message_Handling_System).  En
+annen mye brukt lagringsmåte er å lagre flere epost etter hverandre i
+samme fil slik for eksempel
+[mbox-formatet](https://en.wikipedia.org/wiki/Mbox) ([IETC RFC
+4155](https://tools.ietf.org/html/rfc4155)) gjør.  I bunnen av alle
+disse lagringsformatene ligger formatbeskrivelsen fra RFC 822, som er
+det et epostprogram er laget for å tolke.  Det som skiller dem er
+hvordan enkeltepost skilles fra hverandre.
 
-Epost kan lagres i Noark i epostens opprinnelige format.  I tillegg
-kan det være lurt å hente ut enkeltdelene i eposten der det er aktuelt
-(f.eks. ved PDF-vedlegg), slik at disse filene er tilgjengelig separat
-og kan omformes til PDF/A for langtidslagring.  Verdien i
-format-feltet må være unikt og representere Internett-epost.  En god
-verdi å bruke her er 'RFC822'.
+Her følger en beskrivelse om hvordan epost kan lagres i en Noark
+5-database i epostens opprinnelige format.  Verdien i format-feltet
+for dokumentobjekt skal være unikt og må ha en verdi som representere
+Internett-epost.  Vi foreslår å bruke verdien 'RFC822'..  I tillegg
+til å lagre eposten i originalformat. kan det være lurt å hente ut
+enkeltdelene i eposten i enkelte tilfeller (f.eks. PDF-vedlegg), slik
+at disse filene er tilgjengelig separat og kan omformes til
+arkivformat (f.eks. PDF/A) for langtidslagring.
 
-Eposter kan enten lagres som basisregistrering eller journalpost.
-Førstnevnte er for epost som ikke skal med i den offentlige journalen.
+Eposter kan enten lagres som registrering, basisregistrering eller
+journalpost.  De to førstnevnte er for epost som ikke skal med i den
+offentlige journalen.  Jeg anbefaler at en begrenser seg til
+basisregistrering og journalpost, for å ha tilgang til feltet
+oppbevaringssted, jamfør forslaget under.
 
 Epost inneholder følgende hodefelter relevant for lagring i Noark 5:
 
@@ -72,23 +88,34 @@ Epost inneholder følgende hodefelter relevant for lagring i Noark 5:
  * Content-Transfer-Encoding:
  * Content-Disposition:
 
-For a kunne effektivt finne alle epostene i en eposttråd er det lurt å
-ta gjøre det mulig å søke ut epost basert på Message-ID-verdien som
-var i eposten som startet tråden.  Dette er den Message-ID-verdien som
+I epostformatet er det spesifisert hvordan en epost kan kobles til
+eposten den er svar på, såkalt epost-tråding.  En god beskrivelse om
+hvordan tilgjengelig informasjon kan brukes til å gjenskape flyten i
+en epostutveksling er i dokumentet [message
+threading](https://www.jwz.org/doc/threading.html) av Jamie Zawinski.
+
+For å effektivt kunne finne alle epostene i en eposttråd er det lurt å
+gjøre det mulig å søke etter epost basert på "Message-ID"-verdien fra
+eposten som startet tråden.  Dette er den Message-ID-verdien som
 ligger først i References i epost der dette feltet finnes og i
 In-Reply-To-verdien for epost som er svar på første epost.  Det er
-desverre ikke noe åpenbart felt i Noark 5 for å lagre denne verdien
-for å søke den ut senere. Mitt forslag er å bruke 'oppbevaringssted
-tilhørende basisregistrering og journalpost, da dette feltet er ubrukt
-for elektroniske dokumenter, og en kan tenke seg at epost er lagret
-bak stedet merket med Message-ID-verdien.
+ikke noe åpenbart felt i Noark 5 for å lagre denne verdien for å kunne
+søke den ut senere. Mitt forslag er å bruke
+basisregistrering.oppbevaringssted og journalpost.oppbevaringssted, da
+dette feltet er ubrukt for elektroniske dokumenter, og en kan tenke
+seg at epost er lagret bak stedet merket med Message-ID-verdien.  Et
+alternativ er å utvide Noark 5 med epostspesifikke felter.
+
+FIXME revurder om oppbevaringssted skal brukes til trådstarterens
+Message-ID (aka References og/eller In-Reply-To).
 
 FIXME: Bestem og beskriv hvordan epost skal lagres:
 
-Hver arkiverte epost får en basisregistrering eller journalpost, alt
-etter om eposten skal være journalført eller ikke.  Feltet "forfatter"
-registreres ikke i basisregistreringsdelen, for å unngå
-dobbeltregistrering i korrespondansepart og dokumentbeskrivelse.
+Hver arkiverte epost kobles til en journalpost eller
+basisregistrering, alt etter om eposten skal være journalført eller
+ikke.  Feltet "forfatter" registreres ikke i basisregistreringsdelen,
+for å unngå dobbeltregistrering i korrespondansepart og
+dokumentbeskrivelse.
 
 ```
 registrering / basisregistrering / journalpost: {
@@ -103,7 +130,7 @@ registrering / basisregistrering / journalpost: {
 }
 ```
 
-For Journalpost registreres det en korrespondansepart for hver adresse
+For journalpost registreres det en korrespondansepart for hver adresse
 oppgitt i en av From/Reply-To/Sender, To og Cc.  Epostadressedelen
 (dvs. det mellom &lt; og &gt;) legges i epostadresse-attributtet til
 kontaktinformasjons-feltet, mens adressens tilknyttede navn legges inn
@@ -111,7 +138,10 @@ i feltet "navn".
 
 Når det gjelder avsender er det flere eposthodefelt som er aktuelle.
 Den første med verdi av følgende felt legges inn med
-korrespondansetype "avsender: Sender, From:
+korrespondansetype "avsender: Sender, From:.  Feltet Reply-To benyttes
+ikke.
+
+FIXME forklar hvorfor sender/from men ikke reply-to.  Referer til RFC.
 
 ```
 korrespondansepart: {
@@ -121,8 +151,8 @@ korrespondansepart: {
 }
 ```
 
-Når det gjelder mottaker, så er det et eposthodefelt som er aktuelt,
-"To".  Dette feltet kan inneholde flere epostadresser oppdelt med
+Når det gjelder mottaker, så er det ku eposthodefelt "To" som er
+aktuelt.  Dette feltet kan inneholde flere epostadresser oppdelt med
 komma.  Det lages en korrespondansepart for hver epostadresse:
 
 ```
@@ -147,8 +177,8 @@ korrespondansepart: {
 ```
 
 Selve eposten lagres som et dokumentobjekt med tilhørende
-dokumentbeskrivelse, som i dagens REST-API må opprettes i motsatt
-rekkefølge:
+dokumentbeskrivelse.  I dagens REST-API må dokumentbeskrivelse
+opprettes før dokumentobjekt:
 
 ```
 dokumentbeskrivelse: {
@@ -164,10 +194,9 @@ dokumentobjekt: {
 }
 ```
 
-Hvis eposten består av flere vedlegg, så bør det lages separate
-dokumentbeskrivelse-/dokumentobjekt-instanser for vedleggene.  Det bør
-være mulig å angi av det av disse vedleggene som er følgebrevet /
-selve meldingen får tilknyttetRegistreringSom "Hoveddokument".
+Hvis eposten har vedlegg, så bør det lages separate
+dokumentbeskrivelse-/dokumentobjekt-instanser for vedleggene med
+tilknyttetRegistreringSom satt til "Vedlegg".
 
 
 ## Eksempler
@@ -193,8 +222,9 @@ Vennlig hilsen
 Ola Nordmann
 ```
 
-Har her droppet alle eposthodefelter som ikke er releante for dette
-forslaget.  Svareposten ser så slik ut:
+Eksemplet har ku eposthodefelter som er releante for dette forslaget.
+En ekte epost vil ha mange flere hodefelter.  Svareposten ser så slik
+ut:
 
 ```
 From: Bob-Jonny Nordmann <bob@example.com>
@@ -215,8 +245,6 @@ Vennlig hilsen
 Bob-Jonny Nordmann
 ```
 
-FIXME vurder om oppbevaringssted skal brukes til første References-verdi og/eller In-Reply-To.
-
 Disse to epostene legges inn i tjenestegresesnittet på følgende måte.
 Det er viktig her å huske at eventuell koding av ikke-ASCII-tegn i
 tittelen må oversettes til UTF-8 før lagring i tråd med beskrivelsen i
@@ -226,7 +254,8 @@ første eposten:
 ```
 registrering / basisregistrering / journalpost: {
   "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
-  "dokumentDato"   : "2017-01-01T12:30+0100"
+  "dokumentDato"   : "2017-01-01T12:30+0100",
+  "oppbevaringssted" : "<20170101123000.AB23269@example.com>"
 }
 
 korrespondansepart: {
@@ -262,18 +291,17 @@ dokumentobjekt: {
 
 Selve eposten med hode og kropp lastes så opp som del av
 dokumentobjekt.  Har her ignorert filstoerrelse og andre felt som ikke
-er spesielt for epostarkivering.
+er spesifikk for epostarkivering.
 
 Arkivering av svar-eposten ser så slik ut.  Merk at det RFC
 5322-standardiserte (del 3.6.4) subject-prefikset 'Re: ' fjernes fra
-tittelen
-
-
+tittelen.
 
 ```
 registrering / basisregistrering / journalpost: {
   "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
   "dokumentDato"   : "2017-01-02T09:00+0100"
+  "oppbevaringssted" : "<20170101123000.AB23269@example.com>"
 }
 
 korrespondansepart: {
@@ -376,6 +404,7 @@ Noark 5-strukturen for denne eposten blir da slik:
 registrering / basisregistrering / journalpost: {
   "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
   "dokumentDato"   : "2017-01-01T12:40+0100"
+  "oppbevaringssted" : "<20170101123000.AB23342@example.com>"
 }
 
 korrespondansepart: {
