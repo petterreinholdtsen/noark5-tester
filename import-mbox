@@ -47,9 +47,13 @@ class MboxImporter(n5core.endpoint.Endpoint):
         parser = argparse.ArgumentParser()
         parser.add_argument("--baseurl", help="(default is %s)" % self.baseurl)
         parser.add_argument("--input", help="(default is %s)" % self.input)
+        parser.add_argument("--saksmappe",
+                            help="Store as saksmappe/journalpost instead of basisregistrering/mappe",
+                            action="store_true")
         parser.add_argument("--verbose", help="enable debug output",
                             action="store_true")
         args = parser.parse_args()
+        self.usesaksmappe = args.saksmappe
         if args.baseurl:
             self.baseurl = args.baseurl
         if args.input:
@@ -240,15 +244,20 @@ are in.
         return None
 
     def createNewFile(self, message):
-        # FIXME should it be mappe or saksmappe?
         filedata = {
             'tittel' : decodeheader(message['subject']),
             'beskrivelse' : None,
         }
-        filerel = relbase + '/arkivstruktur/ny-mappe/'
-        fileinfo = self.createEntity('mappe', filerel,
-                                     parselinks(self.seriesinfo['_links']),
-                                     filedata)
+        if self.usesaksmappe:
+            filerel = relbase + '/arkivstruktur/ny-mappe/'
+            fileinfo = self.createEntity('mappe', filerel,
+                                         parselinks(self.seriesinfo['_links']),
+                                         filedata)
+        else:
+            casefilerel = relbase + '/sakarkiv/ny-saksmappe/'
+            fileinfo = self.createEntity('saksmappe', casefilerel,
+                                         parselinks(self.seriesinfo['_links']),
+                                         filedata)
         return fileinfo
     
     def recordMapping(self, parentinfo, childinfo, type):
@@ -259,6 +268,7 @@ are in.
 
     def addMessageToFile(self, fileinfo, message):
         recordrel = relbase + '/arkivstruktur/ny-basisregistrering/'
+        recordentryrel = relbase + '/arkivstruktur/ny-journalpost/'
         docdescrel = relbase + '/arkivstruktur/ny-dokumentbeskrivelse/'
         docobjrel = relbase + '/arkivstruktur/ny-dokumentobjekt/'
 
@@ -276,17 +286,31 @@ are in.
         else:
             threadstarterid = message['message-id']
 
-        recorddata = {
-            'tittel' : decodeheader(message['subject']),
-            #"dokumentDato"   : message['date'], # FIXME convert date format
-            'beskrivelse' : None,
-        }
-        recordinfo = self.createEntity('basisregistrering', recordrel,
-                                       parselinks(fileinfo['_links']),
-                                       recorddata)
-        created.append(parselinks(recordinfo['_links'])['self'])
-        self.recordMapping(fileinfo, recordinfo, 'basisregistrering')
-
+        if self.usesaksmappe:
+            recorddata = {
+                'tittel' : decodeheader(message['subject']),
+                #"dokumentDato"   : message['date'], # FIXME convert date format
+                'beskrivelse' : None,
+            }
+            recordinfo = self.createEntity('journalpost', recordrel,
+                                           parselinks(fileinfo['_links']),
+                                           recorddata)
+            created.append(parselinks(recordinfo['_links'])['self'])
+            self.recordMapping(fileinfo, recordinfo, 'journalpost')
+            # FIXME consider journalpost and korrespondansepart (from
+            # to/from/cc)
+        else:
+            recorddata = {
+                'tittel' : decodeheader(message['subject']),
+                #"dokumentDato"   : message['date'], # FIXME convert date format
+                'beskrivelse' : None,
+            }
+            recordinfo = self.createEntity('basisregistrering', recordrel,
+                                           parselinks(fileinfo['_links']),
+                                           recorddata)
+            created.append(parselinks(recordinfo['_links'])['self'])
+            self.recordMapping(fileinfo, recordinfo, 'basisregistrering')
+        
         docdescdata = {
             'tittel' : decodeheader(message['subject']),
             # FIXME remove [] when the API is fixed
