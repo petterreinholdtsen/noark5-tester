@@ -617,7 +617,7 @@ Test basis requirements for NOARK 5 Core.
                         info.pop(key, None)
                 modkey = None
                 for keycandidate in ('tittel',
-                                     'korrespondansepartNavn',
+                                     'navn',
                                      'arkivskaperNavn',
                                      'mimeType',
                                      'arkivertAv'):
@@ -742,11 +742,10 @@ Test basis requirements for NOARK 5 Core.
                 'korrespondanseparttype' : {
                     'kode' : code
                 },
-                # FIXME korrespondansepartNavn is called navn in the
-                # spec, and only present in KorrespondansepartEnhet
-                # and KorrespondansepartPerson, not
+                # FIXME korrespondansepartNavn is only present in
+                # KorrespondansepartEnhet and KorrespondansepartPerson, not
                 # KorrespondansepartIntern.
-                'korrespondansepartNavn' : 'Eksempel %s' % code,
+                'navn' : 'Eksempel %s' % code,
             }
             corrinfo = self.createEntity('correspondance part',
                                          corrpartrel,

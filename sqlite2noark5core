@@ -150,13 +150,12 @@ def main():
                         code = None
                         corr = None
                 if corr:
-                        # FIXME korrespondansepartNavn is called navn in the spec.
                         for entry in corr.split(','):
                                 corrdata = {
                                         'korrespondanseparttype' : {
                                                 'kode' : code
                                         },
-                                        'korrespondansepartNavn' : entry,
+                                        'navn' : entry,
                                 }
                                 corrinfo = createEntity(e, 'korrespondansepart',
                                                         corrpartrel,
