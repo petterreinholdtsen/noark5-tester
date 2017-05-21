@@ -68,9 +68,7 @@ arkivformat (f.eks. PDF/A) for langtidslagring.
 
 Eposter kan enten lagres som registrering, basisregistrering eller
 journalpost.  De to førstnevnte er for epost som ikke skal med i den
-offentlige journalen.  Jeg anbefaler at en begrenser seg til
-basisregistrering og journalpost, for å ha tilgang til feltet
-oppbevaringssted, jamfør forslaget under.
+offentlige journalen.
 
 Epost inneholder følgende hodefelter relevant for lagring i Noark 5:
 
@@ -101,10 +99,10 @@ ligger først i References i epost der dette feltet finnes og i
 In-Reply-To-verdien for epost som er svar på første epost.  Det er
 ikke noe åpenbart felt i Noark 5 for å lagre denne verdien for å kunne
 søke den ut senere. Mitt forslag er å bruke
-basisregistrering.oppbevaringssted og journalpost.oppbevaringssted, da
-dette feltet er ubrukt for elektroniske dokumenter, og en kan tenke
-seg at epost er lagret bak stedet merket med Message-ID-verdien.  Et
-alternativ er å utvide Noark 5 med epostspesifikke felter.
+dokumentbeskrivelse.oppbevaringssted, da dette feltet er ubrukt for
+elektroniske dokumenter, og en kan tenke seg at epost er lagret bak
+stedet merket med Message-ID-verdien.  Et alternativ er å utvide Noark
+5 med epostspesifikke felter.
 
 FIXME revurder om oppbevaringssted skal brukes til trådstarterens
 Message-ID (aka References og/eller In-Reply-To).
@@ -123,7 +121,6 @@ registrering / basisregistrering / journalpost: {
 
   # basisregistrering / journalpost
   "tittel"         : subject,
-  "oppbevaringssted" til første message-id i References?
 
   # Journalpost
   "dokumentDato"   : date
@@ -145,9 +142,9 @@ FIXME forklar hvorfor sender/from men ikke reply-to.  Referer til RFC.
 
 ```
 korrespondansepart: {
-  "korrespondansepartType" : "avsender"
-  "navn" : sender / from
-  "kontaktinformasjon.epostadresse" : sender / from
+  "korrespondansepartType" : "avsender",
+  "navn" : sender / from,
+  "kontaktinformasjon.epostadresse" : sender / from,
 }
 ```
 
@@ -157,9 +154,9 @@ komma.  Det lages en korrespondansepart for hver epostadresse:
 
 ```
 korrespondansepart: {
-  "korrespondansepartType" : "mottaker"
-  "navn" : to
-  "kontaktinformasjon.epostadresse" : to
+  "korrespondansepartType" : "mottaker",
+  "navn" : to,
+  "kontaktinformasjon.epostadresse" : to,
 }
 ```
 
@@ -170,9 +167,9 @@ epostadresse:
 
 ```
 korrespondansepart: {
-  "korrespondansepartType" : "kopimottaker"
-  "navn" : cc
-  "kontaktinformasjon.epostadresse" : cc
+  "korrespondansepartType" : "kopimottaker",
+  "navn" : cc,
+  "kontaktinformasjon.epostadresse" : cc,
 }
 ```
 
@@ -184,7 +181,8 @@ opprettes før dokumentobjekt:
 dokumentbeskrivelse: {
   "tittel"         : subject,
   "forfatter"      : from / sender / reply-to,
-  "tilknyttetRegistreringSom" : "Hoveddkokument"
+  "tilknyttetRegistreringSom" : "Hoveddokument",
+  "oppbevaringssted" : første message-id i References
 }
 
 dokumentobjekt: {
@@ -255,7 +253,6 @@ første eposten:
 registrering / basisregistrering / journalpost: {
   "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
   "dokumentDato"   : "2017-01-01T12:30+0100",
-  "oppbevaringssted" : "<20170101123000.AB23269@example.com>"
 }
 
 korrespondansepart: {
@@ -278,8 +275,9 @@ korrespondansepart: {
 
 dokumentbeskrivelse: {
   "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
-  "forfatter"      : "Ola Nordmann"
-  "tilknyttetRegistreringSom" : "Hoveddkokument"
+  "forfatter"      : "Ola Nordmann",
+  "tilknyttetRegistreringSom" : "Hoveddokument",
+  "oppbevaringssted" : "<20170101123000.AB23269@example.com>",
 }
 
 dokumentobjekt: {
@@ -301,7 +299,6 @@ tittelen.
 registrering / basisregistrering / journalpost: {
   "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
   "dokumentDato"   : "2017-01-02T09:00+0100"
-  "oppbevaringssted" : "<20170101123000.AB23269@example.com>"
 }
 
 korrespondansepart: {
@@ -325,13 +322,14 @@ korrespondansepart: {
 dokumentbeskrivelse: {
   "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
   "forfatter"      : "Bob-Jonny Nordmann",
-  "tilknyttetRegistreringSom" : "Hoveddkokument"
+  "tilknyttetRegistreringSom" : "Hoveddokument",
+  "oppbevaringssted" : "<20170101123000.AB23269@example.com>",
 }
 
 dokumentobjekt: {
   "format"         : "RFC822",
   "mimeType"       : "message/rfc822",
-  "filnavn"        : "<20170102090000.AB23269@example.com>"
+  "filnavn"        : "<20170102090000.AB23269@example.com>",
 }
 ```
 
@@ -403,26 +401,25 @@ Noark 5-strukturen for denne eposten blir da slik:
 ```
 registrering / basisregistrering / journalpost: {
   "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
-  "dokumentDato"   : "2017-01-01T12:40+0100"
-  "oppbevaringssted" : "<20170101123000.AB23342@example.com>"
+  "dokumentDato"   : "2017-01-01T12:40+0100",
 }
 
 korrespondansepart: {
-  "korrespondansepartType" : "avsender"
+  "korrespondansepartType" : "avsender",
   "navn" : "Ola Nordmann",
-  "kontaktinformasjon.epostadresse" : "ola@example.com"
+  "kontaktinformasjon.epostadresse" : "ola@example.com",
 }
 
 korrespondansepart: {
-  "korrespondansepartType" : "mottaker"
+  "korrespondansepartType" : "mottaker",
   "navn" : "Kari Nordmann",
-  "kontaktinformasjon.epostadresse" : "kari@example.com"
+  "kontaktinformasjon.epostadresse" : "kari@example.com",
 }
 
 korrespondansepart: {
-  "korrespondansepartType" : "kopimottaker"
-  "navn" : "Bob-Jonny Nordmann"
-  "kontaktinformasjon.epostadresse" : "bob@example.com"
+  "korrespondansepartType" : "kopimottaker",
+  "navn" : "Bob-Jonny Nordmann",
+  "kontaktinformasjon.epostadresse" : "bob@example.com",
 }
 ```
 
@@ -433,8 +430,9 @@ dokumentobjekt:
 ```
 dokumentbeskrivelse: {
   "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
-  "forfatter"      : "Ola Nordmann"
-  "tilknyttetRegistreringSom" : "Hoveddkokument"
+  "forfatter"      : "Ola Nordmann",
+  "tilknyttetRegistreringSom" : "Hoveddokument",
+  "oppbevaringssted" : "<20170101123000.AB23342@example.com>",
 }
 
 dokumentobjekt: {
@@ -445,8 +443,8 @@ dokumentobjekt: {
 
 dokumentbeskrivelse: {
   "tittel"         : "Valg av ny konge, ønsker ny konge velkommen",
-  "forfatter"      : "Ola Nordmann"
-  "tilknyttetRegistreringSom" : "Vedlegg"
+  "forfatter"      : "Ola Nordmann",
+  "tilknyttetRegistreringSom" : "Vedlegg",
 }
 
 dokumentobjekt: {
@@ -456,7 +454,7 @@ dokumentobjekt: {
 
 dokumentbeskrivelse: {
   "tittel"         : "voteringsresultat.xml",
-  "tilknyttetRegistreringSom" : "Vedlegg"
+  "tilknyttetRegistreringSom" : "Vedlegg",
 }
 
 dokumentobjekt: {
