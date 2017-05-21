@@ -249,13 +249,13 @@ are in.
             'beskrivelse' : None,
         }
         if self.usesaksmappe:
-            filerel = relbase + '/arkivstruktur/ny-mappe/'
-            fileinfo = self.createEntity('mappe', filerel,
+            casefilerel = relbase + '/sakarkiv/ny-saksmappe/'
+            fileinfo = self.createEntity('saksmappe', casefilerel,
                                          parselinks(self.seriesinfo['_links']),
                                          filedata)
         else:
-            casefilerel = relbase + '/sakarkiv/ny-saksmappe/'
-            fileinfo = self.createEntity('saksmappe', casefilerel,
+            filerel = relbase + '/arkivstruktur/ny-mappe/'
+            fileinfo = self.createEntity('mappe', filerel,
                                          parselinks(self.seriesinfo['_links']),
                                          filedata)
         return fileinfo
@@ -292,7 +292,7 @@ are in.
                 #"dokumentDato"   : message['date'], # FIXME convert date format
                 'beskrivelse' : None,
             }
-            recordinfo = self.createEntity('journalpost', recordrel,
+            recordinfo = self.createEntity('journalpost', recordentryrel,
                                            parselinks(fileinfo['_links']),
                                            recorddata)
             created.append(parselinks(recordinfo['_links'])['self'])
