@@ -42,7 +42,6 @@ def createEntity(ep, name, rel, rels, data):
         except urllib2.HTTPError, e:
             raise
         info = json.loads(c)
-        linkrefs = parselinks(info['_links'])
         return info
 
 def main():
