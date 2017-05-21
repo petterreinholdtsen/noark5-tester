@@ -261,6 +261,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/ny-presedens/?',
         'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/presedens/?',
         'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/journalpost/?',
+        'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/klasse/?',
         'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-klasse/?',
         'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-presedens/?',
         'http://localhost:8092/noark5v4/hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-sakspart/?',
