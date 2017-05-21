@@ -8,6 +8,7 @@ sys.path.append('lib')
 
 import argparse
 import email
+from email.utils import parseaddr
 import json
 import mailbox
 import urllib
@@ -300,6 +301,33 @@ are in.
             self.recordMapping(fileinfo, recordinfo, 'journalpost')
             # FIXME consider journalpost and korrespondansepart (from
             # to/from/cc)
+            corrpartrel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepart/'
+            parts = {
+                'from' : 'EA',
+                'to'   : 'EM',
+                'cc'   : 'EK',
+            }
+            # FIXME should sort into KorrespondansepartEnhet,
+            # KorrespondansepartPerson and KorrespondansepartIntern.
+            # How can we do this?
+            for part in parts:
+                if part in message:
+                    partstr = decodeheader(message[part])
+                    for p in partstr.split(","):
+                        navn, epost = parseaddr("From: %s" % p)
+                        corrdata = {
+                            'korrespondanseparttype' : {
+                                'kode' : parts[part],
+                            },
+                            'navn' : navn,
+                            'epostadresse' : epost,
+                        }
+                        corrinfo = \
+                            self.createEntity('correspondance part',
+                                              corrpartrel,
+                                              parselinks(recordinfo['_links']),
+                                              corrdata)
+
         else:
             recorddata = {
                 'tittel' : decodeheader(message['subject']),
