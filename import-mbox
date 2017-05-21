@@ -16,6 +16,7 @@ import urllib2
 import n5core.endpoint
 
 relbase = 'http://rel.kxml.no/noark5/v4/api'
+nikitabase = 'http://nikita.arkivlab.no/noark5/v4'
 
 def decodeheader(s):
     if s is None:
@@ -268,7 +269,7 @@ are in.
 
     def addMessageToFile(self, fileinfo, message):
         recordrel = relbase + '/arkivstruktur/ny-basisregistrering/'
-        recordentryrel = relbase + '/arkivstruktur/ny-journalpost/'
+        recordentryrel = nikitabase + '/ny-journalpost/'
         docdescrel = relbase + '/arkivstruktur/ny-dokumentbeskrivelse/'
         docobjrel = relbase + '/arkivstruktur/ny-dokumentobjekt/'
 
