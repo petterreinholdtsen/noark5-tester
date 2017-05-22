@@ -87,6 +87,9 @@ for å bare hente ut en bestemt type korrespondansepart. Da kan følgende brukes
 [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepartperson
 [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepartintern
 
+Vi ser også at i N5v3.1 er det et felt M400 - korrespondansepartNavn. Det er 
+kanskje M400 "navn" feltet egentlig er.
+
 Det bør også vurderes om det er et behov for å skille navn i fornavn,
 mellomnavn og etternavn.
 
