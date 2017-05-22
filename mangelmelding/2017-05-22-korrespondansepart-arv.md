@@ -76,7 +76,7 @@ Gitt at arv allerede håndteres med forskjellige URL så kan dere allikevel
 Derfor foreslår vi at dere tar i bruk både 1 og 3.
 
 For å eksemplifisere dette, vil det å hente alle korrespondanseparter knyttet
-til en journalpost kan det se slik ut:
+til en journalpost se slik ut:
 
 [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepart
 
