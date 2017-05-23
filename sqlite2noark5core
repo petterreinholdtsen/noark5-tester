@@ -61,6 +61,7 @@ def main():
         # Mapping from agency to fond and serie
         fonds = {}
         series = {}
+        files = {}
 
         conn = sqlite3.connect('postliste-oslo-havn.sqlite')
         c = conn.cursor()
@@ -108,19 +109,28 @@ def main():
                         fondsinfo = fonds[agency]
                         seriesinfo = series[agency]
                 print("info: Creating using fonds:%s and series:%s" % (fondsinfo['tittel'], seriesinfo['tittel']))
-                casefiledata = {
-                        "mappeID"              : row[n['caseid']],
-                        "saksaar"              : row[n['caseyear']],
-                        "sakssekvensnummer"    : row[n['caseseqnr']],
-                        "offentligTittel"      : row[n['casedesc']],
-                        "tittel"               : row[n['casedesc']],
-                        "beskrivelse"          : None,
-                        "administrativEnhet"   : None,
-                        "saksansvarlig"        : None,
-                }
-                casefileinfo = createEntity(e, 'file', createcasefilerel,
-                                            parselinks(seriesinfo['_links']),
-                                            casefiledata)
+
+                # FIXME should search to figure out of file is already registered
+                casestr = "%s+%s+%s" % (fondsinfo['systemID'],
+                                        seriesinfo['systemID'],
+                                        row[n['caseid']])
+                if casestr not in files:
+                        casefiledata = {
+                                "mappeID"              : row[n['caseid']],
+                                "saksaar"              : row[n['caseyear']],
+                                "sakssekvensnummer"    : row[n['caseseqnr']],
+                                "offentligTittel"      : row[n['casedesc']],
+                                "tittel"               : row[n['casedesc']],
+                                "beskrivelse"          : None,
+                                "administrativEnhet"   : None,
+                                "saksansvarlig"        : None,
+                        }
+                        casefileinfo = createEntity(e, 'file', createcasefilerel,
+                                                    parselinks(seriesinfo['_links']),
+                                                    casefiledata)
+                        files[casestr] = casefileinfo
+                else:
+                        casefileinfo = files[casestr]
 
                 registryentrydata = {
                         "tittel"               : row[n['docdesc']],
