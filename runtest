@@ -581,8 +581,21 @@ Test basis requirements for NOARK 5 Core.
             except urllib2.HTTPError as e:
                 self.failure("unable to GET self url %s" % selfurl)
         for k in data.keys():
-            self.verify(k in info and info[k] == data[k],
-                        "POST %s response for '%s' should match '%s'" % (url, k, data[k]))
+            if self.verify(k in info,
+                           "POST %s respons should have key %s" % (url, k)):
+                if list is type(data[k]):
+                    for v in data[k]:
+                        self.verify(data[k][v] == info[k][v],
+                                    "POST %s respons list member %s should match %s" %
+                                    (url, k, v, data[k][v]))
+                elif dict is type(data[k]):
+                    for v in data[k].keys():
+                        self.verify(data[k][v] == info[k][v],
+                                    "POST %s respons dict %s key %s should match %s" %
+                                    (url, k, v, data[k][v]))
+                else:
+                    self.verify(info[k] == data[k],
+                                "POST %s response for '%s' should match '%s'" % (url, k, data[k]))
         return info
     def deleteCreated(self):
         for entityurl in self.created[::-1]:
