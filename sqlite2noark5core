@@ -80,8 +80,8 @@ def main():
                 # accesscode, *agency, *casedesc, *casedocseq, *caseid,
                 # *caseseqnr, *caseyear, *docdate, *docdesc, *doctype,
                 # exemption, journalid, *journalseqnr, *journalyear,
-                # recipient, *recorddate, scrapedurl, scrapestamputc,
-                # sender
+                # *recipient, *recorddate, scrapedurl, scrapestamputc,
+                # *sender
 
                 # FIXME should search for agency to avoid duplicates
 
@@ -137,10 +137,11 @@ def main():
                         "beskrivelse"          : None,
                         "dokumentetsDato"      : row[n['docdate']],
                         "journaldato"          : row[n['recorddate']],
-                        "journalaar"           : row[n['journalyear']],
-                        "journalsekvensnummer" : row[n['journalseqnr']],
-                        "journalpostnummer"    : row[n['casedocseq']],
-
+                        "journalaar"           : str(row[n['journalyear']]),
+                        #"journalid"            : row[n['journalid']],
+                        "journalsekvensnummer" : str(row[n['journalseqnr']]),
+                        "journalpostnummer"    : str(row[n['casedocseq']]),
+                        "journalposttype"      : row[n['doctype']],
                 }
                 registryentryinfo = createEntity(e, 'journalpost',
                                                  createrecordrel,
@@ -172,8 +173,8 @@ def main():
                                                         corrdata)
 
                 docdescdata = {
-                        "dokumenttype"    : row[n['doctype']],
                         "tittel"          : row[n['docdesc']],
+                        "beskrivelse"     : None,
                         "tilknyttetRegistreringSom" : "Associated with record as"
                 }
 
