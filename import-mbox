@@ -301,7 +301,7 @@ are in.
             self.recordMapping(fileinfo, recordinfo, 'journalpost')
             # FIXME consider journalpost and korrespondansepart (from
             # to/from/cc)
-            corrpartrel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepart/'
+            corrpartrel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepartenhet/'
             parts = {
                 'from' : 'EA',
                 'to'   : 'EM',
@@ -320,7 +320,10 @@ are in.
                                 'kode' : parts[part],
                             },
                             'navn' : navn,
-                            'epostadresse' : epost,
+                            'kontaktinformasjon' : { 'epostadresse' : epost},
+                            'kontaktperson' : None,
+                            'forretningsadresse' : {},
+                            'postadresse' : {},
                         }
                         corrinfo = \
                             self.createEntity('correspondance part',
