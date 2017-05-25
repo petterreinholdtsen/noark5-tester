@@ -23,6 +23,7 @@ Arv i datamodellen er synlig i følgende forhold:
 
  * mappe -> saksmappe
  * registrering -> basisregistrering -> journalpost
+ * korrespondansepart -> korrespondansepartenhet|korrespondansepartperson|korrespondansepartintern
 
 Disse arvforholdene håndteres ikke konsistent i spesifikasjonen.  Hvis
 vi ser på forholdet mappe -> saksmappe, så ser vi at relasjonene som
@@ -36,6 +37,8 @@ utvid-til-saksmappe:
 
  * "href": "http://n5test.kxml.no/api/sakarkiv/Saksmappe/12345/utvid-til-saksmappe"
  * "rel": "http://rel.kxml.no/noark5/v4/utvid-til-saksmappe"
+
+FIXME spesifikasjonen nevner ikke 'utvid-til-saksmappe, den kommer fra http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/
 
 Hvis vi ser på forholdet registrering -> basisregistrering, så ser vi
 at under "arkivdel" kan du kun opprette en registrering:
