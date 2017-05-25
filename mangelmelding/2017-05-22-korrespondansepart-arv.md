@@ -50,13 +50,13 @@ mappe/saksmappe.
 
 Det tolkes utifra tjenestegrensesnittet-delene 7.2.3.6 til 7.2.3.9 og
 del 7.2.3.4 at med korrespondansepart så ønsker dere en felles URL for
-alle korrespondansepart typer. Dette synet styres ved at det kun er en
+alle korrespondansepart typer. Dette synet styrkes ved at det kun er en
 relasjon under journalpost for å legge til korrespondansepart, ikke
-hver korrespondansepartklasse:
+for hver korrespondansepartklasse:
 
  * http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepart/
 
-Slik vi tolker beskrivelsen i tjenestegrensesnitt-spesifikasjone er
+Slik vi tolker beskrivelsen i tjenestegrensesnitt-spesifikasjonen er
 det ikke alltid mulig å differensiere mellom en
 korrespondansepartperson og en korrespondansepartenhet, med mindre
 noen av feltene som kun finnes i en av klassene har verdi når
@@ -86,8 +86,8 @@ Samtidig kunne en også velge mer beskrivende feltnavn enn "navn".
 Derfor foreslår vi at spesifikasjonen endres til å ta i bruk både
 metode 1 og 3.
 
-For å eksemplifisere dette, vil det å hente alle korrespondanseparter
-knyttet til en journalpost se slik ut:
+For å eksemplifisere dette, vil det å hente alle korrespondanseparter knyttet
+til en journalpost se slik ut:
 
  * [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepart
 
@@ -99,13 +99,17 @@ følgende brukes:
  * [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepartperson
  * [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepartintern
 
-Vi ser også at i N5v3.1 er det et felt M400 - korrespondansepartNavn.
-Det er kanskje M400 "navn" feltet egentlig er.
-
-FIXME hva betyr setningen over?
+Vi ser også at i N5v3.1 standarden er det definert et felt M400 - korrespondansepartNavn.
+Det kan være at det er skjedd forveksling mellom feltet _navn_ og 
+feltet _korrespondansepartNavn_ og dette må ryddes opp i.
 
 Det bør også vurderes om det er et behov for å skille navn i fornavn,
-mellomnavn og etternavn.
+mellomnavn og etternavn. Det er en urbredt praksis i Norge at navn 
+kan lagres som et felt der navn, fornavn og etternavn skilles med 
+mellomrom. Det er ikke automatisk gitt at utenlandske navn vil kunne
+tilpasse en slik tilnærming. Hvis en utenlandsk navn har et mellomrom
+kan det skape problemer hvis systemet må lagre navnet lik det er 
+spesifisert i feks pass.
 
 Spesifikasjonen forklarer ikke hvordan en skal kunne skille mellom
 enheter og personer.  Dette kan være utfordrende å gjøre maskinelt,
