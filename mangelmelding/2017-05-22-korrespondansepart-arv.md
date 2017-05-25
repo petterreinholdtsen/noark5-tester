@@ -105,17 +105,23 @@ følgende brukes:
  * [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepartperson
  * [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepartintern
 
-Vi ser også at i N5v3.1 standarden er det definert et felt M400 - korrespondansepartNavn.
-Det kan være at det er skjedd forveksling mellom feltet _navn_ og 
-feltet _korrespondansepartNavn_ og dette må ryddes opp i.
+Vi ser også at i spesifikasjonen for Noark 5 versjon 3.1 er det
+definert et felt M400 - korrespondansepartNavn.  Det kan være at det
+er skjedd forveksling mellom feltet _navn_ og feltet
+_korrespondansepartNavn_ og dette må ryddes opp i.
 
 Det bør også vurderes om det er et behov for å skille navn i fornavn,
-mellomnavn og etternavn. Det er en urbredt praksis i Norge at navn 
-kan lagres som et felt der navn, fornavn og etternavn skilles med 
+mellomnavn og etternavn. Det er en urbredt praksis i Norge at navn kan
+lagres som et felt der navn, fornavn og etternavn skilles med
 mellomrom. Det er ikke automatisk gitt at utenlandske navn vil kunne
 tilpasse en slik tilnærming. Hvis en utenlandsk navn har et mellomrom
-kan det skape problemer hvis systemet må lagre navnet lik det er 
-spesifisert i feks pass.
+kan det skape problemer hvis systemet må lagre navnet lik det er
+spesifisert i feks pass.  Det er forøvrig nyttig å lese litt
+bakgrunnsinformasjon om personnavn i «[Falsehoods Programmers Believe
+About
+Names](http://www.kalzumeus.com/2010/06/17/falsehoods-programmers-believe-about-names/)»
+av Patrick McKenzie, for å forstå hvilke utfordringer navn utgjør for
+et datasystem.
 
 Spesifikasjonen forklarer ikke hvordan en skal kunne skille mellom
 enheter og personer.  Dette kan være utfordrende å gjøre maskinelt,
