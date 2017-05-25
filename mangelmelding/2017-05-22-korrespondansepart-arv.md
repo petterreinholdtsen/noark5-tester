@@ -65,14 +65,15 @@ korrespondansepartenhet hvis kun navn oppgis.
 
 For å løse dette på en generisk måte, ser vi tre muligheter.
 
-1. Differensier mellom feltene korrespondansepartenhet.navn og
-   korrespondansepartenhet.navn. Feltene kunne hete feks enhetsnavn og
-   personnavn.
+1. Gjør det mulig å se forskjell på feltene
+   korrespondansepartenhet.navn og korrespondansepartenhet.navn.
+   Feltene kunne for eksempel bytte navn til enhetsnavn og personnavn.
 
 2. Legg til et felt i korrespondansepart som kan brukes til å skille
    mellom korrespondansepartklassene. Det er et felt der som heter
    korrespondanseparttype, men den brukes til å skille mellom
-   Avsender/ mottaker osv.
+   avsender/mottaker osv.  En ide er å bruke et nytt feltnavn
+   'korrespondanseklasse'.
 
 3. Lage egne URLer for å opprette de forskjellige typer
    korrespondanseparter.
@@ -99,8 +100,16 @@ følgende brukes:
 Vi ser også at i N5v3.1 er det et felt M400 - korrespondansepartNavn.
 Det er kanskje M400 "navn" feltet egentlig er.
 
+FIXME hva betyr setningen over?
+
 Det bør også vurderes om det er et behov for å skille navn i fornavn,
 mellomnavn og etternavn.
+
+Spesifikasjonen forklarer ikke hvordan en skal kunne skille mellom
+enheter og personer.  Dette kan være utfordrende å gjøre maskinelt,
+spesielt ved korrespondanse med utlandet.  Det hadde vært nyttig med
+beskrivelser, enten direkte i spesifikasjonen eller som referanse til
+andre dokumenter der det er beskrevet hvordan dette skal gjøres.
 
 Ønsket endring
 --------------
@@ -119,7 +128,3 @@ På side 214 legges det inn følgende relasjoner:
  * http://rel.kxml.no/noark5/v4/api/sakarkiv/korrespondansepartenhet/
  * http://rel.kxml.no/noark5/v4/api/sakarkiv/korrespondansepartperson/
  * http://rel.kxml.no/noark5/v4/api/sakarkiv/korrespondansepartintern/
-
-og teksten endres til å gjenspeile dette.
-
-FIXME explain what in the text should be changed?
