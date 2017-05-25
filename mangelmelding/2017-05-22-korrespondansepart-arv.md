@@ -15,7 +15,6 @@ Håndtering av arv for korrespondansepart?
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
 tilgjengelig fra
-
 [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
 Beskrivelse
@@ -29,16 +28,23 @@ barna/spesialiseringene til korrespondansepart.  Dette gjelder
 entiteter med klassene KorrespondansepartEnhet,
 KorrespondansepartIntern og KorrespondansepartPerson.
 
+FIXME dette diskuterer href-verdiene, mens det som bør diskuteres er
+relasjons-verdiene, da href-verdiene kan være hva som helst.
+
 Det er to måter arv kan håndteres i grensesnittet. Enten deler
 entitetene en felles URL ala dette:
 
- * [contextpath][api]/sakarkiv/{systemID}/korrespondansepart
+ * [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepart
+ * [contextpath][api]/sakarkiv/journalpost/{systemID}/ny-korrespondansepart
 
 eller entitetene får hver sin URL ala dette:
 
- * [contextpath][api]/sakarkiv/{systemID}/korrespondansepartenhet
- * [contextpath][api]/sakarkiv/{systemID}/korrespondansepartperson
- * [contextpath][api]/sakarkiv/{systemID}/korrespondansepartintern
+ * [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepartenhet
+ * [contextpath][api]/sakarkiv/journalpost/{systemID}/ny-korrespondansepartenhet
+ * [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepartperson
+ * [contextpath][api]/sakarkiv/journalpost/{systemID}/ny-korrespondansepartperson
+ * [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepartintern
+ * [contextpath][api]/sakarkiv/journalpost/{systemID}/ny-korrespondansepartintern
 
 Det er delte meninger om hvilken måte som er «riktig».  Når det
 gjelder arv andre steder i tjenestegrensesnittet er det valgt metode
@@ -65,7 +71,7 @@ feltet navn.  Det vil dermed ikke være mulig å finne ut om innkommende
 objekt skal lagres som en korrespondansepartperson eller som en
 korrespondansepartenhet hvis kun navn oppgis.
 
-For å løse dette på en generisk måte, ser vi tre muligheter.
+For å løse dette for alle tilfeller, ser vi tre muligheter.
 
 1. Gjør det mulig å se forskjell på feltene
    korrespondansepartenhet.navn og korrespondansepartenhet.navn.
@@ -86,8 +92,8 @@ Samtidig kunne en også velge mer beskrivende feltnavn enn "navn".
 Derfor foreslår vi at spesifikasjonen endres til å ta i bruk både
 metode 1 og 3.
 
-For å eksemplifisere dette, vil det å hente alle korrespondanseparter knyttet
-til en journalpost se slik ut:
+Hvis en ønsker å hente alle korrespondanseparter knyttet til en
+journalpost, så kan en for eksempel bruke følgende URL:
 
  * [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepart
 
