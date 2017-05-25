@@ -13,8 +13,9 @@ Klargjør forhold mellom tjenestegrensesnittet og standarden / katalogene
     Innsendingsdato  Ikke sendt inn
  ------------------  ---------------------------------
 
-Denne teksten er del av en samling innspill til Noark 5-standarden
-tilgjengelig fra https://github.com/petterreinholdtsen/noark5-tester/ .
+Denne teksten er del av en samling innspill til NOARK5-standarden
+tilgjengelig fra
+[https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
 Beskrivelse
 -----------
@@ -24,10 +25,12 @@ FIXME Få inn sidehenvisninger for eksemplene?
 Det er noen uoverensstemmelser mellom tjenestegrensesnittet og Noark
 5-standarden, metadatakatalogene og tilhørende XSD-filer.
 
-Et eksempel er i Dokumentdel 7.2.1.7 (Dokumentobjekt i
-tjenestegrensesnittet), der det er et attributt som heter mimeType.
-Dette attributtet finnes ikke i metadatakatalogene eller i Noark
-5-standarden.
+FIXME er eksempellisten komplett?
+
+Et eksempel er i del 7.2.1.7 (Dokumentobjekt) på side 104 i
+tjenestegrensesnittspesifikasjonen, der det er et attributt som heter
+mimeType.  Dette attributtet finnes ikke i metadatakatalogene eller i
+Noark 5-standarden versjon 4.0.
 
 Det kan virke som om feltene dokumentobjekt.format og
 dokumentobjekt.mimeType representerer samme informasjon, men er det
@@ -83,3 +86,5 @@ format og om de egentlig er samme felt.
 XSD-filene tilhørende tjenestegrensesnittet må kvalitetsikres.
 
 Tjenestegrensesnitt gjenbruker den offisielle arkivstruktur.xsd
+
+FIXME hva betyr de to siste sentningene?
