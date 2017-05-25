@@ -13,7 +13,7 @@ createfondsrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
 createseriesrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
 createcasefilerel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-saksmappe/'
 createrecordrel = 'http://nikita.arkivlab.no/noark5/v4/ny-journalpost/'
-corrpartrel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepart/'
+corrpartrel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepartenhet/'
 createdocdescrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentbeskrivelse/'
 
 def parselinks(links):
