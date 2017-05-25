@@ -14,7 +14,9 @@ Håndtering av arv for korrespondansepart?
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
-tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
+tilgjengelig fra
+
+[https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
 Beskrivelse
 -----------
@@ -84,8 +86,8 @@ Samtidig kunne en også velge mer beskrivende feltnavn enn "navn".
 Derfor foreslår vi at spesifikasjonen endres til å ta i bruk både
 metode 1 og 3.
 
-For å eksemplifisere dette, vil det å hente alle korrespondanseparter knyttet
-til en journalpost se slik ut:
+For å eksemplifisere dette, vil det å hente alle korrespondanseparter
+knyttet til en journalpost se slik ut:
 
  * [contextpath][api]/sakarkiv/journalpost/{systemID}/korrespondansepart
 
