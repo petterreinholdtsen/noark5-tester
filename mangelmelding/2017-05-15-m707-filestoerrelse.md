@@ -57,9 +57,21 @@ implementasjoner, hvis dette feltet har en klar og entydig betydning,
 og alltid er et heltall større eller lik null som oppgir filstørrelsen
 i bytes.
 
-Kan det være en ide å endre typen fra «xs:string» til «xs:integer» i
-metadatakatalog.xsdl?  I så tilfelle bør ønsket endring justeres
-tilsvarende for å ta ut referansen til tekststreng.
+Dette bør ha en konsekvens på hvordan filstoerrelse er definert i
+metadatakatalog.xsdl?  Følgende forslag kan definere filstoerrelse
+som heltall større eller lik 0.
+
+<xs:simpleType name="filstoerrelse">
+  <xs:annotation>
+    <xs:documentation>M707</xs:documentation>
+  </xs:annotation>
+  <xs:restriction base="xs:string">
+    <xs:pattern value="[0-9]+"/>    
+  </xs:restriction>
+</xs:simpleType>
+
+Dette vil også unngå at noen kan sette in negative verdier eller 
+annent «søppel».
 
 Feltet «filstørrelse» er brukt på sidene 29, 50, 52, 54, 105 og 203 i
 spesifikasjonen for Noark 5 Tjenestegrensesnitt.
