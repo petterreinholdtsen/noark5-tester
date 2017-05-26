@@ -1,3 +1,6 @@
+all:
+	echo "you probably want call runtest manually"
+
 # docker build says: reference format: repository name must be lowercase
 project ?=nikita5/noark5-tester
 
