@@ -42,9 +42,9 @@ så fall kreve klare regler for avrunding og gjøre det vanskelig å
 bruke verdien til å sjekke at komplett fil er lastet opp og ned på
 grunn av avrunding.  For eksempel er det vanskelig å vite hva
 størrelsen egentlig er hvis det står 1,2 KiB, da 1,2*1024 jo er
-1228,8, og størrelsen jo da må være enten 1228 eller 1229 bytes.
+1228,8, og størrelsen jo må være enten 1228 eller 1229 bytes.
 
-I tillegg kommer jo tolkningsutfordringer når det gjelder f.eks. «KB»,
+I tillegg kommer tolkningsutfordringer når det gjelder f.eks. «KB»,
 som både kan tolkes som verdi ganger 1000 eller 1024.  Her må
 spesifikasjonen klargjøre hvordan slike verdier skal tolkes hvis det
 skal være mulig med desimaltall.
@@ -76,7 +76,7 @@ som heltall større eller lik 0.
 Dette vil også gjøre det klart at kun ikke-negative heltall aksepteres
 i dette feltet.
 
-En annen ide er å bytte type fra xs:string til en numberisk verdi.
+En annen ide er å bytte type fra xs:string til en numerisk type.
 Dette bør i så fall gjøres på en måte som ikke begrenser mulige
 filstørrelser.  Feltet «filstørrelse» er brukt på sidene 29, 50, 52,
 54, 105 og 203 i spesifikasjonen for Noark 5 Tjenestegrensesnitt.
