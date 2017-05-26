@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 import sys
 sys.path.append('lib')
 
@@ -24,8 +26,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
             self.baseurl = args.baseurl
         if args.savedir:
             self.savedir = args.savedir
-        self.verbose = args.verbose
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
+        self.verbose = args.verbose
         
     def _mkdir_recursive(self, path):
         sub_path = os.path.dirname(path)
@@ -53,7 +55,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
             path = path + ".json"
             
             try:
-                print("info: Fetching %s" % url)
+                if self.verbose:
+                    print("info: Fetching %s" % url)
+                else:
+                    sys.stdout.write('.')
                 (content, res) = self.json_get(url)
 
                 dir = os.path.dirname(path)
@@ -94,6 +99,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                                                 urlsleft.append(href)
             except urllib2.HTTPError as e:
                 pass
+        if not self.verbose:
+            print("")
 
 def main():
     t = ContentDumper()
