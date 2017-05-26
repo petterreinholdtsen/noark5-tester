@@ -50,7 +50,7 @@ http://n5test.kxml.no/api/arkivstruktur/journalpost, slik at det ikke
 er noe hjelp der å få når det gjelder riktig attributtnavn.
 Attributtnavnet «journalår» er heller ikke omtalt på
 http://rel.kxml.no/noark5/v4/api/sakarkiv/journalpost/, som forøvrig
-her helt uten tekst.  Jeg antar derfor at det er feil, og skulle vært
+er helt uten tekst.  Jeg antar derfor at det er feil, og skulle vært
 «journalaar».
 
 Hvis attributtnavnet «journalår» er korrekt og ment å avvike fra
