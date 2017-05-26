@@ -68,7 +68,10 @@ kontrollert av arkivverket?
 Det vil helt klart ikke være noe problem hvis eierskap for kxml.no
 overføres til Arkivverket, men kan bli problematisk i fremtiden hvis
 det ikke gjøres og Arkitektum og Arkivverket blir uenige om videre
-forvaltning av standarden.
+forvaltning av standarden.  Det kan også være et problem hvis
+Arkitektum legges ned eller går konkurs og adressen kjøpes opp av noen
+som erstatter innholdet på rel.kxml.no med for eksempel reklame for en
+spesifikk leverandør av Noark-tjenesteer eller et pornonettsted.
 
 Ønsket endring
 --------------
