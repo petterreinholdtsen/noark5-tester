@@ -73,11 +73,14 @@ som heltall større eller lik 0.
 </xs:simpleType>
 ```
 
-Dette vil også unngå at noen kan sette in negative verdier eller 
-annent «søppel».
+Dette vil også gjøre det klart at kun ikke-negative heltall aksepteres
+i dette feltet.
 
-Feltet «filstørrelse» er brukt på sidene 29, 50, 52, 54, 105 og 203 i
-spesifikasjonen for Noark 5 Tjenestegrensesnitt.
+En annen ide er å bytte type fra xs:string til en numberisk verdi.
+Dette bør i så fall gjøres på en måte som ikke begrenser mulige
+filstørrelser.  Feltet «filstørrelse» er brukt på sidene 29, 50, 52,
+54, 105 og 203 i spesifikasjonen for Noark 5 Tjenestegrensesnitt.
+Hvis typen skal endres så må det endres også her.
 
 Ønsket endring
 --------------
@@ -91,6 +94,20 @@ til
 
 > Størrelsen på fila som en tekststreng med antall bytes i oppgitt som
 > et ikke-negativt heltall i titallsystemet, f.eks. "123456890".
+
+Endre beskrivelsen av M707 i metadatakatalog.xsdl, bytt ut
+
+> ```
+> <xs:restriction base="xs:string"/>
+> ```
+
+med
+
+> ```
+> <xs:restriction base="xs:string">
+>   <xs:pattern value="[0-9]+"/>
+> </xs:restriction>
+> ```
 
 Endre feltbeskrivelsen i del 7.2.1.7 (Dokumentobjekt) på side 105 i
 spesifikasjonen for Noark 5 tjenestegrensenitt 1.0 beta fra
