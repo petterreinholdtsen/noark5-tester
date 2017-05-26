@@ -27,21 +27,22 @@ Kommentarer: (ingen)».  I metadatakatalog.xsdl er den oppført med
 datatype «string» .
 
 Et [desimaltall](https://no.wikipedia.org/wiki/Desimaltall) er i følge
-den norske Wikipediasiden, «tall som er satt sammen av en heltallsdel
-og en fraksjonsdel. Disse to delene er skilt med et
+definisjonen i norsk Wikipedia, «tall som er satt sammen av en
+heltallsdel og en fraksjonsdel. Disse to delene er skilt med et
 desimalskilletegn. Et eksempel kan være tallet «49,90» der
-heltallsdelen er «49» og fraksjondelen er «90».» [Store Norske
-Leksikon](https://snl.no/numerisk_metode) bekrefter denne språkbruken.
+heltallsdelen er «49» og fraksjondelen er «90».» Store Norske Leksikon
+bekrefter denne språkbruken blant annet i beskrivelsen av [numerisk
+metode](https://snl.no/numerisk_metode).
 
-Beskrivelsen «desimaltall» tyder dermed på at størrelsen skal kunne
-være brøkdeler av en byte, hvilket ikke gir mening.  Er tanken at det
-skal være mulig å lagre størrelsen i kibibytes, kilobytes eller
-lignende, dvs. lagre «1,2 KiB» i feltet?  Dette vil i så fall kreve
-klare regler for avrunding og gjøre det vanskelig å bruke verdien til
-å sjekke at komplett fil er lastet opp og ned på grunn av avrunding.
-For eksempel er det vanskelig å vite hva størrelsen egentlig er hvis
-det står 1,2 KiB, da 1,2*1024 jo er 1228,8, og størrelsen jo da må
-være enten 1228 eller 1229 bytes.
+At definisjonen bruker «desimaltall» tyder dermed på at størrelsen
+skal kunne være brøkdeler av en byte, hvilket ikke gir mening.  Er
+tanken at det skal være mulig å lagre størrelsen i kibibytes,
+kilobytes eller lignende, dvs. lagre «1,2 KiB» i feltet?  Dette vil i
+så fall kreve klare regler for avrunding og gjøre det vanskelig å
+bruke verdien til å sjekke at komplett fil er lastet opp og ned på
+grunn av avrunding.  For eksempel er det vanskelig å vite hva
+størrelsen egentlig er hvis det står 1,2 KiB, da 1,2*1024 jo er
+1228,8, og størrelsen jo da må være enten 1228 eller 1229 bytes.
 
 I tillegg kommer jo tolkningsutfordringer når det gjelder f.eks. «KB»,
 som både kan tolkes som verdi ganger 1000 eller 1024.  Her må
