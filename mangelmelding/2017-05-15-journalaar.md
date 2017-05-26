@@ -46,7 +46,7 @@ er definert uten å:
 Attributtnavnet «journalår» er ikke brukt i Noark 5 standarden eller
 tilhørende XSD-filer.  Attributtnavnet er heller ikke brukt på
 demonettstedet når vi ser på
-http://n5test.kxml.no/api/arkivstruktur/journalpost, slik at det ikke
+http://n5test.kxml.no/api/sakarkiv/journalpost, slik at det ikke
 er noe hjelp der å få når det gjelder riktig attributtnavn.
 Attributtnavnet «journalår» er heller ikke omtalt på
 http://rel.kxml.no/noark5/v4/api/sakarkiv/journalpost/, som forøvrig
