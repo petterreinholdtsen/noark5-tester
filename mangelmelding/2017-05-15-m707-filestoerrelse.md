@@ -62,13 +62,22 @@ spesifikasjonen for Noark 5 Tjenestegrensesnitt.
 Ønsket endring
 --------------
 
-Endre feltbeskrivelsen i del 7.2.1.7 (Dokumentobjekt) på side 105 fra
+Legge inn ny merkad i del 5.6 (Dokumentbeskrivelse og Dokumentobjekt)
+under «Metadata for Dokumentobjekt» i spesifikasjonen for Noark 5
+versjon 4.0 (PDF side 73):
+
+> 3. filstoerrelse er størrelsen på fila som en string med antall
+>    bytes i oppgitt som et ikke-negativt heltall i titallsystemet,
+>    f.eks. "123456890".
+
+Endre feltbeskrivelsen i del 7.2.1.7 (Dokumentobjekt) på side 105 i
+spesifikasjonen for Noark 5 tjenestegrensenitt 1.0 beta fra
 
 > Definisjon: Størrelsen på fila i antall bytes oppgitt med
 > desimaltall
 
 til
 
-> Definisjon: Størrelsen på fila i antall bytes i oppgitt som et
-> ikke-negativt heltall i titallsystemet i en string,
+> Definisjon: Størrelsen på fila som en string med antall bytes i
+> oppgitt som et ikke-negativt heltall i titallsystemet,
 > f.eks. "123456890".
