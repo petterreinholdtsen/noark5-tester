@@ -61,14 +61,16 @@ Dette bør ha en konsekvens på hvordan filstoerrelse er definert i
 metadatakatalog.xsdl?  Følgende forslag kan definere filstoerrelse
 som heltall større eller lik 0.
 
-`<xs:simpleType name="filstoerrelse">
+```
+<xs:simpleType name="filstoerrelse">
   <xs:annotation>
     <xs:documentation>M707</xs:documentation>
   </xs:annotation>
   <xs:restriction base="xs:string">
     <xs:pattern value="[0-9]+"/>    
   </xs:restriction>
-</xs:simpleType>`
+</xs:simpleType>
+```
 
 Dette vil også unngå at noen kan sette in negative verdier eller 
 annent «søppel».
