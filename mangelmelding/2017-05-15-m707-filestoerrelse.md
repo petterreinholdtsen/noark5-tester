@@ -19,11 +19,12 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-M707 filstørrelse (filstoerrelse i XSD) er definert med datatype
-«string» i vedlegg 1 (Metadatakatalog) til Noark 5 versjon 4.0, og med
-følgende beskrivelse «Definisjon: Størrelsen på fila i antall bytes
-oppgitt med desimaltall Kilde: Registreres automatisk i forbindelse
-med eksport for avlevering Kommentarer: (ingen)».
+M707 filstørrelse (filstoerrelse i XSD) er definert i vedlegg 1
+(Metadatakatalog) til Noark 5 versjon 4.0, og med følgende beskrivelse
+«Definisjon: Størrelsen på fila i antall bytes oppgitt med desimaltall
+Kilde: Registreres automatisk i forbindelse med eksport for avlevering
+Kommentarer: (ingen)».  I metadatakatalog.xsdl er den oppført med
+datatype «string» .
 
 Et [desimaltall](https://no.wikipedia.org/wiki/Desimaltall) er i følge
 den norske Wikipediasiden, «tall som er satt sammen av en heltallsdel
@@ -55,6 +56,10 @@ Det vil være enklere for alle, både API-klienter og andre
 implementasjoner, hvis dette feltet har en klar og entydig betydning,
 og alltid er et heltall større eller lik null som oppgir filstørrelsen
 i bytes.
+
+Kan det være en ide å endre typen fra «xs:string» til «xs:integer» i
+metadatakatalog.xsdl?  I så tilfelle bør ønsket endring justeres
+tilsvarende for å ta ut referansen til tekststreng.
 
 Feltet «filstørrelse» er brukt på sidene 29, 50, 52, 54, 105 og 203 i
 spesifikasjonen for Noark 5 Tjenestegrensesnitt.
