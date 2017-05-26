@@ -26,7 +26,7 @@ http://rel.kxml.no/, og fungerer som nettadresser til dokumentasjon om
 de ulike relasjonene.  Dette er en god ide.  I dag kontrolleres
 DNS-domenet rel.kxml.no og kxml.no i følge WHOIS-databasen til Uninett
 Norid av det private selskapet [Arkitektum
-AS](http://www.proff.no/bransjes%C3%B8k?q=914994780):
+AS](https://w2.brreg.no/enhet/sok/detalj.jsp?orgnr=914994780):
 
 ```
 Domain Information
@@ -75,4 +75,5 @@ forvaltning av standarden.
 
 Enten bør eierskap for kxml.no flyttes til Arkivverket som står bak
 Noark-standarden, eller så bør alle relasjonsnavn endres til å bruke
-DNS-navn som kontrolleres av Arkivverket.
+DNS-navn som kontrolleres av Arkivverket,
+f.eks. rel.noark5.arkivverket.no.
