@@ -59,7 +59,7 @@ og alltid er et heltall større eller lik null som oppgir filstørrelsen
 i bytes.
 
 Dette bør ha en konsekvens på hvordan filstoerrelse er definert i
-metadatakatalog.xsdl?  Følgende forslag kan definere filstoerrelse
+metadatakatalog.xsdl.  Følgende forslag kan definere filstoerrelse
 som heltall større eller lik 0.
 
 ```
