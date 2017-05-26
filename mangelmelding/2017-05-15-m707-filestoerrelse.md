@@ -7,8 +7,8 @@ Hvordan skal innholdet i filstørrelse (M707) tolkes?
         Alvorlighet  protest
        Meldingstype  trenger klargjøring
     Brukerreferanse  thomas.sodring@hioa.no
-        Dokumentdel  7.2.1.7
-         Sidenummer  105
+        Dokumentdel  Vedlegg 1
+         Sidenummer  61
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
@@ -20,10 +20,10 @@ Beskrivelse
 -----------
 
 M707 filstørrelse (filstoerrelse i XSD) er definert med datatype
-«string» i metadatakatalogen, og med følgende beskrivelse «Definisjon:
-Størrelsen på fila i antall bytes oppgitt med desimaltall Kilde:
-Registreres automatisk i forbindelse med eksport for avlevering
-Kommentarer: (ingen)».
+«string» i vedlegg 1 (Metadatakatalog) til Noark 5 versjon 4.0, og med
+følgende beskrivelse «Definisjon: Størrelsen på fila i antall bytes
+oppgitt med desimaltall Kilde: Registreres automatisk i forbindelse
+med eksport for avlevering Kommentarer: (ingen)».
 
 Et [desimaltall](https://no.wikipedia.org/wiki/Desimaltall) er i følge
 den norske Wikipediasiden, «tall som er satt sammen av en heltallsdel
@@ -62,13 +62,15 @@ spesifikasjonen for Noark 5 Tjenestegrensesnitt.
 Ønsket endring
 --------------
 
-Legge inn ny merkad i del 5.6 (Dokumentbeskrivelse og Dokumentobjekt)
-under «Metadata for Dokumentobjekt» i spesifikasjonen for Noark 5
-versjon 4.0 (PDF side 73):
+Endre oppføringen for M707 på side 61 i vedlegg 1 (Metadatakatalog)
+til Noark 5 versjon 4.0, bytte ut
 
-> 3. filstoerrelse er størrelsen på fila som en string med antall
->    bytes i oppgitt som et ikke-negativt heltall i titallsystemet,
->    f.eks. "123456890".
+> Størrelsen på fila i antall bytes oppgitt med desimaltall
+
+til
+
+> Størrelsen på fila som en tekststreng med antall bytes i oppgitt som
+> et ikke-negativt heltall i titallsystemet, f.eks. "123456890".
 
 Endre feltbeskrivelsen i del 7.2.1.7 (Dokumentobjekt) på side 105 i
 spesifikasjonen for Noark 5 tjenestegrensenitt 1.0 beta fra
@@ -78,6 +80,6 @@ spesifikasjonen for Noark 5 tjenestegrensenitt 1.0 beta fra
 
 til
 
-> Definisjon: Størrelsen på fila som en string med antall bytes i
+> Definisjon: Størrelsen på fila som en tekststreng med antall bytes i
 > oppgitt som et ikke-negativt heltall i titallsystemet,
 > f.eks. "123456890".
