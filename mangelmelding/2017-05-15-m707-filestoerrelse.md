@@ -49,9 +49,8 @@ som både kan tolkes som verdi ganger 1000 eller 1024.  Her må
 spesifikasjonen klargjøre hvordan slike verdier skal tolkes hvis det
 skal være mulig med desimaltall.
 
-En annen utfordring er at formattering av desimaltall er
-språkavhengig, der noen bruker punktum som desimalskille, mens andre
-bruker komma.
+En annen utfordring er at desimaltall-formater er språkavhengig, der
+noen bruker punktum som desimalskille, mens andre bruker komma.
 
 Det vil være enklere for alle, både API-klienter og andre
 implementasjoner, hvis dette feltet har en klar og entydig betydning,
@@ -80,7 +79,8 @@ En annen ide er å bytte type fra xs:string til en numerisk type.
 Dette bør i så fall gjøres på en måte som ikke begrenser mulige
 filstørrelser.  Feltet «filstørrelse» er brukt på sidene 29, 50, 52,
 54, 105 og 203 i spesifikasjonen for Noark 5 Tjenestegrensesnitt.
-Hvis typen skal endres så må det endres også her.
+Hvis typen skal endres i metadatakatalog.xsdl så må det endres også
+her.
 
 Ønsket endring
 --------------
