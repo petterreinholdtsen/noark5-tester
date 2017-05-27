@@ -743,24 +743,22 @@ Test basis requirements for NOARK 5 Core.
                                              createjournalentryrel,
                                              self.parselinks(casefileinfo['_links']),
                                              journalentrydata)
-        # FIXME should test both KorrespondansepartEnhet and
-        # KorrespondansepartPerson instead of the base class
-        # Korrespondansepart
-        corrpartrel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepartenhet/'
-        for code in ('EA', 'EM', 'EK', 'GM', 'IA', 'IM', 'IK'):
-            corrdata = {
-                'korrespondanseparttype' : {
-                    'kode' : code
-                },
-                # FIXME korrespondansepartNavn is only present in
-                # KorrespondansepartEnhet and KorrespondansepartPerson, not
-                # KorrespondansepartIntern.
-                'navn' : 'Eksempel %s' % code,
-            }
-            corrinfo = self.createEntity('correspondance part',
-                                         corrpartrel,
-                                         self.parselinks(journalentryinfo['_links']),
-                                         corrdata)
+        for (c, f) in [('enhet', 'navn'),
+                       ('person', 'navn'),
+                       # ('intern', 'administrativenhet') # FIXME not working yet
+        ]:
+            corrpartrel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepart%s/' % c
+            for code in ('EA', 'EM', 'EK', 'GM', 'IA', 'IM', 'IK'):
+                corrdata = {
+                    'korrespondanseparttype' : {
+                        'kode' : code
+                    },
+                    f : 'Eksempel %s' % code,
+                }
+                corrinfo = self.createEntity('correspondance part %s' % c,
+                                             corrpartrel,
+                                             self.parselinks(journalentryinfo['_links']),
+                                             corrdata)
         docdescdata = {
 #            "dokumenttype"    : "type dokument",
 #            "dokumentstatus"  : "status of document",
