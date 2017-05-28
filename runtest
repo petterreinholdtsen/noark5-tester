@@ -38,132 +38,135 @@ import urllib2
 import xml.etree.ElementTree
 import n5core.endpoint
 
+noarkrelbase = 'http://rel.kxml.no/noark5/v4/api/'
+nikitarelbase = 'http://nikita.arkivlab.no/noark5/v4/'
+
 class Noark5Tester (n5core.endpoint.Endpoint):
     knownrels = [
-        'http://rel.kxml.no/noark5/v4/api/admin/administrativenhet/',
-        'http://rel.kxml.no/noark5/v4/api/admin/bruker/',
-        'http://rel.kxml.no/noark5/v4/api/admin/enhet/',
-        'http://rel.kxml.no/noark5/v4/api/admin/ny-administrativenhet/',
-        'http://rel.kxml.no/noark5/v4/api/admin/ny-bruker/',
-        'http://rel.kxml.no/noark5/v4/api/admin/ny-rettighet/',
-        'http://rel.kxml.no/noark5/v4/api/admin/rettighet/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivdel/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivskaper/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/basisregistrering/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/bygning/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentbeskrivelse/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentobjekt/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/elektronisksignatur/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/hendelseslogg/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/klasse/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/klassifikasjonssystem/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/konvertering/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/kryssreferanse/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/logg/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/matrikkel/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/merknad/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/nasjonaleidentifikator/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/nasjonalidentifikator/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivskaper/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-basisregistrering/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-bygning/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentbeskrivelse/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentobjekt/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-elektronisksignatur/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-hendelseslogg/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-klasse/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-klassifikasjonssystem/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-konvertering/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-kryssreferanse/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-matrikkel/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-merknad/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-nasjonalidentifikator',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-plan/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-posisjon/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/plan/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/posisjon/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/registrering/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/sekundaerklassifikasjons',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/underarkiv/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/underklasse/',
-        'http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/',
-        'http://rel.kxml.no/noark5/v4/api/loggingogsporing/endringslogg/',
-        'http://rel.kxml.no/noark5/v4/api/loggingogsporing/ny-endringslogg/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/arkivdelstatus/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/arkivstatus/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/avskrivningsmaate/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/dokumentmedium/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/dokumentstatus/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/dokumenttype/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/elektronisksignatursikkerhetsnivaa/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/elektronisksignaturverifisert/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/flytstatus/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/format/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/graderingskode/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/hendelsetype/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/journalposttype/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/journalstatus/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/kassasjonsvedtak/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/klassifikasjonstype/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/korrespondanseparttype/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/land/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/mappetype/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/merknadstype/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/moetedeltakerfunksjon/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/moeteregistreringsstatus/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/moeteregistreringstype/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/moetesakstype/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/postnummer/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/presedensstatus/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/sakspartrolle/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/saksstatus/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/skjermingdokument/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/skjermingmetadata/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/slettingstype/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/tilgangskategori/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/tilgangsrestriksjon/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/tilknyttetregistreringsom/',
-        'http://rel.kxml.no/noark5/v4/api/metadata/variantformat/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/avskrivning/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/dokumentflyt/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/enkeladresse/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/journalpost/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/kontaktinformasjon/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/korrespondansepart/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/korrespondansepartenhet/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/korrespondansepartintern/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/korrespondansepartperson/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-avskrivning/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-dokumentflyt/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-enkeladresse/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-journalpost/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-kontaktinformasjon/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepart/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepartenhet/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepartintern/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepartperson/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-presedens/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-saksmappe/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-sakspart/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-sakspartenhet/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-sakspartperson/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/presedens/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/sak/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/saksmappe/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/sakspart/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/sakspartenhet/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/saksparter/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/sakspartperson/',
-        'http://rel.kxml.no/noark5/v4/api/sakarkiv/sekundaerklassifikasjon/',
+        noarkrelbase + 'admin/administrativenhet/',
+        noarkrelbase + 'admin/bruker/',
+        noarkrelbase + 'admin/enhet/',
+        noarkrelbase + 'admin/ny-administrativenhet/',
+        noarkrelbase + 'admin/ny-bruker/',
+        noarkrelbase + 'admin/ny-rettighet/',
+        noarkrelbase + 'admin/rettighet/',
+        noarkrelbase + 'arkivstruktur/',
+        noarkrelbase + 'arkivstruktur/arkiv/',
+        noarkrelbase + 'arkivstruktur/arkivdel/',
+        noarkrelbase + 'arkivstruktur/arkivskaper/',
+        noarkrelbase + 'arkivstruktur/basisregistrering/',
+        noarkrelbase + 'arkivstruktur/bygning/',
+        noarkrelbase + 'arkivstruktur/dokumentbeskrivelse/',
+        noarkrelbase + 'arkivstruktur/dokumentobjekt/',
+        noarkrelbase + 'arkivstruktur/elektronisksignatur/',
+        noarkrelbase + 'arkivstruktur/fil/',
+        noarkrelbase + 'arkivstruktur/hendelseslogg/',
+        noarkrelbase + 'arkivstruktur/klasse/',
+        noarkrelbase + 'arkivstruktur/klassifikasjonssystem/',
+        noarkrelbase + 'arkivstruktur/konvertering/',
+        noarkrelbase + 'arkivstruktur/kryssreferanse/',
+        noarkrelbase + 'arkivstruktur/logg/',
+        noarkrelbase + 'arkivstruktur/mappe/',
+        noarkrelbase + 'arkivstruktur/matrikkel/',
+        noarkrelbase + 'arkivstruktur/merknad/',
+        noarkrelbase + 'arkivstruktur/nasjonaleidentifikator/',
+        noarkrelbase + 'arkivstruktur/nasjonalidentifikator/',
+        noarkrelbase + 'arkivstruktur/ny-arkiv/',
+        noarkrelbase + 'arkivstruktur/ny-arkivdel/',
+        noarkrelbase + 'arkivstruktur/ny-arkivskaper/',
+        noarkrelbase + 'arkivstruktur/ny-basisregistrering/',
+        noarkrelbase + 'arkivstruktur/ny-bygning/',
+        noarkrelbase + 'arkivstruktur/ny-dokumentbeskrivelse/',
+        noarkrelbase + 'arkivstruktur/ny-dokumentobjekt/',
+        noarkrelbase + 'arkivstruktur/ny-elektronisksignatur/',
+        noarkrelbase + 'arkivstruktur/ny-hendelseslogg/',
+        noarkrelbase + 'arkivstruktur/ny-klasse/',
+        noarkrelbase + 'arkivstruktur/ny-klassifikasjonssystem/',
+        noarkrelbase + 'arkivstruktur/ny-konvertering/',
+        noarkrelbase + 'arkivstruktur/ny-kryssreferanse/',
+        noarkrelbase + 'arkivstruktur/ny-mappe/',
+        noarkrelbase + 'arkivstruktur/ny-matrikkel/',
+        noarkrelbase + 'arkivstruktur/ny-merknad/',
+        noarkrelbase + 'arkivstruktur/ny-nasjonalidentifikator',
+        noarkrelbase + 'arkivstruktur/ny-plan/',
+        noarkrelbase + 'arkivstruktur/ny-posisjon/',
+        noarkrelbase + 'arkivstruktur/ny-registrering/',
+        noarkrelbase + 'arkivstruktur/plan/',
+        noarkrelbase + 'arkivstruktur/posisjon/',
+        noarkrelbase + 'arkivstruktur/registrering/',
+        noarkrelbase + 'arkivstruktur/sekundaerklassifikasjons',
+        noarkrelbase + 'arkivstruktur/underarkiv/',
+        noarkrelbase + 'arkivstruktur/underklasse/',
+        noarkrelbase + 'arkivstruktur/undermappe/',
+        noarkrelbase + 'loggingogsporing/endringslogg/',
+        noarkrelbase + 'loggingogsporing/ny-endringslogg/',
+        noarkrelbase + 'metadata/arkivdelstatus/',
+        noarkrelbase + 'metadata/arkivstatus/',
+        noarkrelbase + 'metadata/avskrivningsmaate/',
+        noarkrelbase + 'metadata/dokumentmedium/',
+        noarkrelbase + 'metadata/dokumentstatus/',
+        noarkrelbase + 'metadata/dokumenttype/',
+        noarkrelbase + 'metadata/elektronisksignatursikkerhetsnivaa/',
+        noarkrelbase + 'metadata/elektronisksignaturverifisert/',
+        noarkrelbase + 'metadata/flytstatus/',
+        noarkrelbase + 'metadata/format/',
+        noarkrelbase + 'metadata/graderingskode/',
+        noarkrelbase + 'metadata/hendelsetype/',
+        noarkrelbase + 'metadata/journalposttype/',
+        noarkrelbase + 'metadata/journalstatus/',
+        noarkrelbase + 'metadata/kassasjonsvedtak/',
+        noarkrelbase + 'metadata/klassifikasjonstype/',
+        noarkrelbase + 'metadata/korrespondanseparttype/',
+        noarkrelbase + 'metadata/land/',
+        noarkrelbase + 'metadata/mappetype/',
+        noarkrelbase + 'metadata/merknadstype/',
+        noarkrelbase + 'metadata/moetedeltakerfunksjon/',
+        noarkrelbase + 'metadata/moeteregistreringsstatus/',
+        noarkrelbase + 'metadata/moeteregistreringstype/',
+        noarkrelbase + 'metadata/moetesakstype/',
+        noarkrelbase + 'metadata/postnummer/',
+        noarkrelbase + 'metadata/presedensstatus/',
+        noarkrelbase + 'metadata/sakspartrolle/',
+        noarkrelbase + 'metadata/saksstatus/',
+        noarkrelbase + 'metadata/skjermingdokument/',
+        noarkrelbase + 'metadata/skjermingmetadata/',
+        noarkrelbase + 'metadata/slettingstype/',
+        noarkrelbase + 'metadata/tilgangskategori/',
+        noarkrelbase + 'metadata/tilgangsrestriksjon/',
+        noarkrelbase + 'metadata/tilknyttetregistreringsom/',
+        noarkrelbase + 'metadata/variantformat/',
+        noarkrelbase + 'sakarkiv/',
+        noarkrelbase + 'sakarkiv/avskrivning/',
+        noarkrelbase + 'sakarkiv/dokumentflyt/',
+        noarkrelbase + 'sakarkiv/enkeladresse/',
+        noarkrelbase + 'sakarkiv/journalpost/',
+        noarkrelbase + 'sakarkiv/kontaktinformasjon/',
+        noarkrelbase + 'sakarkiv/korrespondansepart/',
+        noarkrelbase + 'sakarkiv/korrespondansepartenhet/',
+        noarkrelbase + 'sakarkiv/korrespondansepartintern/',
+        noarkrelbase + 'sakarkiv/korrespondansepartperson/',
+        noarkrelbase + 'sakarkiv/ny-avskrivning/',
+        noarkrelbase + 'sakarkiv/ny-dokumentflyt/',
+        noarkrelbase + 'sakarkiv/ny-enkeladresse/',
+        noarkrelbase + 'sakarkiv/ny-journalpost/',
+        noarkrelbase + 'sakarkiv/ny-kontaktinformasjon/',
+        noarkrelbase + 'sakarkiv/ny-korrespondansepart/',
+        noarkrelbase + 'sakarkiv/ny-korrespondansepartenhet/',
+        noarkrelbase + 'sakarkiv/ny-korrespondansepartintern/',
+        noarkrelbase + 'sakarkiv/ny-korrespondansepartperson/',
+        noarkrelbase + 'sakarkiv/ny-presedens/',
+        noarkrelbase + 'sakarkiv/ny-saksmappe/',
+        noarkrelbase + 'sakarkiv/ny-sakspart/',
+        noarkrelbase + 'sakarkiv/ny-sakspartenhet/',
+        noarkrelbase + 'sakarkiv/ny-sakspartperson/',
+        noarkrelbase + 'sakarkiv/presedens/',
+        noarkrelbase + 'sakarkiv/sak/',
+        noarkrelbase + 'sakarkiv/saksmappe/',
+        noarkrelbase + 'sakarkiv/sakspart/',
+        noarkrelbase + 'sakarkiv/sakspartenhet/',
+        noarkrelbase + 'sakarkiv/saksparter/',
+        noarkrelbase + 'sakarkiv/sakspartperson/',
+        noarkrelbase + 'sakarkiv/sekundaerklassifikasjon/',
         'self',
     ]
     knownmissingregex = [
@@ -652,8 +655,7 @@ Test basis requirements for NOARK 5 Core.
             self.failure("not logged in, unable to test creation")
             return
 
-        createrecordcreatorrel = \
-            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivskaper/'
+        createrecordcreatorrel = noarkrelbase + 'arkivstruktur/ny-arkivskaper/'
         recordcreatordata = {
             #'arkivskaperID' : '123456789',
             #'arkivskaperNavn': 'Mr. arkivskaper',
@@ -665,8 +667,7 @@ Test basis requirements for NOARK 5 Core.
         if recordcreatorinfo is None:
             return
             
-        createfondsrel = \
-            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
+        createfondsrel = noarkrelbase + 'arkivstruktur/ny-arkiv/'
         fondsdata = {
             "tittel"          : "Title of the test fonds created %s" % now,
 #            "beskrivelse"     : "Description of the test fonds",
@@ -685,8 +686,7 @@ Test basis requirements for NOARK 5 Core.
 #            "oppbevaringssted" : [ "location 1", "location2", "location3" ],
 #            "dokumentmedium"  : "Elektronisk arkiv",
         }
-        createseriesrel = \
-            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
+        createseriesrel = noarkrelbase + 'arkivstruktur/ny-arkivdel/'
         serieinfo = self.createEntity('serie', createseriesrel,
                                       self.parselinks(fondinfo['_links']),
                                       seriesdata)
@@ -700,16 +700,14 @@ Test basis requirements for NOARK 5 Core.
 #            "oppbevaringssted"    : [ "location 1", "location2", "location3" ],
 #            "dokumentmedium"     : "Elektronisk arkiv",
         }
-        createfilerel = \
-            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/'
+        createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
         fileinfo = self.createEntity('file', createfilerel,
                                      self.parselinks(serieinfo['_links']),
                                      filedata)
 
         recorddata = {
         }
-        createrecordrel = \
-            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering/'
+        createrecordrel = noarkrelbase + 'arkivstruktur/ny-registrering/'
         recordinfo = self.createEntity('record', createrecordrel,
                                        self.parselinks(fileinfo['_links']),
                                        recorddata)
@@ -726,8 +724,7 @@ Test basis requirements for NOARK 5 Core.
 #            "saksansvarlig"      : "Joe the case handler",
 #            "saksstatus"         : "Opprettet",
         }
-        createcasefilerel = \
-            'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-saksmappe/'
+        createcasefilerel = noarkrelbase + 'sakarkiv/ny-saksmappe/'
         casefileinfo = self.createEntity('casefile', createcasefilerel,
                                          self.parselinks(serieinfo['_links']),
                                          casefiledata)
@@ -736,8 +733,7 @@ Test basis requirements for NOARK 5 Core.
         journalentrydata = {
         }
         # FIXME figure out how the spec expect us to add journalpost
-        createjournalentryrel = \
-            'http://nikita.arkivlab.no/noark5/v4/ny-journalpost/'
+        createjournalentryrel = nikitarelbase + 'ny-journalpost/'
         journalentryinfo = self.createEntity('journalentry',
                                              createjournalentryrel,
                                              self.parselinks(casefileinfo['_links']),
@@ -746,7 +742,7 @@ Test basis requirements for NOARK 5 Core.
                        ('person', 'navn'),
                        # ('intern', 'administrativenhet') # FIXME not working yet
         ]:
-            corrpartrel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepart%s/' % c
+            corrpartrel = noarkrelbase + 'sakarkiv/ny-korrespondansepart%s/' % c
             for code in ('EA', 'EM', 'EK', 'GM', 'IA', 'IM', 'IK'):
                 corrdata = {
                     'korrespondanseparttype' : {
@@ -764,8 +760,7 @@ Test basis requirements for NOARK 5 Core.
 #            "tittel"          : "Title of the test document description created %s" % now,
 #            "tilknyttetRegistreringSom" : "Associated with record as"
         }
-        createdocdescrel = \
-            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentbeskrivelse/'
+        createdocdescrel = noarkrelbase + 'arkivstruktur/ny-dokumentbeskrivelse/'
         docdescinfo = self.createEntity('document description',
                                         createdocdescrel,
                                         self.parselinks(recordinfo['_links']),
@@ -780,15 +775,14 @@ Test basis requirements for NOARK 5 Core.
             "filstoerrelse"   : str(len(xmldata)),
 #            "mimeType"       : "application/xml", 
         }
-        createdocobjrel = \
-            'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentobjekt/'
+        createdocobjrel = noarkrelbase + 'arkivstruktur/ny-dokumentobjekt/'
         docobjinfo = self.createEntity('document object', createdocobjrel,
                                        self.parselinks(docdescinfo['_links']),
                                        docobjdata)
 
         # FIXME try to upload a file, for examle an xml file and large
         # chunked file.
-        reffilerel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil/'
+        reffilerel = noarkrelbase + 'arkivstruktur/fil/'
         self.verify(reffilerel in self.parselinks(docobjinfo['_links']),
                     "_links in response from %s rel should include '%s' rel" % (createdocobjrel, reffilerel))
         rels = self.parselinks(docobjinfo['_links'])
