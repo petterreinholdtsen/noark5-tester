@@ -1,5 +1,5 @@
-Er relasjonen 'saksparter' en skrivefeil?
-=========================================
+Er relasjonen '.../sakarkiv/saksparter' en skrivefeil?
+======================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -37,7 +37,7 @@ dvs arkiv - ny-arkiv, mappe -> ny-mappe osv.  Bruken av 'saksparter' i
 flertallsform er dermed litt spesiellt, og vi lurer på om dette
 kanskje er en skrivefeil for 'sakspart'?  Hvis ikke, bør det forklares
 i spesifikasjonen hva som er forskjellen på
-`http://rel.kxml.no/noark5/v4/api/sakarkiv/saksparter/` og *
+`http://rel.kxml.no/noark5/v4/api/sakarkiv/saksparter/` og
 `http://rel.kxml.no/noark5/v4/api/sakarkiv/sakspart/`.
 
 Ønsket endring
