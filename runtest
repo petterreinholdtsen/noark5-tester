@@ -32,9 +32,11 @@ import argparse
 import datetime
 import json
 import mechanize
+import os
 import re
-import urlparse
+from subprocess import call
 import urllib2
+import urlparse
 import xml.etree.ElementTree
 import n5core.endpoint
 
@@ -824,4 +826,6 @@ def main():
     return t.runtests()
 
 if __name__ == '__main__':
+    if os.path.isdir('.git'):
+        call(["git", "rev-parse", "HEAD"])
     exit(main())
