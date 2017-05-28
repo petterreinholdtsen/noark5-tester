@@ -13,9 +13,6 @@ Når skal det brukes 'uri' i stedet for 'href' \_links?
     Innsendingsdato  2017-04-19
  ------------------  ---------------------------------
 
-Denne teksten er del av en samling innspill til NOARK5-standarden
-tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
-
 Beskrivelse
 -----------
 

@@ -13,9 +13,6 @@ Uklar beskrivelse om opprettelse av journalpost og bruken av arv
    Innsendingsdato 20177-05-09
 ------------------ ---------------------------------
 
-Denne teksten er del av en samling innspill til NOARK5-standarden
-tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
-
 Beskrivelse
 -----------
 

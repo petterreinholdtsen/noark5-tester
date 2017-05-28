@@ -13,9 +13,6 @@ Er relasjonen .../sakarkiv/sak/ under presedens en skrivefeil?
     Innsendingsdato  2017-05-16
  ------------------  ---------------------------------
 
-Denne teksten er del av en samling innspill til NOARK5-standarden
-tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
-
 Beskrivelse
 -----------
 
