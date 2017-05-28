@@ -652,6 +652,29 @@ Test basis requirements for NOARK 5 Core.
             except urllib2.HTTPError as e:
                 self.failure("unable to modify %s" % url)
 
+    def testDateFormats(self):
+        """
+Check if the API can handle all valid date formats.  Should handle
+all formats listed in http://www.w3.org/TR/NOTE-datetime .
+"""
+        createfondsrel = noarkrelbase + 'arkivstruktur/ny-arkiv/'
+        for timestamp in [
+                '1997',
+                '1997-07',
+                '1997-07-16',
+                '1997-07-16T19:20+01:00',
+                '1997-07-16T19:20:30+01:00',
+                '1997-07-16T19:20:30.45+01:00'
+        ]:
+            try:
+                fondsdata = {
+                    "opprettetDato"        : timestamp,
+                }
+                fondinfo = self.createEntity('fonds', createfondsrel,
+                                             self.rels, fondsdata)
+                self.success("able to create arkiv with opprettetDato='%s'" % timestamp)
+            except urllib2.HTTPError as e:
+                self.failure("unable to create arkiv with opprettetDato='%s'" % timestamp)
     def testNewDocument(self):
         now = datetime.datetime.now().isoformat()
         if not self.gotlogin:
@@ -810,6 +833,7 @@ Test basis requirements for NOARK 5 Core.
                 self.gotlogin = False
                 self.failure("unable to log in, operating in read only mode: %s" % e)
             self.recursiveHateoas()
+            self.testDateFormats()
             self.testNewDocument()
             self.recursiveHateoas()
             self.testNewDocument()
