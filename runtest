@@ -539,7 +539,8 @@ Test basis requirements for NOARK 5 Core.
         return rels
 
     def createEntity(self, name, rel, rels, data):
-        print("trying to create %s" % name)
+        if self.verbose:
+            print("trying to create %s" % name)
         if rel not in rels:
             self.failure("unable to create a new %s, no %s entry discovered even if logged in" % (name, rel))
             return
