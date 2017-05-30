@@ -68,6 +68,20 @@ satt til 0?  Det virker ikke å gi mening å laste opp en slik fil til
 arkivet, og det mest fornuftige er antagelig å avvise oppretting av
 dokumentobjekt hvis fillengden er null.
 
+### Kan en fil knyttet til dokumentobjekt byttes ut?
+
+Spesifikasjonen sier ingenting om hva som skal skje hvis en API-klient
+oppretter en dokumentobjekt-entitet, laster opp en fil, og så laster
+opp en annen fil.  Skal det være mulig?  Hvis eksisterende sjekksum i
+dokumentobjekt kontrolleres etter opplasting, så vil filen antagelig
+bli avvist på grunn av ny sjekksum.  Skal det være mulig å endre
+sjekksum i dokumentobjekt-entiteten uten å endre allerede opplastet
+fil?  Det vil vel fjerne poenget med sjekksummen.  Det mest fornuftige
+er kanskje å kreve at en dokumentobjekt-entiet med tilknyttet fil må
+slettes og ny opprettes hvis det skal lastes opp en ny fil.
+
+FIXME foreslå konkret endring for å forklare hvordan dette skal fungere.
+
 ### Filopplasting som del av dokumentobjekt-transaksjon
 
 En annen særlig utfordring er klienthåndtering av feil på
