@@ -10,7 +10,7 @@ Bør relasjonnavn bruke DNS-navn eid av Arkivverket?
         Dokumentdel  6.1.1.1
          Sidenummer  12
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-05-30
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
@@ -19,13 +19,16 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-Dette gjelder de fleste sider, fra side 12 og utover.
+Dette gjelder de fleste sider i spesifikasjonen for
+tjenestegrensesnittet, fra side 12 og utover, da relasjonsnavn er
+definert for alle klasser, kodelister og operasjoner.
 
 De offisielle relasjonsnavnene i spesifikasjonen starter med
-http://rel.kxml.no/, og fungerer som nettadresser til dokumentasjon om
-de ulike relasjonene.  Dette er en god ide.  I dag kontrolleres
-DNS-domenet rel.kxml.no og kxml.no i følge WHOIS-databasen til Uninett
-Norid av det private selskapet [Arkitektum
+tekststrengen http://rel.kxml.no/, og i tillegg til å være navn
+fungerer de som nettadresser til dokumentasjon om hva relasjonen
+brukes til.  Den doble betydningen av relasjonene er en veldig god
+ide.  I dag kontrolleres DNS-domenet rel.kxml.no og kxml.no i følge
+WHOIS-databasen til Uninett Norid av det private selskapet [Arkitektum
 AS](https://w2.brreg.no/enhet/sok/detalj.jsp?orgnr=914994780):
 
 ```
@@ -79,4 +82,6 @@ spesifikk leverandør av Noark-tjenesteer eller et pornonettsted.
 Enten bør eierskap for kxml.no flyttes til Arkivverket som står bak
 Noark-standarden, eller så bør alle relasjonsnavn endres til å bruke
 DNS-navn som kontrolleres av Arkivverket,
-f.eks. rel.noark5.arkivverket.no.
+f.eks. rel.noark5.arkivverket.no.  Det kan være en fordel om et nytt
+relasjons-prefix er så kort som praktisk mulig, for å redusere
+båndbreddebruken i protokollen.
