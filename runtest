@@ -824,6 +824,17 @@ all formats listed in http://www.w3.org/TR/NOTE-datetime .
             self.verify(200 == res.code, "file upload returned HTTP code 200")
         except urllib2.HTTPError, e:
             print("POST %s failed: %s" % (url, e.read()))
+        try:
+            headers = { 'Accept' : 'application/xml' }
+            (c, res) = self._get(url)
+            self.verify(c == xmldata,
+                        "downloaded file should match uploaded file")
+            ctype = res.info().getheader('Content-Type')
+            self.verify(0 == ctype.find('application/xml'),
+                        "MIME type %s should be application/xml for url %s" %
+                        (ctype, url))
+        except urllib2.HTTPError as e:
+            self.failure("downloading %s failed: %s" % (url, e.read()))
 
     def runtests(self):
         try:
