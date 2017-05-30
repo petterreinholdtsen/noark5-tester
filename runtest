@@ -848,7 +848,11 @@ all formats listed in http://www.w3.org/TR/NOTE-datetime .
                 self.gotlogin = False
                 self.failure("unable to log in, operating in read only mode: %s" % e)
             self.recursiveHateoas()
-            self.testDateFormats()
+
+            # Disabled until we figure out exactly what kind of date
+            # formats should be supported.
+            #self.testDateFormats()
+
             self.testNewDocument()
             self.recursiveHateoas()
             self.testNewDocument()
