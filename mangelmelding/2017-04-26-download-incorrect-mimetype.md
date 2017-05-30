@@ -1,5 +1,5 @@
-Hvordan skal Accept tolkes ved forsøk på filnedlasting?
-=======================================================
+Hvordan skal HTTP-hodefeltet Accept tolkes ved forsøk på filnedlasting?
+=======================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -22,7 +22,7 @@ Beskrivelse
 I punkt 6.1.1.9 (Hente og overføre data) side 25 står det ikke hvordan
 Accept-hodefeltet skal håndteres i en GET-forespørsel.  Hva skal skje
 hvis en API-klient forsøker å bruke GET mot href til relasjonsnøkkelen
-'http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil/' hvis
+'http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil/' når
 GET-forespørselens Accept-hodefelt ikke har en verdi som stemmer
 overens med MIME-typen til filen som etterspøres?  Hvis Accept-verdi
 og filens MIME-type er like, virker det klart at at filen skal
@@ -61,6 +61,8 @@ forespørsel:
 GET .../referanseFil
 Accept: application/pdf; q=0.5, application/vnd.ms-excel,
 ```
+
+FIXME beskriv forslag og hvorfor forslaget vi kommer med er en god ide.
 
 Ønsket endring
 --------------
