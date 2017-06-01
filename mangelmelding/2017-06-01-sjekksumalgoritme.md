@@ -39,10 +39,10 @@ i listen med restriksjoner på side 106 sier:
 > M706 sjekksumAlgoritme: Algoritmen som skal brukes inntil videre per
 > SHA256.
 
-En kunne ut fra dette anta at verdien som skal brukes er 'SHA256', men
+En kunne ut fra dette anta at verdien som skal brukes er «SHA256», men
 [Eksempel på innhold i malen for arkivuttrek.xml for Noark 5 versjon
 4.0](http://arkivverket.no/arkivverket/content/download/20549/186617/version/1/file/pdf.pdf)
-bruker verdien 'SHA-256' med bindestrek.  Det er dermed minst to ulike
+bruker verdien «SHA-256» med bindestrek.  Det er dermed minst to ulike
 tolkninger av lovlig verdi for dette feltet.  Gitt at SHA-256 allerede
 er brukt i et eksempeluttrekk, foreslår jeg at denne varianten velges
 som lovlig verdi for metadatafelt M706.
@@ -74,10 +74,10 @@ side 106
 med denne teksten:
 
 > M706 sjekksumAlgoritme: Algoritmen som skal brukes inntil videre er
-> SHA256.  Verdien i feltet skal være 'SHA-256'.
+> SHA256.  Verdien i feltet skal være «SHA-256».
 
 Endre betingelsen for M706 i metadatakatalogen for Noark 5, legg inn
-følgende etter 'Algoritmen som skal brukes inntil videre er SHA256':
+følgende etter «Algoritmen som skal brukes inntil videre er SHA256»:
 
 > Obligatorisk verdi:
->  * 'SHA-256'
+>  * «SHA-256»
