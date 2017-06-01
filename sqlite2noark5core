@@ -137,10 +137,10 @@ def main():
                         "beskrivelse"          : None,
                         "dokumentetsDato"      : row[n['docdate']],
                         "journaldato"          : row[n['recorddate']],
-                        "journalaar"           : str(row[n['journalyear']]),
+                        "journalaar"           : row[n['journalyear']],
                         #"journalid"            : row[n['journalid']],
-                        "journalsekvensnummer" : str(row[n['journalseqnr']]),
-                        "journalpostnummer"    : str(row[n['casedocseq']]),
+                        "journalsekvensnummer" : row[n['journalseqnr']],
+                        "journalpostnummer"    : row[n['casedocseq']],
                         "journalposttype"      : row[n['doctype']],
                 }
                 registryentryinfo = createEntity(e, 'journalpost',
