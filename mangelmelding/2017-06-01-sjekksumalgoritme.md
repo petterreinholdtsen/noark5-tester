@@ -76,8 +76,12 @@ med denne teksten:
 > M706 sjekksumAlgoritme: Algoritmen som skal brukes inntil videre er
 > SHA-256.  Verdien i feltet skal være «SHA-256».
 
-Endre betingelsen for M706 i metadatakatalogen for Noark 5, legg inn
-følgende etter «Algoritmen som skal brukes inntil videre er SHA-256»:
+Endre betingelsen for M706 i metadatakatalogen for Noark 5, bytt ut
 
+> Algoritmen som skal brukes inntil videre er SHA256»
+
+med
+
+> Algoritmen som skal brukes inntil videre er SHA-256».
 > Obligatorisk verdi:
 >  * «SHA-256»
