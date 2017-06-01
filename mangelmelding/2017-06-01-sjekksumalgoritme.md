@@ -61,7 +61,7 @@ tjenestegrensesnittspesifikasjonen.
 
 Endre del 2 (Normative referanser), legg inn nytt punkt på slutten:
 
-> SHA256 er definiert i IETF RFC 4634 -
+> SHA-256 er definiert i IETF RFC 4634 -
 > https://tools.ietf.org/html/rfc4634.
 
 Endre spesifikasjonen for tjenestegrensesnittet del 7.2.1.7
@@ -74,10 +74,10 @@ side 106
 med denne teksten:
 
 > M706 sjekksumAlgoritme: Algoritmen som skal brukes inntil videre er
-> SHA256.  Verdien i feltet skal være «SHA-256».
+> SHA-256.  Verdien i feltet skal være «SHA-256».
 
 Endre betingelsen for M706 i metadatakatalogen for Noark 5, legg inn
-følgende etter «Algoritmen som skal brukes inntil videre er SHA256»:
+følgende etter «Algoritmen som skal brukes inntil videre er SHA-256»:
 
 > Obligatorisk verdi:
 >  * «SHA-256»
