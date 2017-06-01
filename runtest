@@ -30,6 +30,7 @@ sys.path.append('lib')
 
 import argparse
 import datetime
+from hashlib import sha256
 import json
 import mechanize
 import os
@@ -797,11 +798,18 @@ all formats listed in http://www.w3.org/TR/NOTE-datetime .
                                         docdescdata)
 
         xmldata = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml></xml>\n"
+        hashalg = 'SHA-256'
+        hasher = sha256()
+        hasher.update(xmldata)
+        hash = hasher.hexdigest()
+        
         docobjdata = {
 #            "versjonsnummer"  : 1,
 #            "variantformat"   : "Arkivformat",
 #            "format"          : "PDF",
 #            "formatDetaljer"  : "PDF/A PDFv1.4",
+            "sjekksum"          : hash,
+            "sjekksumAlgoritme" : hashalg,
             "filstoerrelse"   : str(len(xmldata)),
 #            "mimeType"       : "application/xml", 
         }

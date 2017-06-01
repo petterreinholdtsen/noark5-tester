@@ -257,7 +257,7 @@ def main():
         inforeader = None
         fh = file(filename, "rb")
 
-        hashalg = "SHA256"
+        hashalg = "SHA-256"
         hasher = sha256()
         for chunk in iter(lambda: fh.read(8192), b''): 
             hasher.update(chunk)
