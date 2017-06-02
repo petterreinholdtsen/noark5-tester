@@ -1,5 +1,5 @@
-Er relasjonen '.../sakarkiv/saksparter' en skrivefeil?
-======================================================
+Er relasjonen «http://rel.kxml.no/noark5/v4/api/sakarkiv/saksparter/» en skrivefeil?
+====================================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -33,9 +33,9 @@ relasjoner som virker å være tilsvarende men med litt andre navn:
 
 I resten av spesifikasjonen for tjenestegrensesnittet så er det brukt
 samme benevnelse på listen over entiteter og oppretting av entiteter,
-dvs arkiv - ny-arkiv, mappe -> ny-mappe osv.  Bruken av 'saksparter' i
+dvs arkiv - ny-arkiv, mappe -> ny-mappe osv.  Bruken av «saksparter» i
 flertallsform i delen on Saksmappe er dermed litt spesielt, og vi
-lurer på om dette kanskje er en skrivefeil for 'sakspart'?  Hvis ikke,
+lurer på om dette kanskje er en skrivefeil for «sakspart»?  Hvis ikke,
 bør det forklares i spesifikasjonen hva som er forskjellen på
 `http://rel.kxml.no/noark5/v4/api/sakarkiv/saksparter/` og
 `http://rel.kxml.no/noark5/v4/api/sakarkiv/sakspart/`.
