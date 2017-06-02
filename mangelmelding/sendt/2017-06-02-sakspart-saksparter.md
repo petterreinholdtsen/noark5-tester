@@ -10,12 +10,8 @@ Er relasjonen «http://rel.kxml.no/noark5/v4/api/sakarkiv/saksparter/» en skriv
         Dokumentdel  7.2.3.11
          Sidenummer  239
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-06-02
  ------------------  ---------------------------------
-
-Denne teksten er del av en samling innspill til NOARK5-standarden
-tilgjengelig fra
-[https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
 Beskrivelse
 -----------
