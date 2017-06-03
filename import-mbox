@@ -49,6 +49,8 @@ class MboxImporter(n5core.endpoint.Endpoint):
         self.input = 'input.mbox'
         parser = argparse.ArgumentParser()
         parser.add_argument("--baseurl", help="(default is %s)" % self.baseurl)
+        parser.add_argument("--mda", help="behave as mda, read single email from stdin",
+                            action="store_true")
         parser.add_argument("--input", help="(default is %s)" % self.input)
         parser.add_argument("--saksmappe",
                             help="Store as saksmappe/journalpost instead of basisregistrering/mappe",
@@ -59,8 +61,11 @@ class MboxImporter(n5core.endpoint.Endpoint):
         self.usesaksmappe = args.saksmappe
         if args.baseurl:
             self.baseurl = args.baseurl
+        if args.mda and args.input:
+            raise Exception("invalid combination of arguments, can not use --mda and --input together")
         if args.input:
             self.input = args.input
+        self.mda = args.mda
         self.docobjurl = None
         self.parentmap = {}
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
@@ -410,10 +415,27 @@ are in.
         return self.addMessageToFile(threadfile, message)
 
     def loadMbox(self):
+        retval = True
         mbox = mailbox.mbox(self.input)
         for message in mbox:
             if not self.uploadEmail(message):
                 print("error: failed to load email")
+                retval = False
+        return retval
+
+    def loadEmail(self):
+        """ Load a single email from stdin like /usr/sbin/sendmail does. """
+        message = email.message_from_file(sys.stdin)
+        if not self.uploadEmail(message):
+            print("error: failed to load email")
+            return False
+        return True
+
+    def load(self):
+        if self.mda:
+            return self.loadEmail()
+        else:
+            return self.loadMbox()
 
 def main():
     t = MboxImporter()
@@ -421,7 +443,7 @@ def main():
     if t.findSeries() is None:
         print("error: unable to find arkivdel to use")
         return 1
-    return t.loadMbox()
+    return t.load() != True
 
 if __name__ == '__main__':
     exit(main())
