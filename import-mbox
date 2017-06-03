@@ -7,6 +7,7 @@ import sys
 sys.path.append('lib')
 
 import argparse
+import dateutil.parser
 import email
 from email.utils import parseaddr
 import json
@@ -248,6 +249,8 @@ are in.
     def createNewFile(self, message):
         filedata = {
             'tittel' : decodeheader(message['subject']),
+             # Workaround for bogus ny-* values
+            'offentligTittel' : None,
             'beskrivelse' : None,
         }
         if self.usesaksmappe:
@@ -288,10 +291,15 @@ are in.
         else:
             threadstarterid = message['message-id']
 
+        fromdate = dateutil.parser.parse(message['date']).isoformat()
+
         if self.usesaksmappe:
             recorddata = {
                 'tittel' : decodeheader(message['subject']),
-                #"dokumentDato"   : message['date'], # FIXME convert date format
+                "dokumentetsDato"      : fromdate,
+                'sendtDato'            : fromdate, # what if date is faked?
+                "journalposttype"      : 'I',
+                # Workaround for bogus ny-* values
                 'beskrivelse' : None,
             }
             recordinfo = self.createEntity('journalpost', recordentryrel,
@@ -334,7 +342,7 @@ are in.
         else:
             recorddata = {
                 'tittel' : decodeheader(message['subject']),
-                #"dokumentDato"   : message['date'], # FIXME convert date format
+                "dokumentetsDato" : fromdate,
                 'beskrivelse' : None,
             }
             recordinfo = self.createEntity('basisregistrering', recordrel,
