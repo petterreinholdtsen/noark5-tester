@@ -342,7 +342,6 @@ are in.
         else:
             recorddata = {
                 'tittel' : decodeheader(message['subject']),
-                "dokumentetsDato" : fromdate,
                 'beskrivelse' : None,
             }
             recordinfo = self.createEntity('basisregistrering', recordrel,
