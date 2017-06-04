@@ -46,12 +46,13 @@ def parselinks(links):
 class MboxImporter(n5core.endpoint.Endpoint):
     def __init__(self):
         self.baseurl = 'http://localhost:8092/noark5v4/'
-        self.input = 'input.mbox'
+        self.mbox = 'input.mbox'
         parser = argparse.ArgumentParser()
         parser.add_argument("--baseurl", help="(default is %s)" % self.baseurl)
         parser.add_argument("--mda", help="behave as mda, read single email from stdin",
                             action="store_true")
-        parser.add_argument("--input", help="(default is %s)" % self.input)
+        parser.add_argument("--mbox", help="(default is %s)" % self.mbox)
+        parser.add_argument("--storageurl", help="specify under which URL (arkivdel/mappe) to store email files in")
         parser.add_argument("--saksmappe",
                             help="Store as saksmappe/journalpost instead of basisregistrering/mappe",
                             action="store_true")
@@ -59,12 +60,13 @@ class MboxImporter(n5core.endpoint.Endpoint):
                             action="store_true")
         args = parser.parse_args()
         self.usesaksmappe = args.saksmappe
+        self.storageurl = args.storageurl
         if args.baseurl:
             self.baseurl = args.baseurl
-        if args.mda and args.input:
-            raise Exception("invalid combination of arguments, can not use --mda and --input together")
-        if args.input:
-            self.input = args.input
+        if args.mda and args.mbox:
+            raise Exception("invalid combination of arguments, can not use --mda and --mbox together")
+        if args.mbox:
+            self.mbox = args.mbox
         self.mda = args.mda
         self.docobjurl = None
         self.parentmap = {}
@@ -150,16 +152,21 @@ user to pick one.
         return info
 
     def getDocObjUrl(self):
+        """ Cache href to the list of dokumentobject """
         if not self.docobjurl:
             self.docobjurl = self.findRelation(relbase + '/arkivstruktur/dokumentobjekt/')
         return self.docobjurl
 
     def findSeries(self):
         """
-Figure out which series to use when creating one file per mail thread.
+Figure out which URL to use when creating one file per mail thread.
 
-Store the URL for the serie in self.seriesinfo
+Store the info about the entity in self.seriesinfo
 """
+        if self.storageurl:
+            (c, res) = self.json_get(self.storageurl)
+            self.seriesinfo = json.loads(c)
+            return self.seriesinfo
         fondshref = self.findRelation(relbase + '/arkivstruktur/arkiv/')
         (c, res) = self.json_get(fondshref)
         fondsinfo = json.loads(c)
@@ -172,8 +179,8 @@ Store the URL for the serie in self.seriesinfo
         (c, res) = self.json_get(serieshref)
         seriesinfo = json.loads(c)
         #print()
-        #print(seriesinfo)
         self.seriesinfo = self.pickUnlessOne(seriesinfo, 'arkivdel')
+        print("serieurl: %s" % parselinks(self.seriesinfo['_links'])['self'])
         return self.seriesinfo
 
     def alreadySaved(self, message):
