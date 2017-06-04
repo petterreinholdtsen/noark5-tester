@@ -423,7 +423,7 @@ are in.
 
     def loadMbox(self):
         retval = True
-        mbox = mailbox.mbox(self.input)
+        mbox = mailbox.mbox(self.mbox)
         for message in mbox:
             if not self.uploadEmail(message):
                 print("error: failed to load email")
