@@ -110,7 +110,7 @@ def main():
                         seriesinfo = series[agency]
                 print("info: Creating using fonds:%s and series:%s" % (fondsinfo['tittel'], seriesinfo['tittel']))
 
-                # FIXME should search to figure out of file is already registered
+                # FIXME should search to figure out if file is already registered
                 casestr = "%s+%s+%s" % (fondsinfo['systemID'],
                                         seriesinfo['systemID'],
                                         row[n['caseid']])
