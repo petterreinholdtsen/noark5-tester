@@ -40,18 +40,22 @@ i listen med restriksjoner på side 106 sier:
 > SHA256.
 
 En kunne ut fra dette anta at verdien som skal brukes er «SHA256», men
-[Eksempel på innhold i malen for arkivuttrek.xml for Noark 5 versjon
-4.0](http://arkivverket.no/arkivverket/content/download/20549/186617/version/1/file/pdf.pdf)
+«[Eksempel på innhold i malen for arkivuttrek.xml for Noark 5 versjon
+4.0](http://arkivverket.no/arkivverket/content/download/20549/186617/version/1/file/pdf.pdf)»
 bruker verdien «SHA-256» med bindestrek.  Det er dermed minst to ulike
-tolkninger av lovlig verdi for dette feltet.  Gitt at SHA-256 allerede
-er brukt i et eksempeluttrekk, foreslår jeg at denne varianten velges
-som lovlig verdi for metadatafelt M706.
+tolkninger av lovlig verdi for dette feltet.  Det bør være entydig
+definiert i tjenestegrensesnittet hvilken verdi som vil bli gjenkjent
+av klient og tjeneste.  Gitt at verdien «SHA-256» allerede er brukt i
+et eksempeluttrekk, foreslår jeg at denne varianten velges som lovlig
+verdi for metadatafelt M706.
 
-Det er for øvrig ingen referanse til hva som konkret menes med
-sjekksumalgoritmen SHA 256, hverken i spesifikasjonen for Noark 5
-versjon 4.0 eller i spesifikasjonen for Noark 5 Tjenestegrensesnitt
-versjon 1.0 Beta.  Det kunne med fordel refereres til en spesifikasjon
-der SHA256 er forklart.  En slik mulig referanse er [IETF RFC
+Jeg har ikke klart å finne en referanse i spesifikasjonen for
+tjenestegrensesnitt eller i Noark 5-spesifikasjonene forøvrig til hva
+som konkret menes med sjekksumalgoritmen SHA 256, hverken i
+spesifikasjonen for Noark 5 versjon 4.0 eller i spesifikasjonen for
+Noark 5 Tjenestegrensesnitt versjon 1.0 Beta.  Algoritmen er velkjent,
+men det kunne med fordel refereres til en spesifikasjon der SHA 256 er
+forklart.  En slik mulig referanse er [IETF RFC
 4634](https://tools.ietf.org/html/rfc4634).  Jeg foreslår at denne
 legges inn i tjenestegrensesnitt-spesifikasjonen under del 2
 (Normative referanser) i tjenestegrensesnittspesifikasjonen.
@@ -83,5 +87,7 @@ Endre betingelsen for M706 i metadatakatalogen for Noark 5, bytt ut
 med
 
 > Algoritmen som skal brukes inntil videre er SHA-256».
+>
 > Obligatorisk verdi:
+>
 >  * «SHA-256»
