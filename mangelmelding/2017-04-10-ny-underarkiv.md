@@ -1,5 +1,5 @@
-Hvordan opprettes underarkiv?
-=============================
+Hvordan er relasjoner mellom arkiv og underarkiv?
+===================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -22,15 +22,50 @@ Beskrivelse
 Dette gjelder del 7.2.1.1 (Arkiv).
 
 Listen over relasjonsnøkler på side 57 viser at en kan få ut oversikt
-over underarkiv, men har ingen ny-underarkiv/ for a opprette et nytt
-underarkiv.  Det er derimot relasjoner for ny-arkivskaper/,
-ny-arkivdel/ og ny-arkiv/.  Hvordan er det mening at en skal opprette
-et nytt underarkiv?
+over underarkiv ved å benytte relasjonen
+.../arkivstruktur/underarkiv/, men har ingen ny-underarkiv/ for a
+opprette et nytt underarkiv.  Det er relasjonspar for
+arkivskaper/ny-arkivskaper, arkivdel/ny-arkivde, arkiv/ny-arkiv men
+ikke for underarkiv.  Hvordan er det mening at en skal opprette et
+nytt underarkiv knyttet til et arkiv?
 
-Mangler det en relasjon for ny-underarkiv/, eller er det mening at
-ny-arkiv/ skal brukes?
+Det er uklart hva som er forskjellen på relasjonene 'arkiv' og
+'underarkiv'.  I følge UML-skjema er ethvert arkiv koblet under et
+annet arkiv et underarkiv.  Det virker dermed nærliggende å tro at
+relasjonen .../arkivstruktur/underarkiv/ er en skrivefeil.  Hvis ikke,
+må det forklares hva som er forskjellen på arkiv- og
+underarkiv-relasjonene for klassen Arkiv.
+
+Jeg foreslår at relasjonen 'underarkiv' fjernes og at kun relasjonene
+'arkiv/' og 'ny-arkiv/' brukes til å finne og opprette undearkiv.
+
+Merk, det er en tilsvarende situasjon for mappe/undermappe, der det
+kun finnes relasjoner for å opprette 'mappe', men relasjoner for å
+liste opp både 'mappe' og 'undermappe'.
 
 Ønsket endring
 --------------
 
-FIXME Hva skal foreslås her?
+I del 7.2.1.1 (Arkiv), endre følgende setning i siste avsnitt i
+beskrivelsen av klassen på side 56:
+
+> Toppnivået skal bare ha én forekomst, men kan ha ett eller flere
+> undernivåer, se om underarkiv nedenfor.
+
+Endres til følgende:
+
+> Toppnivået skal bare ha én forekomst, men kan ha ett eller flere
+> undernivåer, se om underarkiv nedenfor.  Underarkiv opprettes med
+> relasjonen .../ny-arkiv/ og listes opp medrelasjonen .../arkiv/.
+
+Endre i relasjonslisten på side 56, endre Kilde 'undearkiv' til
+'arkiv' og legg inn følgende merknad:
+
+> Lenker til underarkiv.
+
+Fjern duplikat-Aggregation med kilde underarkiv på side 57 (identisk
+med første relasjon i listen).
+
+Fjern relasjonen
+`http://rel.kxml.no/noark5/v4/api/arkivstruktur/underarkiv/` fra
+listen over relasjonsnøkler på side 57.
