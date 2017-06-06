@@ -1,5 +1,5 @@
-
-==============================
+Klargjør hvor listen med aksepterte formater og deres formatverdier finnes
+==========================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -19,10 +19,23 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-Punkt 6.1.1.9 skisserer hvordan lagre PDF og JPEG i arkivet.  Men hvor
-finnes listen over hvilke formater som er akseptert inn i arkivet og
-hvilke MIME-typer som bør brukes for disse?  Hva med RFC 822-type
-epost?  SMS?  Lydfiler?
+M701
+
+Del 6.1.1.9 (Hente og overføre filer) skisserer hvordan lagre PDF og
+JPEG i arkivet.  Her kunne det med fordel legges inn en henvisning til
+kodelisten Format på side 173 for å forklare hvor listen med formater
+kan finnes.
+
+Det trengs en liste med hvilke MIME-typer som skal brukes for de ulike
+formatene, og en prosedyre som de som lager arkivløsninger kan bruke
+for å registrere formater som ikke er på listen over formater som kan
+deponeres.  Dette vil sikre at alle arkivsystemer bruker de samme
+verdiene slik at det blir enklere å migrere data fra en arkivløsning
+til den neste.
+
+Men hvor finnes listen over hvilke formater som er
+akseptert inn i arkivet og hvilke MIME-typer som bør brukes for disse?
+Hva med RFC 822-type epost?  SMS?  Lydfiler?
 
 se side 173 (format)
 
