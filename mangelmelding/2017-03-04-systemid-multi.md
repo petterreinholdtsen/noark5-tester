@@ -1,4 +1,4 @@
-Avklar når objekter skal ha SystemID (M001) og når det ikke valgfritt
+Avklar når objekter skal ha SystemID (M001) og når det ikke er valgfritt
 =====================================================================
 
  ------------------  ---------------------------------
@@ -56,4 +56,4 @@ avsnitt foran 'Resultat' på side 17:
 
 > Når en oppretter objekter med POST skal feltet systemID ikke være
 > satt.  Det settes automatisk når objektet opprettes, og korrekt
-> verdi returneres etter at objektet er opprettet i databsaen.
+> verdi returneres etter at objektet er opprettet i databasen.
