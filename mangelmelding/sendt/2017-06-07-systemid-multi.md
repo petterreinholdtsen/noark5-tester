@@ -10,7 +10,7 @@ Avklar når objekter skal ha SystemID (M001) og når det ikke er valgfritt
         Dokumentdel  7.2.1.3
          Sidenummer  75
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-06-07
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
@@ -21,16 +21,16 @@ Beskrivelse
 -----------
 
 I følge 'Multipl.'-feltet for flere klasser, eksempelvis Arkivenhet
-side 38 samt Arkiv og Arkivdel side 44 (muligens alle klasser, men jeg
-har ikke sjekket samtlige), så er systemID et "[0..1]-felt", mens
-merknaden til feltet sier systemID alltid skal eksistere.  Hvordan kan
-begge deler stemme?  I hvilke tilfeller kan feltet SystemID i så fall
-mangle for et objekt?  Er poenget at informasjonen som sendes inn ved
-oppretting av nye objekter skal være uten SystemID-verdi, da den
-settes ved opprettelsen?  I så fall er det vel mer korrekt å droppe
-[0..1]-notasjonen og i stedet klargjøre at alle objekter skal ha slik
-verdi etter opprettelsen, samt nevne i del 6.1.1.3 (Opprette objekter
-(Create)) at systemID-attributten aldri skal være satt ved POST.
+side 38 samt Arkiv og Arkivdel side 44, så er systemID et
+"[0..1]-felt", mens merknaden til feltet sier systemID alltid skal
+eksistere.  Hvordan kan begge deler stemme?  I hvilke tilfeller kan
+feltet SystemID i så fall mangle for et objekt?  Er poenget at
+informasjonen som sendes inn ved oppretting av nye objekter skal være
+uten SystemID-verdi, da den settes ved opprettelsen?  I så fall er det
+vel mer korrekt å droppe [0..1]-notasjonen og i stedet klargjøre at
+alle objekter skal ha slik verdi etter opprettelsen, samt nevne i del
+6.1.1.3 (Opprette objekter (Create)) at systemID-attributten aldri
+skal være satt ved POST.
 
 I følge blant annet punkt 7.2.1.1 (Arkiv) side 62 skal systemID være
 utfylt etter registrering av arkiv.  Dette kan tolkes å være i strid
