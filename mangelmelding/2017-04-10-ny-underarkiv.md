@@ -1,4 +1,4 @@
-Hvordan er relasjoner mellom arkiv og underarkiv?
+Hvordan defineres relasjoner mellom arkiv og underarkiv?
 ===================================================
 
  ------------------  ---------------------------------
@@ -49,7 +49,7 @@ For å hente en liste av underarkiv kan følgende href brukes:
    GET [contextpath][api]/arkivstruktur/arkiv/{systemID}/arkiv
 
 Merk, det er en tilsvarende situasjon for mappe/undermappe, der det
-kun finnes relasjoner for å opprette 'mappe', men relasjoner for å
+kun finnes relasjoner for å opprette 'mappe', men ingen relasjoner for å
 liste opp både 'mappe' og 'undermappe'.
 
 Ønsket endring
