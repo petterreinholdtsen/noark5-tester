@@ -25,7 +25,7 @@ Listen over relasjonsnøkler på side 57 viser at en kan få ut oversikt
 over underarkiv ved å benytte relasjonen
 .../arkivstruktur/underarkiv/, men har ingen ny-underarkiv/ for a
 opprette et nytt underarkiv.  Det er relasjonspar for
-arkivskaper/ny-arkivskaper, arkivdel/ny-arkivde, arkiv/ny-arkiv men
+arkivskaper/ny-arkivskaper, arkivdel/ny-arkivdel, arkiv/ny-arkiv men
 ikke for underarkiv.  Hvordan er det mening at en skal opprette et
 nytt underarkiv knyttet til et arkiv?
 
@@ -37,7 +37,16 @@ må det forklares hva som er forskjellen på arkiv- og
 underarkiv-relasjonene for klassen Arkiv.
 
 Jeg foreslår at relasjonen 'underarkiv' fjernes og at kun relasjonene
-'arkiv/' og 'ny-arkiv/' brukes til å finne og opprette undearkiv.
+'arkiv/' og 'ny-arkiv/' brukes til å finne og opprette underarkiv. 
+Følgende brukes for å illustrere dette.
+
+For å opprette en underarkiv kan følgende href brukes:
+
+   POST [contextpath][api]/arkivstruktur/arkiv/{systemID}/ny-arkiv
+
+For å hente en liste av underarkiv kan følgende href brukes:
+
+   GET [contextpath][api]/arkivstruktur/arkiv/{systemID}/arkiv
 
 Merk, det er en tilsvarende situasjon for mappe/undermappe, der det
 kun finnes relasjoner for å opprette 'mappe', men relasjoner for å
@@ -56,7 +65,7 @@ Endres til følgende:
 
 > Toppnivået skal bare ha én forekomst, men kan ha ett eller flere
 > undernivåer, se om underarkiv nedenfor.  Underarkiv opprettes med
-> relasjonen .../ny-arkiv/ og listes opp medrelasjonen .../arkiv/.
+> relasjonen .../ny-arkiv/ og listes opp med relasjonen .../arkiv/.
 
 Endre i relasjonslisten på side 56, endre Kilde 'undearkiv' til
 'arkiv' og legg inn følgende merknad:
