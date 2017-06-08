@@ -123,7 +123,7 @@ def main():
                                 "tittel"               : row[n['casedesc']],
                                 "beskrivelse"          : None,
                                 "administrativEnhet"   : None,
-                                "saksansvarlig"        : None,
+                                "saksansvarlig"        : "Ukjent", # FIXME should have more sensible value
                         }
                         casefileinfo = createEntity(e, 'file', createcasefilerel,
                                                     parselinks(seriesinfo['_links']),
