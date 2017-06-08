@@ -99,6 +99,7 @@ def main():
                         seriesdata =  {
                                 "tittel"          : agency,
                                 "dokumentmedium"  : "Elektronisk arkiv",
+                                "arkivdelstatus" : "O",
                         }
                         seriesinfo = createEntity(e, 'series', createseriesrel,
                                                   parselinks(fondsinfo['_links']),
@@ -175,6 +176,8 @@ def main():
                 docdescdata = {
                         "tittel"          : row[n['docdesc']],
                         "beskrivelse"     : None,
+                        "dokumentnummer" : 1,
+                        "tilknyttetDato" : row[n['recorddate']],
                         "tilknyttetRegistreringSom" : "Associated with record as"
                 }
 
