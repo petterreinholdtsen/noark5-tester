@@ -1,5 +1,5 @@
 Hvordan defineres relasjoner mellom arkiv og underarkiv?
-===================================================
+========================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -14,7 +14,8 @@ Hvordan defineres relasjoner mellom arkiv og underarkiv?
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
-tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
+tilgjengelig fra
+[https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
 Beskrivelse
 -----------
@@ -40,13 +41,17 @@ Jeg foreslår at relasjonen 'underarkiv' fjernes og at kun relasjonene
 'arkiv/' og 'ny-arkiv/' brukes til å finne og opprette underarkiv. 
 Følgende brukes for å illustrere dette.
 
-For å opprette en underarkiv kan følgende href brukes:
+For å opprette en underarkiv skal dermed POST til href knyttet til
+rel-verdi `http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/`
+brukes.  Den kan for eksempel an en slik struktur:
 
-   POST [contextpath][api]/arkivstruktur/arkiv/{systemID}/ny-arkiv
+ * POST `[contextpath][api]/arkivstruktur/arkiv/{systemID}/ny-arkiv`   
 
-For å hente en liste av underarkiv kan følgende href brukes:
+For å hente en liste av underarkiv skal dermed GET til href knyttet
+til rel-verdi `http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/`
+brukes, for eksempel:
 
-   GET [contextpath][api]/arkivstruktur/arkiv/{systemID}/arkiv
+ * GET `[contextpath][api]/arkivstruktur/arkiv/{systemID}/arkiv`
 
 Merk, det er en tilsvarende situasjon for mappe/undermappe, der det
 kun finnes relasjoner for å opprette 'mappe', men ingen relasjoner for å
@@ -64,8 +69,11 @@ beskrivelsen av klassen på side 56:
 Endres til følgende:
 
 > Toppnivået skal bare ha én forekomst, men kan ha ett eller flere
-> undernivåer, se om underarkiv nedenfor.  Underarkiv opprettes med
-> relasjonen .../ny-arkiv/ og listes opp med relasjonen .../arkiv/.
+> undernivåer, se om underarkiv nedenfor.  Underarkiv opprettes ved å
+> bruke arkiv-objektets relasjon
+> `http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/` og listes
+> opp ved å bruke arkiv-objektets relasjon
+> `http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/`.
 
 Endre i relasjonslisten på side 56, endre Kilde 'undearkiv' til
 'arkiv' og legg inn følgende merknad:

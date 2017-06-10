@@ -74,19 +74,19 @@ formatlist = {
     # PDF/A - ISO 19005 1:205
     'PDF document, ': {
         'mimetype':   'application/pdf',
-        'format':     'PDF',
+        'format':     'RA-PDF',
         'inforeader': pdfReader,
         },
     # JPEG (ISO 10918-1:1994)
     'JPEG image data, ': {
         'mimetype':   'image/jpeg',
-        'format':     'JPEG',
+        'format':     'RA-JPEG',
         'inforeader': imageReader,
     },
     # TIFF versjon 6
     'TIFF image data, ': {
         'mimetype':   'image/tiff',
-        'format':     'TIFF',
+        'format':     'RA-TIFF6',
         'inforeader': imageReader,
     },
     # Ren text

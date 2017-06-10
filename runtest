@@ -716,6 +716,7 @@ all formats listed in http://www.w3.org/TR/NOTE-datetime .
 #            "beskrivelse"     : "Description of the test series",
 #            "oppbevaringssted" : [ "location 1", "location2", "location3" ],
 #            "dokumentmedium"  : "Elektronisk arkiv",
+            "arkivdelstatus" : "O",
         }
         createseriesrel = noarkrelbase + 'arkivstruktur/ny-arkivdel/'
         serieinfo = self.createEntity('serie', createseriesrel,
@@ -762,6 +763,7 @@ all formats listed in http://www.w3.org/TR/NOTE-datetime .
         casefileurl = self.parselinks(casefileinfo['_links'])['self']
 
         journalentrydata = {
+            'tittel' : 'test',
         }
         # FIXME figure out how the spec expect us to add journalpost
         createjournalentryrel = nikitarelbase + 'ny-journalpost/'
@@ -790,6 +792,8 @@ all formats listed in http://www.w3.org/TR/NOTE-datetime .
 #            "dokumentstatus"  : "status of document",
 #            "tittel"          : "Title of the test document description created %s" % now,
 #            "tilknyttetRegistreringSom" : "Associated with record as"
+            "dokumentnummer" : 1,
+            "tilknyttetDato" : "2017-01-01",
         }
         createdocdescrel = noarkrelbase + 'arkivstruktur/ny-dokumentbeskrivelse/'
         docdescinfo = self.createEntity('document description',
@@ -832,6 +836,16 @@ all formats listed in http://www.w3.org/TR/NOTE-datetime .
             self.verify(200 == res.code, "file upload returned HTTP code 200")
         except urllib2.HTTPError, e:
             print("POST %s failed: %s" % (url, e.read()))
+
+        # Verify the pointer to the file to download
+        (infostr, res) = self.json_get(rels['self'])
+        docobjinfo2 = json.loads(infostr)
+        if (self.verify(reffilerel in self.parselinks(docobjinfo2['_links']),
+                        "_links in response from %s rel should include '%s' rel" % (createdocobjrel, reffilerel))):
+            self.verify(self.parselinks(docobjinfo2['_links'])[reffilerel] == docobjinfo2['referanseDokumentfil'],
+                        "referanseDokumentfil and _links->%s should have the same value (%s != %s)" %
+                        (reffilerel, docobjinfo2['referanseDokumentfil'], self.parselinks(docobjinfo2['_links'])[reffilerel]))
+
         try:
             headers = { 'Accept' : 'application/xml' }
             (c, res) = self._get(url)
