@@ -743,6 +743,15 @@ all formats listed in http://www.w3.org/TR/NOTE-datetime .
         recordinfo = self.createEntity('record', createrecordrel,
                                        self.parselinks(fileinfo['_links']),
                                        recorddata)
+        basicrecorddata = {
+            "tittel"             : "Title of basic record created %s" % now,
+#            "forfatter"          : [ "testforfatter"],
+        }
+        createbasicrecordrel = noarkrelbase + 'arkivstruktur/ny-basisregistrering/'
+        basicrecordinfo = self.createEntity('basicrecord',
+                                            createbasicrecordrel,
+                                            self.parselinks(fileinfo['_links']),
+                                            basicrecorddata)
         casefiledata = {
 #            "mappeID"            : "2017/1",
 #            "offentligTittel"    : "Public title of the test case file created %s" % now,
