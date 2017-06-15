@@ -656,30 +656,54 @@ Test basis requirements for NOARK 5 Core.
 
     def testDateFormats(self):
         """
-Check if the API can handle all valid date formats.  Should handle
-all formats listed in http://www.w3.org/TR/NOTE-datetime .
+Check if the API can handle all valid date and datetime formats.
+The spec state that the API should handle all formats listed in
+http://www.w3.org/TR/NOTE-datetime .  But this do not quite make
+sense, as several of the valid values according to NODE-datetime are
+not allowed by the Noark 5 standard XML metadata list, which refer
+to date and datetime types in http://www.w3.org/2001/XMLSchema.
+
+Also, should 'date' fields accept values with time of day in them,
+or should it be rejected?
+
 """
         createfondsrel = noarkrelbase + 'arkivstruktur/ny-arkiv/'
-        for timestamp in [
-                '1997',
-                '1997-07',
-                '1997-07-16',
-                '1997-07-16T19:20+01:00',
-                '1997-07-16T19:20:30+01:00',
-                '1997-07-16T19:20:30.45+01:00'
-        ]:
-            try:
-                fondsdata = {
-                    "opprettetDato"        : timestamp,
-                }
-                fondinfo = self.createEntity('fonds', createfondsrel,
+
+        # FIXME Need to pick a object with 'date' and try to create it with variations
+        datemust = []
+        datecould = []
+        datetimemust = [
+            '1997-07-16T19:20+01:00', # From NOTE-datetime
+            '1997-07-16T19:20:30+01:00', # From NOTE-datetime
+            '1997-07-16T19:20:30.45+01:00', # From NOTE-datetime
+
+            '2012-10-10T15:00:00', # From example extraction data sets
+            '2014-11-22T15:15:02.956+01:00', # From example extraction data sets
+        ]
+
+        datetimecould = [
+            '1997', # From NOTE-datetime, not accepted by XMLSChema date nor datetime
+            '1997-07', # From NOTE-datetime, not accepted by XMLSChema date nor datetime
+            '1997-07-16', # From NOTE-datetime accepted by XMLSChema date not datetime
+
+            '1865-02-13T00:00:00Z', # From example extraction data sets
+        ]
+
+        for timevalues, level in [(datetimemust, self.failure), (datetimecould, self.xfailure)]:
+            for timevalue in timevalues:
+                try:
+                    fondsdata = {
+                        "avsluttetDato"        : timevalue,
+                    }
+                    fondinfo = self.createEntity('fonds', createfondsrel,
                                              self.rels, fondsdata)
-                if fondinfo: 
-                    self.success("able to create arkiv with opprettetDato='%s'" % timestamp)
-                else:
-                    self.failure("unable to create arkiv with opprettetDato='%s'" % timestamp)
-            except urllib2.HTTPError as e:
-                self.failure("unable to create arkiv with opprettetDato='%s'" % timestamp)
+                    if fondinfo:
+                        self.success("able to create arkiv with opprettetDato='%s'" % timevalue)
+                    else:
+                        level("unable to create arkiv with opprettetDato='%s'" % timevalue)
+                except urllib2.HTTPError as e:
+                    level("unable to create arkiv with opprettetDato='%s'" % timevalue)
+
     def testNewDocument(self):
         now = datetime.datetime.now().isoformat()
         if not self.gotlogin:
@@ -882,7 +906,7 @@ all formats listed in http://www.w3.org/TR/NOTE-datetime .
 
             # Disabled until we figure out exactly what kind of date
             # formats should be supported.
-            #self.testDateFormats()
+            self.testDateFormats()
 
             self.testNewDocument()
             self.recursiveHateoas()
