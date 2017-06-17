@@ -197,7 +197,8 @@ Store the info about the entity in self.seriesinfo
         seriesinfo = json.loads(c)
         #print()
         self.seriesinfo = self.pickUnlessOne(seriesinfo, 'arkivdel')
-        print("serieurl: %s" % parselinks(self.seriesinfo['_links'])['self'])
+        if self.seriesinfo and self.verbose:
+            print("serieurl: %s" % parselinks(self.seriesinfo['_links'])['self'])
         return self.seriesinfo
 
     def alreadySaved(self, message):
