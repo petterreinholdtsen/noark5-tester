@@ -161,12 +161,22 @@ def main():
                             if 'message/rfc822' == ct:
                                 print("Received email from API (Content-Type %s)" % ct)
                             else:
-                                print("Received non-email from API (Content-Type %s)" % ct)
-                                mailfile.write("Content-type: %s" % ct)
+                                if 'formatDetaljer' in docobjinfo:
+                                    d = "/" + docobjinfo['formatDetaljer']
+                                else:
+                                    d = ""
+                                
+                                subject = "%s: %s%s - %s" % \
+                                          (docobjinfo['variantformat'],
+                                           docobjinfo['format'], d,
+                                           docobjinfo['filnavn'])
+                                print("Received non-email from API (Content-Type %s, filename %s)" % (ct, subject))
+                                mailfile.write("Subject: %s\n" % subject)
+                                mailfile.write("Content-type: %s\n" % ct)
                                 mailfile.write("\n")
                             mailfile.write(c)
                             first=False
-                                
+
     mailfile.close()
 
     # Start mailer with MAIL environment set to the mbox file 
