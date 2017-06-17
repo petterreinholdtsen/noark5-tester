@@ -43,6 +43,23 @@ def parselinks(links):
             rels[l['rel']] = l['href']
     return rels
 
+def mime2format(mimestr):
+    mimetypemap = {
+        'application/pdf' : 'RA-PDF',
+        'image/jpeg'      : 'RA-JPEG',
+        'message/rfc822'  : "RFC822",
+
+        # No use splitting these formats out as separate upload, the
+        # original email content is just fine and we are not going to
+        # convert them to archive format anyway.
+        'text/plain'      : None,
+        'text/html'       : None,
+        'multipart/mixed' : None,
+        'multipart/alternative' : None,
+    }
+    mimetype = mimestr.split(';')[0]
+    return  mimetypemap[mimetype]
+
 class MboxImporter(n5core.endpoint.Endpoint):
     def __init__(self):
         self.baseurl = 'http://localhost:8092/noark5v4/'
@@ -283,11 +300,41 @@ are in.
         parenthref = parselinks(parentinfo['_links'])['self']
         self.parentmap[childid] = (parentid, type, parenthref)
 
+
+    def createDocumentObject(self, docdescinfo, docobjdata, content, created):
+        docobjrel = relbase + '/arkivstruktur/ny-dokumentobjekt/'
+        docobjinfo = self.createEntity('dokumentobjekt', docobjrel,
+                                       parselinks(docdescinfo['_links']),
+                                       docobjdata)
+        created.append(parselinks(docobjinfo['_links'])['self'])
+        self.recordMapping(docdescinfo, docobjinfo, 'dokumentobjekt')
+
+        newfilehref = self.objectOperation(docobjinfo,
+                                           relbase + '/arkivstruktur/fil/')
+        # Make sure all parts going into the POST are type str by
+        # converting newfilehref to str.  This avoid a
+        # UnicodeDecodeError when the content is not UTF-8.
+        try:
+            (c, res) = self.post(str(newfilehref), content,
+                                 docobjdata['mimeType'],
+                                 length=len(content))
+        except Exception as e:
+            print("error: upload threw exception, removing object: %s" % str(e))
+            for e in created[::-1]:
+                self.delete(e)
+            return False
+        if 200 != res.code:
+            print("error: upload failed (status == %d), removing object"
+                  % res.code)
+            for e in created[::-1]:
+                self.delete(e)
+            return False
+        return True
+
     def addMessageToFile(self, fileinfo, message):
         recordrel = relbase + '/arkivstruktur/ny-basisregistrering/'
         recordentryrel = nikitabase + '/ny-journalpost/'
         docdescrel = relbase + '/arkivstruktur/ny-dokumentbeskrivelse/'
-        docobjrel = relbase + '/arkivstruktur/ny-dokumentobjekt/'
 
         created = []
         content = message.as_string()
@@ -379,33 +426,34 @@ are in.
             "format"          : "RFC822",
             "filstoerrelse"   : str(messagelen),
             "filnavn"         : message['message-id'],       
-            "mimeType"       : mimetype, 
+            "mimeType"        : mimetype,
         }
-        docobjinfo = self.createEntity('dokumentobjekt', docobjrel,
-                                       parselinks(docdescinfo['_links']),
-                                       docobjdata)
-        created.append(parselinks(docobjinfo['_links'])['self'])
-        self.recordMapping(docdescinfo, docobjinfo, 'dokumentobjekt')
+        if not self.createDocumentObject(docdescinfo, docobjdata,
+                                         content, created):
+            asfdlkjasdf
+            return False
+        if message.is_multipart():
+            for part in message.walk():
+                mimetype = part.get_content_type()
+                print(mimetype)
+                format = mime2format(mimetype)
+                if format is None:
+                    continue
+                content = part.get_payload(decode=True)
+                if content is None:
+                    continue
+                contentlen = len(content)
+                docobjdata = {
+                    "versjonsnummer"  : str(0),
+                    "variantformat"   : "Produksjonsformat",
+                    "format"          : format,
+                    "filstoerrelse"   : contentlen,
+                    "filnavn"         : part.get_filename(),
+                    "mimeType"        : mimetype,
+                }
 
-        newfilehref = self.objectOperation(docobjinfo,
-                                           relbase + '/arkivstruktur/fil/')
-        # Make sure all parts going into the POST are type str by
-        # converting newfilehref to str.  This avoid a
-        # UnicodeDecodeError when the content is not UTF-8.
-        try:
-            (c, res) = self.post(str(newfilehref), content, mimetype,
-                                 length=messagelen)
-        except:
-            print("error: upload threw exception")
-            for e in created[::-1]:
-                self.delete(e)
-            return False
-        if 200 != res.code:
-            print("error: upload failed (status == %d)" % res.code)
-            for e in created[::-1]:
-                self.delete(e)
-            return False
-        # FIXME upload attachments separately
+                self.createDocumentObject(docdescinfo, docobjdata,
+                                          content, created)
         return True
 
     def uploadEmail(self, message):
