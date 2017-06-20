@@ -4,11 +4,11 @@ Kan en sette verdien tom streng ok i et påkrevd felt?
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
-        Alvorlighet  ?
-       Meldingstype  ?
+        Alvorlighet  kommentar
+       Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  ?
-         Sidenummer  ?
+        Dokumentdel  7.1
+         Sidenummer  31
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
@@ -44,7 +44,7 @@ tekststreng, dvs om dette er tillatt:
 }
 ```
 
-Det virker mest fornuftig å både avvise null og "" som gydlige verdier.
+Det virker mest fornuftig å både avvise null og "" som gyldige verdier.
 
 Ønsket endring
 --------------
