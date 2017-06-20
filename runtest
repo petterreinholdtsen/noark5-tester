@@ -823,7 +823,7 @@ or should it be rejected?
         docdescdata = {
 #            "dokumenttype"    : "type dokument",
 #            "dokumentstatus"  : "status of document",
-#            "tittel"          : "Title of the test document description created %s" % now,
+            "tittel"          : "Title of the test document description created %s" % now,
 #            "tilknyttetRegistreringSom" : "Associated with record as"
             "dokumentnummer" : 1,
             "tilknyttetDato" : "2017-01-01",
