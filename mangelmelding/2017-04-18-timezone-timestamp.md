@@ -56,7 +56,8 @@ hvordan 1997 og 1997-07 skal omformes til en dato på formen
 ÅÅÅÅ-MM-DD, enn å finne ut av dette først når arkivet skal deponeres,
 og jeg foreslår derfor at definisjonen av lovlige datoverdier i
 tjenestegrensesnittet endres til å være i samsvar med kravene i Noark
-5.
+5.  Alternativt kan jo tjenestegrensesnittet endres til å kreve
+formatet beskrevet i date og dateTime-definisjonen i XML Schema 1.0?
 
 En utfordring med denne definisjonen er bruken av
 tjenestegrensesnittet i generell saksbehandling, der det vil være
@@ -69,7 +70,7 @@ tjenestegrensesnittet?
 
 En annen utfordring er hvordan datoer og tidspunkt skal håndteres hvis
 samme instans av tjenestegrensesnittet brukes i flere tidssoner.  Et
-tenkt eksempel er hvis alle ambassadene i utenriksdepartementet skal
+tenkt eksempel er hvis alle ambassadene i utenrikstjenesten skal
 dele arkivløsning og arkivere enten via lokale klienter som snakker
 direkte med tjenestegrensesnittet via Internett, klienter tilgjengelig
 via fjerntilgang (for eksempel RDP) som kjører sentralt eller
