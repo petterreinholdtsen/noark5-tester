@@ -67,6 +67,17 @@ uke etter dagene før bytte til sommertid bli til 12:00+0200 etter
 bytte til sommertid.  Dette bør kanskje nevnes i
 tjenestegrensesnittet?
 
+En annen utfordring er hvordan datoer og tidspunkt skal håndteres hvis
+samme instans av tjenestegrensesnittet brukes i flere tidssoner.  Et
+tenkt eksempel er hvis alle ambassadene i utenriksdepartementet skal
+dele arkivløsning og arkivere enten via lokale klienter som snakker
+direkte med tjenestegrensesnittet via Internett, klienter tilgjengelig
+via fjerntilgang (for eksempel RDP) som kjører sentralt eller
+webklient.  Hvis datoer og tidspunkt skal gi mening her må alle datoer
+inkludere tidssone, da samme tidspunkt på to forskjellige steder på
+jordkloden kan ha forskjellige datoer.  Tilsvarende gjelder for
+klokkeslett.
+
 Forøvrig kan det nevnes at tjenestegrensesnittet ikke ser ut til å ha
 konsekvent navngiving av datofelter.  Noen består av kun små bokstaver
 (merknadsdato, kassasjonsdato, graderingsdato, nedgraderingsdato),
