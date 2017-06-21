@@ -31,7 +31,9 @@ W3C tilgjengelig fra http://www.w3.org/TR/NOTE-datetime.
 
 Notatet fra W3C sier at alle tidspunkt som inneholder tid på døgnet
 skal oppgis med numerisk tidssone i tråd med ISO 8601, men med
-firesifret årstall.  Det tillates dermed følgende datetime-verdier:
+firesifret årstall.  Det tillates dermed date- og datetime-verdier som
+ligner dette (det skilles så vidt jeg kan forstå ikke på hvilke
+formater som tolkes som datoer):
 
  * 1997
  * 1997-07
@@ -39,11 +41,29 @@ firesifret årstall.  Det tillates dermed følgende datetime-verdier:
  * 1997-07-16T19:20+01:00
  * 1997-07-16T19:20:30+01:00
  * 1997-07-16T19:20:30.45+01:00
+ * 1997-07-16T19:20Z
+ * 1997-07-16T19:20:30Z
+ * 1997-07-16T19:20:30.45Z
+
+Mens XML Schema 1.0 tillater dateTime-verdier som ligner dette:
+
+ * 1997-07-16T19:20:00
+ * 1997-07-16T19:20:00Z
+ * 1997-07-16T19:20:30.45+01:00
+
+og date-verdier som ligner dette:
+
+ * 1997-07-16
+ * 1997-07-16Z
+ * 1997-07-16+01:00
+
+FIXME verifiser hvilke formater som aksepteres av XML dateTime. https://www.w3schools.com/XML/schema_dtypes_date.asp seem to agree that all parts are required.
 
 Det virker nærliggende å anta at verdier som legges inn i en attributt
 via tjenestegrensesnittet også må kunne hentes ut av
 tjenestegrensesnittet, og i så tilfelle må det være mulig å lagre
-enkeltårstall i et date-felt.
+enkeltårstall i et date-felt for å kunne ta vare på alle datoformatene
+tillatt av W3Cs "Date and Time Formats".
 
 Men gir det mening å akseptere kun årstall og årstall/måned i API-et?
 I definisjonen av date og dateTime i XML Schema 1.0 date er det krav
@@ -94,3 +114,6 @@ http://www.w3.org/TR/NOTE-datetime" til
 
 > Datoformat skal være angitt ihht http://www.w3.org/TR/NOTE-datetime,
 > med det unntak at datoer alltid må inneholde år, måned og dag.
+
+FIXME formuler som en "profil" av NOTE-datetime, eller bytt referansen
+til XML Schema 1.0?
