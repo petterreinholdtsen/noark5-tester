@@ -1,5 +1,5 @@
-Kan en sette verdien tom streng ok i et påkrevd felt?
-=====================================================
+Kan en sette verdien tom streng i et påkrevd felt?
+==================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -21,11 +21,11 @@ Beskrivelse
 -----------
 
 Det er flere påkrevde felt for objekter i tjenestegrensesnittet, men
-det står ingen steder i spesifikasjonen om hvorvidt hva som er
-ugyldige verdier i JSON for slike felt.  Feltet arkiv.tittel er i
-følge spesifikasjonen en tekststring som må være satt.  Dette tolker
-vi til at en verdi satt til null ikke er tillatt, dvs at dette ikke er
-lov:
+det står ingen steder i spesifikasjonen om hva som er ugyldige
+JSON-verdier for slike felt.  Et eksempel er feltet arkiv.tittel som i
+følge spesifikasjonen er en tekststreng som må være satt.  En naturlig
+tolkning av dette er at JSON-verdi satt til null ikke er tillatt, dvs
+at dette ikke er lov:
 
 ```
 {
@@ -34,7 +34,7 @@ lov:
 }
 ```
 
-Et spørsmål som melder seg er om den kan være satt til en tom
+Men et spørsmål som melder seg er om feltet kan være satt til en tom
 tekststreng, dvs om dette er tillatt:
 
 ```
@@ -44,15 +44,22 @@ tekststreng, dvs om dette er tillatt:
 }
 ```
 
-Det virker mest fornuftig å både avvise null og "" som gyldige verdier.
+Det virker mest fornuftig å både avvise null og `""` som gyldige
+verdier, for å sikre at tittelen kan vises frem og har et reelt
+innhold.
+
+Det er ikke åpenbart hvor i spesifikasjonen det bør klargjøres.  Det
+virker mest fornuftig å legge det inn under 7 (Tjenester og
+informasjonsmodell), men det kan også legges inn under både 4
+(Teknologi) og 6 (Konsepter og prinsipper).
 
 Ønsket endring
 --------------
 
-Endre i del 7.1 blokken om "Multiplisiteten på side 31, legg til
-følgende setning etter "En Klasse skal alltid ha en klasseID, og kan
-bare ha en":
+Endre i del 7.1, blokken om «Multiplisiteten» på side 31, legg til
+følgende setning etter «En Klasse skal alltid ha en klasseID, og kan
+bare ha en.»:
 
-> En om tekststreng-verdi er likestilt med en manglende verdi, slik at
-> i dette tilfellet betyr det at klasseID må ha en verdi forskjellig
-> fra tom streng.
+> En tom tekststreng-verdi (`""`) er likestilt med en manglende verdi,
+> slik at ved multipolisitet [1..1] betyr det at klasseID også må ha
+> en verdi forskjellig fra tom streng.
