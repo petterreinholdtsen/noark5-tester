@@ -44,7 +44,6 @@ Følgende brukes for å illustrere dette.
 For å opprette en underarkiv skal en dermed bruke POST til href knyttet til
 rel-verdien  
 `http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/`.
- 
 Den kan for eksempel angi en slik struktur:
 
  * POST `[contextpath][api]/arkivstruktur/arkiv/{systemID}/ny-arkiv`   
@@ -52,7 +51,6 @@ Den kan for eksempel angi en slik struktur:
 For å hente en liste av underarkiv skal en dermed bruke  GET til href knyttet
 til rel-verdien  
 `http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/`.
- 
 Den kan for eksempel angi en slik struktur:
 
  * GET `[contextpath][api]/arkivstruktur/arkiv/{systemID}/arkiv`
