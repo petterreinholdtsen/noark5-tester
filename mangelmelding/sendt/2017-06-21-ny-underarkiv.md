@@ -4,13 +4,13 @@ Hvordan defineres relasjoner mellom arkiv og underarkiv?
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
-        Alvorlighet  kommentar
+        Alvorlighet  protest
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
         Dokumentdel  7.2.1.1
          Sidenummer  57
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-06-21
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
