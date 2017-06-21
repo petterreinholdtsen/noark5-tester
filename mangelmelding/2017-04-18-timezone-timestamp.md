@@ -1,5 +1,5 @@
-Klargjør datohåndteringen
-=========================
+Formattering av dato og tid er i strid med Noark 5-krav for avlevering
+======================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -19,37 +19,66 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-I følge del 6.1.1.8 side 25 skal datoformatet angis i henhold til
-http://www.w3.org/TR/NOTE-datetime, og dette notatet sier at alle
-tidspunkt som inneholder tid på døgnet skal oppgis med numerisk
-tidssone i tråd med ISO 8601, men med firesifret årstall.  Det skal
-dermed være mulig å oppgi datetime-verdier ala dette: 1997, 1997-07,
-1997-07-16, 1997-07-16T19:20+01:00, 1997-07-16T19:20:30+01:00 og
-1997-07-16T19:20:30.45+01:00.  Men gir det mening å akseptere kun
-årstall og årstall/måned i API-et?  Spesifikasjonen i
-tjenestegrensesnittet er i strid med metadatakatalog.xsdl for Noark 5
-versjon 4.0, som sier at dato-typen hentes fra
-http://www.w3.org/2001/XMLSchema, der det henvises til
-https://www.w3.org/TR/xmlschema11-2/#date som spesifiserer at dato
-består av år, måned og dag med valgfri tidssoneinformasjon.
+Det er motstrid mellom formattering av dato med og uten klokkeslett i
+tjenestegrensesnittspesifikasjonen og kravene i Noark 5 versjon 4.0.
+Noark 5-Kravene 5.12.7 (datoer uten klokkeslett) og 5.12.8 (datoer med
+klokkeslett) sier at disse skal representeres ved hjelp av XML Schema
+1.0 henholds datatypen date og dateTime, tilgjengelig fra
+https://www.w3.org/TR/xmlschema11-2/.  I følge
+tjenestegrenesnittspesifikasjonens del 6.1.1.8 side 25 skal
+datoformatet angis i henhold til notatet "Date and Time Formats" fra
+W3C tilgjengelig fra http://www.w3.org/TR/NOTE-datetime.
 
-  
-Vil det noen gang være nødvendig å oppgi et "generisk" fremtidig
-tidspunkt i et NOARK 5-arkiv?  Kravet om numerisk tidssone vil være
-problematisk hvis det skal oppgis tidspunkt i fremtiden,
-f.eks. kl. 12:00 om to måneder, eller hver tirsdag kl. 13:00 det neste
-året.  Årsaken er at sommertid gjør at tidssoneverdien endrer seg (for
-Norge fra +01 til +02 og tilbake), og et slikt lokalt tidspunkt dermed
-ikke kan representeres med numerisk tidssone uten mer informasjon.
+Notatet fra W3C sier at alle tidspunkt som inneholder tid på døgnet
+skal oppgis med numerisk tidssone i tråd med ISO 8601, men med
+firesifret årstall.  Det tillates dermed følgende datetime-verdier:
 
-FIXME Finn ut om dette er en problemstilling med NOARK 5, eller om det
-aldri oppgis lokal tid i fremtiden.
+ * 1997
+ * 1997-07
+ * 1997-07-16
+ * 1997-07-16T19:20+01:00
+ * 1997-07-16T19:20:30+01:00
+ * 1997-07-16T19:20:30.45+01:00
 
-FIXME forsøk å finne forskjellen mellom 'datetime' og 'date' som datatype i spec.
+Det virker nærliggende å anta at verdier som legges inn i en attributt
+via tjenestegrensesnittet også må kunne hentes ut av
+tjenestegrensesnittet, og i så tilfelle må det være mulig å lagre
+enkeltårstall i et date-felt.
 
-FIXME camelcase eller ikke?  merknadsdato, kassasjonsdato, graderingsdato, nedgraderingsdato men slettetDato og presedensDato, skjermingOpphoererDato
+Men gir det mening å akseptere kun årstall og årstall/måned i API-et?
+I definisjonen av date og dateTime i XML Schema 1.0 date er det krav
+om at en dato må inneholde både år, måned og dag, og det er ikke
+tillatt å ha kun årstall eller kun årstall og måned.  Dermed vil en
+kunne ende opp i en situasjon der arkivdatabasen inneholder dato og
+tid som ikke kan avleveres i tråd med kravene i Noark 5.  Det virker
+mer fornuftig å be de som legger metadata inn i arkivet å vurdere
+hvordan 1997 og 1997-07 skal omformes til en dato på formen
+ÅÅÅÅ-MM-DD, enn å finne ut av dette først når arkivet skal deponeres,
+og jeg foreslår derfor at definisjonen av lovlige datoverdier i
+tjeneste grensesnittet endres til å være i samsvar med kravene i Noark
+5.
+
+En utfordring med denne definisjonen er bruken av
+tjenestegrensesnittet i generell saksbehandling, der det vil være
+behov for å oppgi fremtidige tidspunkt i lokal tidssone.  Dette kan
+ikke uten videre gjøres med numeriske tidssoner i land som Norge der
+en har sommer og vintertid.  Der vil jo for eksempel kl. 12:00+0100 en
+uke etter dagene før bytte til sommertid bli til 12:00+0200 etter
+bytte til sommertid.  Dette bør kanskje nevnes i
+tjenestegrensesnittet?
+
+Forøvrig kan det nevnes at tjenestegrensesnittet ikke ser ut til å ha
+konsekvent navngiving av datofelter.  Noen består av kun små bokstaver
+(merknadsdato, kassasjonsdato, graderingsdato, nedgraderingsdato),
+mens andre består av camelCase (slettetDato, presedensDato,
+skjermingOpphoererDato).  Det bør vurderes å konsekvent navngiving for
+å forenkle livet til de som skal ta i bruk tjenestegrensesnittet.
 
 Ønsket endring
 --------------
 
-FIXME
+Endre del 6.1.1.8 side 25 fra "Datoformat skal være angitt ihht
+http://www.w3.org/TR/NOTE-datetime" til
+
+> Datoformat skal være angitt ihht http://www.w3.org/TR/NOTE-datetime,
+> med det unntak at datoer alltid må inneholde år, måned og dag.
