@@ -41,15 +41,19 @@ Jeg foreslår at relasjonen 'underarkiv' fjernes og at kun relasjonene
 'arkiv/' og 'ny-arkiv/' brukes til å finne og opprette underarkiv. 
 Følgende brukes for å illustrere dette.
 
-For å opprette en underarkiv skal dermed POST til href knyttet til
-rel-verdi `http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/`
-brukes.  Den kan for eksempel an en slik struktur:
+For å opprette en underarkiv skal en dermed bruke POST til href knyttet til
+rel-verdien  
+`http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/`.
+ 
+Den kan for eksempel angi en slik struktur:
 
  * POST `[contextpath][api]/arkivstruktur/arkiv/{systemID}/ny-arkiv`   
 
-For å hente en liste av underarkiv skal dermed GET til href knyttet
-til rel-verdi `http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/`
-brukes, for eksempel:
+For å hente en liste av underarkiv skal en dermed bruke  GET til href knyttet
+til rel-verdien  
+`http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/`.
+ 
+Den kan for eksempel angi en slik struktur:
 
  * GET `[contextpath][api]/arkivstruktur/arkiv/{systemID}/arkiv`
 
@@ -70,8 +74,9 @@ Endres til følgende:
 
 > Toppnivået skal bare ha én forekomst, men kan ha ett eller flere
 > undernivåer, se om underarkiv nedenfor.  Underarkiv opprettes ved å
-> bruke arkiv-objektets relasjon
-> `http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/` og listes
+> bruke arkiv-objektets relasjon  
+> `http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/`
+> og listes
 > opp ved å bruke arkiv-objektets relasjon
 > `http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/`.
 
