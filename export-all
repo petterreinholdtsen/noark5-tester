@@ -59,6 +59,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                     print("info: Fetching %s" % url)
                 else:
                     sys.stdout.write('.')
+                    sys.stdout.flush()
                 (content, res) = self.json_get(url)
 
                 dir = os.path.dirname(path)
