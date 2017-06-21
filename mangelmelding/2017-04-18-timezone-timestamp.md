@@ -19,7 +19,7 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-Det er motstrid mellom formattering av dato med og uten klokkeslett i
+Det er ikke samsvar mellom formattering av dato med og uten klokkeslett i
 tjenestegrensesnittspesifikasjonen og kravene i Noark 5 versjon 4.0.
 Noark 5-Kravene 5.12.7 (datoer uten klokkeslett) og 5.12.8 (datoer med
 klokkeslett) sier at disse skal representeres ved hjelp av XML Schema
