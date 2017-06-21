@@ -51,11 +51,11 @@ om at en dato må inneholde både år, måned og dag, og det er ikke
 tillatt å ha kun årstall eller kun årstall og måned.  Dermed vil en
 kunne ende opp i en situasjon der arkivdatabasen inneholder dato og
 tid som ikke kan avleveres i tråd med kravene i Noark 5.  Det virker
-mer fornuftig å be de som legger metadata inn i arkivet å vurdere
+mer fornuftig å be de som legger metadata inn i kjernen å vurdere
 hvordan 1997 og 1997-07 skal omformes til en dato på formen
 ÅÅÅÅ-MM-DD, enn å finne ut av dette først når arkivet skal deponeres,
 og jeg foreslår derfor at definisjonen av lovlige datoverdier i
-tjeneste grensesnittet endres til å være i samsvar med kravene i Noark
+tjenestegrensesnittet endres til å være i samsvar med kravene i Noark
 5.
 
 En utfordring med denne definisjonen er bruken av
