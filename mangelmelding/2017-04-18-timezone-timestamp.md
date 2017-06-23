@@ -116,6 +116,7 @@ skjermingOpphoererDato).  Det bør vurderes å konsekvent navngiving for
 Endre del 6.1.1.8 side 25 fra "Datoformat skal være angitt ihht
 http://www.w3.org/TR/NOTE-datetime" til
 
-> Datoformat skal være angitt ihht definisjonen i
-> https://www.w3schools.com/XML/schema_dtypes_date.asp for date og
-> dateTime.
+> Datoformat skal være angitt i tråd med definisjonen i Noark 5, det
+> vil si definisjonen for date og datetime i XML Schema 1.0
+> tilgjengelig fra
+> https://www.w3schools.com/XML/schema_dtypes_date.asp.
