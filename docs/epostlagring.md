@@ -102,7 +102,8 @@ søke den ut senere. Mitt forslag er å bruke
 dokumentbeskrivelse.oppbevaringssted, da dette feltet er ubrukt for
 elektroniske dokumenter, og en kan tenke seg at epost er lagret bak
 stedet merket med Message-ID-verdien.  Et alternativ er å utvide Noark
-5 med epostspesifikke felter.
+5 med epostspesifikke felter eller et felt for "ekstern" referanse
+slik Noark 4 hadde (AM.REF i AVSMOT-tabellen).
 
 FIXME revurder om oppbevaringssted skal brukes til trådstarterens
 Message-ID (aka References og/eller In-Reply-To).
