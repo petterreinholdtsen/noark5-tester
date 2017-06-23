@@ -24,12 +24,12 @@ side 22, del 7.2.1.6 (Dokumentbeskrivelse) på side 89-98 og 7.2.1.7
 (Dokumentobjekt) på side 99-105.
 
 Det er uklarheter rundt filopplasting og angivelse av metadata til
-dokumentobjekt og dokumentbesrkivelse. Man må lese gjennon linjene for
+dokumentobjekt og dokumentbeskrivelse. Man må lese gjennom linjene for
 å forstå hvordan dette henger sammen.
 
 Opprettelse av Noark objekter (arkiv, mappe osv) er ganske enkel da
 avhengigheten mellom entiter angis i HTTP-requesten. Når det gjelder
-filopplasting så er det en slags transaksjon som må skje.
+filopplasting så er det en flerstegs transaksjon som gjøres.
 
 En mulig tolkning er at først oppretter man dokumentobjekt og angir
 filnavn, filstørrelse, mimeType.  Etter at filen er lastet opp
