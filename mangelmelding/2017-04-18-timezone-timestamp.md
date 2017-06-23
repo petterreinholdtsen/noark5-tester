@@ -14,7 +14,8 @@ Formattering av dato og tid er i strid med Noark 5-krav for avlevering
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
-tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
+tilgjengelig fra
+[https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
 Beskrivelse
 -----------
@@ -47,8 +48,11 @@ formater som tolkes som datoer):
 
 Mens XML Schema 1.0 tillater dateTime-verdier som ligner dette:
 
- * 1997-07-16T19:20:00
- * 1997-07-16T19:20:00Z
+ * 1997-07-16T19:20:30
+ * 1997-07-16T19:20:30.45
+ * 1997-07-16T19:20:30Z
+ * 1997-07-16T19:20:30.45Z
+ * 1997-07-16T19:20:30+01:00
  * 1997-07-16T19:20:30.45+01:00
 
 og date-verdier som ligner dette:
@@ -56,8 +60,6 @@ og date-verdier som ligner dette:
  * 1997-07-16
  * 1997-07-16Z
  * 1997-07-16+01:00
-
-FIXME verifiser hvilke formater som aksepteres av XML dateTime. https://www.w3schools.com/XML/schema_dtypes_date.asp seem to agree that all parts are required.
 
 Det virker nærliggende å anta at verdier som legges inn i en attributt
 via tjenestegrensesnittet også må kunne hentes ut av
@@ -76,28 +78,30 @@ hvordan 1997 og 1997-07 skal omformes til en dato på formen
 ÅÅÅÅ-MM-DD, enn å finne ut av dette først når arkivet skal deponeres,
 og jeg foreslår derfor at definisjonen av lovlige datoverdier i
 tjenestegrensesnittet endres til å være i samsvar med kravene i Noark
-5.  Alternativt kan jo tjenestegrensesnittet endres til å kreve
-formatet beskrevet i date og dateTime-definisjonen i XML Schema 1.0?
+5.  Det gjøres enklest ved å endre tjenestegrensesnittet til å kreve
+formatet beskrevet i date og dateTime-definisjonen i XML Schema 1.0.
 
-En utfordring med denne definisjonen er bruken av
-tjenestegrensesnittet i generell saksbehandling, der det vil være
+En utfordring med tidssonen i begge definisjone er bruken av
+tjenestegrensesnittet i generell saksbehandling, der det kan være
 behov for å oppgi fremtidige tidspunkt i lokal tidssone.  Dette kan
 ikke uten videre gjøres med numeriske tidssoner i land som Norge der
 en har sommer og vintertid.  Der vil jo for eksempel kl. 12:00+0100 en
 uke etter dagene før bytte til sommertid bli til 12:00+0200 etter
-bytte til sommertid.  Dette bør kanskje nevnes i
+bytte til sommertid.  Et annet eksempel på utfordringen er at
+kl. 12:00 hver uke de neste tolv månedene vil ha forskjellig tidssone
+for sommer og vintetid, og når overgangen skjer kan endre seg med
+politiske vedtak.  Problemstillingen bør kanskje nevnes i
 tjenestegrensesnittet?
 
 En annen utfordring er hvordan datoer og tidspunkt skal håndteres hvis
 samme instans av tjenestegrensesnittet brukes i flere tidssoner.  Et
-tenkt eksempel er hvis alle ambassadene i utenrikstjenesten skal
-dele arkivløsning og arkivere enten via lokale klienter som snakker
-direkte med tjenestegrensesnittet via Internett, klienter tilgjengelig
-via fjerntilgang (for eksempel RDP) som kjører sentralt eller
-webklient.  Hvis datoer og tidspunkt skal gi mening her må alle datoer
-inkludere tidssone, da samme tidspunkt på to forskjellige steder på
-jordkloden kan ha forskjellige datoer.  Tilsvarende gjelder for
-klokkeslett.
+tenkt eksempel er hvis alle ambassadene i utenrikstjenesten skal dele
+arkivløsning og arkivere enten via lokale klienter som snakker direkte
+med tjenestegrensesnittet via Internett, klienter tilgjengelig via
+fjerntilgang (for eksempel RDP) som kjører sentralt eller webklient.
+Hvis datoer og tidspunkt skal gi mening her må alle datoer inkludere
+tidssone, da samme tidspunkt på to forskjellige steder på jordkloden
+kan ha forskjellige datoer.  Tilsvarende gjelder for klokkeslett.
 
 Forøvrig kan det nevnes at tjenestegrensesnittet ikke ser ut til å ha
 konsekvent navngiving av datofelter.  Noen består av kun små bokstaver
@@ -112,8 +116,6 @@ skjermingOpphoererDato).  Det bør vurderes å konsekvent navngiving for
 Endre del 6.1.1.8 side 25 fra "Datoformat skal være angitt ihht
 http://www.w3.org/TR/NOTE-datetime" til
 
-> Datoformat skal være angitt ihht http://www.w3.org/TR/NOTE-datetime,
-> med det unntak at datoer alltid må inneholde år, måned og dag.
-
-FIXME formuler som en "profil" av NOTE-datetime, eller bytt referansen
-til XML Schema 1.0?
+> Datoformat skal være angitt ihht definisjonen i
+> https://www.w3schools.com/XML/schema_dtypes_date.asp for date og
+> dateTime.
