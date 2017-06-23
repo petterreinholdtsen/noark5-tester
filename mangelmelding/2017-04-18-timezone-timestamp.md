@@ -4,7 +4,7 @@ Formattering av dato og tid er i strid med Noark 5-krav for avlevering
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
-        Alvorlighet  kommentar
+        Alvorlighet  protest
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
         Dokumentdel  6.1.1.8
@@ -107,7 +107,7 @@ Forøvrig kan det nevnes at tjenestegrensesnittet ikke ser ut til å ha
 konsekvent navngiving av datofelter.  Noen består av kun små bokstaver
 (merknadsdato, kassasjonsdato, graderingsdato, nedgraderingsdato),
 mens andre består av camelCase (slettetDato, presedensDato,
-skjermingOpphoererDato).  Det bør vurderes å konsekvent navngiving for
+skjermingOpphoererDato).  Det bør vurderes å ha konsekvent navngiving for
 å forenkle livet til de som skal ta i bruk tjenestegrensesnittet.
 
 Ønsket endring
@@ -116,7 +116,8 @@ skjermingOpphoererDato).  Det bør vurderes å konsekvent navngiving for
 Endre del 6.1.1.8 side 25 fra "Datoformat skal være angitt ihht
 http://www.w3.org/TR/NOTE-datetime" til
 
-> Datoformat skal være angitt i tråd med definisjonen i Noark 5, det
-> vil si definisjonen for date og datetime i XML Schema 1.0
+> Datoformat skal være angitt i tråd med definisjonen i Noark 5 krav
+> 5.12.7 (datoer uten klokkeslett) og 5.12.8 (datoer med klokkeslett),
+> det vil si definisjonen for date og dateTime i XML Schema 1.0
 > tilgjengelig fra
 > https://www.w3schools.com/XML/schema_dtypes_date.asp.
