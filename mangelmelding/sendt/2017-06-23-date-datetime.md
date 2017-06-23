@@ -10,7 +10,7 @@ Formattering av dato og tid er i strid med Noark 5-krav for avlevering
         Dokumentdel  6.1.1.8
          Sidenummer  25
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-06-23
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
@@ -119,5 +119,6 @@ http://www.w3.org/TR/NOTE-datetime" til
 > Datoformat skal være angitt i tråd med definisjonen i Noark 5 krav
 > 5.12.7 (datoer uten klokkeslett) og 5.12.8 (datoer med klokkeslett),
 > det vil si definisjonen for date og dateTime i XML Schema 1.0
-> tilgjengelig fra
-> https://www.w3schools.com/XML/schema_dtypes_date.asp.
+> tilgjengelig fra https://www.w3.org/TR/xmlschema11-2/.  Det skal
+> alltid være tidssone-informasjon knyttet til date og
+> dateTime-verdier.
