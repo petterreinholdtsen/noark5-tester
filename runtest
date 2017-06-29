@@ -826,7 +826,6 @@ or should it be rejected?
             "tittel"          : "Title of the test document description created %s" % now,
 #            "tilknyttetRegistreringSom" : "Associated with record as"
             "dokumentnummer" : 1,
-            "tilknyttetDato" : "2017-01-01",
         }
         createdocdescrel = noarkrelbase + 'arkivstruktur/ny-dokumentbeskrivelse/'
         docdescinfo = self.createEntity('document description',
