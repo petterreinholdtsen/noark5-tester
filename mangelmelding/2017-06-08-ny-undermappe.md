@@ -26,10 +26,8 @@ Listen over relasjonsnøkler på sidene 133-134 viser at en kan få ut oversikt 
 opprette et nytt undermappe.  Hvordan er det mening at en skal opprette et nytt undermappe knyttet til et mappe?
 
 Det er uklart hva som er forskjellen på relasjonene 'mappe' og
-'undermappe'.  I følge UML-skjema er ethvert mappe koblet under et
-annet mappe et undermappe.  
-
-_Er det et eller en mappe??_
+'undermappe'.  I følge UML-skjema er enhvert mappe som er koblet under
+en annet mappe en undermappe.
 
 Det virker dermed nærliggende å tro at
 relasjonen .../arkivstruktur/undermappe/ er en skrivefeil.  Hvis ikke,
