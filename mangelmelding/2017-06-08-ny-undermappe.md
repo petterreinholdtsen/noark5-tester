@@ -26,13 +26,13 @@ at en kan få ut oversikt over undermapper ved å benytte relasjonen
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/, men har
 ingen tilsvarende relasjon ny-undermappe/ for å *opprette* en ny
 undermappe.  Hvordan er det mening at en skal opprette en nytt
-undermappe knyttet til et mappe?
+undermappe knyttet til en mappe?
 
 I listen over relasjonsnøkler finnes relasjonene
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/ og
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/, men det er
 uklart hva som er forskjellen på relasjonene 'mappe' og 'undermappe'.
-I følge UML-skjema er enhvert mappe som er koblet under en annet mappe
+I følge UML-skjema er enhvert mappe som er koblet under en annen mappe
 en undermappe.  Det virker dermed som om relasjonene for 'mappe' og
 'undermappe' er redundante.
 
