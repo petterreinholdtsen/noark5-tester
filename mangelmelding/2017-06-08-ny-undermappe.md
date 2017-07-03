@@ -69,6 +69,8 @@ relasjoner for å liste opp både 'arkiv' og 'underarkiv'.
 Ønsket endring
 --------------
 
+FIXME lag forslag som gjør det mulig å finne foreldremappe samtidig som undermapper kan lages og listes opp.
+
 Fjern duplikat-Aggregation med kilde undermappe som er både på side
 133 og 132.
 
