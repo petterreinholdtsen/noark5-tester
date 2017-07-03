@@ -51,13 +51,15 @@ Jeg foreslår at relasjonen 'undermappe' fjernes og at kun relasjonene
 'mappe/' og 'ny-mappe/' brukes til å finne og opprette undermappe.
 Følgende brukes for å illustrere dette.
 
-For å opprette en undermappe kan følgende href brukes:
+For å opprette en undermappe skal POST til href som er knyttet til
+følgende relasjon brukes:
 
-   POST [contextpath][api]/arkivstruktur/mappe/{systemID}/ny-mappe
+ * http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/
 
-For å hente en liste av undermappe kan følgende href brukes:
+For å hente en liste av undermappe skal GET til href som er knyttet
+til følgende relasjon brukes:
 
-   GET [contextpath][api]/arkivstruktur/mappe/{systemID}/mappe
+ * http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/
 
 Merk, det er en tilsvarende situasjon for arkiv/underarkiv i del
 7.2.1.1 side 57, der det kun finnes relasjon 'ny-arkiv' for å opprette
