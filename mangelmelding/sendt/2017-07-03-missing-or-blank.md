@@ -1,5 +1,5 @@
-Kan en sette verdien tom streng i et påkrevd felt?
-==================================================
+Kan en sette verdien «tom streng» i et påkrevd felt?
+====================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -10,7 +10,7 @@ Kan en sette verdien tom streng i et påkrevd felt?
         Dokumentdel  7.1
          Sidenummer  31
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2017-07-03
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til NOARK5-standarden
@@ -44,7 +44,7 @@ tekststreng, dvs om dette er tillatt:
 }
 ```
 
-Det virker mest fornuftig å både avvise null og `""` som gyldige
+Det virker mest fornuftig å avvise både null og `""` som gyldige
 verdier, for å sikre at tittelen kan vises frem og har et reelt
 innhold.
 
@@ -61,5 +61,5 @@ følgende setning etter «En Klasse skal alltid ha en klasseID, og kan
 bare ha en.»:
 
 > En tom tekststreng-verdi (`""`) er likestilt med en manglende verdi,
-> slik at ved multipolisitet [1..1] betyr det at klasseID også må ha
+> slik at ved multiplisiteten [1..1] betyr det at klasseID også må ha
 > en verdi forskjellig fra tom streng.
