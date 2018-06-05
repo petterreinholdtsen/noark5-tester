@@ -2,7 +2,7 @@ Klargjør om attributtnavn «skjermingOpphørerDato» er korrekt
 ============================================================
 
  ------------------  ---------------------------------
-           Prosjekt  NOARK 5 Tjenestegresesnitt
+           Prosjekt  Noark 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
         Alvorlighet  kommentar
        Meldingstype  trenger klargjøring

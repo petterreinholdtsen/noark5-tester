@@ -2,7 +2,7 @@ Korriger beskrivelse av epost og beskriv hvordan de bør arkiveres
 =================================================================
 
  ------------------  ---------------------------------
-           Prosjekt  NOARK 5
+           Prosjekt  Noark 5
            Kategori  Versjon 3.1
         Alvorlighet  kommentar
        Meldingstype  trenger klargjøring
@@ -13,7 +13,7 @@ Korriger beskrivelse av epost og beskriv hvordan de bør arkiveres
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
-Denne teksten er del av en samling innspill til NOARK5-standarden
+Denne teksten er del av en samling innspill til Noark5-standarden
 tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
 Beskrivelse
@@ -25,7 +25,7 @@ Se også docs/epostlagring.md
 
 https://www.arkivverket.no/arkivverket/Offentleg-forvalting/Noark/Noark-5/Standarden
 
-I NOARK 5 versjon 3.1 side 193 står følgende:
+I Noark 5 versjon 3.1 side 193 står følgende:
 
 > "Selv om RFC2822 definerer syntaksen for e-posttransaksjoner, er den
 > ingen standard som definerer dataformatet som skal bli brukt når
@@ -42,7 +42,7 @@ epost gjør.
 
 FIXME
 
-Denne delen av NOARK 5-spesifikasjonen bør endres til å forklare
+Denne delen av Noark 5-spesifikasjonen bør endres til å forklare
 hvordan epost kan lagres og arkiveres i sitt opprinnelige format.
 
 Ønsket endring

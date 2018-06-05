@@ -2,7 +2,7 @@ Fjern duplisert beskrivelse av SystemID
 =======================================
 
  ------------------  ---------------------------------
-           Prosjekt  NOARK 5 Tjenestegresesnitt
+           Prosjekt  Noark 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
         Alvorlighet  kommentar
        Meldingstype  trenger klargjøring
@@ -13,7 +13,7 @@ Fjern duplisert beskrivelse av SystemID
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
-Denne teksten er del av en samling innspill til NOARK5-standarden
+Denne teksten er del av en samling innspill til Noark5-standarden
 tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
 Beskrivelse
@@ -32,7 +32,7 @@ FIXME nevn eksempler.
 
 Skriv om første avsnitt fra
 
-> En arkivenhet (se NOARK 5 v3.1 krav 5.1.2 og 5.1.3) skal kunne
+> En arkivenhet (se Noark 5 v3.1 krav 5.1.2 og 5.1.3) skal kunne
 > identifiseres entydig innenfor det arkivskapende organet. I et
 > arkivuttrekk skal denne identifikasjonen hete systemID, og være
 > entydig på tvers av alle uttrekk som organet produserer, dermed også

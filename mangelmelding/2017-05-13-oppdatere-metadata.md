@@ -2,7 +2,7 @@ Hvordan vedlikehodes nye kodeliste-oppføringer og annen metadata?
 =================================================================
 
  ------------------  ---------------------------------
-           Prosjekt  NOARK 5 Tjenestegresesnitt
+           Prosjekt  Noark 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
         Alvorlighet  protest
        Meldingstype  utelatt
@@ -13,7 +13,7 @@ Hvordan vedlikehodes nye kodeliste-oppføringer og annen metadata?
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
-Denne teksten er del av en samling innspill til NOARK5-standarden
+Denne teksten er del av en samling innspill til Noark5-standarden
 tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
 Beskrivelse

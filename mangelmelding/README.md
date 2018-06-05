@@ -1,4 +1,4 @@
-Samling med observerte mangler ved NOARK 5 tjenestegrensesnitt
+Samling med observerte mangler ved Noark 5 tjenestegrensesnitt
 ==============================================================
 
 Bruk
@@ -9,7 +9,7 @@ Group](http://www.opengroup.org/austin/mantis.html), dvs:
  1. Oppsummering / overskrift - Enlinjers kort oppsummering av
     mangelmeldingen.
  1. Prosjekt - Kort navn på spesifikasjon/prosjektet meldingen
-    omhandler, f.eks. 'NOARK 5 Tjenestegresesnitt'.
+    omhandler, f.eks. 'Noark 5 Tjenestegresesnitt'.
  1. Kategori - Hvilken del / utgave av prosjektet meldingen gjelder.
     Her kan en legge inn versjon for spesifikasjonen som diskuteres,
     f.eks. 'Versjon 1.0 beta'.

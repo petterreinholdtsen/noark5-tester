@@ -2,7 +2,7 @@ Savner standardisert felt for ekstern dokumentreferanse
 =======================================================
 
  ------------------  ---------------------------------
-           Prosjekt  NOARK 5
+           Prosjekt  Noark 5
            Kategori  Versjon 4.0
         Alvorlighet  kommentar
        Meldingstype  utelatt
@@ -13,7 +13,7 @@ Savner standardisert felt for ekstern dokumentreferanse
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
 
-Denne teksten er del av en samling innspill til NOARK5-standarden
+Denne teksten er del av en samling innspill til Noark5-standarden
 tilgjengelig fra
 [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
