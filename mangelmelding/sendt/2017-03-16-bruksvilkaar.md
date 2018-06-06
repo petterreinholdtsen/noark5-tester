@@ -2,7 +2,7 @@ Legg inn opphavsrettslig status og bruksvilkår i spesifikasjonsteksten
 ======================================================================
 
  ------------------  ---------------------------------
-           Prosjekt  NOARK 5 Tjenestegresesnitt
+           Prosjekt  Noark 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
         Alvorlighet  protest
        Meldingstype  utelatt
@@ -102,3 +102,6 @@ Respons
 -------
 
 Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/1 .
