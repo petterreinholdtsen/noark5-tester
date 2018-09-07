@@ -1,0 +1,65 @@
+From benn@olifans.no Mon Nov  7 12:17:51 2016
+Return-Path: <SRS0+hzSX=WY=nuug.no=nikita-noark-bounces@surprisemanager.hungry.com>
+X-Original-To: pere@hungry.com
+Delivered-To: pere@hungry.com
+Received: from surprisemanager.hungry.com [54.149.130.205]
+	by ulrik.uio.no with IMAP (fetchmail-6.3.17)
+	for <pre@localhost> (single-drop); Mon, 07 Nov 2016 13:18:52 +0100 (CET)
+Received: from ironport2.hungry.com (static-50-37-73-5.mscw.id.frontiernet.net [50.37.73.5])
+	by surprisemanager.hungry.com (Postfix) with ESMTP id DB37A60B76
+	for <pere@hungry.com>; Mon,  7 Nov 2016 12:17:51 +0000 (UTC)
+X-Cloudmark-SP-Filtered: true
+X-Cloudmark-SP-Result: v=1.1 cv=UnX5N7EJ0qCIb7B0GX77vHMKGivmXc3lc7JEyYYq5zw= c=1 sm=1
+ a=Ytz1pTPSscpcRaWN0E7F0Q==:17 a=MhBVioSXAAAA:8 a=94OqLZCLlC6vg79xMCcA:9
+ a=CjuIK1q_8ugA:10 a=HpAAvcLHHh0Zw7uRqdWCyQ==:117
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: A0D/AQC2cCBYl4e/JJ5dHAEXAQYBgyIBAQEBAXd8AaRSgxqTGCsLgUqDZ0YCgglTAQIBAQEBAQITAQEBAQEIFgdJBEISAYQOAgQBATcMCh4OAwECBgJACAgDASMBFQQQHwWIUwQBAQizc4tIJYg7CIdjhRQFmieGNYVehgkBY41Ukn8bhRBxgXaGEwEBAQ
+X-IPAS-Result: A0D/AQC2cCBYl4e/JJ5dHAEXAQYBgyIBAQEBAXd8AaRSgxqTGCsLgUqDZ0YCgglTAQIBAQEBAQITAQEBAQEIFgdJBEISAYQOAgQBATcMCh4OAwECBgJACAgDASMBFQQQHwWIUwQBAQizc4tIJYg7CIdjhRQFmieGNYVehgkBY41Ukn8bhRBxgXaGEwEBAQ
+X-IronPort-AV: E=Sophos;i="5.22,553,1449561600"; 
+   d="scan'208";a="66781892"
+Received: from nerdhaven.nuug.no ([158.36.191.135])
+  by ironport2.hungry.com with ESMTP/TLS/ADH-AES256-SHA; 07 Nov 2016 04:17:31 -0800
+Received: from nerdhaven.nuug.no (nerdhaven.nuug.no [158.36.191.135])
+	by nerdhaven.nuug.no (Postfix) with ESMTP id 2B9CE2900A9
+	for <pere@hungry.com>; Mon,  7 Nov 2016 13:17:24 +0100 (CET)
+X-Original-To: nikita-noark@nuug.no
+Delivered-To: nikita-noark@nuug.no
+Received: from portal.nuug.no (portal.nuug.no [158.36.191.225])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by nerdhaven.nuug.no (Postfix) with ESMTPS id 816E42900AC
+	for <nikita-noark@nuug.no>; Mon,  7 Nov 2016 13:17:07 +0100 (CET)
+Received: from olifans.no ([78.47.174.133])
+	by portal.nuug.no with esmtps (UNKNOWN:AES256-GCM-SHA384:256)
+	(Exim 4.77) (envelope-from <benn@olifans.no>) id 1c3irH-0000l9-0O
+	for nikita-noark@nuug.no; Mon, 07 Nov 2016 13:17:06 +0100
+To: nikita-noark@nuug.no
+From: Ben Waldron <benn@olifans.no>
+Subject: hallo verden
+Message-ID: <5f8de48f-3cf0-1a36-1785-4ed35abbb364@olifans.no>
+Date: Mon, 7 Nov 2016 13:17:51 +0100
+X-BeenThere: nikita-noark@nuug.no
+X-Mailman-Version: 2.1.9
+Precedence: list
+List-Id: <nikita-noark.nuug.no>
+List-Unsubscribe: <http://lists.nuug.no/mailman/listinfo/nikita-noark>,
+	<mailto:nikita-noark-request@nuug.no?subject=unsubscribe>
+List-Archive: <http://lists.nuug.no/pipermail/nikita-noark>
+List-Post: <mailto:nikita-noark@nuug.no>
+List-Help: <mailto:nikita-noark-request@nuug.no?subject=help>
+List-Subscribe: <http://lists.nuug.no/mailman/listinfo/nikita-noark>,
+	<mailto:nikita-noark-request@nuug.no?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Sender: nikita-noark-bounces@nuug.no
+Errors-To: nikita-noark-bounces@nuug.no
+Content-Length: 147
+Lines: 5
+
+
+_______________________________________________
+nikita-noark mailing list
+nikita-noark@nuug.no
+http://lists.nuug.no/mailman/listinfo/nikita-noark
+
