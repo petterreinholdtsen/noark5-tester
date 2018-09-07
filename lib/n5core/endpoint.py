@@ -39,22 +39,47 @@ class Endpoint:
             raise ValueError("asked to expand undefined URL path")
         url = urlparse.urljoin(self.baseurl, path)
         return url
-
-    def login(self, username = 'admin', password = 'password'):
-        data = {
-            'username': username,
-            'password': password,
-        }
-        jsondata = json.dumps(data)
-        url = self.findRelation("http://nikita.arkivlab.no/noark5/v4/login/rfc7519/")
-        if url is not None:
+    def login(self, username = None, password = None):
+        baserel = "http://nikita.arkivlab.no/noark5/v4"
+        url7519 = self.findRelation("%s/login/rfc7519/" % baserel)
+        url6749 = self.findRelation("%s/login/rfc6749/" % baserel)
+        if url7519 is not None:
+            url = url7519
             try:
-                (c,r) = self.post(url, jsondata, 'application/json',
-                                  length=None)
+                if username is None:
+                    username = 'admin'
+                if password is None:
+                    password = 'password'
+                data = {
+                    'username': username,
+                    'password': password,
+                }
+                jsondata = json.dumps(data)
+                (c,r) = self.post(url, jsondata, 'application/json')
             except urllib2.HTTPError as e:
-                raise LoginFailure("Posting to login relation %s failed: %s" % url, e)
+                raise LoginFailure("Posting to login relation %s failed: %s" % (url, e))
             j = json.loads(c)
             self.token = j['token']
+        elif url6749 is not None:
+            url = url6749
+            try:
+                if username is None:
+                    username = 'gjest@example.com'
+                if password is None:
+                    password = 'password'
+                data = {
+                    'grant_type': 'password',
+                    'username': username,
+                    'password': password,
+                }
+                datastr = urllib.urlencode(data)
+                a = '%s:%s' % ('nikita-client', 'secret')
+                self.token = 'Basic %s' % base64.encodestring(a).strip()
+                (c,r) = self.post(url, datastr, 'application/x-www-form-urlencoded')
+            except urllib2.HTTPError as e:
+                raise LoginFailure("Posting to login relation %s failed: %s" % (url, str(e)))
+            j = json.loads(c)
+            self.token = "%s %s" % (j['token_type'], j['access_token'])
         else:
             raise LoginFailure("Unable to find login relation")
 
