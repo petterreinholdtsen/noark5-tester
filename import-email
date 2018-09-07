@@ -320,7 +320,8 @@ are in.
                                  docobjdata['mimeType'],
                                  length=len(content))
         except Exception as e:
-            print("error: upload threw exception, removing object: %s" % str(e))
+            print("error: upload threw exception, removing object: %s %s" % (str(e),
+                                                                             e.read()))
             for e in created[::-1]:
                 self.delete(e)
             return False
