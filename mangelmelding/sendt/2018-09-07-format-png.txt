@@ -1,0 +1,46 @@
+Legge inn PNG formatkode i listen over arkivformater?
+=====================================================
+
+ ------------------  ---------------------------------
+           Prosjekt  Noark 5 Tjenestegresesnitt
+           Kategori  Versjon 1.0 beta
+        Alvorlighet  kommentar
+       Meldingstype  trenger klargjøring
+    Brukerreferanse  pere@hungry.com
+        Dokumentdel  7.2.2.10
+         Sidenummer  173
+        Linjenummer  ?
+    Innsendingsdato  2018-09-07 (github issue #4)
+ ------------------  ---------------------------------
+
+Denne teksten er del av en samling innspill til Noark5-standarden
+tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
+
+Beskrivelse
+-----------
+
+I følge "Forskrift om utfyllende tekniske og arkivfaglige bestemmelser
+om behandling av offentlige arkiver (riksarkivarens forskrift)"[1]
+aksepteres PNG ved deponering av arkiv, men i spesifikasjonen for
+tjenestegrensesnittet er PNG ikke med i listen over
+formatkoder[2]. Dette er type M701 i metadatakatalogen.  I følge
+definisjonen til feltet i dokumentobjekt vil "faste verdier bestemmes
+senere".
+
+[1] https://lovdata.no/dokument/SF/forskrift/2017-12-19-2286
+[2] https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/blob/master/kapitler/07-tjenester_og_informasjonsmodell.md#format
+[3] https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/blob/master/kapitler/07-tjenester_og_informasjonsmodell.md#dokumentobjekt
+
+Ønsket endring
+--------------
+
+Kan det være en ide å utvide listen over formatkoder i
+tjenestegrensesnittet til å inneholde alle formater i riksarkivarens
+forskrift, i hvert fall PNG?
+
+Respons
+-------
+
+Rapportert til
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/4
+.  Ingen respons fra arkivverket så langt.
