@@ -433,7 +433,7 @@ are in.
         }
         if not self.createDocumentObject(docdescinfo, docobjdata,
                                          content, created):
-            asfdlkjasdf
+            print("error: failed to create document object")
             return False
         if message.is_multipart():
             for part in message.walk():
