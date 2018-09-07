@@ -456,8 +456,11 @@ are in.
                     "mimeType"        : mimetype,
                 }
 
-                self.createDocumentObject(docdescinfo, docobjdata,
-                                          content, created)
+                if not self.createDocumentObject(docdescinfo, docobjdata,
+                                                 content, created):
+                    print("error: failed to create document object for attachment %s"
+                          % part.get_filename())
+
         return True
 
     def uploadEmail(self, message):
