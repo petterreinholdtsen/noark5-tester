@@ -77,7 +77,7 @@ class Endpoint:
                 self.token = 'Basic %s' % base64.encodestring(a).strip()
                 (c,r) = self.post(url, datastr, 'application/x-www-form-urlencoded')
             except urllib2.HTTPError as e:
-                raise LoginFailure("Posting to login relation %s failed: %s" % (url, str(e)))
+                raise LoginFailure("Posting to login relation %s failed: %s (%s)" % (url, str(e), e.read()))
             j = json.loads(c)
             self.token = "%s %s" % (j['token_type'], j['access_token'])
         else:
