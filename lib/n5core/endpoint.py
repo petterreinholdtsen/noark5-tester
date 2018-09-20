@@ -64,7 +64,7 @@ class Endpoint:
             url = url6749
             try:
                 if username is None:
-                    username = 'gjest@example.com'
+                    username = 'admin@example.com'
                 if password is None:
                     password = 'password'
                 data = {
