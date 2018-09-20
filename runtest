@@ -563,9 +563,14 @@ Test basis requirements for NOARK 5 Core.
             try:
                 # Verify OPTIONS announce POST support 
                 (ocontent, ores) = self.options(url)
-                allow = ores.info().getheader('Allow').split(',')
-                self.verify(-1 != allow.index('POST'), 'OPTIONS header Allow should include POST for %s' % url)
-                self.verify(-1 != allow.index('GET'), 'OPTIONS header Allow should include GET for %s' % url)
+                allow = []
+                allowstr = ores.info().getheader('Allow')
+                if allowstr:
+                    allow = allowstr.split(',')
+                    verify(-1 != allow.index('POST'), 'OPTIONS header Allow should include POST for %s' % url)
+                    verify(-1 != allow.index('GET'), 'OPTIONS header Allow should include GET for %s' % url)
+                else:
+                    self.failure("OPTIONS for URL %s missing Allow header" % url)
             except urllib2.HTTPError, e:
                 self.failure('unable to OPTIONS %s' % url)
         except urllib2.HTTPError, e:
