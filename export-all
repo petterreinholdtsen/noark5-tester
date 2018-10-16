@@ -44,15 +44,20 @@ class ContentDumper(n5core.endpoint.Endpoint):
         print("Saving to %s" % self.savedir)
         urlsleft = ['.']
         urlseen = {}
+        urlsrc = {'.': 'root'}
         while 0 < len(urlsleft):
             url = urlsleft.pop(0)
             if url in urlseen:
                 continue
             urlseen[url] = 1
             
-            path = os.path.join(self.savedir, url.replace(self.baseurl, ""))
+            path = url.replace(self.baseurl, "")
             path = path.rstrip('/').replace('/.', '/index')
             path = path + ".json"
+            path = os.path.join(self.savedir, path)
+            if -1 != path.find('//') or '/' == path[0]:
+                print("error: bogus url %s seen in %s (path %s)" % ( url, urlsrc[url], path))
+                continue
             
             try:
                 if self.verbose:
@@ -62,6 +67,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                     sys.stdout.flush()
                 (content, res) = self.json_get(url)
 
+                if self.verbose:
+                    print("info: Creating %s for %s" % (path, url))
                 dir = os.path.dirname(path)
                 self._mkdir_recursive(dir)
                 f = open(path, 'w')
@@ -89,6 +96,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
                                     href = href.split('{')[0]
                                 if href not in urlseen:
                                     urlsleft.append(href)
+                                    if href not in urlsrc:
+                                        urlsrc[href] = []
+                                    urlsrc[href].append(url)
                     if baseref is not None and type(baseref) is not list:
                         for basekey in baseref.keys():
                             if basekey != '_links' and type(baseref[basekey]) is list:
@@ -98,6 +108,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
                                             href = l['href']
                                             if href not in urlseen:
                                                 urlsleft.append(href)
+                                                if href not in urlsrc:
+                                                    urlsrc[href] = []
+                                                urlsrc[href].append(url)
             except urllib2.HTTPError as e:
                 pass
         if not self.verbose:
