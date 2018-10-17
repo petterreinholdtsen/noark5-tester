@@ -378,6 +378,11 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                     elif '_links' in baseref:
                         self.verifyuniquerels(baseref['_links'], url)
                         for l in baseref['_links']:
+                            # Detect hrefs with double slashes
+                            if 'href' in l \
+                               and -1 != l['href'].replace('://', '/').find('//') \
+                               and 'self' != l['rel']:
+                                self.failure("_links %s with double slashes in %s" % (l['href'], url))
                             # Ignore non-standard relations
                             if 'href' in l \
                                and -1 == l['rel'].find("//rel.kxml.no/noark5/") \
