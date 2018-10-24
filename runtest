@@ -549,9 +549,15 @@ Test basis requirements for NOARK 5 Core.
                 rels[l['rel']] = l['href']
         return rels
 
-    def createEntity(self, name, rel, rels, data):
+    def createEntity(self, name, rel, rels, data, failureexpected=False):
         if self.verbose:
             print("trying to create %s" % name)
+        if failureexpected:
+            failure=self.xfailure
+            verify=self.xverify
+        else:
+            failure=self.failure
+            verify=self.verify
         if rel not in rels:
             self.failure("unable to create a new %s, no %s entry discovered even if logged in" % (name, rel))
             return
@@ -584,15 +590,15 @@ Test basis requirements for NOARK 5 Core.
         try:
             (c, res) = self.json_post(url, data)
         except urllib2.HTTPError, e:
-            self.failure("POST %s failed: %s" % (url, e.read().decode('UTF-8')))
+            failure("POST %s failed: %s" % (url, e.read().decode('UTF-8')))
             raise
         info = json.loads(c)
         id = info['systemID']
-        self.verify(id is not None, "created %s" % name)
-        self.verify(201 == res.code, "%s creation returned HTTP code 201" % name)
+        verify(id is not None, "created %s" % name)
+        verify(201 == res.code, "%s creation returned HTTP code 201" % name)
         self.verifyuniquerels(info['_links'], url)
         linkrefs = self.parselinks(info['_links'])
-        self.verify('self' in linkrefs, "_links in response from %s creation should include 'self' reference" % name)
+        verify('self' in linkrefs, "_links in response from %s creation should include 'self' reference" % name)
         if 'self' in linkrefs:
             selfurl = self.parselinks(info['_links'])['self']
             self.created.append(selfurl)
@@ -601,24 +607,32 @@ Test basis requirements for NOARK 5 Core.
                 extrainfo = self.json_get(selfurl)
                 self.success("able to GET self url %s" % selfurl)
             except urllib2.HTTPError as e:
-                self.failure("unable to GET self url %s" % selfurl)
+                failure("unable to GET self url %s" % selfurl)
         for k in data.keys():
-            if self.verify(k in info,
+            if verify(k in info,
                            "POST %s respons should have key %s" % (url, k)):
-                if list is type(data[k]):
-                    for v in data[k]:
-                        self.verify(data[k][v] == info[k][v],
-                                    "POST %s respons list member %s should match %s" %
-                                    (url, k, v, data[k][v]))
-                elif dict is type(data[k]):
-                    for v in data[k].keys():
-                        self.verify(data[k][v] == info[k][v],
-                                    "POST %s respons dict %s key %s should match %s" %
-                                    (url, k, v, data[k][v]))
-                else:
-                    self.verify(info[k] == data[k],
-                                "POST %s response for '%s' should match '%s'" % (url, k, data[k]))
+                if verify(type(data[k]) == type(info[k]),
+                          'type of attribute %s matches  for sent (%s) and received (%s) JSON' % (
+                              k, type(data[k]), type(info[k]),
+                          )):
+                    if list is type(data[k]):
+                        for v in data[k]:
+                            verify(data[k][v] == info[k][v],
+                                        "POST %s respons list member %s should match %s" %
+                                        (url, k, v, data[k][v]))
+                    elif dict is type(data[k]):
+                        print("data[%s]:", (k, data[k]))
+                        print("info[%s]:", (k, info[k]))
+                        for v in data[k].keys():
+                            print("checking %s key %s" % (k, v))
+                            verify(data[k][v] == info[k][v],
+                                        "POST %s respons dict %s key %s should match %s" %
+                                        (url, k, v, data[k][v]))
+                    else:
+                        verify(info[k] == data[k],
+                                    "POST %s response for '%s' should match '%s'" % (url, k, data[k]))
         return info
+
     def deleteCreated(self):
         for entityurl in self.created[::-1]:
             try:
