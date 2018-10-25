@@ -47,6 +47,10 @@ def mime2format(mimestr):
     mimetypemap = {
         'application/pdf' : 'RA-PDF',
         'image/jpeg'      : 'RA-JPEG',
+
+        # These should have official codes, but do not
+        'application/vnd.oasis.opendocument.presentation' : "ODP",
+        'image/png'       : "PNG",
         'message/rfc822'  : "RFC822",
 
         # No use splitting these formats out as separate upload, the
