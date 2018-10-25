@@ -55,6 +55,7 @@ def mime2format(mimestr):
         'text/plain'      : None,
         'text/html'       : None,
         'multipart/mixed' : None,
+        'multipart/signed': None,
         'multipart/alternative' : None,
     }
     mimetype = mimestr.split(';')[0]
