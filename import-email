@@ -71,7 +71,7 @@ class MboxImporter(n5core.endpoint.Endpoint):
         self.mbox = 'input.mbox'
         parser = argparse.ArgumentParser()
         parser.add_argument("--baseurl", help="(default is %s)" % self.baseurl)
-        parser.add_argument("--mda", help="behave as mda, read single email from stdin",
+        parser.add_argument("--mta", help="behave as mta, read single email from stdin",
                             action="store_true")
         parser.add_argument("--mbox", help="(default is %s)" % self.mbox)
         parser.add_argument("--storageurl", help="specify under which URL (arkivdel/mappe) to store email files in")
@@ -85,11 +85,11 @@ class MboxImporter(n5core.endpoint.Endpoint):
         self.storageurl = args.storageurl
         if args.baseurl:
             self.baseurl = args.baseurl
-        if args.mda and args.mbox:
-            raise Exception("invalid combination of arguments, can not use --mda and --mbox together")
+        if args.mta and args.mbox:
+            raise Exception("invalid combination of arguments, can not use --mta and --mbox together")
         if args.mbox:
             self.mbox = args.mbox
-        self.mda = args.mda
+        self.mta = args.mta
         self.docobjurl = None
         self.parentmap = {}
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
@@ -499,7 +499,7 @@ are in.
         return True
 
     def load(self):
-        if self.mda:
+        if self.mta:
             return self.loadEmail()
         else:
             return self.loadMbox()
