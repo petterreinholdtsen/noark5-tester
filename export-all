@@ -76,7 +76,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 f.close()
                 
                 ctype = res.info().getheader('Content-Type')
-                if 0 != ctype.find('application/vnd.noark5-v4+json'):
+                if ctype is None:
+                    print("error: No Content-Type from %s" % url)
+                if ctype is None or 0 != ctype.find('application/vnd.noark5-v4+json'):
                     print("info: ignoring %s" % url)
                 else:
                     try:
