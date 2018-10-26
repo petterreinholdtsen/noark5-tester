@@ -61,3 +61,6 @@ Respons
 -------
 
 Henvendelsen er gitt saksnummer 2017/5964 hos Arkivverket.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/16
