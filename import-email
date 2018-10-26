@@ -64,7 +64,7 @@ def mime2format(mimestr):
         'multipart/alternative' : None,
     }
     mimetype = mimestr.split(';')[0]
-    return  mimetypemap[mimetype]
+    return mimetypemap[mimetype]
 
 class MboxImporter(n5core.endpoint.Endpoint):
     def __init__(self):
@@ -445,8 +445,9 @@ are in.
         if message.is_multipart():
             for part in message.walk():
                 mimetype = part.get_content_type()
-                print(mimetype)
                 format = mime2format(mimetype)
+                if self.verbose:
+                    print("info: mapping %s to %s" % (mimetype, format))
                 if format is None:
                     continue
                 content = part.get_payload(decode=True)
