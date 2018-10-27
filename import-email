@@ -62,6 +62,9 @@ def mime2format(mimestr):
         'multipart/mixed' : None,
         'multipart/signed': None,
         'multipart/alternative' : None,
+
+        # Not quite sure what to do with these
+        'application/x-xz': None,
     }
     mimetype = mimestr.split(';')[0]
     return mimetypemap[mimetype]
