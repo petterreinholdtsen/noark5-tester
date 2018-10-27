@@ -424,8 +424,6 @@ are in.
             'tittel' : decodeheader(message['subject']),
             # FIXME remove [] when the API is fixed
             'oppbevaringssted' : [ threadstarterid ],
-            # FIXME this should be set automatically by the server
-            "dokumentnummer" : 1,
         }
         docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
                                        parselinks(recordinfo['_links']),
