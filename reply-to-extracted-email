@@ -13,12 +13,13 @@ import sys
 sys.path.append('lib')
 
 import argparse
+import dateutil.parser
 import email.utils
 import json
 import os
 import subprocess
 import tempfile
-from time import strftime, gmtime, time
+from time import strftime, gmtime, mktime, time
 
 import n5core.endpoint
 
@@ -170,8 +171,12 @@ def main():
                                           (docobjinfo['variantformat'],
                                            docobjinfo['format'], d,
                                            docobjinfo['filnavn'])
+                                # FIXME figure out if there is a better date field to use
+                                date = dateutil.parser.parse(docobjinfo['opprettetDato'])
                                 print("Received non-email from API (Content-Type %s, filename %s)" % (ct, subject))
                                 mailfile.write("Subject: %s\n" % subject)
+                                mailfile.write("Date: %s\n" % \
+                                               email.utils.formatdate(mktime(date.timetuple())))
                                 mailfile.write("Content-type: %s\n" % ct)
                                 mailfile.write("\n")
                             mailfile.write(c)
