@@ -99,44 +99,44 @@ class MboxImporter(n5core.endpoint.Endpoint):
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
         self.verbose = args.verbose
 
-    def objectOperation(self, json, relation):
+    def objectOperation(self, info, relation):
         """
 Return the URL/href for a given relation on the object represented by
 the json structure.
 
     """
-        if json is None or '_links' not in json:
+        if info is None or '_links' not in info:
             return None
-        for l in json['_links']:
+        for l in info['_links']:
             if l['rel'] == relation:
                 return l['href']
         return None
 
-    def pickUnlessOne(self, json, type):
+    def pickUnlessOne(self, info, type):
         """
 Check the array in the json structure, if there is only one
 elemet, return it.  If there are more than one elemet, ask the
 user to pick one.
         """
-        #print("Found %d %s entries" % (len(json), type))
-        if 'results' in json:
-            count = len(json['results'])
+        #print("Found %d %s entries" % (len(info), type))
+        if 'results' in info:
+            count = len(info['results'])
         else:
             count = 0
         if 0 == count:
             return None
         if 1 == count:
-            if 'tittel' in json['results'][0]:
-                print("using %s: %s" % (type, json['results'][0]['tittel']))
+            if 'tittel' in info['results'][0]:
+                print("using %s: %s" % (type, info['results'][0]['tittel']))
             else:
-                print("using %s: %s" % (type, json['results'][0]['systemID']))
-            return json['results'][0]
+                print("using %s: %s" % (type, info['results'][0]['systemID']))
+            return info['results'][0]
         else:
             print("")
             n = -1
             while -1 == n:
                 i = 0
-                for entry in json['results']:
+                for entry in info['results']:
                     if 'tittel' in entry:
                         print(" %d - %s" % (i, entry['tittel']))
                     else:
@@ -149,7 +149,7 @@ user to pick one.
                         print("error: Invalid selection %d" % n)
                         n = -1
                     else:
-                        return json['results'][int(n)]
+                        return info['results'][int(n)]
                 except Exception as e:
                     # FIXME search instead
                     pass
