@@ -1,0 +1,202 @@
+From jthelander@gmail.com Fri Aug  3 05:14:01 2018
+Return-Path: <SRS0+ER4y=KS=lists.debian.org=bounce-debconf-discuss=pere=hungry.com@surprisemanager.hungry.com>
+X-Original-To: pere@hungry.com
+Delivered-To: pere@hungry.com
+Received: from surprisemanager.hungry.com [52.27.131.156]
+	by meta.reinholdtsen.name with IMAP (fetchmail-6.3.26)
+	for <pere@localhost> (single-drop); Fri, 03 Aug 2018 07:30:24 +0200 (CEST)
+Received: from ironport2.hungry.com (static-50-37-73-5.mscw.id.frontiernet.net [50.37.73.5])
+	by surprisemanager.hungry.com (Postfix) with ESMTP id A1CF660D14
+	for <pere@hungry.com>; Fri,  3 Aug 2018 05:30:15 +0000 (UTC)
+Authentication-Results: surprisemanager.hungry.com;
+	dkim=pass (2048-bit key; unprotected) header.d=gmail.com header.i=@gmail.com header.b=uF/l0S0w;
+	dkim-atps=neutral
+X-Cloudmark-SP-Filtered: true
+X-Cloudmark-SP-Result: v=1.1 cv=WeThn3ZmkUA5OLwaPPYZFwNPK6SStR8SdkcqqvTjvKM= c=1 sm=1
+ a=iPP3/VK3GZFrSrB3xBCCpA==:17 a=xNf9USuDAAAA:8 a=ZyYluoxtOHLHz0ATlugA:9
+ a=QEXdDO2ut3YA:10 a=pWWjeo-5eqbjFLPIX9YA:9 a=HpAAvcLHHh0Zw7uRqdWCyQ==:117
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: A0AWDQB452Nbh2RLw1JcgyuCXoN+gR2CU5Begg0UgnaFSGmHCYUvgVwVGAESAYdHITcVAQIBAQEBAQECFAEBAQoLCQgbDiMMQhABhGQBAgIBAQEBIB0BBQgCDAwSAwEBAQIGAQYDAgQBBi8BBwICAwEeAQ4DAQUBHBkFGASCf4FnAQMNCQMBlw+QAjyLCoERBQEXgnUFg1IKGSYNV4JUAgYSiHYXgUE/gRKCZC6BQQGDBBF0gjSCVQKIIJIJCY9BgUqEHogwkkMPIYECAjKBdE0jgQGCOIIlDAsRgzSKVG17AQGJJoMggkkBAQ
+X-IPAS-Result: A0AWDQB452Nbh2RLw1JcgyuCXoN+gR2CU5Begg0UgnaFSGmHCYUvgVwVGAESAYdHITcVAQIBAQEBAQECFAEBAQoLCQgbDiMMQhABhGQBAgIBAQEBIB0BBQgCDAwSAwEBAQIGAQYDAgQBBi8BBwICAwEeAQ4DAQUBHBkFGASCf4FnAQMNCQMBlw+QAjyLCoERBQEXgnUFg1IKGSYNV4JUAgYSiHYXgUE/gRKCZC6BQQGDBBF0gjSCVQKIIJIJCY9BgUqEHogwkkMPIYECAjKBdE0jgQGCOIIlDAsRgzSKVG17AQGJJoMggkkBAQ
+X-IronPort-AV: E=Sophos;i="5.22,553,1449561600"; 
+   d="scan'208,217";a="68410037"
+Received: from bendel.debian.org ([82.195.75.100])
+  by ironport2.hungry.com with ESMTP/TLS/ADH-AES256-SHA; 02 Aug 2018 22:30:13 -0700
+Received: from localhost (localhost [127.0.0.1])
+	by bendel.debian.org (Postfix) with QMQP
+	id C98B81CB; Fri,  3 Aug 2018 05:30:10 +0000 (UTC)
+X-Mailbox-Line: From debconf-discuss-request@lists.debian.org  Fri Aug  3 05:30:10 2018
+Old-Return-Path: <jthelander@gmail.com>
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on bendel.debian.org
+X-Spam-Level: 
+X-Spam-Status: No, score=0.8 required=4.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,DKIM_VERIFIED,EMPTY_BODY,FOURLA,FREEMAIL_FROM,HTML_MESSAGE,
+	LDO_WHITELIST,RCVD_IN_DNSWL_NONE,SARE_HEAD_8BIT_SPAM autolearn=no
+	autolearn_force=no version=3.4.1
+X-Original-To: lists-debconf-discuss@bendel.debian.org
+Delivered-To: lists-debconf-discuss@bendel.debian.org
+Received: from localhost (localhost [127.0.0.1])
+	by bendel.debian.org (Postfix) with ESMTP id D3F98196
+	for <lists-debconf-discuss@bendel.debian.org>; Fri,  3 Aug 2018 05:14:25 +0000 (UTC)
+X-Virus-Scanned: at lists.debian.org with policy bank en-lt
+X-Amavis-Spam-Status: No, score=-1.111 tagged_above=-10000 required=5.3
+	tests=[BAYES_00=-2, DKIM_SIGNED=0.1, DKIM_VALID=-0.1,
+	DKIM_VALID_AU=-0.1, EMPTY_BODY=3, FOURLA=0.1, FREEMAIL_FROM=0.001,
+	HTML_MESSAGE=2, LDO_WHITELIST=-5, RCVD_IN_DNSWL_NONE=-0.0001,
+	SARE_HEAD_8BIT_SPAM=0.888] autolearn=no autolearn_force=no
+Received: from bendel.debian.org ([127.0.0.1])
+	by localhost (lists.debian.org [127.0.0.1]) (amavisd-new, port 2525)
+	with ESMTP id sFrDb_AHa5KU
+	for <lists-debconf-discuss@bendel.debian.org>;
+	Fri,  3 Aug 2018 05:14:20 +0000 (UTC)
+X-policyd-weight: using cached result; rate: -7
+Received: from mail-ua0-x22c.google.com (mail-ua0-x22c.google.com [IPv6:2607:f8b0:400c:c08::22c])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(Client CN "smtp.gmail.com", Issuer "Google Internet Authority G3" (not verified))
+	by bendel.debian.org (Postfix) with ESMTPS id 677E6162
+	for <debconf-discuss@lists.debian.org>; Fri,  3 Aug 2018 05:14:17 +0000 (UTC)
+Received: by mail-ua0-x22c.google.com with SMTP id m13-v6so3024156uaq.7
+        for <debconf-discuss@lists.debian.org>; Thu, 02 Aug 2018 22:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=A5QEsJfQN6bOcEZNVNF3V79nkSjvb38kWGtRK3mU7z4=;
+        b=uF/l0S0wstuZEonUoaEUxrvPCPWj9UpyV/lWdGxuFUlkGN9VDXzh+gep8O3VROxF0A
+         6jek59jSycY8sOJDPnv3pXDdBh7gE5QOqmZo79LVMEH9rbvxepqdxIlWZjxxdzE7TOIP
+         fNAjGb6U2L7M6+5T0nIkrDfxf7nUsI1XF1MyYL/WksCyiYUVYLGUITl0dk5+UAZkGs68
+         jLeXvwaRKUsoyUyKFScCBjCnJdiKkixj5W9IS8OJxg3iF/5RdHVQFQ957hiSJymOwOOX
+         HdUO40ag4ow0XLRCfFARMvNkcDYvG31/iEz6rbb1DM/dFUQ52kFbssVPv66U+VvfoUcI
+         zLQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=A5QEsJfQN6bOcEZNVNF3V79nkSjvb38kWGtRK3mU7z4=;
+        b=ZW/F2/nMKNEqlQ9oMyNa0lxpS2nNP4rKoaMy9t/+vPheQ/3x9ejlJnsFLQ1lXmlgp4
+         tFCu4tPR5Yq4Vnstu3LyvtYQlu+VS3hLCPd8aIpTsJSaFTglAMxVhTHBSXDr1puPbrkr
+         6Jm/zlinT5ibJ03Ba0164w0vB/FCRFURkB2pOE1c12r3VLZ6GMTriKm4sr8blxZwHjy7
+         f87B3zERTjHjgyW685+56ZsBcb15L09D+mo06B3uusUSK+wptEg17SPpEV5NNtkIsUG3
+         LKCNC1xGx87OZckTqB4pFqbrzO33t1LoQ0QqR1u6hO1eMrrV9oKDbq8U9ceEcdbNMIk2
+         FDGw==
+X-Gm-Message-State: AOUpUlF9YryRSjbCjMGLYLXzPCUBzSZPYfANwSJrGGCLEk22Z1U+9MOS
+	n4LCd+vpSen3GygQ0INXTwHpMb1CXyJ2Zl+wluRCDA==
+X-Google-Smtp-Source: AAOMgpe8weq+FAp+/gPOgMDFYUHwg0tTPyopy4lf/R3sga5d8YIvC9Ig8h5meEOCOfg2DV6UFHbqWki+Atu6uVY2TWc=
+X-Received: by 2002:ab0:b:: with SMTP id 11-v6mr1707259uai.19.1533273253948;
+ Thu, 02 Aug 2018 22:14:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20180803044936.GA20015@mail.bluemosh.com>
+In-Reply-To: <20180803044936.GA20015@mail.bluemosh.com>
+From: Johan Thelander <jthelander@gmail.com>
+Date: Fri, 3 Aug 2018 07:14:01 +0200
+Message-ID: <CAPk+KJSGkDV8HognBUmCoOK7=r5sCCocnxSfBRQHCCcH5Qtkxw@mail.gmail.com>
+Subject: =?UTF-8?Q?Re=3A_=F0=9F=9B=AB_DebConf_Announcements=3A_Planning_your_depart?=
+	=?UTF-8?Q?ure=2C_T=2Dshirt_swaps_available=2C_Happy_hour_in_hacklab_today?=
+To: debconf-discuss@lists.debian.org
+Content-Type: multipart/alternative; boundary="000000000000a53187057280ff92"
+X-Rc-Spam: 2008-11-04_01
+X-Rc-Virus: 2007-09-13_01
+X-Rc-Spam: 2008-11-04_01
+Resent-Message-ID: <jSVUMdRIo4I.A.VcC.ih-YbB@bendel>
+Resent-From: debconf-discuss@lists.debian.org
+X-Mailing-List: <debconf-discuss@lists.debian.org> archive/latest/599
+X-Loop: debconf-discuss@lists.debian.org
+List-Id: <debconf-discuss.lists.debian.org>
+List-URL: <https://lists.debian.org/debconf-discuss/>
+List-Post: <mailto:debconf-discuss@lists.debian.org>
+List-Help: <mailto:debconf-discuss-request@lists.debian.org?subject=help>
+List-Subscribe: <mailto:debconf-discuss-request@lists.debian.org?subject=subscribe>
+List-Unsubscribe: <mailto:debconf-discuss-request@lists.debian.org?subject=unsubscribe>
+Precedence: list
+Resent-Sender: debconf-discuss-request@lists.debian.org
+List-Archive: https://lists.debian.org/msgid-search/CAPk+KJSGkDV8HognBUmCoOK7=r5sCCocnxSfBRQHCCcH5Qtkxw@mail.gmail.com
+Resent-Date: Fri,  3 Aug 2018 05:30:10 +0000 (UTC)
+Status: RO
+Content-Length: 2857
+Lines: 85
+
+--000000000000a53187057280ff92
+Content-Type: text/plain; charset="UTF-8"
+
+Unsubscribe
+
+
+On Fri, 03 Aug 2018, 06:50 Jonathan Carter (highvoltage), <jcc@debian.org>
+wrote:
+
+> Dear DebConfers
+>
+> == Planning your departure ==
+>
+> - Please return keys, AC Card, RFID Card (if you have one) to the Front
+> Desk.
+>   IMPORTANT: we pay a non-trivial fine for each one that is lost, so if you
+>   don't return it, we will have to ask you to please post it back to
+> Taiwan.
+> - Return mattresses, blankets, pillows, etc to a heap on the 6th floor
+> (like
+>   the heap where you found it on the 7th floor)
+> - Sponsors, please pick up sponsor  packs from frontdesk if you haven't
+>   already done so
+>
+> == T-Shirt swaps are now available ==
+>
+> Is your t-shirt the wrong size? Is it too small and/or large? Come to the
+> front-desk, and you may change your shirt for another size.
+>
+> == Happy hour in the happy hacklab ==
+>
+> Starting at 18:00 today, you will be able to buy one beer (as usual) and
+> get a free bottle of wine or beer from the conference dinner.
+> Come and join us for this limited-time offer, while supplies last!
+>
+> Drink responsibly and happy hacking!
+>
+> -DebConf Team
+>
+
+--000000000000a53187057280ff92
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto">Unsubscribe<div dir=3D"auto"><br></div></div><br><div cla=
+ss=3D"gmail_quote"><div dir=3D"ltr">On Fri, 03 Aug 2018, 06:50 Jonathan Car=
+ter (highvoltage), &lt;<a href=3D"mailto:jcc@debian.org">jcc@debian.org</a>=
+&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 =
+0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Dear DebConfers<br>
+<br>
+=3D=3D Planning your departure =3D=3D<br>
+<br>
+- Please return keys, AC Card, RFID Card (if you have one) to the Front Des=
+k.<br>
+=C2=A0 IMPORTANT: we pay a non-trivial fine for each one that is lost, so i=
+f you<br>
+=C2=A0 don&#39;t return it, we will have to ask you to please post it back =
+to Taiwan.<br>
+- Return mattresses, blankets, pillows, etc to a heap on the 6th floor (lik=
+e<br>
+=C2=A0 the heap where you found it on the 7th floor)<br>
+- Sponsors, please pick up sponsor=C2=A0 packs from frontdesk if you haven&=
+#39;t<br>
+=C2=A0 already done so<br>
+<br>
+=3D=3D T-Shirt swaps are now available =3D=3D<br>
+<br>
+Is your t-shirt the wrong size? Is it too small and/or large? Come to the<b=
+r>
+front-desk, and you may change your shirt for another size.<br>
+<br>
+=3D=3D Happy hour in the happy hacklab =3D=3D<br>
+<br>
+Starting at 18:00 today, you will be able to buy one beer (as usual) and<br=
+>
+get a free bottle of wine or beer from the conference dinner.<br>
+Come and join us for this limited-time offer, while supplies last!<br>
+<br>
+Drink responsibly and happy hacking!<br>
+<br>
+-DebConf Team<br>
+</blockquote></div>
+
+--000000000000a53187057280ff92--
+
+
