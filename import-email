@@ -353,6 +353,7 @@ are in.
         
         messagelen = len(content)
         mimetype = "message/rfc822"
+        format = mime2format(mimetype)
 
         threadstarterid = None
         if 'references' in message:
@@ -435,7 +436,7 @@ are in.
         docobjdata = {
             "versjonsnummer"  : str(0),
             "variantformat"   : "Produksjonsformat",
-            "format"          : "RFC822",
+            "format"          : format,
             "filstoerrelse"   : str(messagelen),
             "filnavn"         : message['message-id'],       
             "mimeType"        : mimetype,
