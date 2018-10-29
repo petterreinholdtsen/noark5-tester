@@ -49,6 +49,7 @@ def mime2format(mimestr):
     mimetypemap = {
         'application/pdf':           'RA-PDF',  # Registered MIME type
         'image/jpeg':                'RA-JPEG', # Registered MIME type
+        'image/jpg':                 'RA-JPEG', # Not registered MIME type
 
         # These should have official codes, but do not
         'application/vnd.oasis.opendocument.presentation' : "ODP",
