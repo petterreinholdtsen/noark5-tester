@@ -176,6 +176,14 @@ user to pick one.
         except urllib2.HTTPError, e:
             raise
         info = json.loads(c)
+        if self.verbose:
+            # Validate the stuff we send came back after storing
+            for f in data.keys():
+                if data[f] is not None:
+                    if  f not in info:
+                        print("error: field %s=%s disappeared from object" %  (f, data[f]))
+                    elif data[f] != info[f]:
+                        print("error: field %s=%s do not match object value %s" %  (f, data[f], info[f]))
         return info
 
     def getDocObjUrl(self):
