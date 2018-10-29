@@ -52,6 +52,7 @@ def mime2format(mimestr):
         'application/vnd.oasis.opendocument.presentation' : "ODP",
         'image/png'       : "PNG",
         'message/rfc822'  : "RFC822",
+        'text/csv'        : 'CSV',
 
         # No use splitting these formats out as separate upload, the
         # original email content is just fine and we are not going to
