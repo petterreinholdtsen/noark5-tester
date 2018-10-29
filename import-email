@@ -44,28 +44,30 @@ def parselinks(links):
     return rels
 
 def mime2format(mimestr):
+    # IANA register at
+    # https://www.iana.org/assignments/media-types/media-types.xhtml
     mimetypemap = {
-        'application/pdf' : 'RA-PDF',
-        'image/jpeg'      : 'RA-JPEG',
+        'application/pdf':           'RA-PDF',  # Registered MIME type
+        'image/jpeg':                'RA-JPEG', # Registered MIME type
 
         # These should have official codes, but do not
         'application/vnd.oasis.opendocument.presentation' : "ODP",
-        'image/png'       : "PNG",
-        'message/rfc822'  : "RFC822",
-        'text/csv'        : 'CSV',
+        'image/png':                 "PNG",     # Registered MIME type
+        'message/rfc822':            "RFC822",  # Registered MIME type
+        'text/csv':                  'CSV',     # Registered MIME type
 
         # No use splitting these formats out as separate upload, the
         # original email content is just fine and we are not going to
         # convert them to archive format anyway.
-        'application/pgp-signature': None,
-        'text/plain'      : None,
-        'text/html'       : None,
-        'multipart/mixed' : None,
-        'multipart/signed': None,
-        'multipart/alternative' : None,
+        'application/pgp-signature': None,      # Registered MIME type
+        'text/plain':                None,      # Registered MIME type
+        'text/html':                 None,      # Registered MIME type
+        'multipart/mixed':           None,      # Registered MIME type
+        'multipart/signed':          None,      # Registered MIME type
+        'multipart/alternative':     None,      # Registered MIME type
 
         # Not quite sure what to do with these
-        'application/x-xz': None,
+        'application/x-xz':          None,      # Not registered MIME type
     }
     mimetype = mimestr.split(';')[0]
     return mimetypemap[mimetype]
