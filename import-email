@@ -62,6 +62,7 @@ def mime2format(mimestr):
         # convert them to archive format anyway.
         'application/pgp-signature': None,      # Registered MIME type
         'application/pkcs7-signature': None,    # Registered MIME type
+        'application/pgp-keys':      None,      # Registered MIME type
         'text/plain':                None,      # Registered MIME type
         'text/html':                 None,      # Registered MIME type
         'multipart/mixed':           None,      # Registered MIME type
@@ -70,6 +71,7 @@ def mime2format(mimestr):
 
         # Not quite sure what to do with these
         'application/x-xz':          None,      # Not registered MIME type
+        'application/octet-stream':  None,      # Registered MIME type
     }
     mimetype = mimestr.split(';')[0]
     return mimetypemap[mimetype]
