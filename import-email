@@ -44,12 +44,15 @@ def parselinks(links):
     return rels
 
 def mime2format(mimestr):
+    # Observed incorrectly spelled MIME types
+    mimealias = {
+        'image/jpg': 'image/jpeg',
+    }
     # IANA register at
     # https://www.iana.org/assignments/media-types/media-types.xhtml
     mimetypemap = {
         'application/pdf':           'RA-PDF',  # Registered MIME type
         'image/jpeg':                'RA-JPEG', # Registered MIME type
-        'image/jpg':                 'RA-JPEG', # Not registered MIME type
 
         # These should have official codes, but do not
         'application/vnd.oasis.opendocument.presentation' : "ODP",
@@ -74,6 +77,8 @@ def mime2format(mimestr):
         'application/octet-stream':  None,      # Registered MIME type
     }
     mimetype = mimestr.split(';')[0]
+    if mimetype in mimealias:
+        mimetype = mimealias[mimetype]
     return mimetypemap[mimetype]
 
 class MboxImporter(n5core.endpoint.Endpoint):
