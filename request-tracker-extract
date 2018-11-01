@@ -50,6 +50,8 @@ class RTExtract(object):
         self.mech["user"] = self.args.username
         self.mech["pass"] = self.args.password
         r = self.mech.submit()
+        if self.baseurl != r.geturl():
+            raise Exception("unable to log in with username %s" % self.args.username)
 
     def restcall(self, call):
         url = "%sREST/1.0/%s" % (self.baseurl, call)
