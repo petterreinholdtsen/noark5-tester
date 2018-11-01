@@ -78,10 +78,15 @@ class RTExtract(object):
             print(r.read())
         return r
     def xmlexport(self):
+        class XMLNamespace:
+            noark = "http://www.arkivverket.no/standarder/noark5/arkivstruktur"
+            xsi = "http://www.w3.org/2001/XMLSchema-instance"
+
         E = lxml.builder.ElementMaker(
             nsmap={
-                None: "http://www.arkivverket.no/standarder/noark5/arkivstruktur",
-                'xsi': "http://www.w3.org/2001/XMLSchema-instance"}
+                None: XMLNamespace.noark,
+                'xsi': XMLNamespace.xsi
+            }
         )
         reg = E.registrering(
             E.systemID('foo'),
@@ -91,7 +96,7 @@ class RTExtract(object):
                 ),
             ),
         )
-        reg.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = 'journalpost'
+        reg.attrib['{%s}type' % XMLNamespace.xsi] = 'journalpost'
 
         mappe = E.mappe()
         mappe.append(reg)
