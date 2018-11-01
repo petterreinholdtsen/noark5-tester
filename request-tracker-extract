@@ -60,7 +60,7 @@ class RTExtract(object):
     def ticket(self, id):
         r = self.restcall("ticket/%d/show" % id)
         if self.args.verbose:
-            print(url)
+            print(r.read())
         return r
     def attachments(self, id):
         r = self.restcall("ticket/%d/attachments" % id)
