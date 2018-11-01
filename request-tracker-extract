@@ -1,0 +1,86 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+"""
+Extract data from Request Tracker and save it as Noark 5 extraction XML.
+"""
+
+from __future__ import print_function
+
+import sys
+sys.path.append('lib')
+
+import argparse
+import mechanize
+
+# https://rt-wiki.bestpractical.com/wiki/REST#Authentication
+# /REST/1.0/ticket/<ticket-id>/show
+# /REST/1.0/ticket/<ticket-id>/attachments
+# /REST/1.0/ticket/<ticket-id>/attachments/<attachment-id
+# /REST/1.0/ticket/<ticket-id>/attachments/<attachment-id>/content>
+# /REST/1.0/ticket/<ticket-id>/history
+# /REST/1.0/ticket/<ticket-id>/history/id/<history-id>
+
+class RTExtract(object):
+    def __init__(self):
+        self.baseurl = "https://rt.nuug.no/"
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--baseurl", help="URL to RT site (default is %s)" % self.baseurl)
+        parser.add_argument("--verbose", help="enable debug output",
+                            action="store_true")
+        parser.add_argument("--username", help="RT user to log in as")
+        parser.add_argument("--password", help="RT user password to use for authentication")
+        self.args = parser.parse_args()
+
+        if self.args.baseurl:
+            self.baseurl = args.baseurl
+
+        self.mech = mechanize.Browser()
+        self.mech.set_handle_robots(False)
+        if self.args.verbose:
+            self.mech.set_debug_http(True)
+
+
+    def login(self):
+        global user
+        global password
+        self.mech.open(self.baseurl)
+        self.mech.select_form(nr=0)
+        self.mech["user"] = self.args.username
+        self.mech["pass"] = self.args.password
+        r = self.mech.submit()
+
+    def restcall(self, call):
+        url = "%sREST/1.0/%s" % (self.baseurl, call)
+        if self.args.verbose:
+            print(url)
+        return self.mech.open(url)
+
+    def ticket(self, id):
+        r = self.restcall("ticket/%d/show" % id)
+        if self.args.verbose:
+            print(url)
+        return r
+    def attachments(self, id):
+        r = self.restcall("ticket/%d/attachments" % id)
+        if self.args.verbose:
+            print(r.read())
+        return r
+
+    def history(self, id):
+        r = self.restcall("ticket/%d/history" % id)
+        if self.args.verbose:
+            print(r.read())
+        return r
+
+def main():
+    t = RTExtract()
+    t.login()
+    id = 21407
+    t.ticket(id)
+    t.attachments(id)
+    t.history(id)
+
+if __name__ == '__main__':
+    exit(main())
