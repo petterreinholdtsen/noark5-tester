@@ -11,6 +11,8 @@ import sys
 sys.path.append('lib')
 
 import argparse
+import lxml.builder
+import lxml.etree
 import mechanize
 
 # https://rt-wiki.bestpractical.com/wiki/REST#Authentication
@@ -75,6 +77,36 @@ class RTExtract(object):
         if self.args.verbose:
             print(r.read())
         return r
+    def xmlexport(self):
+        E = lxml.builder.ElementMaker(
+            nsmap={
+                None: "http://www.arkivverket.no/standarder/noark5/arkivstruktur",
+                'xsi': "http://www.w3.org/2001/XMLSchema-instance"}
+        )
+        reg = E.registrering(
+            E.systemID('foo'),
+            E.dokumentbeskrivelse(
+                E.dokumentobjekt(
+                    E.format('something'),
+                ),
+            ),
+        )
+        reg.attrib['{http://www.w3.org/2001/XMLSchema-instance}type'] = 'journalpost'
+
+        mappe = E.mappe()
+        mappe.append(reg)
+
+        arkiv = E.arkiv(
+            E.systemID('foo'),
+            E.arkivdel(
+                mappe
+            ),
+        )
+
+        print(lxml.etree.tostring(arkiv,
+                                  pretty_print=True,
+                                  xml_declaration=True,
+                                  encoding='UTF-8'))
 
 def main():
     t = RTExtract()
@@ -83,6 +115,7 @@ def main():
     t.ticket(id)
     t.attachments(id)
     t.history(id)
+    t.xmlexport()
 
 if __name__ == '__main__':
     exit(main())
