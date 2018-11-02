@@ -173,7 +173,6 @@ class RTExtract(object):
         mappeid = '%sTicket/Display.html?id=%d' % (self.baseurl, t.id)
         mappe.append(E.systemID(mappeid))
         mappe.append(E.mappeID(str(t.id)))
-        print(type(t.subject), t.subject)
         mappe.append(E.tittel(t.subject))
         mappe.append(E.opprettetDato(str(t.created)))
         mappe.append(E.opprettetAv(t.requestors))
