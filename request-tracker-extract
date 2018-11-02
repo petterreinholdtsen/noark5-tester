@@ -81,6 +81,28 @@ class TicketProxy(object):
                     setattr(self, f, v)
         return self
 
+
+    def links(self, id):
+        r = self._e.restcall("ticket/%d/links/show" % id)
+        if self._e.args.verbose:
+            print(r.read())
+        return r
+
+
+    def attachments(self, id):
+        r = self._e.restcall("ticket/%d/attachments" % id)
+        if self._e.args.verbose:
+            print(r.read())
+        return r
+
+
+    def history(self, id):
+        r = self._e.restcall("ticket/%d/history?format=l" % id)
+        if self._e.args.verbose:
+            print(r.read())
+        return r
+
+
 class RTExtract(object):
     def __init__(self):
         self.baseurl = "https://rt.nuug.no/"
@@ -126,17 +148,6 @@ class RTExtract(object):
         return t
 
 
-    def attachments(self, id):
-        r = self.restcall("ticket/%d/attachments" % id)
-        if self.args.verbose:
-            print(r.read())
-        return r
-
-    def history(self, id):
-        r = self.restcall("ticket/%d/history" % id)
-        if self.args.verbose:
-            print(r.read())
-        return r
     def xmlexport(self, t):
         class XMLNamespace:
             noark = "http://www.arkivverket.no/standarder/noark5/arkivstruktur"
@@ -186,8 +197,9 @@ def main():
 
     id = 21407
     t = rt.ticket(id)
-    rt.attachments(id)
-    rt.history(id)
+    t.links(id)
+    t.history(id)
+    t.attachments(id)
     rt.xmlexport(t)
 
 if __name__ == '__main__':
