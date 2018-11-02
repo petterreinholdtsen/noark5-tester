@@ -40,12 +40,32 @@ import lxml.builder
 import lxml.etree
 import mechanize
 import dateutil.parser
+import shutil
 
+class Document(object):
+    def __init__(self, path, name, mimetype=None):
+        self.path = path
+        self.name = name
+        self.mimetype = mimetype
 
 class TicketProxy(object):
     def __init__(self, extractor, id):
         self._e = extractor
         self.id = id
+        self._attachments = {}
+
+
+    def documents(self):
+        return self._attachments
+
+
+    def _fetch(self, call, name):
+        filename = self._e.mkpath(name)
+        r = self._e.restcall(call)
+        with open(filename, 'w') as f:
+            shutil.copyfileobj(r, f)
+        self._attachments[name] = Document(filename, name)
+        return open(filename, 'r')
 
 
     def _get_metadata(self):
@@ -53,11 +73,9 @@ class TicketProxy(object):
                  'resolved', 'told', 'lastupdated')
         ints = ('priority', 'initialpriority', 'finalpriority',
                 'timeestimated', 'timeworked', 'timeleft')
-        r = self._e.restcall("ticket/%d/show" % self.id)
+        r = self._fetch("ticket/%d/show" % self.id, 'ticket-%d-details' % self.id)
         status = r.readline()
-        print(status)
         blank = r.readline()
-        print(blank)
         for e in r:
             e = e.strip()
             if '' != e:
@@ -77,27 +95,27 @@ class TicketProxy(object):
                         v = None
                     else:
                         v = dateutil.parser.parse(v)
-                if v is not None:
-                    setattr(self, f, v)
+                setattr(self, f, v)
+        r.close()
         return self
 
 
     def links(self, id):
-        r = self._e.restcall("ticket/%d/links/show" % id)
+        r = self._fetch("ticket/%d/links/show" % id, 'ticket-%d-links' % self.id)
         if self._e.args.verbose:
             print(r.read())
         return r
 
 
     def attachments(self, id):
-        r = self._e.restcall("ticket/%d/attachments" % id)
+        r = self._fetch("ticket/%d/attachments" % id, 'ticket-%d-attachments' % self.id)
         if self._e.args.verbose:
             print(r.read())
         return r
 
 
     def history(self, id):
-        r = self._e.restcall("ticket/%d/history?format=l" % id)
+        r = self._fetch("ticket/%d/history" % id, 'ticket-%d-history' % self.id)
         if self._e.args.verbose:
             print(r.read())
         return r
@@ -114,6 +132,8 @@ class RTExtract(object):
                             action="store_true")
         parser.add_argument("--username", help="RT user to log in as")
         parser.add_argument("--password", help="RT user password to use for authentication")
+        parser.add_argument("--targetpath", help="store extraction in path",
+                            default='arkivstruktur')
         self.args = parser.parse_args()
 
         if self.args.baseurl:
@@ -125,9 +145,11 @@ class RTExtract(object):
             self.mech.set_debug_http(True)
 
 
+    def mkpath(self, name):
+        return "%s/filer/%s" % (self.args.targetpath, name)
+
+
     def login(self):
-        global user
-        global password
         self.mech.open(self.baseurl)
         self.mech.select_form(nr=0)
         self.mech["user"] = self.args.username
@@ -182,12 +204,19 @@ class RTExtract(object):
 
                 reg = E.registrering(
                     E.systemID('foo'),
-                    E.dokumentbeskrivelse(
+                )
+                docs = t.documents()
+                for f in docs.keys():
+                    d = docs[f]
+                    db = E.dokumentbeskrivelse(
+                        E.tittel(d.name),
                         E.dokumentobjekt(
                             E.format('something'),
+                            E.referanseDokumentfil(d.path),
                         ),
-                    ),
-                )
+                    )
+                    reg.append(db)
+
                 reg.attrib['{%s}type' % XMLNamespace.xsi] = 'journalpost'
                 mappe.append(reg)
                 arkivdel.append(mappe)
