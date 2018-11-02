@@ -3,6 +3,31 @@
 
 """
 Extract data from Request Tracker and save it as Noark 5 extraction XML.
+
+Proposed mapping
+
+RT instance = arkiv
+RT queue = arkivdel
+RT ticket = mappe
+  ticket subject = mappe.tittel
+RT event = registrering
+RT attachment = dokumentobjekt
+
+Everything downloaded from the REST API is stored as documents in the
+extraction.
+
+The RT REST API is documented on
+https://rt-wiki.bestpractical.com/wiki/REST .  Here is a relevant list
+of endpoints.
+
+ * /REST/1.0/ticket/<ticket-id>/show
+ * /REST/1.0/ticket/<ticket-id>/attachments
+ * /REST/1.0/ticket/<ticket-id>/attachments/<attachment-id
+ * /REST/1.0/ticket/<ticket-id>/attachments/<attachment-id>/content>
+ * /REST/1.0/ticket/<ticket-id>/history
+ * /REST/1.0/ticket/<ticket-id>/history/id/<history-id>
+ * /REST/1.0/search/ticket?query=<query>&orderby=<sort-order>&format=<format>
+
 """
 
 from __future__ import print_function
@@ -16,13 +41,6 @@ import lxml.etree
 import mechanize
 import dateutil.parser
 
-# https://rt-wiki.bestpractical.com/wiki/REST#Authentication
-# /REST/1.0/ticket/<ticket-id>/show
-# /REST/1.0/ticket/<ticket-id>/attachments
-# /REST/1.0/ticket/<ticket-id>/attachments/<attachment-id
-# /REST/1.0/ticket/<ticket-id>/attachments/<attachment-id>/content>
-# /REST/1.0/ticket/<ticket-id>/history
-# /REST/1.0/ticket/<ticket-id>/history/id/<history-id>
 
 class TicketProxy(object):
     def __init__(self, extractor, id):
