@@ -106,6 +106,7 @@ class TicketProxy(object):
 class RTExtract(object):
     def __init__(self):
         self.baseurl = "https://rt.nuug.no/"
+        self._tickets = {}
 
         parser = argparse.ArgumentParser()
         parser.add_argument("--baseurl", help="URL to RT site (default is %s)" % self.baseurl)
@@ -145,10 +146,13 @@ class RTExtract(object):
     def ticket(self, id):
         t = TicketProxy(self, id)
         t._get_metadata()
+        if t.queue not in self._tickets:
+            self._tickets[t.queue] = {}
+        self._tickets[t.queue][id] = t
         return t
 
 
-    def xmlexport(self, t):
+    def xmlexport(self):
         class XMLNamespace:
             noark = "http://www.arkivverket.no/standarder/noark5/arkivstruktur"
             xsi = "http://www.w3.org/2001/XMLSchema-instance"
@@ -159,31 +163,35 @@ class RTExtract(object):
                 'xsi': XMLNamespace.xsi
             }
         )
-        reg = E.registrering(
-            E.systemID('foo'),
-            E.dokumentbeskrivelse(
-                E.dokumentobjekt(
-                    E.format('something'),
-                ),
-            ),
-        )
-        reg.attrib['{%s}type' % XMLNamespace.xsi] = 'journalpost'
-
-        mappe = E.mappe()
-        mappeid = '%sTicket/Display.html?id=%d' % (self.baseurl, t.id)
-        mappe.append(E.systemID(mappeid))
-        mappe.append(E.mappeID(str(t.id)))
-        mappe.append(E.tittel(t.subject))
-        mappe.append(E.opprettetDato(str(t.created)))
-        mappe.append(E.opprettetAv(t.requestors))
-        mappe.append(reg)
 
         arkiv = E.arkiv(
-            E.systemID('foo'),
-            E.arkivdel(
-                mappe
-            ),
+            E.systemID(self.baseurl),
         )
+
+        for queue in self._tickets.keys():
+            arkivdel = E.arkivdel(E.tittel(queue))
+            for id in self._tickets[queue].keys():
+                t = self._tickets[queue][id]
+                mappe = E.mappe()
+                mappeid = '%sTicket/Display.html?id=%d' % (self.baseurl, t.id)
+                mappe.append(E.systemID(mappeid))
+                mappe.append(E.mappeID(str(t.id)))
+                mappe.append(E.tittel(t.subject))
+                mappe.append(E.opprettetDato(str(t.created)))
+                mappe.append(E.opprettetAv(t.requestors))
+
+                reg = E.registrering(
+                    E.systemID('foo'),
+                    E.dokumentbeskrivelse(
+                        E.dokumentobjekt(
+                            E.format('something'),
+                        ),
+                    ),
+                )
+                reg.attrib['{%s}type' % XMLNamespace.xsi] = 'journalpost'
+                mappe.append(reg)
+                arkivdel.append(mappe)
+            arkiv.append(arkivdel)
 
         print(lxml.etree.tostring(arkiv,
                                   pretty_print=True,
@@ -199,7 +207,8 @@ def main():
     t.links(id)
     t.history(id)
     t.attachments(id)
-    rt.xmlexport(t)
+
+    rt.xmlexport()
 
 if __name__ == '__main__':
     exit(main())
