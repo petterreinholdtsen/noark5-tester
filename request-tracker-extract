@@ -14,6 +14,7 @@ import argparse
 import lxml.builder
 import lxml.etree
 import mechanize
+import dateutil.parser
 
 # https://rt-wiki.bestpractical.com/wiki/REST#Authentication
 # /REST/1.0/ticket/<ticket-id>/show
@@ -22,6 +23,45 @@ import mechanize
 # /REST/1.0/ticket/<ticket-id>/attachments/<attachment-id>/content>
 # /REST/1.0/ticket/<ticket-id>/history
 # /REST/1.0/ticket/<ticket-id>/history/id/<history-id>
+
+class TicketProxy(object):
+    def __init__(self, extractor, id):
+        self._e = extractor
+        self.id = id
+
+
+    def _get_metadata(self):
+        dates = ('created', 'starts', 'started', 'due',
+                 'resolved', 'told', 'lastupdated')
+        ints = ('priority', 'initialpriority', 'finalpriority',
+                'timeestimated', 'timeworked', 'timeleft')
+        r = self._e.restcall("ticket/%d/show" % self.id)
+        status = r.readline()
+        print(status)
+        blank = r.readline()
+        print(blank)
+        for e in r:
+            e = e.strip()
+            if '' != e:
+                f, v = e.split(':', 1)
+                f = f.lower()
+                v = v.strip().decode('UTF-8')
+                if self._e.args.verbose:
+                    print("Received %s='%s'" % (f, v))
+                if '' == v:
+                    v = None
+                if 'id' == f:
+                    v = int(v.split('/', 1)[1])
+                elif f in ints:
+                    v = int(v)
+                elif f in dates:
+                    if 'Not set' == v:
+                        v = None
+                    else:
+                        v = dateutil.parser.parse(v)
+                if v is not None:
+                    setattr(self, f, v)
+        return self
 
 class RTExtract(object):
     def __init__(self):
@@ -61,11 +101,13 @@ class RTExtract(object):
             print(url)
         return self.mech.open(url)
 
+
     def ticket(self, id):
-        r = self.restcall("ticket/%d/show" % id)
-        if self.args.verbose:
-            print(r.read())
-        return r
+        t = TicketProxy(self, id)
+        t._get_metadata()
+        return t
+
+
     def attachments(self, id):
         r = self.restcall("ticket/%d/attachments" % id)
         if self.args.verbose:
@@ -77,7 +119,7 @@ class RTExtract(object):
         if self.args.verbose:
             print(r.read())
         return r
-    def xmlexport(self):
+    def xmlexport(self, t):
         class XMLNamespace:
             noark = "http://www.arkivverket.no/standarder/noark5/arkivstruktur"
             xsi = "http://www.w3.org/2001/XMLSchema-instance"
@@ -99,6 +141,12 @@ class RTExtract(object):
         reg.attrib['{%s}type' % XMLNamespace.xsi] = 'journalpost'
 
         mappe = E.mappe()
+        mappe.append(E.systemID('systemid'))
+        mappe.append(E.mappeID(str(t.id)))
+        print(type(t.subject), t.subject)
+        mappe.append(E.tittel(t.subject))
+        mappe.append(E.opprettetDato(str(t.created)))
+        mappe.append(E.opprettetAv(t.requestors))
         mappe.append(reg)
 
         arkiv = E.arkiv(
@@ -114,13 +162,14 @@ class RTExtract(object):
                                   encoding='UTF-8'))
 
 def main():
-    t = RTExtract()
-    t.login()
+    rt = RTExtract()
+    rt.login()
+
     id = 21407
-    t.ticket(id)
-    t.attachments(id)
-    t.history(id)
-    t.xmlexport()
+    t = rt.ticket(id)
+    rt.attachments(id)
+    rt.history(id)
+    rt.xmlexport(t)
 
 if __name__ == '__main__':
     exit(main())
