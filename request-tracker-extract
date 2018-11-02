@@ -36,10 +36,12 @@ import sys
 sys.path.append('lib')
 
 import argparse
+import dateutil.parser
+import hashlib
 import lxml.builder
 import lxml.etree
 import mechanize
-import dateutil.parser
+import os
 import shutil
 
 class Document(object):
@@ -47,6 +49,14 @@ class Document(object):
         self.path = path
         self.name = name
         self.mimetype = mimetype
+        self.filesize = os.path.getsize(path)
+
+        hash_sha256 = hashlib.sha256()
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_sha256.update(chunk)
+        self.sha256 = hash_sha256.hexdigest()
+        self.format = 'ukjent'
 
 class TicketProxy(object):
     def __init__(self, extractor, id):
@@ -211,8 +221,15 @@ class RTExtract(object):
                     db = E.dokumentbeskrivelse(
                         E.tittel(d.name),
                         E.dokumentobjekt(
-                            E.format('something'),
+                            E.filstoerrelse(str(d.filesize)),
+                            E.format(d.format),
+#                            E.opprettetAv(''),
+#                            E.opprettetDato(''),
                             E.referanseDokumentfil(d.path),
+                            E.sjekksum(d.sha256),
+                            E.sjekksumAlgoritme('SHA-256'),
+                            E.variantformat('Produksjonsformat'),
+                            E.versjonsnummer('1'),
                         ),
                     )
                     reg.append(db)
