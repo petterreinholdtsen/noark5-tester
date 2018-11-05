@@ -7,7 +7,9 @@ Extract data from Request Tracker and save it as Noark 5 extraction XML.
 Proposed mapping
 
 RT instance = arkiv
+  RT instance URL = arkiv.tittel
 RT queue = arkivdel
+  queue name = arkivdel.tittel
 RT ticket = mappe
   ticket subject = mappe.tittel
 RT event = registrering
