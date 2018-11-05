@@ -80,3 +80,6 @@ Respons
 -------
 
 Ingen respons fra Arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/20
