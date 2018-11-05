@@ -85,3 +85,11 @@ DNS-navn som kontrolleres av Arkivverket,
 f.eks. rel.noark5.arkivverket.no.  Det kan være en fordel om et nytt
 relasjons-prefix er så kort som praktisk mulig, for å redusere
 båndbreddebruken i protokollen.
+
+Respons
+-------
+
+Ingen respons fra Arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/23
