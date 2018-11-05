@@ -141,12 +141,23 @@ class RTExtract(object):
             print("Unable to log in to RT")
             return
 
-        ids = (
-            21407, # only text
-            20318, # with PDF
+        tickets = self.rt.search(Queue=rt.ALL_QUEUES,
+                                 order='+Created',
+                                 Format='i',
+                                 raw_query="(Status='resolved'+OR+Status='rejected')",
+                                 # FIXME figure out how to get LastUpdated working
+                                 LastUpdated_lt='1990-01-01'
         )
-        for ticket_id in ids:
-            self.extract_ticket(ticket_id)
+
+        max = 50
+        if self.args.verbose:
+            print("Search returned %d tickets" % len(tickets))
+
+        for ticket in tickets:
+            self.extract_ticket(int(ticket['numerical_id']))
+            max = max - 1
+            if 0 > max:
+                break
 
 
     def xmlexport(self):
