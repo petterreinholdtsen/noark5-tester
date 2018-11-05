@@ -101,21 +101,22 @@ class RTExtract(object):
     def extract_ticket(self, ticket_id):
         print("fetch ticket %d" % ticket_id)
         t = self.rt.get_ticket(ticket_id)
-        self._save(ticket_id, 'ticket-%d-details' % ticket_id, t)
-        print(t)
+        self._save(ticket_id, 'ticket-%d-details.json' % ticket_id, t)
+        if self.args.verbose:
+            print(t)
 
         attachments = self.rt.get_attachments(ticket_id)
-        self._save(ticket_id, 'ticket-%d-attachments' % (ticket_id), attachments)
-        print(attachments)
+        self._save(ticket_id, 'ticket-%d-attachments.json' % (ticket_id), attachments)
+        if self.args.verbose:
+            print(attachments)
         h = self.rt.get_history(ticket_id, transaction_id=None)
-        self._save(ticket_id, 'ticket-%d-history' % ticket_id, h)
+        self._save(ticket_id, 'ticket-%d-history.json' % ticket_id, h)
 
         if t['Queue'] not in self._tickets:
             self._tickets[t['Queue']] = {}
         self._tickets[t['Queue']][ticket_id] = (t, h, attachments)
 
         for attachment_id, name, mimetype, size in attachments:
-            print(mimetype)
             attachment_id = int(attachment_id)
             a = self.rt.get_attachment(ticket_id, attachment_id)
             try:
@@ -124,11 +125,12 @@ class RTExtract(object):
                 # Binary / unrepresentable as UTF-8, drop it and only
                 # store the content as separate file
                 a['Content'] = '[separate binary file]'
-            print(a)
-            self._save(ticket_id, 'ticket-%d-attachment-%d-metadata' % (ticket_id, attachment_id), a)
+            if self.args.verbose:
+                print(a)
+            self._save(ticket_id, 'ticket-%d-attachment-%d-metadata.json' % (ticket_id, attachment_id), a)
             c = self.rt.get_attachment_content(ticket_id, attachment_id)
             self._save(ticket_id, 'ticket-%d-attachment-%d' % \
-                       (ticket_id, attachment_id), c)
+                       (ticket_id, attachment_id), c, mimetype=mimetype)
 
 
     def extract(self):
