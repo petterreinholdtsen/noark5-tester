@@ -38,11 +38,11 @@ sys.path.append('lib')
 import argparse
 import dateutil.parser
 import hashlib
+import json
 import lxml.builder
 import lxml.etree
-import mechanize
 import os
-import shutil
+import rt
 
 class Document(object):
     def __init__(self, path, name, mimetype=None):
@@ -57,79 +57,6 @@ class Document(object):
                 hash_sha256.update(chunk)
         self.sha256 = hash_sha256.hexdigest()
         self.format = 'ukjent'
-
-class TicketProxy(object):
-    def __init__(self, extractor, id):
-        self._e = extractor
-        self.id = id
-        self._attachments = {}
-
-
-    def documents(self):
-        return self._attachments
-
-
-    def _fetch(self, call, name):
-        filename = self._e.mkpath(name)
-        r = self._e.restcall(call)
-        with open(filename, 'w') as f:
-            shutil.copyfileobj(r, f)
-        self._attachments[name] = Document(filename, name)
-        return open(filename, 'r')
-
-
-    def _get_metadata(self):
-        dates = ('created', 'starts', 'started', 'due',
-                 'resolved', 'told', 'lastupdated')
-        ints = ('priority', 'initialpriority', 'finalpriority',
-                'timeestimated', 'timeworked', 'timeleft')
-        r = self._fetch("ticket/%d/show" % self.id, 'ticket-%d-details' % self.id)
-        status = r.readline()
-        blank = r.readline()
-        for e in r:
-            e = e.strip()
-            if '' != e:
-                f, v = e.split(':', 1)
-                f = f.lower()
-                v = v.strip().decode('UTF-8')
-                if self._e.args.verbose:
-                    print("Received %s='%s'" % (f, v))
-                if '' == v:
-                    v = None
-                if 'id' == f:
-                    v = int(v.split('/', 1)[1])
-                elif f in ints:
-                    v = int(v)
-                elif f in dates:
-                    if 'Not set' == v:
-                        v = None
-                    else:
-                        v = dateutil.parser.parse(v)
-                setattr(self, f, v)
-        r.close()
-        return self
-
-
-    def links(self, id):
-        r = self._fetch("ticket/%d/links/show" % id, 'ticket-%d-links' % self.id)
-        if self._e.args.verbose:
-            print(r.read())
-        return r
-
-
-    def attachments(self, id):
-        r = self._fetch("ticket/%d/attachments" % id, 'ticket-%d-attachments' % self.id)
-        if self._e.args.verbose:
-            print(r.read())
-        return r
-
-
-    def history(self, id):
-        r = self._fetch("ticket/%d/history" % id, 'ticket-%d-history' % self.id)
-        if self._e.args.verbose:
-            print(r.read())
-        return r
-
 
 class RTExtract(object):
     def __init__(self):
@@ -149,39 +76,73 @@ class RTExtract(object):
         if self.args.baseurl:
             self.baseurl = args.baseurl
 
-        self.mech = mechanize.Browser()
-        self.mech.set_handle_robots(False)
-        if self.args.verbose:
-            self.mech.set_debug_http(True)
+        self.rt = rt.Rt(self.baseurl + 'REST/1.0/')
+
+        self._attachments = {}
+        self._events = {}
 
 
     def mkpath(self, name):
-        return "%s/filer/%s" % (self.args.targetpath, name)
+        return "%s/dokumentfil/%s" % (self.args.targetpath, name)
 
 
-    def login(self):
-        self.mech.open(self.baseurl)
-        self.mech.select_form(nr=0)
-        self.mech["user"] = self.args.username
-        self.mech["pass"] = self.args.password
-        r = self.mech.submit()
-        if self.baseurl != r.geturl():
-            raise Exception("unable to log in with username %s" % self.args.username)
-
-    def restcall(self, call):
-        url = "%sREST/1.0/%s" % (self.baseurl, call)
-        if self.args.verbose:
-            print(url)
-        return self.mech.open(url)
+    def _save(self, ticket_id, name, data, mimetype=None):
+        filename = self.mkpath(name)
+        if dict == type(data) or list == type(data):
+            data = json.dumps(data)
+            mimetype="application/json"
+        with open(filename, 'w') as f:
+            f.write(data)
+        if ticket_id not in self._attachments:
+            self._attachments[ticket_id] = {}
+        self._attachments[ticket_id][name] = Document(filename, name, mimetype=mimetype)
 
 
-    def ticket(self, id):
-        t = TicketProxy(self, id)
-        t._get_metadata()
-        if t.queue not in self._tickets:
-            self._tickets[t.queue] = {}
-        self._tickets[t.queue][id] = t
-        return t
+    def extract_ticket(self, ticket_id):
+        print("fetch ticket %d" % ticket_id)
+        t = self.rt.get_ticket(ticket_id)
+        self._save(ticket_id, 'ticket-%d-details' % ticket_id, t)
+        print(t)
+
+        attachments = self.rt.get_attachments(ticket_id)
+        self._save(ticket_id, 'ticket-%d-attachments' % (ticket_id), attachments)
+        print(attachments)
+        h = self.rt.get_history(ticket_id, transaction_id=None)
+        self._save(ticket_id, 'ticket-%d-history' % ticket_id, h)
+
+        if t['Queue'] not in self._tickets:
+            self._tickets[t['Queue']] = {}
+        self._tickets[t['Queue']][ticket_id] = (t, h, attachments)
+
+        for attachment_id, name, mimetype, size in attachments:
+            print(mimetype)
+            attachment_id = int(attachment_id)
+            a = self.rt.get_attachment(ticket_id, attachment_id)
+            try:
+                convertable = a['Content'].decode('UTF-8')
+            except:
+                # Binary / unrepresentable as UTF-8, drop it and only
+                # store the content as separate file
+                a['Content'] = '[separate binary file]'
+            print(a)
+            self._save(ticket_id, 'ticket-%d-attachment-%d-metadata' % (ticket_id, attachment_id), a)
+            c = self.rt.get_attachment_content(ticket_id, attachment_id)
+            self._save(ticket_id, 'ticket-%d-attachment-%d' % \
+                       (ticket_id, attachment_id), c)
+
+
+    def extract(self):
+        print("logging in")
+        if not self.rt.login(self.args.username, self.args.password):
+            print("Unable to log in to RT")
+            return
+
+        ids = (
+            21407, # only text
+            20318, # with PDF
+        )
+        for ticket_id in ids:
+            self.extract_ticket(ticket_id)
 
 
     def xmlexport(self):
@@ -202,22 +163,26 @@ class RTExtract(object):
 
         for queue in self._tickets.keys():
             arkivdel = E.arkivdel(E.tittel(queue))
-            for id in self._tickets[queue].keys():
-                t = self._tickets[queue][id]
+            for ticket_id in self._tickets[queue].keys():
+                t, h, attachments = self._tickets[queue][ticket_id]
                 mappe = E.mappe()
-                mappeid = '%sTicket/Display.html?id=%d' % (self.baseurl, t.id)
+                mappeid = '%sTicket/Display.html?id=%d' % (self.baseurl, ticket_id)
                 mappe.append(E.systemID(mappeid))
-                mappe.append(E.mappeID(str(t.id)))
-                mappe.append(E.tittel(t.subject))
-                mappe.append(E.opprettetDato(str(t.created)))
-                mappe.append(E.opprettetAv(t.requestors))
+                mappe.append(E.mappeID(str(ticket_id)))
+                mappe.append(E.tittel(t['Subject']))
+                mappe.append(E.opprettetDato(str(t['Created'])))
+                # FIXME requestor is not really creator.  creator need
+                # to be found in history
+                for r in t['Requestors']:
+                    mappe.append(E.opprettetAv(r))
 
                 reg = E.registrering(
-                    E.systemID('foo'),
+                    E.systemID('ticket-%d-attachments' % ticket_id),
                 )
-                docs = t.documents()
+                docs = self._attachments[ticket_id]
                 for f in docs.keys():
                     d = docs[f]
+                    shortpath = d.path.lstrip(self.args.targetpath + '/')
                     db = E.dokumentbeskrivelse(
                         E.tittel(d.name),
                         E.dokumentobjekt(
@@ -225,7 +190,7 @@ class RTExtract(object):
                             E.format(d.format),
 #                            E.opprettetAv(''),
 #                            E.opprettetDato(''),
-                            E.referanseDokumentfil(d.path),
+                            E.referanseDokumentfil(shortpath),
                             E.sjekksum(d.sha256),
                             E.sjekksumAlgoritme('SHA-256'),
                             E.variantformat('Produksjonsformat'),
@@ -239,21 +204,16 @@ class RTExtract(object):
                 arkivdel.append(mappe)
             arkiv.append(arkivdel)
 
-        print(lxml.etree.tostring(arkiv,
+        with open('%s/arkivstruktur.xml' % self.args.targetpath, 'w') as f:
+            f.write(lxml.etree.tostring(arkiv,
                                   pretty_print=True,
                                   xml_declaration=True,
                                   encoding='UTF-8'))
 
+
 def main():
     rt = RTExtract()
-    rt.login()
-
-    id = 21407
-    t = rt.ticket(id)
-    t.links(id)
-    t.history(id)
-    t.attachments(id)
-
+    rt.extract()
     rt.xmlexport()
 
 if __name__ == '__main__':
