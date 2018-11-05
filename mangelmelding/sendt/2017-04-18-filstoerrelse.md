@@ -42,8 +42,8 @@ er M707 definert uten ø:
 ```
 
 I tillegg bør det nevnes at eksempelet på side 29 omtaler datatypen
-«foto» som skal inneholde atributten «filstørrelse».  Datatypen «foto»
-er ikk nevnt andre steder i spesifikasjonen.  Skulle
+«foto» som skal inneholde attributten «filstørrelse».  Datatypen «foto»
+er ikke nevnt andre steder i spesifikasjonen.  Skulle
 tjenestegrensesnitt-definisjonen hatt foto definert?  Kanskje
 eksemplet på side 29 bør endres til å kun bruke datatyper som er
 definert i spesifikasjonen?
@@ -98,3 +98,6 @@ Respons
 -------
 
 Ingen respons fra Arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/21
