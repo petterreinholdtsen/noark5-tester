@@ -43,6 +43,7 @@ import hashlib
 import json
 import lxml.builder
 import lxml.etree
+import magic
 import os
 import rt
 
@@ -58,7 +59,31 @@ class Document(object):
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_sha256.update(chunk)
         self.sha256 = hash_sha256.hexdigest()
-        self.format = 'ukjent'
+
+        m = magic.open(magic.MIME)
+        m.load()
+        mimetype = m.file(path)
+        m.close()
+        self.format = self.mime2format(self.mimetype, mimetype)
+
+    def mime2format(self, reported, detected):
+        detected_short = detected.split('; ')[0]
+        if reported != detected_short:
+            print("MIME type mismatch: %s != %s" % (reported, detected))
+        map = {
+            'application/pdf':           'RA-PDF',  # Registered MIME type
+            'text/plain':                'RA-TEKST',# Registered MIME type
+            'image/jpeg':                'RA-JPEG', # Registered MIME type
+            'application/xml':           'RA-XML',  # Registered MIME type
+            'text/xml':                  'RA-XML',  # Registered MIME type
+        }
+
+        if detected_short in map:
+            return map[detected_short]
+        else:
+            print("Unknown mime type: %s %s" % (reported, detected))
+        return "RA-TEKST"
+
 
 class RTExtract(object):
     def __init__(self):
