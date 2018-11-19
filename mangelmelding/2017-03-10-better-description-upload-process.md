@@ -34,7 +34,7 @@ filopplasting så er det en flerstegs transaksjon som gjøres.
 En mulig tolkning er at først oppretter man dokumentobjekt og angir
 filnavn, filstørrelse, mimeType.  Etter at filen er lastet opp
 beregner man sjekksum og oppdaterer dokumentobjekt med sjekksumverdi
-og algoritme.  Det er da en to-trinns prossess for å få en endelig
+og algoritme.  Det er da en to-trinns prossess for å få den endelige
 dokumentobjektet i databasen.
 
 En annen mulig tolkning er at sjekksum registreres idet dokumentobjekt
@@ -63,16 +63,17 @@ returnerer tilhørende dokumentobjekt som svar til en filopplasting.
 Responsen kan klienten sammenligne med sin kopi av dokumentobjekt for
 å sikre at resultatet tilsvarer den som ble laget før filopplastingen.
 
-Skal det være tillatt å laste opp en tom fil, dvs. en med filstørrelse
-satt til 0?  Det virker ikke å gi mening å laste opp en slik fil til
-arkivet, og det mest fornuftige er antagelig å avvise oppretting av
-dokumentobjekt hvis fillengden er null.
+Videre kan det problematiseres hvorvidt det skal det være tillatt å laste opp
+en tom fil, dvs. en med filstørrelse satt til 0?  Det virker ikke å gi mening å 
+laste opp en slik fil til arkivet, og det mest fornuftige er antagelig å 
+avvise oppretting av dokumentobjekt hvis fillengden er null.  
 
 ### Kan en fil knyttet til dokumentobjekt byttes ut?
 
 Spesifikasjonen sier ingenting om hva som skal skje hvis en API-klient
 oppretter en dokumentobjekt-entitet, laster opp en fil, og så laster
-opp en annen fil.  Skal det være mulig?  Hvis eksisterende sjekksum i
+opp en annen fil. Dvs klienten ønsker å utføre en PUT-forespøsel og overskrive 
+filen som ble lastet opp. Skal det være mulig?  Hvis eksisterende sjekksum i 
 dokumentobjekt kontrolleres etter opplasting, så vil filen antagelig
 bli avvist på grunn av ny sjekksum.  Skal det være mulig å endre
 sjekksum i dokumentobjekt-entiteten uten å endre allerede opplastet
@@ -80,7 +81,11 @@ fil?  Det vil vel fjerne poenget med sjekksummen.  Det mest fornuftige
 er kanskje å kreve at en dokumentobjekt-entiet med tilknyttet fil må
 slettes og ny opprettes hvis det skal lastes opp en ny fil.
 
-FIXME foreslå konkret endring for å forklare hvordan dette skal fungere.
+Ønsket endring
+--------------
+> «Det er er ikke mulig å overskrive en eksisterende fil med feks en 
+> PUT-forespørsel. Hvis en fil må overskrives skal filen slettes og en ny POST 
+> utføres mot href til rel=http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil»
 
 ### Filopplasting som del av dokumentobjekt-transaksjon
 
@@ -148,13 +153,15 @@ Størrelsen på fila i antall bytes oppgitt med desimaltall» til
 
 ### Filopplasting som del av dokumentobjekt-transaksjon
 
-FIXME foreslå konkret forslag til endring for å beskrive hvordan feil
-på tjenersiden ved filopplasting bør håndteres?
+Problemstillingen om hvordan tjenestegrensesnittet skal håndtere feil i 
+komboen dokumentbeskrivelse, dokumentobjekt og fil opplasting kan også sees 
+på fra server-siden. Hvis opplasting av filen blir avbrutt eller en feil 
+skjer med lagring til disk bør det være spesifiert hvordan tjeneren skal 
+håndtere feilen. Dette tilfellet trenger en avklaring.  
 
-Dette tilfellet trenger en avklaring.  En mulig løsning er å bytte ut
-de tre API-kallene med ett API-kall til kjernen der
-dokumentbeskrivelse, dokumentobjekt og selve filen lastes opp sammen.
-En slik løsning gjør det mulig for kjernen å behandle opprettelsen som
+En mulig løsning er å bytte ut de tre API-kallene med ett API-kall til 
+kjernen der dokumentbeskrivelse, dokumentobjekt og selve filen lastes opp 
+sammen. En slik løsning gjør det mulig for kjernen å behandle opprettelsen som
 en transaksjon og la alle tre stegene feile hvis en av dem feiler.
 Dermed kan klienten vite om hele transaksjonen var vellykket og filen
 er lagret slik den skal.
@@ -164,3 +171,9 @@ dokumentobjekt- og dokumentbeskrivelse-oppføringer frem til de er
 knyttet til en opplastet fil, eller når de har fått satt variantformat
 til arkivformat.  Det er uklart fra del 6.1.1.7 (Slette objekter
 (Delete)) om dette er tillatt eller ikke.
+
+Ønsket endring
+--------------
+> «Dersom det skjer en feil under opplasting eller lagringsprossesen skal 
+> tjeneren returnere en 422 Unprocessable Entity svar. Det er klientens ansvar 
+> da å slette eventuelle dokumentbeskrivelse og dokumentobjet entiteter.»
