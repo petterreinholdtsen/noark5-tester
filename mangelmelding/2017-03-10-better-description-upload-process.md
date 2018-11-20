@@ -140,14 +140,15 @@ content-type og content-length.» på side 25.
 > mimeType er identisk med Content-Type, filstørrelse er identisk med
 > Content-Length (for komplett POST) eller X-Upload-Content-Length
 > (for overføring i bolker med PUT) og at sjekksum stemmer overens med
-> den overførte filen.  Hvis tjeneren ikke er i stand til å foreta
-> nødvendige analyser for å beregne verdiene eller hvis noen en av
-> disse verdiene fra opplastingen ikke stemmer overens med verdiene i
-> dokumentobjekt, så returneres statuskode 400 Bad Request.» Når
-> filopplasting er fullført setter tjeneren de feltene i
-> dokumentobjekt som ikke var satt, dvs. utleder «format», «mimeType»,
-> «filnavn», «sjekksum», og «filstørrelse» basert på filens innhold
-> samt, samt gir «sjekksumAlgoritme» aktuell verdi.
+> den overførte filen.  Hvis tjeneren etter opplasting ser at noen av
+> verdiene avleded fra opplastet fil ikke stemmer overens med verdiene
+> i dokumentobjekt-entiteten, så returneres statuskode 400 Bad
+> Request.  Hvis den opplastede filen har et format tjeneren ikke
+> kjenner igjen, så settes format til 'UNKNOWN'.  Når filopplasting er
+> fullført setter tjeneren de feltene i dokumentobjekt som ikke var
+> satt, dvs. utleder «format», «mimeType», «filnavn», «sjekksum», og
+> «filstørrelse» basert på filens innhold samt, samt gir
+> «sjekksumAlgoritme» aktuell verdi.»
 
 Legg inn nytt avsnitt på side 26 før tabell over resultatkoder og
 etter setning «Når siste overføring er gjort så returneres statuskode
