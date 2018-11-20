@@ -162,11 +162,12 @@ Størrelsen på fila i antall bytes oppgitt med desimaltall» til
 
 ### Filopplasting som del av dokumentobjekt-transaksjon
 
-Problemstillingen om hvordan tjenestegrensesnittet skal håndtere feil i 
-komboen dokumentbeskrivelse, dokumentobjekt og fil opplasting kan også sees 
-på fra server-siden. Hvis opplasting av filen blir avbrutt eller en feil 
-skjer med lagring til disk bør det være spesifiert hvordan tjeneren skal 
-håndtere feilen. Dette tilfellet trenger en avklaring.  
+Problemstillingen om hvordan tjenestegrensesnittet skal håndtere feil
+i komboen dokumentbeskrivelse, dokumentobjekt og fil opplasting kan
+også sees på fra server-siden. Hvis opplasting av filen blir avbrutt
+eller en feil skjer med lagring til disk bør det være spesifiert
+hvordan tjeneren skal håndtere feilen. Dette tilfellet trenger en
+avklaring.
 
 En mulig løsning er å bytte ut de tre API-kallene med ett API-kall til
 kjernen der dokumentbeskrivelse, dokumentobjekt og selve filen lastes
@@ -199,5 +200,5 @@ siste overføring er gjort så returneres statuskode 201 Created»:
 > dokumentobjet entiteter ved hjelp av DELETE på entitetenes
 > self-relasjon.»
 
-I tillegg legges 422-koden inn i tabellen på side 26-27 over mulige feilkoder fra
-opplastingen.
+I tillegg legges 422-koden inn i tabellen på side 26-27 over mulige
+feilkoder fra opplastingen.
