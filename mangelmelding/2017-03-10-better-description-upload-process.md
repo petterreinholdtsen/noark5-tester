@@ -132,16 +132,18 @@ ny fil brukes POST til href til
 rel=http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil med header for
 content-type og content-length.» på side 25.
 
-> «Et dokumentobjekt opprettes før opplasting, og først når en fil er
-> klar for opplasting, og feltene «format», «mimeType», «filnavn»,
-> «sjekksum», «sjekksumAlgoritme» og «filstørrelse» fylles inn.
-> Tjenestegrensesnittet sjekker så ved opplasting av mimeType er
+> «Et dokumentobjekt opprettes før opplasting. Hvis noen av feltene
+> «format», «mimeType», «filnavn», «sjekksum», «sjekksumAlgoritme»
+> og «filstørrelse» er fyllt inn skal tjeneren verifisere at verdiene 
+> i de angitte feltene stemmer.
+> Tjeneren sjekker så ved opplasting at mimeType er
 > identisk med Content-Type, filstørrelse er identisk med
-> Content-Length (for complett POST) eller X-Upload-Content-Length
+> Content-Length (for komplett POST) eller X-Upload-Content-Length
 > (for overføring i bolker med PUT) og at sjekksum stemmer overens med
-> den overførte filen.  Hvis en av disse verdiene fra opplastingen
-> ikke stemmer overens med verdiene i dokumentobjekt, så returneres
-> statuskode 400 BadRequest.»
+> den overførte filen.  Hvis tjeneren ikke er i stand til å foreta 
+> nødvendige analyser for å beregne verdiene eller hvis noen en av disse
+> verdiene fra opplastingen ikke stemmer overens med verdiene i 
+> dokumentobjekt, så returneres statuskode 400 Bad Request.»
 
 Legg inn nytt avsnitt på side 26 før tabell over resultatkoder og
 etter setning «Når siste overføring er gjort så returneres statuskode
@@ -150,13 +152,6 @@ etter setning «Når siste overføring er gjort så returneres statuskode
 > Når en filopplasting er vellykket, så returneres tilhørende
 > dokumentobjekt som respons på avsluttende 200 OK / 201 Created.
 
-I del 7.2.1.7 på side 102-205, endre «Multipl.»-verdi for feltene
-«format», «filnavn», «sjekksum», «sjekksumAlgoritme», «mimeType» og
-«filstørrelse» fra «[0..1]» til «[1..1]» for å gjøre det klart at
-disse verdiene alltid skal fylles inn ved oppretting av et
-dokumentobjekt.  Alternativt, så kan si at server fyller inn disse
-feltene etter opplasting hvis de mangler, og dermed la det være opp
-til klienten om en slik ekstra sjekk skal gjøres ved opplasting.
 
 På side 105 endres definisjonen av filstørrelse fra «Definisjon:
 Størrelsen på fila i antall bytes oppgitt med desimaltall» til
