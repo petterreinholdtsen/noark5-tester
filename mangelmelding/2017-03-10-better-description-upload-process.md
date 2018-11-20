@@ -14,7 +14,8 @@ Forbedre beskrivelse av filopplastingsprossesen
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
-tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
+tilgjengelig fra
+[https://github.com/petterreinholdtsen/noark5-tester/](https://github.com/petterreinholdtsen/noark5-tester/).
 
 Beskrivelse
 -----------
@@ -63,29 +64,33 @@ returnerer tilhørende dokumentobjekt som svar til en filopplasting.
 Responsen kan klienten sammenligne med sin kopi av dokumentobjekt for
 å sikre at resultatet tilsvarer den som ble laget før filopplastingen.
 
-Videre kan det problematiseres hvorvidt det skal det være tillatt å laste opp
-en tom fil, dvs. en med filstørrelse satt til 0?  Det virker ikke å gi mening å 
-laste opp en slik fil til arkivet, og det mest fornuftige er antagelig å 
-avvise oppretting av dokumentobjekt hvis fillengden er null.  
+Videre kan det problematiseres hvorvidt det skal det være tillatt å
+laste opp en tom fil, dvs. en med filstørrelse satt til 0?  Det virker
+ikke å gi mening å laste opp en slik fil til arkivet, da den jo er
+formatløs (hvilket format og mimeType skal settes for en tom fil, og
+hvorfor skal den lagres?), og det mest fornuftige er antagelig å
+avvise oppretting av dokumentobjekt hvis fillengden er null.
 
 ### Kan en fil knyttet til dokumentobjekt byttes ut?
 
 Spesifikasjonen sier ingenting om hva som skal skje hvis en API-klient
 oppretter en dokumentobjekt-entitet, laster opp en fil, og så laster
-opp en annen fil. Dvs klienten ønsker å utføre en PUT-forespøsel og overskrive 
-filen som ble lastet opp. Skal det være mulig?  Hvis eksisterende sjekksum i 
-dokumentobjekt kontrolleres etter opplasting, så vil filen antagelig
-bli avvist på grunn av ny sjekksum.  Skal det være mulig å endre
-sjekksum i dokumentobjekt-entiteten uten å endre allerede opplastet
-fil?  Det vil vel fjerne poenget med sjekksummen.  Det mest fornuftige
-er kanskje å kreve at en dokumentobjekt-entiet med tilknyttet fil må
-slettes og ny opprettes hvis det skal lastes opp en ny fil.
+opp en annen fil.  Det vil si at klienten ønsker å utføre en
+PUT-forespøsel og overskrive filen som ble lastet opp.  Skal det være
+mulig?  Hvis eksisterende sjekksum i dokumentobjekt kontrolleres etter
+opplasting, så vil filen antagelig bli avvist på grunn av ny sjekksum.
+Skal det være mulig å endre sjekksum i dokumentobjekt-entiteten uten å
+endre allerede opplastet fil?  Det vil vel fjerne poenget med
+sjekksummen.  Det mest fornuftige er kanskje å kreve at en
+dokumentobjekt-entiet med tilknyttet fil må slettes og ny opprettes
+hvis det skal lastes opp en ny fil.
 
 Ønsket endring
 --------------
-> «Det er er ikke mulig å overskrive en eksisterende fil med feks en 
-> PUT-forespørsel. Hvis en fil må overskrives skal filen slettes og en ny POST 
-> utføres mot href til rel=http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil»
+> «Det er er ikke mulig å overskrive en eksisterende fil med for
+> eksempel en PUT-forespørsel. Hvis en fil må overskrives skal filen
+> slettes og en ny POST utføres mot href til
+> rel=http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil»
 
 ### Filopplasting som del av dokumentobjekt-transaksjon
 
@@ -103,14 +108,15 @@ opplastingen.
 
 Det er uklart fra spesifikasjonen hva som skal gjøres i et slikt
 tilfelle, og det er ingen dokumentert mekanisme for klienten å be om
-at det filløse dokumentobjekt-instansen slettes når det skjer.  Det er
-dermed ikke mulig for klienten å rydde opp etter seg når feilen
-oppstår.  Den eneste muligheten for klienten er å forsøkte opplasting
-på nytt og på nytt frem til den lykkes, og det er ikke alltid mulig
-for en klient å fortsette til evig tid.  Det er bedre om klienten kan
-fjerne de "ubrukelige" dokumentbeskrivelse og
-dokumentobjekt-oppføringene, gi en feilmelding til brukeren som
-forsøker å arkivere en fil og forsøke på nytt senere når det passer.
+at det filløse dokumentobjekt-instansen slettes når det skjer.  [FIXME
+Hva med 'DELETE på oppføringen?] Det er dermed ikke mulig for klienten
+å rydde opp etter seg når feilen oppstår.  Den eneste muligheten for
+klienten er å forsøkte opplasting på nytt og på nytt frem til den
+lykkes, og det er ikke alltid mulig for en klient å fortsette til evig
+tid.  Det er bedre om klienten kan fjerne de "ubrukelige"
+dokumentbeskrivelse og dokumentobjekt-oppføringene, gi en feilmelding
+til brukeren som forsøker å arkivere en fil og forsøke på nytt senere
+når det passer.
 
 Ønsket endring
 --------------
@@ -120,7 +126,7 @@ ny fil brukes POST til href til
 rel=http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil med header for
 content-type og content-length.» på side 25.
 
-> «Et dokumentopbjekt opprettes før opplasting, og først når en fil er
+> «Et dokumentobjekt opprettes før opplasting, og først når en fil er
 > klar for opplasting, og feltene «format», «mimeType», «filnavn»,
 > «sjekksum», «sjekksumAlgoritme» og «filstørrelse» fylles inn.
 > Tjenestegrensesnittet sjekker så ved opplasting av mimeType er
@@ -142,7 +148,9 @@ I del 7.2.1.7 på side 102-205, endre «Multipl.»-verdi for feltene
 «format», «filnavn», «sjekksum», «sjekksumAlgoritme», «mimeType» og
 «filstørrelse» fra «[0..1]» til «[1..1]» for å gjøre det klart at
 disse verdiene alltid skal fylles inn ved oppretting av et
-dokumentobjekt.
+dokumentobjekt.  Alternativt, så kan si at server fyller inn disse
+feltene etter opplasting hvis de mangler, og dermed la det være opp
+til klienten om en slik ekstra sjekk skal gjøres ved opplasting.
 
 På side 105 endres definisjonen av filstørrelse fra «Definisjon:
 Størrelsen på fila i antall bytes oppgitt med desimaltall» til
@@ -159,12 +167,15 @@ på fra server-siden. Hvis opplasting av filen blir avbrutt eller en feil
 skjer med lagring til disk bør det være spesifiert hvordan tjeneren skal 
 håndtere feilen. Dette tilfellet trenger en avklaring.  
 
-En mulig løsning er å bytte ut de tre API-kallene med ett API-kall til 
-kjernen der dokumentbeskrivelse, dokumentobjekt og selve filen lastes opp 
-sammen. En slik løsning gjør det mulig for kjernen å behandle opprettelsen som
-en transaksjon og la alle tre stegene feile hvis en av dem feiler.
-Dermed kan klienten vite om hele transaksjonen var vellykket og filen
-er lagret slik den skal.
+En mulig løsning er å bytte ut de tre API-kallene med ett API-kall til
+kjernen der dokumentbeskrivelse, dokumentobjekt og selve filen lastes
+opp sammen. En slik løsning gjør det mulig for kjernen å behandle
+opprettelsen som en transaksjon og la alle tre stegene feile hvis en
+av dem feiler.  Dermed kan klienten vite om hele transaksjonen var
+vellykket og filen er lagret slik den skal.  En annen fordel ved en
+slik samlet registrering/opplasting er at serveren kan forsøke å hente
+ut metadata fra dokumentet (f.eks. tittel, forfatter, dato etc) og
+slik gjøre det enklere å arkivere dokumenter.
 
 En annen mulig løsning er å tillate sletting av egenproduserte
 dokumentobjekt- og dokumentbeskrivelse-oppføringer frem til de er
@@ -172,8 +183,19 @@ knyttet til en opplastet fil, eller når de har fått satt variantformat
 til arkivformat.  Det er uklart fra del 6.1.1.7 (Slette objekter
 (Delete)) om dette er tillatt eller ikke.
 
+Foreslår en enkel endring i første omgang, så kan en vurdere løsninger
+med opplasting og registrering som en transaksjon på sikt.
+
 Ønsket endring
 --------------
-> «Dersom det skjer en feil under opplasting eller lagringsprossesen skal 
-> tjeneren returnere en 422 Unprocessable Entity svar. Det er klientens ansvar 
-> da å slette eventuelle dokumentbeskrivelse og dokumentobjet entiteter.»
+
+I de 6.1.1.9 legges følgende avsnitt inn på side 26 etter setning «Når
+siste overføring er gjort så returneres statuskode 201 Created»:
+
+> «Dersom det skjer en feil under opplasting eller lagringsprossesen
+> skal tjeneren returnere en 422 Unprocessable Entity svar. Det er
+> klientens ansvar da å slette eventuelle dokumentbeskrivelse og
+> dokumentobjet entiteter.»
+
+I tillegg legges 422-koden inn i tabellen på side 26-27 over mulige feilkoder fra
+opplastingen.
