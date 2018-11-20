@@ -50,8 +50,9 @@ Spesifikasjonen sier heller ingen ting om hva slags innhold en
 filopplasting skal returnere.  Hvis det ikke skal returneres noe annet
 enn en HTTP returkode, så bør det nevnes eksplisitt.  Et annet
 alternativ som kan gi mening er å returnere tilhørende dokumentobjekt
-når filoverføringen er fullført (dvs. POST uten Content-Length satt
-til 0 eller bulkopplasting med PUT som returnerer 201 Created).
+når filoverføringen er fullført (det vil si ved POST uten
+Content-Length satt til 0 og når siste bolk lastes opp med PUT som
+returnerer 201 Created).
 
 Når det gjelder håndtering av sjekksum og filstørrelse så ser vi en
 interessant bi-effekt.  Hvis klienten angir sin sjekksum og
