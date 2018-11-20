@@ -107,16 +107,17 @@ dokumentbeskrivlese og dokumentobjekt og deretter en 50X Error ved
 opplastingen.
 
 Det er uklart fra spesifikasjonen hva som skal gjøres i et slikt
-tilfelle, og det er ingen dokumentert mekanisme for klienten å be om
-at det filløse dokumentobjekt-instansen slettes når det skjer.  [FIXME
-Hva med 'DELETE på oppføringen?] Det er dermed ikke mulig for klienten
-å rydde opp etter seg når feilen oppstår.  Den eneste muligheten for
-klienten er å forsøkte opplasting på nytt og på nytt frem til den
-lykkes, og det er ikke alltid mulig for en klient å fortsette til evig
-tid.  Det er bedre om klienten kan fjerne de "ubrukelige"
-dokumentbeskrivelse og dokumentobjekt-oppføringene, gi en feilmelding
-til brukeren som forsøker å arkivere en fil og forsøke på nytt senere
-når det passer.
+tilfelle.  Skal klienten forsøke å rulle tilbake opprettingen av
+entitetene for dokumentobjekt og dokumentbeskrivelse ved hjelp av
+DELETE, eller fortsette å forsøke å laste opp dokumentet, potensielt
+til evig tid?  Det blir uansett vanskelig for klienten å rydde opp
+etter seg, og helt umulig hvis det som skjedde var at serveren krasjet
+ved opplasting og dermed ble utilgjengelig når klienten forsøker å
+slette dokumentobjekt og dokumentbeskrivelse.  Det er bedre om
+klienten kan fjerne de "ubrukte" dokumentbeskrivelse og
+dokumentobjekt-oppføringene, gi en feilmelding til brukeren som
+forsøker å arkivere en fil og forsøke på nytt senere når det passer,
+men det vil ikke være mulig i enkelte feilsituasjoner.
 
 Ønsket endring
 --------------
@@ -195,7 +196,8 @@ siste overføring er gjort så returneres statuskode 201 Created»:
 > «Dersom det skjer en feil under opplasting eller lagringsprossesen
 > skal tjeneren returnere en 422 Unprocessable Entity svar. Det er
 > klientens ansvar da å slette eventuelle dokumentbeskrivelse og
-> dokumentobjet entiteter.»
+> dokumentobjet entiteter ved hjelp av DELETE på entitetenes
+> self-relasjon.»
 
 I tillegg legges 422-koden inn i tabellen på side 26-27 over mulige feilkoder fra
 opplastingen.
