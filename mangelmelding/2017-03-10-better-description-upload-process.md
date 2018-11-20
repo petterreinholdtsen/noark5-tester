@@ -133,17 +133,21 @@ rel=http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil med header for
 content-type og content-length.» på side 25.
 
 > «Et dokumentobjekt opprettes før opplasting. Hvis noen av feltene
-> «format», «mimeType», «filnavn», «sjekksum», «sjekksumAlgoritme»
-> og «filstørrelse» er fyllt inn skal tjeneren verifisere at verdiene 
-> i de angitte feltene stemmer.
-> Tjeneren sjekker så ved opplasting at mimeType er
-> identisk med Content-Type, filstørrelse er identisk med
+> «format», «mimeType», «filnavn», «sjekksum», «sjekksumAlgoritme» og
+> «filstørrelse» er fyllt inn ved opprettelsen skal tjeneren
+> verifisere at verdiene i de angitte feltene stemmer når filen lastes
+> opp.  Tjeneren sjekker ved opplasting i dette tilfellet også at
+> mimeType er identisk med Content-Type, filstørrelse er identisk med
 > Content-Length (for komplett POST) eller X-Upload-Content-Length
 > (for overføring i bolker med PUT) og at sjekksum stemmer overens med
-> den overførte filen.  Hvis tjeneren ikke er i stand til å foreta 
-> nødvendige analyser for å beregne verdiene eller hvis noen en av disse
-> verdiene fra opplastingen ikke stemmer overens med verdiene i 
-> dokumentobjekt, så returneres statuskode 400 Bad Request.»
+> den overførte filen.  Hvis tjeneren ikke er i stand til å foreta
+> nødvendige analyser for å beregne verdiene eller hvis noen en av
+> disse verdiene fra opplastingen ikke stemmer overens med verdiene i
+> dokumentobjekt, så returneres statuskode 400 Bad Request.» Når
+> filopplasting er fullført setter tjeneren de feltene i
+> dokumentobjekt som ikke var satt, dvs. utleder «format», «mimeType»,
+> «filnavn», «sjekksum», og «filstørrelse» basert på filens innhold
+> samt, samt gir «sjekksumAlgoritme» aktuell verdi.
 
 Legg inn nytt avsnitt på side 26 før tabell over resultatkoder og
 etter setning «Når siste overføring er gjort så returneres statuskode
