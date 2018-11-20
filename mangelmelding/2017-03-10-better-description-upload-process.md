@@ -88,8 +88,12 @@ hvis det skal lastes opp en ny fil.
 
 Ønsket endring
 --------------
-> «Det er er ikke mulig å overskrive en eksisterende fil med for
-> eksempel en PUT-forespørsel. Hvis en fil må overskrives skal filen
+
+I del 6.1.1.9, legg inn nytt avsnitt etter setning «Når siste
+overføring er gjort så returneres statuskode 201 Created» på side 26:
+
+> «Det er er ikke mulig å overskrive en eksisterende fil med en POST
+> eller en PUT-forespørsel. Hvis en fil må overskrives skal filen
 > slettes og en ny POST utføres mot href til
 > rel=http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil»
 
@@ -192,7 +196,7 @@ med opplasting og registrering som en transaksjon på sikt.
 Ønsket endring
 --------------
 
-I de 6.1.1.9 legges følgende avsnitt inn på side 26 etter setning «Når
+I del 6.1.1.9 legges følgende avsnitt inn på side 26 etter setning «Når
 siste overføring er gjort så returneres statuskode 201 Created»:
 
 > «Dersom det skjer en feil under opplasting eller lagringsprossesen
