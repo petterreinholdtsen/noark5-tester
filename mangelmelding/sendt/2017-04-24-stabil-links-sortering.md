@@ -54,3 +54,6 @@ Respons
 -------
 
 Ingen respons fra arkivverket så langt.
+
+Rapportert til
+[https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/27].

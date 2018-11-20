@@ -51,3 +51,11 @@ følgende under 6.3 på side 28:
 > beskrevet i [IETF RFC 4122](http://www.ietf.org/rfc/rfc4122.txt),
 > ISO/IEC 9834-8:2004 og ITU-T Rec. X.667.  Slike UUID-verdier bør
 > være frakoblet verdiene i objektet det henviser til.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Rapportert til
+[https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/26].
