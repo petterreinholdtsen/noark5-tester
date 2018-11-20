@@ -92,8 +92,8 @@ hvis det skal lastes opp en ny fil.
 I del 6.1.1.9, legg inn nytt avsnitt etter setning «Når siste
 overføring er gjort så returneres statuskode 201 Created» på side 26:
 
-> «Det er er ikke mulig å overskrive en eksisterende fil med en POST
-> eller en PUT-forespørsel. Hvis en fil må overskrives skal filen
+> «Det er ikke mulig å overskrive en eksisterende fil med en POST
+> eller en PUT-forespørsel. Hvis en fil må erstattes så skal filen
 > slettes og en ny POST utføres mot href til
 > rel=http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil»
 
@@ -102,8 +102,8 @@ overføring er gjort så returneres statuskode 201 Created» på side 26:
 En annen særlig utfordring er klienthåndtering av feil på
 mottakersiden av tjenestegrensesnittet.  Prosessen med å laste opp en
 fil kan ses på som en transaksjon som inkluderer opprettelsen av
-dokumentbeskrivelse, dokumentobjekt og selve filen.  Hvis det skulle
-skje at det er problemer med lagringssystemet til
+dokumentbeskrivelse, dokumentobjekt og opplasting av selve filen.
+Hvis det skulle skje at det er problemer med lagringssystemet til
 tjenestegrensesnittet, for eksempel hvis filsystemet er fullt eller
 tjenesten opplever en annen forstyrrelse, så kan det hende at
 dokumentobjekt opprettes og lagres til persistent lager, men selve
@@ -147,11 +147,10 @@ content-type og content-length.» på side 25.
 
 Legg inn nytt avsnitt på side 26 før tabell over resultatkoder og
 etter setning «Når siste overføring er gjort så returneres statuskode
-201 Created.»
+201 Created»:
 
 > Når en filopplasting er vellykket, så returneres tilhørende
 > dokumentobjekt som respons på avsluttende 200 OK / 201 Created.
-
 
 På side 105 endres definisjonen av filstørrelse fra «Definisjon:
 Størrelsen på fila i antall bytes oppgitt med desimaltall» til
@@ -169,15 +168,15 @@ eller en feil skjer med lagring til disk bør det være spesifiert
 hvordan tjeneren skal håndtere feilen. Dette tilfellet trenger en
 avklaring.
 
-En mulig løsning er å bytte ut de tre API-kallene med ett API-kall til
-kjernen der dokumentbeskrivelse, dokumentobjekt og selve filen lastes
-opp sammen. En slik løsning gjør det mulig for kjernen å behandle
-opprettelsen som en transaksjon og la alle tre stegene feile hvis en
-av dem feiler.  Dermed kan klienten vite om hele transaksjonen var
-vellykket og filen er lagret slik den skal.  En annen fordel ved en
-slik samlet registrering/opplasting er at serveren kan forsøke å hente
-ut metadata fra dokumentet (f.eks. tittel, forfatter, dato etc) og
-slik gjøre det enklere å arkivere dokumenter.
+En mulig og kanskje bedre løsning er å bytte ut de tre API-kallene med
+ett API-kall til kjernen der dokumentbeskrivelse, dokumentobjekt og
+selve filen lastes opp sammen. En slik løsning gjør det mulig for
+kjernen å behandle opprettelsen som en transaksjon og la alle tre
+stegene feile hvis et av dem feiler.  Dermed kan klienten vite om hele
+transaksjonen var vellykket og filen er lagret slik den skal.  En
+annen fordel ved en slik samlet registrering/opplasting er at serveren
+kan forsøke å hente ut metadata fra dokumentet (f.eks. tittel,
+forfatter, dato etc) og slik gjøre det enklere å arkivere dokumenter.
 
 En annen mulig løsning er å tillate sletting av egenproduserte
 dokumentobjekt- og dokumentbeskrivelse-oppføringer frem til de er
