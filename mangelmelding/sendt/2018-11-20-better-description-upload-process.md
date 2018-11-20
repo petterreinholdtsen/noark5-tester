@@ -10,7 +10,7 @@ Forbedre beskrivelse av filopplastingsprossesen
         Dokumentdel  6.1.1.9
          Sidenummer  25
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2018-11-20 (github issue #25)
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -169,7 +169,7 @@ Størrelsen på fila i antall bytes oppgitt med desimaltall» til
 Problemstillingen om hvordan tjenestegrensesnittet skal håndtere feil
 i komboen dokumentbeskrivelse, dokumentobjekt og fil opplasting kan
 også sees på fra server-siden. Hvis opplasting av filen blir avbrutt
-eller en feil skjer med lagring til disk bør det være spesifiert
+eller en feil skjer med lagring til disk bør det være spesifisert
 hvordan tjeneren skal håndtere feilen. Dette tilfellet trenger en
 avklaring.
 
@@ -206,3 +206,10 @@ siste overføring er gjort så returneres statuskode 201 Created»:
 
 I tillegg legges 422-koden inn i tabellen på side 26-27 over mulige
 feilkoder fra opplastingen.
+
+Respons
+-------
+
+Rapportert til
+[https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/25].
+Ingen respons fra arkivverket så langt.
