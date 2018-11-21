@@ -122,3 +122,11 @@ http://www.w3.org/TR/NOTE-datetime" til
 > tilgjengelig fra https://www.w3.org/TR/xmlschema11-2/.  Det skal
 > alltid være tidssone-informasjon knyttet til date og
 > dateTime-verdier.
+
+Respons
+-------
+
+Ingen respons fra Arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/30
