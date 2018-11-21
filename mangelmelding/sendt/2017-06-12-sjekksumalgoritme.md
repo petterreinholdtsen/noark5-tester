@@ -93,3 +93,11 @@ med
 > Obligatorisk verdi:
 >
 >  * «SHA-256»
+
+Respons
+-------
+
+Ingen respons fra Arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/31
