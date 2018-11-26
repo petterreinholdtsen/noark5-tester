@@ -63,3 +63,11 @@ bare ha en.»:
 > En tom tekststreng-verdi (`""`) er likestilt med en manglende verdi,
 > slik at ved multiplisiteten [1..1] betyr det at klasseID også må ha
 > en verdi forskjellig fra tom streng.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/39 .

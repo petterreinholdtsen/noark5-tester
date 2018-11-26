@@ -1,5 +1,5 @@
 Avklar når objekter skal ha SystemID (M001) og når det ikke er valgfritt
-=====================================================================
+========================================================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -57,3 +57,11 @@ avsnitt foran 'Resultat' på side 17:
 > Når en oppretter objekter med POST skal feltet systemID ikke være
 > satt.  Det settes automatisk når objektet opprettes, og korrekt
 > verdi returneres etter at objektet er opprettet i databasen.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/37 .

@@ -24,7 +24,7 @@ Dette gjelder del 7.2.1.1 (Arkiv).
 
 Listen over relasjonsnøkler på side 57 viser at en kan få ut oversikt
 over underarkiv ved å benytte relasjonen
-.../arkivstruktur/underarkiv/, men har ingen ny-underarkiv/ for a
+.../arkivstruktur/underarkiv/, men har ingen ny-underarkiv/ for å
 opprette et nytt underarkiv.  Det er relasjonspar for
 arkivskaper/ny-arkivskaper, arkivdel/ny-arkivdel, arkiv/ny-arkiv men
 ikke for underarkiv.  Hvordan er det mening at en skal opprette et
@@ -89,3 +89,11 @@ med første relasjon i listen).
 Fjern relasjonen
 `http://rel.kxml.no/noark5/v4/api/arkivstruktur/underarkiv/` fra
 listen over relasjonsnøkler på side 57.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/38 .

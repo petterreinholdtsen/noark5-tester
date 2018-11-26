@@ -67,3 +67,11 @@ der det brukes i spesifikasjonen:
  * 7.2.1 (Arkivstruktur) UML-entitet for «Sakarkiv::Journalpost» på side 54
  * 7.2.3 (Sakarkiv) UML-entitet Journalpost på side 197, 202 og side 203
  * 7.2.3.4 (Journalpost) under Attributter side 214 og 215 og under Restriksjoner på side 222.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/35 .

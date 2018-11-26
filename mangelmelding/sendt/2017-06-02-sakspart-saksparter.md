@@ -46,3 +46,11 @@ Endre del 7.2.3.11 (Saksmappe) på side 239, bytt ut
 med
 
  * http://rel.kxml.no/noark5/v4/api/sakarkiv/sakspart/
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/36 .
