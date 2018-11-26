@@ -1,5 +1,5 @@
-Beskriv hvordan lister og relasjoner skal formatteres i XML
-===========================================================
+Dropp støtte for XML-varianten av API-et?
+=========================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
@@ -100,27 +100,30 @@ den uten?
 Spesifikasjonen mangler beskrivelse av hvordan objekter og lister skal
 formatteres i XML.  Det er dermed uklart for de som skal utvikle
 REST-klienter og -tjenester hvordan informasjonen som skal utveksles
-skal være.
+skal være.  Det enkleste for alle ville være om det kun var en entydig
+måte å snakke med API-et på, i stedet for to (JSON og XML).  Hvorfor
+er det to ulike "dialekter" i spesifikasjonen?
 
-Enten bør spesifikasjonen beskrive hvordan alle objekter og lister av
-objekter skal formateres i XML, eller så bør den inneholde en
-forklaring på hvordan JSON-strukturer kan omdannes til XML.  Gitt at
+Hvis XML skal være en del av API-definisjonen, så bør enten
+spesifikasjonen beskrive hvordan alle objekter og lister av objekter
+skal formateres i XML, eller så bør den inneholde en forklaring på
+hvordan JSON-strukturer kan omdannes til XML.  Gitt at
 XML-formatteringen nok trenger navnerom-informasjon, mens
 JSON-formatteringen ikke trenger tilsvarende, så vil det ikke være
 mulig å automatisk omforme JSON til XML uten at det tilføres ekstra
 informasjon.  Hvorvidt det er praktisk gjennomførbart eller ikke
 kommer an på hvor mange ulike navnerom som forventes brukt i
-XML-formatteringen.
+XML-formatteringen. 
 
-FIXME beskriv behovet for informasjon om formattering av objekter og
-lister.
+Gitt at JSON-utgaven er tilstrekkelig og bedre beskrevet i
+spesifikasjonen enn XML, så er det kanskje like greit å droppe
+XML-dialekten?  Alternativt så må det beskrives i detalj hvordan
+XML-utvekslingen for alle endepunktene skal se ut, og alle eksemplene
+på http://rel.kxml.no/noark5/ endres til å stemme overens med
+spesifikasjonen.
 
 Ønsket endring
 --------------
 
-FIXME foreslå formuleringer som beskriver formattering av objekter og
-lister, f.eks. ved å beskrive hvordan JSON-eksempler kan gjøres om til
-XML-eksempler (for å slippe doble eksempler i hele dokumentet).
-
-Eksemplene på http://rel.kxml.no/noark5/ bør endres til å stemme
-overens med spesifikasjonen.
+Fjern teksten på side 12-, fra "Alternativt som XML" til og med siste
+"</Links>".
