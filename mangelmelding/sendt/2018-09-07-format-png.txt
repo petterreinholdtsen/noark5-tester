@@ -42,5 +42,5 @@ Respons
 -------
 
 Rapportert til
-https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/4
-.  Ingen respons fra arkivverket så langt.
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/4 .
+Foreslått endring med RA-PNG ble akseptert 2018-11-27.
