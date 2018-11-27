@@ -8,9 +8,9 @@ Dropp støtte for XML-varianten av API-et?
        Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
         Dokumentdel  6.1.1.2
-         Sidenummer  
-        Linjenummer  
-    Innsendingsdato  ikke sendt inn
+         Sidenummer  12
+        Linjenummer  n/a
+    Innsendingsdato  2018-11-27 (github issue #57)
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -125,5 +125,11 @@ spesifikasjonen.
 Ønsket endring
 --------------
 
-Fjern teksten på side 12-, fra "Alternativt som XML" til og med siste
-"</Links>".
+Dropp XML-utveksling fra API-spesifikasjonen, og bruk kun JSON.  Fjern teksten på side 12-, fra "Alternativt som XML" til og med siste "</Links>".
+
+Respons
+-------
+
+Rapportert til
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/57 .
+Ingen respons fra arkivverket så langt.
