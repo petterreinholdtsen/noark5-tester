@@ -142,19 +142,35 @@ class Importer(n5core.endpoint.Endpoint):
         self.handleImport('klasse', rel, parentinfo, element, subs)
 
     def importMappe(self, parentinfo, element):
+        attrtype = '{http://www.w3.org/2001/XMLSchema-instance}type'
+        if attrtype in element.keys():
+            if 'moetemappe' == element.get(attrtype):
+                name = 'moetemappe'
+                rel = self.relbase + '/arkivstruktur/ny-moetemappe/'
+            else:
+                name = 'mappe'
+                rel = self.relbase + '/arkivstruktur/ny-mappe/'
         subs = {
             tagregistrering: ([], self.importRegistrering),
         }
-        rel = self.relbase + '/arkivstruktur/ny-registrering/'
-        # FIXME need to handle journalpost, møtemappe etc.
-        self.handleImport('mappe', rel, parentinfo, element, subs)
+        self.handleImport(name, rel, parentinfo, element, subs)
 
     def importRegistrering(self, parentinfo, element):
+        attrtype = '{http://www.w3.org/2001/XMLSchema-instance}type'
+        if attrtype in element.keys():
+            if 'journalpost' == element.get(attrtype):
+                name = 'journalpost'
+                rel = self.relbase + '/arkivstruktur/ny-journalpost/'
+            elif 'moeteregistrering' == element.get(attrtype):
+                name = 'moeteregistrering'
+                rel = self.relbase + '/arkivstruktur/ny-moeteregistrering/'
+            else:
+                name = 'registrering'
+                rel = self.relbase + '/arkivstruktur/ny-registrering/'
         subs = {
             tagdokumentbeskrivelse: ([], self.importDocumentbeskrivelse),
         }
-        rel = self.relbase + '/arkivstruktur/ny-registrering/'
-        self.handleImport('registrering', rel, parentinfo, element, subs)
+        self.handleImport(name, rel, parentinfo, element, subs)
 
     def importDokumentbeskrivelse(self, parentinfo, element):
         subs = {
