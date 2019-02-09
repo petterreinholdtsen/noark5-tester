@@ -74,7 +74,7 @@ class Importer(n5core.endpoint.Endpoint):
             if self.verbose:
                 print("POST: %s" % data)
             (c, res) = self.json_post(url, data)
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             raise
         info = json.loads(c)
         if self.verbose:
@@ -87,123 +87,85 @@ class Importer(n5core.endpoint.Endpoint):
                         print("error: field %s=%s do not match object value %s" %  (f, data[f], info[f]))
         return info
 
-    def importArkiv(self, element):
+    def handleImport(self, name, rel, parentinfo, element, subs):
         self.nesting += 1
         data = {}
-        arkivdel = []
         for sub in element.iterchildren():
-            self.output("Arkiv: '%s' - '%s'" % (sub.tag, sub.text))
-            if sub.tag == tagarkivdel:
-                arkivdel.append(sub)
+            self.output("%s: '%s' - '%s'" % (name, sub.tag, sub.text))
+            if sub.tag in subs:
+                subs[sub.tag][0].append(sub)
             if None != sub.text:
                 data[sub.tag.replace('{%s}' % strukturns, '')] = sub.text
         if self.dryrun:
             print("POST: %s" % data)
         else:
-            
-            (c, res) = self.json_get(self.findRelation(self.relbase + '/arkivstruktur/'))
-            topinfo = json.loads(c)
-            
-            fondrel = self.relbase + '/arkivstruktur/ny-arkiv/'
-            fondinfo = self.createEntity('arkiv', fondrel,
-                                         parselinks(topinfo['_links']),
-                                         data)
-            print("Created arkiv: %s" % fondinfo)
-        for sub in arkivdel:
-            self.importArkivdel(fondinfo, sub)
-        self.nesting -= 1
-
-    def importArkivdel(self, fondinfo, element):
-        self.nesting += 1
-        data = {}
-        klassifikasjonssystem = []
-        mappe = []
-        for sub in element.iterchildren():
-            self.output("Arkivdel: '%s' - '%s'" % (sub.tag, sub.text))
-            if sub.tag == tagklassifikasjonssystem:
-                klassifikasjonssystem.append(sub)
-            elif sub.tag == tagmappe:
-                mappe.append(sub)
-            if None != sub.text:
-                data[sub.tag.replace('{%s}' % strukturns, '')] = sub.text
-        if self.dryrun:
-            print("POST: %s" % data)
-        else:
-            serierel = self.relbase + '/arkivstruktur/ny-arkivdel/'
-            serieinfo = self.createEntity('arkivdel', serierel,
-                                         parselinks(fondinfo['_links']),
-                                         data)
-            print()
-            print("Created arkivdel: %s" % serieinfo)
-            print()
-        for sub in klassifikasjonssystem:
-            self.importKlassifikasjonssystem(serieinfo, sub)
-        for sub in mappe:
-            self.importMappe(serieinfo, sub)
-        self.nesting -= 1
-
-    def importKlassifikasjonssystem(self, parentinfo, element):
-        self.nesting += 1
-        data = {}
-        klasse = []
-        for sub in element.iterchildren():
-            self.output("Klassifikasjonssystem: '%s' - '%s'" % (sub.tag, sub.text))
-            if sub.tag == tagklasse:
-                klasse.append(sub)
-            if None != sub.text:
-                data[sub.tag.replace('{%s}' % strukturns, '')] = sub.text
-        if self.dryrun:
-            print("POST: %s" % data)
-        else:
-            classificationsystemrel = self.relbase + '/arkivstruktur/ny-klassifikasjonssystem/'
-            classificationsysteminfo = self.createEntity('klassifikasjonssystem',
-                                         classificationsystemrel,
+            info = self.createEntity(name, rel,
                                          parselinks(parentinfo['_links']),
                                          data)
             print()
-            print("Created klassifikasjonssystem: %s" % classificationsysteminfo)
+            print("Created %s: %s" % (name, info))
             print()
-        for sub in klasse:
-            self.importKlasse(classificationsysteminfo, sub)
+        for tag in subs.keys():
+            for sub in subs[tag][0]:
+                subs[tag][1](info, sub)
         self.nesting -= 1
+        return info
+
+    def importArkiv(self, parentinfo, element):
+        subs = {
+            tagarkivdel: ([], self.importArkivdel),
+        }
+        rel = self.relbase + '/arkivstruktur/ny-arkiv/'
+        self.handleImport('arkiv', rel, parentinfo, element, subs)
+
+    def importArkivdel(self, parentinfo, element):
+        subs = {
+            tagmappe: ([], self.importMappe),
+            # FIXME disabled until nikita handle ny-klassifikasjonssystem
+            #tagklassifikasjonssystem: ([], self.importKlassifikasjonssystem),
+        }
+        rel = self.relbase + '/arkivstruktur/ny-arkivdel/'
+        self.handleImport('arkivdel', rel, parentinfo, element, subs)
+
+    def importKlassifikasjonssystem(self, parentinfo, element):
+        subs = {
+            tagklasse: ([], self.importKlasse),
+        }
+        rel = self.relbase + '/arkivstruktur/ny-klassifikasjonssystem/'
+        self.handleImport('klassifikasjonssystem', rel, parentinfo, element, subs)
 
     def importKlasse(self, parentinfo, element):
-        self.nesting += 1
-        for sub in element.iterchildren():
-            self.output("Klasse: '%s' - '%s'" % (sub.tag, sub.text))
-            if sub.tag == tagmappe:
-                self.importMappe(None, sub)
-        self.nesting -= 1
+        subs = {
+            tagmappe: ([], self.importMappe),
+        }
+        rel = self.relbase + '/arkivstruktur/ny-klasse/'
+        self.handleImport('klasse', rel, parentinfo, element, subs)
 
     def importMappe(self, parentinfo, element):
-        self.nesting += 1
-        for sub in element.iterchildren():
-            self.output("Mappe: '%s' - '%s'" % (sub.tag, sub.text))
-            if sub.tag == tagregistrering:
-                self.importRegistrering(None, sub)
-        self.nesting -= 1
+        subs = {
+            tagregistrering: ([], self.importRegistrering),
+        }
+        rel = self.relbase + '/arkivstruktur/ny-registrering/'
+        # FIXME need to handle journalpost, møtemappe etc.
+        self.handleImport('mappe', rel, parentinfo, element, subs)
 
     def importRegistrering(self, parentinfo, element):
-        self.nesting += 1
-        for sub in element.iterchildren():
-            self.output("Registrering: '%s' - '%s'" % (sub.tag, sub.text))
-            if sub.tag == tagdokumentbeskrivelse:
-                self.importDokumentbeskrivelse(None, sub)
-        self.nesting -= 1
+        subs = {
+            tagdokumentbeskrivelse: ([], self.importDocumentbeskrivelse),
+        }
+        rel = self.relbase + '/arkivstruktur/ny-registrering/'
+        self.handleImport('registrering', rel, parentinfo, element, subs)
 
     def importDokumentbeskrivelse(self, parentinfo, element):
-        self.nesting += 1
-        for sub in element.iterchildren():
-            self.output("Dokumentbeskrivelse: '%s' - '%s'" % (sub.tag, sub.text))
-            if sub.tag == tagdokumentobjekt:
-                self.importDokumentobjekt(None, sub)
-        self.nesting -= 1
+        subs = {
+            tagdokumentobjekt: ([], self.importDocumentobjekt),
+        }
+        rel = self.relbase + '/arkivstruktur/ny-dokumentbeskrivelse/'
+        self.handleImport('dokumentbeskrivelse', rel, parentinfo, element, subs)
 
     def importDokumentobjekt(self, parentinfo, element):
-        self.nesting += 1
-        for sub in element.iterchildren():
-            self.output("Dokumentobjekt: '%s' - '%s'" % (sub.tag, sub.text))
-        self.nesting -= 1
+        rel = self.relbase + '/arkivstruktur/ny-dokumentobjekt/'
+        info = self.handleImport('dokumentbeskrivelse', rel, parentinfo, element, {})
         
     def loaddir(self):
         path = os.path.join(self.basedir, "arkivstruktur.xml")
@@ -214,7 +176,9 @@ class Importer(n5core.endpoint.Endpoint):
         fh.close()
         element = tree.getroot()
         if element.tag == tagarkiv:
-            self.importArkiv(element)
+            (c, res) = self.json_get(self.findRelation(self.relbase + '/arkivstruktur/'))
+            parentinfo = json.loads(c)
+            self.importArkiv(parentinfo, element)
     #    print(etree.tostring(tree))
 
 def main():
