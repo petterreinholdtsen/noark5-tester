@@ -1,0 +1,244 @@
+#!/usr/bin/env python
+"""
+
+Import a Noark 5 extract into the API.
+
+Test data can be found in
+../noark5-validator-k/src/resources/test-uttrekk/uttrekk1/n5uttrekk
+
+"""
+
+from __future__ import print_function
+
+__license__ = 'GNU General Public License v2 or later at users choice'
+__author__ = 'Petter Reinholdtsen'
+
+import sys
+sys.path.append('lib')
+
+import argparse
+import json
+import os
+import urllib2
+from lxml import etree
+
+import n5core.endpoint
+
+strukturns = 'http://www.arkivverket.no/standarder/noark5/arkivstruktur'
+
+tagarkiv                 = '{%s}arkiv' % strukturns
+tagarkivdel              = '{%s}arkivdel' % strukturns
+tagklassifikasjonssystem = '{%s}klassifikasjonssystem' % strukturns
+tagklasse                = '{%s}klasse' % strukturns
+tagmappe                 = '{%s}mappe' % strukturns
+tagregistrering          = '{%s}registrering' % strukturns
+tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
+tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
+
+# Copied from import-email
+def parselinks(links):
+    rels = {}
+    for l in links:
+        if 'href' in l and 'rel' in l:
+            rels[l['rel']] = l['href']
+    return rels
+
+class Importer(n5core.endpoint.Endpoint):
+    relbase = 'http://rel.kxml.no/noark5/v4/api'
+    
+    def __init__(self, baseurl, basedir):
+        self.basedir = basedir
+        self.nesting = 0
+        self.dryrun = False
+        n5core.endpoint.Endpoint.__init__(self, baseurl)
+
+    def output(self, msg):
+        print("%s %s" % ('=' * self.nesting, msg))
+
+    # Copied from import-email
+    def createEntity(self, name, rel, rels, data):
+        if rel not in rels:
+            raise Exception("unable to find %s in provided relations" % rel)
+        url = rels[rel]
+        try:
+            if self.verbose:
+                print("GET %s" % url)
+            (gc, gres) = self.json_get(url)
+            default = json.loads(gc)
+            for k in default.keys():
+                if not k == '_links' and k not in data:
+                    data[k] = default[k]
+        except urllib2.HTTPError, e:
+            pass
+        try:
+            if self.verbose:
+                print("POST: %s" % data)
+            (c, res) = self.json_post(url, data)
+        except urllib2.HTTPError, e:
+            raise
+        info = json.loads(c)
+        if self.verbose:
+            # Validate the stuff we send came back after storing
+            for f in data.keys():
+                if data[f] is not None:
+                    if  f not in info:
+                        print("error: field %s=%s disappeared from object" %  (f, data[f]))
+                    elif data[f] != info[f]:
+                        print("error: field %s=%s do not match object value %s" %  (f, data[f], info[f]))
+        return info
+
+    def importArkiv(self, element):
+        self.nesting += 1
+        data = {}
+        arkivdel = []
+        for sub in element.iterchildren():
+            self.output("Arkiv: '%s' - '%s'" % (sub.tag, sub.text))
+            if sub.tag == tagarkivdel:
+                arkivdel.append(sub)
+            if None != sub.text:
+                data[sub.tag.replace('{%s}' % strukturns, '')] = sub.text
+        if self.dryrun:
+            print("POST: %s" % data)
+        else:
+            
+            (c, res) = self.json_get(self.findRelation(self.relbase + '/arkivstruktur/'))
+            topinfo = json.loads(c)
+            
+            fondrel = self.relbase + '/arkivstruktur/ny-arkiv/'
+            fondinfo = self.createEntity('arkiv', fondrel,
+                                         parselinks(topinfo['_links']),
+                                         data)
+            print("Created arkiv: %s" % fondinfo)
+        for sub in arkivdel:
+            self.importArkivdel(fondinfo, sub)
+        self.nesting -= 1
+
+    def importArkivdel(self, fondinfo, element):
+        self.nesting += 1
+        data = {}
+        klassifikasjonssystem = []
+        mappe = []
+        for sub in element.iterchildren():
+            self.output("Arkivdel: '%s' - '%s'" % (sub.tag, sub.text))
+            if sub.tag == tagklassifikasjonssystem:
+                klassifikasjonssystem.append(sub)
+            elif sub.tag == tagmappe:
+                mappe.append(sub)
+            if None != sub.text:
+                data[sub.tag.replace('{%s}' % strukturns, '')] = sub.text
+        if self.dryrun:
+            print("POST: %s" % data)
+        else:
+            serierel = self.relbase + '/arkivstruktur/ny-arkivdel/'
+            serieinfo = self.createEntity('arkivdel', serierel,
+                                         parselinks(fondinfo['_links']),
+                                         data)
+            print()
+            print("Created arkivdel: %s" % serieinfo)
+            print()
+        for sub in klassifikasjonssystem:
+            self.importKlassifikasjonssystem(serieinfo, sub)
+        for sub in mappe:
+            self.importMappe(serieinfo, sub)
+        self.nesting -= 1
+
+    def importKlassifikasjonssystem(self, parentinfo, element):
+        self.nesting += 1
+        data = {}
+        klasse = []
+        for sub in element.iterchildren():
+            self.output("Klassifikasjonssystem: '%s' - '%s'" % (sub.tag, sub.text))
+            if sub.tag == tagklasse:
+                klasse.append(sub)
+            if None != sub.text:
+                data[sub.tag.replace('{%s}' % strukturns, '')] = sub.text
+        if self.dryrun:
+            print("POST: %s" % data)
+        else:
+            classificationsystemrel = self.relbase + '/arkivstruktur/ny-klassifikasjonssystem/'
+            classificationsysteminfo = self.createEntity('klassifikasjonssystem',
+                                         classificationsystemrel,
+                                         parselinks(parentinfo['_links']),
+                                         data)
+            print()
+            print("Created klassifikasjonssystem: %s" % classificationsysteminfo)
+            print()
+        for sub in klasse:
+            self.importKlasse(classificationsysteminfo, sub)
+        self.nesting -= 1
+
+    def importKlasse(self, parentinfo, element):
+        self.nesting += 1
+        for sub in element.iterchildren():
+            self.output("Klasse: '%s' - '%s'" % (sub.tag, sub.text))
+            if sub.tag == tagmappe:
+                self.importMappe(None, sub)
+        self.nesting -= 1
+
+    def importMappe(self, parentinfo, element):
+        self.nesting += 1
+        for sub in element.iterchildren():
+            self.output("Mappe: '%s' - '%s'" % (sub.tag, sub.text))
+            if sub.tag == tagregistrering:
+                self.importRegistrering(None, sub)
+        self.nesting -= 1
+
+    def importRegistrering(self, parentinfo, element):
+        self.nesting += 1
+        for sub in element.iterchildren():
+            self.output("Registrering: '%s' - '%s'" % (sub.tag, sub.text))
+            if sub.tag == tagdokumentbeskrivelse:
+                self.importDokumentbeskrivelse(None, sub)
+        self.nesting -= 1
+
+    def importDokumentbeskrivelse(self, parentinfo, element):
+        self.nesting += 1
+        for sub in element.iterchildren():
+            self.output("Dokumentbeskrivelse: '%s' - '%s'" % (sub.tag, sub.text))
+            if sub.tag == tagdokumentobjekt:
+                self.importDokumentobjekt(None, sub)
+        self.nesting -= 1
+
+    def importDokumentobjekt(self, parentinfo, element):
+        self.nesting += 1
+        for sub in element.iterchildren():
+            self.output("Dokumentobjekt: '%s' - '%s'" % (sub.tag, sub.text))
+        self.nesting -= 1
+        
+    def loaddir(self):
+        path = os.path.join(self.basedir, "arkivstruktur.xml")
+        print(path)
+        parser = etree.XMLParser(remove_blank_text=True)
+        fh = open(path)
+        tree = etree.parse(fh, parser)
+        fh.close()
+        element = tree.getroot()
+        if element.tag == tagarkiv:
+            self.importArkiv(element)
+    #    print(etree.tostring(tree))
+
+def main():
+    relbase = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur'
+    baseurl = "http://localhost:8092/noark5v4/"
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
+    parser.add_argument("--verbose", help="print more debug information",
+                        action="store_true")
+    parser.add_argument("basedir", nargs='+', help="directory with extract")
+    args = parser.parse_args()
+
+    if args.baseurl:
+        baseurl = args.baseurl
+
+    retval = 0
+    for basedir in args.basedir:
+        i = Importer(baseurl, basedir)
+        i.verbose = args.verbose
+        i.login()
+        i.loaddir()
+    
+    return retval
+
+if __name__ == '__main__':
+    exit(main())
