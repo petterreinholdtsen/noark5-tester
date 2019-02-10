@@ -143,30 +143,37 @@ class Importer(n5core.endpoint.Endpoint):
 
     def importMappe(self, parentinfo, element):
         attrtype = '{http://www.w3.org/2001/XMLSchema-instance}type'
+        name = 'mappe'
+        rel = self.relbase + '/arkivstruktur/ny-mappe/'
         if attrtype in element.keys():
-            if 'moetemappe' == element.get(attrtype):
+            etype = element.get(attrtype)
+            if 'moetemappe' == etype:
                 name = 'moetemappe'
                 rel = self.relbase + '/arkivstruktur/ny-moetemappe/'
+            elif 'saksmappe' == etype:
+                name = 'saksmappe'
+                rel = self.relbase + '/sakarkiv/ny-saksmappe/'
             else:
-                name = 'mappe'
-                rel = self.relbase + '/arkivstruktur/ny-mappe/'
+                raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
             tagregistrering: ([], self.importRegistrering),
         }
         self.handleImport(name, rel, parentinfo, element, subs)
 
     def importRegistrering(self, parentinfo, element):
+        name = 'registrering'
+        rel = self.relbase + '/arkivstruktur/ny-registrering/'
         attrtype = '{http://www.w3.org/2001/XMLSchema-instance}type'
         if attrtype in element.keys():
-            if 'journalpost' == element.get(attrtype):
+            etype = element.get(attrtype)
+            if 'journalpost' == etype:
                 name = 'journalpost'
                 rel = self.relbase + '/arkivstruktur/ny-journalpost/'
-            elif 'moeteregistrering' == element.get(attrtype):
+            elif 'moeteregistrering' == etype:
                 name = 'moeteregistrering'
                 rel = self.relbase + '/arkivstruktur/ny-moeteregistrering/'
             else:
-                name = 'registrering'
-                rel = self.relbase + '/arkivstruktur/ny-registrering/'
+                raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
             tagdokumentbeskrivelse: ([], self.importDocumentbeskrivelse),
         }
