@@ -75,6 +75,8 @@ class Importer(n5core.endpoint.Endpoint):
                 print("POST: %s" % data)
             (c, res) = self.json_post(url, data)
         except urllib2.HTTPError as e:
+            msg = e.read()
+            print("Error: ", msg)
             raise
         info = json.loads(c)
         if self.verbose:
