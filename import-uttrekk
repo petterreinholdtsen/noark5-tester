@@ -46,8 +46,7 @@ def parselinks(links):
 class Importer(n5core.endpoint.Endpoint):
     relbase = 'http://rel.kxml.no/noark5/v4/api'
     
-    def __init__(self, baseurl, basedir):
-        self.basedir = basedir
+    def __init__(self, baseurl):
         self.nesting = 0
         self.dryrun = False
         n5core.endpoint.Endpoint.__init__(self, baseurl)
@@ -234,12 +233,13 @@ def main():
     if args.baseurl:
         baseurl = args.baseurl
 
+    i = Importer(baseurl)
+    i.verbose = args.verbose
+    i.login()
+
     retval = 0
     for basedir in args.basedir:
-        i = Importer(baseurl, basedir)
-        i.verbose = args.verbose
-        i.login()
-        i.loaddir()
+        i.loaddir(basedir)
     
     return retval
 
