@@ -1,5 +1,5 @@
-Beskriv krav til innloggingssystem og definer relasjon for OpenID Connect-oppsett
-=================================================================================
+Klargjør entydige krav til innloggingssystem
+============================================
 
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
@@ -17,11 +17,11 @@ Beskrivelse
 -----------
 
 Innlogging er et kritisk punkt i ethvert REST-API, og uten
-standardisering av innloggingsmekanisme kan ikke klienter koble seg
-til tjenestegrensesnitt fra ulike leverandører.  Dagens spesifikasjon
-sier veldig lite om innlogging, og innlogging er gjort på forskjellig
-vis i utkast til tjenestegrensesnitt fra Nikita og Evry.  Erfaring
-viser at dette blokkerer for leverandøruavhengige klienter.
+standardisering av innloggingsmekanisme må alle klienter tilpasses
+hver enkelt leverandør.  Dagens spesifikasjon sier veldig lite om
+innlogging, og innlogging er gjort på forskjellig vis i utkast til
+tjenestegrensesnitt fra Nikita og Evry.  Erfaring viser at dette
+blokkerer for leverandøruavhengige klienter og bidrar til innlåsing.
 
 Her er det som står i spesifikasjonen om innlogging i dag:
 
@@ -35,6 +35,23 @@ Her er det som står i spesifikasjonen om innlogging i dag:
 
   For REST er Basic autentication minimum for autentisering og en bør
   støtte SAML 2.0 og OpenID Connect.
+
+Det trengs en mekanisme for API-klienter å oppdage hvilke
+autentiseringsmekanismer som er tilgjengelig.  Det mangler videre en
+forklaring på hva som menes med "Single Sign On bør støttes", og
+referanser til standardene som definerer Basic-autentisering, SAML 2.0
+og OpenID Connect.
+
+Det viser seg at det er mange måter å gjøre Basic-autentisering, og
+API-et bør beskrive en bestemt måte å gjøre dette på.  Det bør stå om
+oppførselen skal være slik RFC 7617 anbefaler, dvs. at
+ikke-autentiserte HTTP-forespørsler skal sette WWW-Authenticate med
+realm, slik at nettlesere vet at de skal spørre brukeren om brukernavn
+og passord, og klienter automatisk kan se at Basic autentisering er
+støttet.  Det bør gjøres klart om Basic-innlogging skal brukes på en
+bestemt URL til å sette en "cookie" som så brukes videre i
+grensesnittet, eller om brukernavn og passord skal brukes til enhver
+REST-forespørsel i hele grensesnittet.
 
 Evrys API støtter i dag Basic-authentisering, men det er uklart for en
 klient hvordan bruke den, da WWW-Authentication-hodefeltet ikke blir
@@ -80,6 +97,8 @@ beskrivelse av brukes finnes på
 par eksempler finnes på
 `https://id.signicat.com/oidc/.well-known/openid-configuration`_
 `https://oidc.difi.no/idporten-oidc-provider/.well-known/openid-configuration`_.
+
+Se også `http://rel.kxml.no/noark5/autentisering-med-openid-connect/`_.
 
 Ønsket endring
 --------------
