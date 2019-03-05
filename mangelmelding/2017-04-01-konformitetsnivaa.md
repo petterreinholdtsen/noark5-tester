@@ -42,7 +42,10 @@ OPTIONS-forespørsler, eller skal forespørsler og svar ha et bestemt
 innhold?  Testinstansen på http://n5test.kxml.no/api/ støtter ikke
 OPTIONS, så det er lite avklaring å finne der.  CORS er ikke nevnt i
 spesifikasjonen.  Det bør vel legges inn en referanse der for å
-forklare hva som menes med CORS i konformitetsnivåene.
+forklare hva som menes med CORS i konformitetsnivåene.  Se forøvrig
+mangelmelding
+[#29](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/29)
+om behovet for spesifisering av CORS.
 
 Og når det gjelder støtte av JSON og XML, holder det at en kan hente
 ut informasjon i JSON eller XML, eller må en kunne bruke POST og PUT i
@@ -70,3 +73,7 @@ program med fri programvarelisens som kan brukes til å teste en
 API-implementasjon fungerer som den skal.  Dermed kan enhver som lager
 en tjenestegrensesnitt-implementasjon sjekke om det oppfører seg som
 forventet av dette programmet.
+
+Hvis det blir avklart at konformitetskravene skal være maskinelt
+testbare, så bidrar jeg gjerne med forslag til formuleringer og
+skriving av program for å teste konformitetsnivå.
