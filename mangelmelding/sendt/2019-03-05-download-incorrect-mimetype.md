@@ -10,7 +10,7 @@ Hvordan skal HTTP-hodefeltet Accept tolkes ved forsøk på filnedlasting?
         Dokumentdel  6.1.1.9
          Sidenummer  25
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-03-05 (github issue #72)
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -49,16 +49,16 @@ at Accept-hodefeltet er frivillig, men hvis det finnes og
 tjenermaskinen ikke kan sende en akseptabel respons så skal statuskode
 406 (not acceptable) returneres.
 
-En enkel tilnærming er å beskrive i spesifikasjonen hvorvidt en 
-GET-forespørsel for å hente ut en fil skal ha Accept-hodefeltet satt, 
-og hvis det er satt og ikke er identisk med MIME-typestrengen i 
+En enkel tilnærming er å beskrive i spesifikasjonen hvorvidt en
+GET-forespørsel for å hente ut en fil skal ha Accept-hodefeltet satt,
+og hvis det er satt og ikke er identisk med MIME-typestrengen i
 dokumentobjekt så skal det returneres statuskode 406.
 
 Ønsket endring
 --------------
 
-Foreslår at standarden enkelt dokumenterer at Accept enten ikke skal være 
-satt, inneholde samme MIME-type som i dokumentobjekt eller «*/*» som betyr 
+Foreslår at standarden enkelt dokumenterer at Accept enten ikke skal være
+satt, inneholde samme MIME-type som i dokumentobjekt eller «*/*» som betyr
 at et hvilket som helst format aksepteres.
 
 Foreslår derfor at kapittel 6.1.1.9 (Hente og overføre filer) endres,
@@ -75,3 +75,12 @@ filen streames til klient» byttes ut med:
 > identisk med verdien i mimeType-feltet til tilhørende
 > dokumentobjekt, så skal resultatkoden 406 returneres i stedet for
 > 200.»
+
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Rapportert til
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/72
