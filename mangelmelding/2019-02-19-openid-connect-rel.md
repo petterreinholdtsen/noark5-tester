@@ -17,11 +17,14 @@ Beskrivelse
 -----------
 
 Innlogging er et kritisk punkt i ethvert REST-API, og uten
-standardisering av innloggingsmekanisme må alle klienter tilpasses
-hver enkelt leverandør.  Dagens spesifikasjon sier veldig lite om
+standardisering av innloggingsmekanisme må enhver klient tilpasses
+hver enkelt variant av innlogging, i praksis kan det kreve tilpassing
+til hver leverandør.  Dagens API-spesifikasjon sier veldig lite om
 innlogging, og innlogging er gjort på forskjellig vis i utkast til
-tjenestegrensesnitt fra Nikita og Evry.  Erfaring viser at dette
-blokkerer for leverandøruavhengige klienter og bidrar til innlåsing.
+tjenestegrensesnitt fra Nikita og Evry.  Dette blokkerer for
+leverandøruavhengige klienter og bidrar til innlåsing.  Det bør derfor
+spesifiseres i mer detalj hvordan innlogging skal fungere, for å sikre
+at alle leverandører gjør det på samme måte.
 
 Her er det som står i spesifikasjonen om innlogging i dag:
 
@@ -36,27 +39,33 @@ Her er det som står i spesifikasjonen om innlogging i dag:
   For REST er Basic autentication minimum for autentisering og en bør
   støtte SAML 2.0 og OpenID Connect.
 
-Det trengs en mekanisme for API-klienter å oppdage hvilke
-autentiseringsmekanismer som er tilgjengelig.  Det mangler videre en
-forklaring på hva som menes med "Single Sign On bør støttes", og
-referanser til standardene som definerer Basic-autentisering, SAML 2.0
-og OpenID Connect.
+Det mangler en forklaring på hva som menes med "Single Sign On bør
+støttes", og referanser til standardene som definerer
+Basic-autentisering, SAML 2.0 og OpenID Connect.  Det mangler videre
+en presis beskrivelse av hvordan de ulike innloggingsmetodene skal
+tilbys.  Det vil være en stor fordel om det finnes en mekanisme for
+API-klienter å oppdage hvilke autentiseringsmekanismer som er
+tilgjengelig.
 
 Det viser seg at det er mange måter å gjøre Basic-autentisering, og
-API-et bør beskrive en bestemt måte å gjøre dette på.  Det bør stå om
-oppførselen skal være slik RFC 7617 anbefaler, dvs. at
+API-et bør beskrive en bestemt måte å gjøre dette.  Det bør f.eks stå
+om oppførselen skal være slik RFC 7617 anbefaler, dvs. at
 ikke-autentiserte HTTP-forespørsler skal sette WWW-Authenticate med
 realm, slik at nettlesere vet at de skal spørre brukeren om brukernavn
 og passord, og klienter automatisk kan se at Basic autentisering er
 støttet.  Det bør gjøres klart om Basic-innlogging skal brukes på en
 bestemt URL til å sette en "cookie" som så brukes videre i
 grensesnittet, eller om brukernavn og passord skal brukes til enhver
-REST-forespørsel i hele grensesnittet.
+REST-forespørsel i hele grensesnittet.  Førstnevnte alternativ kan
+gjøre det enklere å støtte ulike innloggingsmekanismer.
 
 Evrys API støtter i dag Basic-authentisering, men det er uklart for en
 klient hvordan bruke den, da WWW-Authentication-hodefeltet ikke blir
-satt.  Dette illustrerer behovet for å definere nærmere hvordan
-innlogging skal gjøres.
+satt med realm som nettlesere kjenner igjen.  I stedet settes dette
+hodefeltet til "Bearer" (5 ganger, merkelig nok).  Dette illustrerer
+behovet for å definere nærmere hvordan innlogging skal gjøres.
+"Bearer" er forøvrig beskrevet relatert til Oauth 2.0 i [RFC
+6750](https://www.rfc-editor.org/rfc/rfc6750.txt).
 
 En måte å annonsere at OpenID Connect er støttet i
 tjenestegrensesnittet, er å annonsere en relasjon i _links på toppnivå
