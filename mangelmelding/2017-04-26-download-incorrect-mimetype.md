@@ -20,15 +20,16 @@ Beskrivelse
 -----------
 
 I punkt 6.1.1.9 (Hente og overføre data) side 25 står det ikke hvordan
-Accept-hodefeltet skal håndteres i en GET-forespørsel.  Hva skal skje
-hvis en API-klient forsøker å bruke GET mot href til relasjonsnøkkelen
-'http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil/' når
-GET-forespørselens Accept-hodefelt ikke har en verdi som stemmer
-overens med MIME-typen til filen som etterspøres?  Hvis Accept-verdi
-og filens MIME-type er like, virker det klart at at filen skal
-returneres.  Men skal filen også returneres det Accept-verdien ikke
-passer med filens MIME-type?  Da har jo klienten eksplisitt sagt at
-den ikke ønsker en fil på det aktuelle formatet.
+Accept-hodefeltet skal håndteres i en GET-forespørsel mot href til
+relasjonsnøkkelen
+'http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil/'.  Hva skal skje
+hvis en API-klient forsøker å bruke GET når GET-forespørselens
+Accept-hodefelt ikke har en verdi som stemmer overens med MIME-typen
+til filen som etterspøres?  Hvis Accept-verdi og filens MIME-type er
+like, er det klart at at filen skal returneres.  Usikkerheten oppstår
+med forespørsler det Accept-verdien ikke passer med filens MIME-type.
+Da har jo klienten eksplisitt sagt at den ikke ønsker en fil på det
+aktuelle formatet.
 
 Hvis en antar at en XML-fil er lagret med MIME-type application/xml,
 og så forsøkes nedlastet med denne forespørselen:
@@ -48,14 +49,16 @@ at Accept-hodefeltet er frivillig, men hvis det finnes og
 tjenermaskinen ikke kan sende en akseptabel respons så skal statuskode
 406 (not acceptable) returneres.
 
-Accept-verdien i HTTP kan brukes til å la tjenermaskinen velge beste
-utgave av filen som skal returneres, hvilket gir mest mening når det
-finnes flere varianter av en fil å velge blant, slik en kan ha på
-dokumentbeskrivelse-nivå, men ikke på dokumentobjekt-nivå.
+Accept-verdien i HTTP kan brukes til gi innspill til tjenermaskinen
+når den skal velge beste utgave av en fil å returnere, hvilket gir
+mest mening når det finnes flere varianter av en fil å velge blant.
+Det er her kun mulig på dokumentbeskrivelse-nivå, ikke på
+dokumentobjekt-nivå.
 
-En ide der Accept-hodefeltet blir mer aktuelt er hvis en kan laste ned
-fil(er) knyttet til en dokumentbeskrivelse-entitet, der samme dokument
-finnes i flere formater koblet til ulike dokumentobjekt-entiteter.
+En ide der bruk av Accept-hodefeltet blir mer aktuelt er hvis en kan
+laste ned fil(er) knyttet til en dokumentbeskrivelse-entitet, der
+samme dokument finnes i flere formater koblet til ulike
+dokumentobjekt-entiteter.
 
 Kan det være en ide å gjøre det mulig å be om å få laste ned en av
 flere filer fra et dokumentbeskrivelse-objekt?  Dvs. at
@@ -86,20 +89,21 @@ skal det returneres statuskode 406.
 --------------
 
 Foreslår at vi går for den enkle løsningen i første omgang, og ganske
-enkelt dokumenterer at Accept enten skal mangle, inneholde samme
-MIME-type som i dokumentobjekt eller «*/*» som betyr at et hvilket som
-helst format aksepteres.
+enkelt dokumenterer at Accept enten ikke skal være satt, inneholde
+samme MIME-type som i dokumentobjekt eller «*/*» som betyr at et
+hvilket som helst format aksepteres.
 
-Kapittel 6.1.1.9 (Hente og overføre filer) endres, avsnittet «Gir
-Content-type=filens mime type feks «application/pdf» og filen streames
-til klient» byttes ut med:
+Foreslår derfor at kapittel 6.1.1.9 (Hente og overføre filer) endres,
+avsnittet «Gir Content-type=filens mime type feks «application/pdf» og
+filen streames til klient» byttes ut med:
 
 > «Returnerer filens innhold.  Hodefeltet Content-type settes til
 > filens MIME-type hentet fra dokumentobjekt-entiteten.  Merk,
-> GET-forespørselen bør ikke inneholde HTTPs Accept-hodefelt.  Accept
-> gir beskjed om at et hvilket som helst format ønskes lastet ned, og
-> klienten har ikke noe valg av format og bør derfor ikke forsøke å
-> styre valg av format.  Hvis Accept-hodefeltet er satt, og ikke
-> inneholder enten «*/*» eller er identisk med verdien i
-> mimeType-feltet til tilhørende dokumentobjekt, så skal resultatkoden
-> 406 returneres i stedet for 200.»
+> GET-forespørselen bør ikke inneholde HTTPs Accept-hodefelt.
+> HTTP-hodefeltet Accept brukes til å gi beskjed hvilket helst format
+> som ønskes lastet ned, og klienten har ikke noe valg av format og
+> bør derfor ikke forsøke å styre valg av format.  Hvis
+> Accept-hodefeltet er satt, og ikke inneholder enten «*/*» eller er
+> identisk med verdien i mimeType-feltet til tilhørende
+> dokumentobjekt, så skal resultatkoden 406 returneres i stedet for
+> 200.»
