@@ -72,7 +72,7 @@ hvilke relasjoner som skal være tilstede og funksjonelle i
 den gitte klassen og se at relasjonsoperasjonen er på plass.
 
 Eller kanskje enda bedre, bytt ut listen med konformitetskrav med et
-program med fri programvarelisens som kan brukes til å teste en
+program med fri programvarelisens som kan brukes til å teste om en
 API-implementasjon fungerer som den skal.  Dermed kan enhver som lager
 en tjenestegrensesnitt-implementasjon sjekke om det oppfører seg som
 forventet av dette programmet.
