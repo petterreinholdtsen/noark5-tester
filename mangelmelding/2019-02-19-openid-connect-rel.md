@@ -1,6 +1,8 @@
 Klargjør entydige krav til innloggingssystem
 ============================================
 
+Bør samkjøres med 2017-04-04-login-access.md.
+
  ------------------  ---------------------------------
            Prosjekt  NOARK 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
@@ -59,9 +61,9 @@ gjøre det enklere å støtte ulike innloggingsmekanismer.
 Evrys API støtter i dag Basic-authentisering, men det er uklart for en
 klient hvordan bruke den, da WWW-Authentication-hodefeltet ikke blir
 satt med realm som nettlesere kjenner igjen.  I stedet settes dette
-hodefeltet til "Bearer" (5 ganger, merkelig nok).  Dette illustrerer
-behovet for å definere nærmere hvordan innlogging skal gjøres.
-"Bearer" er forøvrig beskrevet relatert til Oauth 2.0 i [RFC
+hodefeltet til "Bearer" (5 ganger, uvisst av hvilken grunn).  Dette
+illustrerer behovet for å definere nærmere hvordan innlogging skal
+gjøres.  "Bearer" er forøvrig beskrevet relatert til Oauth 2.0 i [RFC
 6750](https://www.rfc-editor.org/rfc/rfc6750.txt).
 
 En måte å annonsere at OpenID Connect er støttet i

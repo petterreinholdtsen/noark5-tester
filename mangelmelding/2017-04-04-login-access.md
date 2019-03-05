@@ -1,6 +1,8 @@
 Klargjøring av innlogging og tilgangskontroll
 =============================================
 
+Bør samkjøres med 2019-02-19-openid-connect-rel.md.
+
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
@@ -24,7 +26,7 @@ I punkt 4.1 (Autentisering) på side 9 står det at «Single Sign On bør
 støttes».  Hva konkret betyr dette?  Er det Kerberos-autentisering ala
 det Microsoft Active Directory tilbyr, eller noe annet?
 
-Det står også at «NOARK5 kjerne må ha metoder for å autentisere
+Det står også at «Noark5 kjerne må ha metoder for å autentisere
 brukere og gi de riktige tilganger til kjernen».  Hva betyr dette?
 Hva er «de riktige tilganger»?  Hva slags granularitet kreves,
 dvs. hvor finkornet tilgangsstyring skal tjenestegrensesnittet ha?  Er
