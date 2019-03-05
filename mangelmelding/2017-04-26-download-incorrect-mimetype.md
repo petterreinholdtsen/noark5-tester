@@ -87,14 +87,14 @@ skal det returneres statuskode 406.
 
 Foreslår at vi går for den enkle løsningen i første omgang, og ganske
 enkelt dokumenterer at Accept enten skal mangle, inneholde samme
-MIME-type som i dokumentobjekt eller '*/*' som betyr at et hvilket som
+MIME-type som i dokumentobjekt eller «*/*» som betyr at et hvilket som
 helst format aksepteres.
 
-Kapittel 6.1.1.9 (Hente og overføre filer) endres, avsnittet "Gir
-Content-type=filens mime type feks âapplication/pdfâ
-og filen streames til klient" byttes ut med:
+Kapittel 6.1.1.9 (Hente og overføre filer) endres, avsnittet «Gir
+Content-type=filens mime type feks «application/pdf» og filen streames
+til klient» byttes ut med:
 
-> Returnerer filens innhold.  Hodefeltet Content-type settes til
+> «Returnerer filens innhold.  Hodefeltet Content-type settes til
 > filens MIME-type hentet fra dokumentobjekt-entiteten.  Merk,
 > GET-forespørselen bør ikke inneholde HTTPs Accept-hodefelt.  Accept
 > gir beskjed om at et hvilket som helst format ønskes lastet ned, og
@@ -102,4 +102,4 @@ og filen streames til klient" byttes ut med:
 > styre valg av format.  Hvis Accept-hodefeltet er satt, og ikke
 > inneholder enten «*/*» eller er identisk med verdien i
 > mimeType-feltet til tilhørende dokumentobjekt, så skal resultatkoden
-> 406 returneres i stedet for 200.
+> 406 returneres i stedet for 200.»
