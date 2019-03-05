@@ -28,18 +28,18 @@ Accept-hodefelt ikke har en verdi som stemmer overens med MIME-typen
 til filen som etterspøres?  Hvis Accept-verdi og filens MIME-type er
 like, er det klart at at filen skal returneres.  Usikkerheten oppstår
 med forespørsler det Accept-verdien ikke passer med filens MIME-type.
-Da har jo klienten eksplisitt sagt at den ikke ønsker en fil på det
+Da har jo klienten eksplisitt sagt at den ikke ønsker en fil med det
 aktuelle formatet.
 
-Hvis en antar at en XML-fil er lagret med MIME-type application/xml,
-og så forsøkes nedlastet med denne forespørselen:
+Anta at en XML-fil er lagret med MIME-type application/xml, og
+deretter bes lastet ned med denne forespørselen:
 
 ```
 GET .../referanseFil
 Accept: application/pdf
 ```
 
-Skal filen returneres, eller skal det returneres en feilmelding?
+Skal filen returneres, eller skal det returneres en feilkode i stedet?
 Alternativt, skal bruken av Accept-hodefeltet i dette API-kallet
 forbys?
 
