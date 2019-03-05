@@ -80,3 +80,8 @@ forventet av dette programmet.
 Hvis det blir avklart at konformitetskravene skal være maskinelt
 testbare, så bidrar jeg gjerne med forslag til formuleringer og
 skriving av program for å teste konformitetsnivå.
+
+Kan det være en ide å flytte oversikten over konformitetskravene fra
+http://rel.kxml.no/noark5/konformitetsniva/ til github-depotet for
+tjenestegrensesnittet, slik at det blir versjonskontrollert og mulig
+for enhver å se hvordan den endrer seg over tid?
