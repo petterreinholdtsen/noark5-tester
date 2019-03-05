@@ -55,35 +55,10 @@ mest mening når det finnes flere varianter av en fil å velge blant.
 Det er her kun mulig på dokumentbeskrivelse-nivå, ikke på
 dokumentobjekt-nivå.
 
-En ide der bruk av Accept-hodefeltet blir mer aktuelt er hvis en kan
-laste ned fil(er) knyttet til en dokumentbeskrivelse-entitet, der
-samme dokument finnes i flere formater koblet til ulike
-dokumentobjekt-entiteter.
-
-Kan det være en ide å gjøre det mulig å be om å få laste ned en av
-flere filer fra et dokumentbeskrivelse-objekt?  Dvs. at
-relasjonsnøkkelen
-'http://rel.kxml.no/noark5/v4/api/arkivstruktur/fil/' legges inn i
-\_links for dokumentbeskrivelse, og at denne kan brukes til å laste
-ned en av de tilhørende dokumentobjekt-filene?  Dermed kunne en laste
-ned enten PDF- eller XLS-fil ved å gjøre en slik forespørsel:
-
-```
-GET .../referanseFil
-Accept: application/pdf; q=0.5, application/vnd.ms-excel,
-```
-
-Det må i så fall beskrives hvordan API-tjenesten skal velge mellom
-likeverdige formater og versjoner.  Det virker naturlig å velge høyest
-tilgjengelig versjon, men det er mer vanskelig å vite hva som skal
-gjøres hvis foretrukket format kun finnes med eldre versjonsnummer.
-En slik tilnærming vil gjøre det vanskeligere for en
-API-implementasjon å vite hvilken fil som skal returneres.
-
-En enklere tilnærming er å beskrive i spesifikasjonen at GET for å
-hente ut en fil ikke skal ha Accept-hodefeltet satt, og hvis det er
-satt og ikke er identisk med MIME-typestrengen i dokumentobjekt så
-skal det returneres statuskode 406.
+En enkel tilnærming er å beskrive i spesifikasjonen at GET for å hente
+ut en fil ikke skal ha Accept-hodefeltet satt, og hvis det er satt og
+ikke er identisk med MIME-typestrengen i dokumentobjekt så skal det
+returneres statuskode 406.
 
 Ønsket endring
 --------------
