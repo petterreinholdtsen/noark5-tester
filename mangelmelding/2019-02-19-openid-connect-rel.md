@@ -26,18 +26,15 @@ leverandøruavhengige klienter og bidrar til innlåsing.  Det bør derfor
 spesifiseres i mer detalj hvordan innlogging skal fungere, for å sikre
 at alle leverandører gjør det på samme måte.
 
-Her er det som står i spesifikasjonen om innlogging i dag:
+Her er det som står i spesifikasjonen om innlogging/autentisering i dag:
 
-  Autentisering
-  ~~~~~~~~~~~~~
-  
-  NOARK5 kjerne må ha metoder for å autentisere brukere og gi de
-  riktige tilganger til kjernen.
-
-  Single Sign On bør støttes.
-
-  For REST er Basic autentication minimum for autentisering og en bør
-  støtte SAML 2.0 og OpenID Connect.
+> NOARK5 kjerne må ha metoder for å autentisere brukere og gi de
+> riktige tilganger til kjernen.
+>
+> Single Sign On bør støttes.
+>
+> For REST er Basic autentication minimum for autentisering og en bør
+> støtte SAML 2.0 og OpenID Connect.
 
 Det mangler en forklaring på hva som menes med "Single Sign On bør
 støttes", og referanser til standardene som definerer
