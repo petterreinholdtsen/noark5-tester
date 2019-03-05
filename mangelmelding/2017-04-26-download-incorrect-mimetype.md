@@ -49,24 +49,17 @@ at Accept-hodefeltet er frivillig, men hvis det finnes og
 tjenermaskinen ikke kan sende en akseptabel respons så skal statuskode
 406 (not acceptable) returneres.
 
-Accept-verdien i HTTP kan brukes til gi innspill til tjenermaskinen
-når den skal velge beste utgave av en fil å returnere, hvilket gir
-mest mening når det finnes flere varianter av en fil å velge blant.
-Det er her kun mulig på dokumentbeskrivelse-nivå, ikke på
-dokumentobjekt-nivå.
-
-En enkel tilnærming er å beskrive i spesifikasjonen at GET for å hente
-ut en fil ikke skal ha Accept-hodefeltet satt, og hvis det er satt og
-ikke er identisk med MIME-typestrengen i dokumentobjekt så skal det
-returneres statuskode 406.
+En enkel tilnærming er å beskrive i spesifikasjonen hvorvidt en 
+GET-forespørsel for å hente ut en fil skal ha Accept-hodefeltet satt, 
+og hvis det er satt og ikke er identisk med MIME-typestrengen i 
+dokumentobjekt så skal det returneres statuskode 406.
 
 Ønsket endring
 --------------
 
-Foreslår at vi går for den enkle løsningen i første omgang, og ganske
-enkelt dokumenterer at Accept enten ikke skal være satt, inneholde
-samme MIME-type som i dokumentobjekt eller «*/*» som betyr at et
-hvilket som helst format aksepteres.
+Foreslår at standarden enkelt dokumenterer at Accept enten ikke skal være 
+satt, inneholde samme MIME-type som i dokumentobjekt eller «*/*» som betyr 
+at et hvilket som helst format aksepteres.
 
 Foreslår derfor at kapittel 6.1.1.9 (Hente og overføre filer) endres,
 avsnittet «Gir Content-type=filens mime type feks «application/pdf» og
