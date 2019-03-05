@@ -51,7 +51,7 @@ et bestemt skjema?  Spesifikasjonen er uklar på XML-formatteringen,
 slik at det vanskelig å vite hvilket skjema som i så fall skal brukes.
 
 Det hadde vært fint om kravene refererte til deler av spesifikasjoen,
-og var formulert på en måte som tillot automatisk testing av ET API
+og var formulert på en måte som tillot automatisk testing av et API
 for å finne konformitetsnivå.
 
 Jeg mistenker Nikita Noark 5 Core allerede oppfyller alle basiskrav,
@@ -60,4 +60,13 @@ men det er vanskelig å vite når beskrivelsen av kravene er så kort.
 Ønsket endring
 --------------
 
-FIXME foreslå konkrete forbedringer
+Skriv om konformitetskravene til å henvise til spesifikasjonsteksten,
+og sikre at de ulike kravene kan testes maskinelt slik at det er mulig
+å kjøre et program som snakker med API-tjenesten for å kontrollere om
+den er konform eller ikke.
+
+Eller kanskje enda bedre, bytt ut listen med konformitetskrav med et
+program med fri programvarelisens som kan brukes til å teste en
+API-implementasjon fungerer som den skal.  Dermed kan enhver som lager
+en tjenestegrensesnitt-implementasjon sjekke om det oppfører seg som
+forventet av dette programmet.
