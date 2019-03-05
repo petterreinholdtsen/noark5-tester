@@ -10,7 +10,7 @@ Skal klasse ha relasjonsnøklene (ny-)klassifikasjonssystem?
         Dokumentdel  7.2.1.12
          Sidenummer  115
         Linjenummer  n/a
-    Innsendingsdato  2019-02-09
+    Innsendingsdato  2019-02-09 (github issue #67)
  ------------------  ---------------------------------
 
 Beskrivelse

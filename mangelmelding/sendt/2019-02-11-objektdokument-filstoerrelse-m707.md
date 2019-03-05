@@ -10,7 +10,7 @@ Klargjør formatet på dokumentobjekt.filstoerrelse  (M707)
         Dokumentdel  6.2.1.7 (Dokumentobjekt)
          Sidenummer  105
         Linjenummer  n/a
-    Innsendingsdato  2019-02-11
+    Innsendingsdato  2019-02-11 (github issue #69)
  ------------------  ---------------------------------
 
 Beskrivelse
