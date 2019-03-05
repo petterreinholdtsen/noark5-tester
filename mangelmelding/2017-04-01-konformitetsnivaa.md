@@ -23,10 +23,10 @@ Gjelder også vedlegg 1 på side 267.
 
 Spesifikasjonen referer til
 [http://rel.kxml.no/noark5/konformitetsniva/](http://rel.kxml.no/noark5/konformitetsniva/)
-som inneholder foreløbig liste med konformitetsnivåer for krav som må
+som inneholder foreløpig liste med konformitetsnivåer for krav som må
 oppfylles for at en implementasjon skal oppfylle et gitt
 konformitetsnivå.  Men listen er veldig kort og det er vanskelig å
-vite når et kraver oppfylt eller ikke.  Finnes det flere detaljer om
+vite når et krav er oppfylt eller ikke.  Finnes det flere detaljer om
 hva de ulike kravene innebærer?
 
 F.eks. for grunnleggende nivå 0 (basiskrav), sier listen på den
@@ -66,7 +66,10 @@ men det er vanskelig å vite når beskrivelsen av kravene er så kort.
 Skriv om konformitetskravene til å henvise til spesifikasjonsteksten,
 og sikre at de ulike kravene kan testes maskinelt slik at det er mulig
 å kjøre et program som snakker med API-tjenesten for å kontrollere om
-den er konform eller ikke.
+den er konform eller ikke.  En måte å gjøre dette på er å henvise til
+hvilke relasjoner som skal være tilstede og funksjonelle i
+\_links-listen for en gitt klasse, slik at en kan opprette objekter av
+den gitte klassen og se at relasjonsoperasjonen er på plass.
 
 Eller kanskje enda bedre, bytt ut listen med konformitetskrav med et
 program med fri programvarelisens som kan brukes til å teste en
