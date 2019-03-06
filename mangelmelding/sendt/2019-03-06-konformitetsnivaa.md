@@ -1,4 +1,4 @@
-Konformitetsnivå bør beskrives slik at det kan automatisk testes
+Konformitetsnivå bør beskrives slik at det automatisk kan testes
 ================================================================
 
  ------------------  ---------------------------------
@@ -10,7 +10,7 @@ Konformitetsnivå bør beskrives slik at det kan automatisk testes
         Dokumentdel  3
          Sidenummer  9
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-03-06 (github issue #73)
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -19,15 +19,15 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-Gjelder også vedlegg 1 på side 267.
+Gjelder også vedlegg 1 (Konformitetskrav) på side 267.
 
-Spesifikasjonen referer til
+For konformitetskrav referer spesifikasjonen til
 [http://rel.kxml.no/noark5/konformitetsniva/](http://rel.kxml.no/noark5/konformitetsniva/)
 som inneholder foreløpig liste med konformitetsnivåer for krav som må
 oppfylles for at en implementasjon skal oppfylle et gitt
-konformitetsnivå.  Men listen er veldig kort og det er vanskelig å
-vite når et krav er oppfylt eller ikke.  Finnes det flere detaljer om
-hva de ulike kravene innebærer?
+konformitetsnivå.  Men slik listen er utformet er det vanskelig å vite
+når et krav er oppfylt eller ikke.  Finnes det flere detaljer om hva
+de ulike kravene innebærer?
 
 F.eks. for grunnleggende nivå 0 (basiskrav), sier listen på den
 omtalte websiden ganske enkelt
@@ -52,6 +52,9 @@ ut informasjon i JSON eller XML, eller må en kunne bruke POST og PUT i
 begge formatene for å fylle kravene?  Må det brukte XML-formatet følge
 et bestemt skjema?  Spesifikasjonen er uklar på XML-formatteringen,
 slik at det vanskelig å vite hvilket skjema som i så fall skal brukes.
+Jeg tror det er bedre å droppe krav om XML, og i stedet konsentrere
+seg om kun JSON, se mangelmelding
+[#57](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/57).
 
 Det hadde vært fint om kravene refererte til deler av spesifikasjoen,
 og var formulert på en måte som tillot automatisk testing av et API
@@ -67,15 +70,17 @@ Skriv om konformitetskravene til å henvise til spesifikasjonsteksten,
 og sikre at de ulike kravene kan testes maskinelt slik at det er mulig
 å kjøre et program som snakker med API-tjenesten for å kontrollere om
 den er konform eller ikke.  En måte å gjøre dette på er å henvise til
-hvilke relasjoner som skal være tilstede og funksjonelle i
-\_links-listen for en gitt klasse, slik at en kan opprette objekter av
-den gitte klassen og se at relasjonsoperasjonen er på plass.
+hvilke relasjoner som skal være tilstede \_links-listen for en gitt
+klasse, og hvilke operasjoner som skal fungere mot dem
+(GET/POST/PUT/DELETE/PATCH), slik at en kan opprette objekter av den
+gitte klassen og se at relasjonsoperasjonen er på plass og fungerer
+som de skal.
 
-Eller kanskje enda bedre, bytt ut listen med konformitetskrav med et
-program med fri programvarelisens som kan brukes til å teste om en
-API-implementasjon fungerer som den skal.  Dermed kan enhver som lager
-en tjenestegrensesnitt-implementasjon sjekke om det oppfører seg som
-forventet av dette programmet.
+Eller kanskje enda bedre, bytt ut fritekstlisten med konformitetskrav
+med et program med fri programvarelisens som kan brukes til å teste om
+en API-implementasjon fungerer som den skal.  Dermed kan enhver som
+lager en tjenestegrensesnitt-implementasjon sjekke om det oppfører seg
+som forventet av dette programmet.
 
 Hvis det blir avklart at konformitetskravene skal være maskinelt
 testbare, så bidrar jeg gjerne med forslag til formuleringer og
@@ -84,4 +89,12 @@ skriving av program for å teste konformitetsnivå.
 Kan det være en ide å flytte oversikten over konformitetskravene fra
 http://rel.kxml.no/noark5/konformitetsniva/ til github-depotet for
 tjenestegrensesnittet, slik at det blir versjonskontrollert og mulig
-for enhver å se hvordan den endrer seg over tid?
+for enhver å bidra samt se hvordan kravlisten endrer seg over tid?
+
+Respons
+-------
+
+Ingen respons fra Arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/73
