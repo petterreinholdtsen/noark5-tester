@@ -35,15 +35,16 @@ register over offisielle
 MIME-typer](https://www.iana.org/assignments/media-types/media-types.xhtml).
 
 Det er uklart fra spesifikasjonen om feltet kun skal inneholde
-mediatypen (dvs. type/undertype) eller om det også skal inneholde
-parametre som tegnsett.  Parameter er svært nyttig for tekstformat,
-der en kan oppgi hvilket tegnsett som er brukt.  Tilsvarende
-informasjon kan muligens legges inn i metadatafeltene format (M701) og
-formatDetaljer (M702), men det er ikke definert nærmere hva
-formatDetaljer skal inneholde.  Derimot er det veldefinert i
-HTTP-standarden hva parameteret betyr.  For eksempel vil formatet
-RA-TEKST kunne ha en av følgende mimeType-verdier, som entydig
-definerer hvilket tegnsett som er brukt i teksten:
+mediatypen (dvs. være på formen «type/undertype») eller om det også
+kan inneholde parametre som tegnsett.  Parameter er svært nyttig for
+tekstformat, der en kan oppgi hvilket tegnsett som er brukt.
+Tilsvarende informasjon kan muligens legges inn i metadatafeltene
+format (M701) og formatDetaljer (M702), men det er ikke definert
+nærmere hva formatDetaljer skal inneholde.  Derimot er det ganske godt
+definert i HTTP-standarden hva parameter i Content-type-hodefeltet
+betyr.  For eksempel vil formatet RA-TEKST kunne ha en av følgende
+mimeType-verdier, som entydig definerer hvilket tegnsett som er brukt
+i teksten:
 
  * text/plain; charset=UTF-8
  * text/plain; charset=ISO-8859-1
@@ -52,10 +53,15 @@ Det er naturligvis mange flere mulige mimeType-verdier som kan gjelde
 for RA-TEKST.
 
 Tilsvarende formatet RA-XML antagelig kunne representeres med mange
-forskjellige mimeType-verdier, med og uten parameter:
+forskjellige mimeType-verdier, med og uten parameter.  Her er noen
+eksempler:
 
  * application/xml; charset=UTF-8
  * image/svg+xml
+
+FIXME drøft hvordan PRONOM-formatkoder påvirker dette.
+
+FIXME drøft mulige kilder til feltverdien
 
 Ønsket endring
 --------------
