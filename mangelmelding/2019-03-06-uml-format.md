@@ -35,7 +35,8 @@ liste.
 Har testet endel av dem, og PlantUML ser ut til å være et bra
 alternativ for vedlikehold av UML-diagrammer.  Nettsiden
 http://plantuml.com/class-diagram har mer informasjon om formatet.
-Her er et eksempel på hvordan UML-diagram fra kapittel 7 med tittelen
+
+Her er et eksempel på hvordan UML-diagram fra kapittel 7 merket
 "LoggingOgSporing - (diagram)" kan se ut i PlantUML-format:
 
 ```
@@ -53,11 +54,54 @@ class Endringslogg {
 @enduml
 ```
 
+Her er et enklere eksempler fra delen om Kodelister i kapittel 7,
+figuren merket "Metadata - (diagram)" som PlantUML:
+
+```
+@startuml
+class SystemID << simple >>
+class BasicTypes::string << simple >>
+BasicTypes::string <|-- SystemID
+@enduml
+```
+
+Til slutt et mer komplekst eksempel figuren merket "Sakarkiv -
+(diagram)" i delen om Sakarkiv i kapittel 7:
+
+```
+@startuml uml-sakarkiv-entiteter.puml
+Arkivstruktur::Registrering <|-- Arkivstruktur::Basisregistrering
+Arkivstruktur::Basisregistrering <|-- Journalpost
+Arkivstruktur::Mappe <|-- Saksmappe
+
+Arkivstruktur::Mappe "+mappe 0..1" *--> "+registrering 0..*" Arkivstruktur::Registrering
+Arkivstruktur::Mappe *--> "+undermappe 0..*" Arkivstruktur::Mappe
+
+Saksmappe *--> "+sakspart 0..*" Sakspart
+Saksmappe "+sak 0..*" o--> "+presedens 0..*" Presedens
+Presedens "+presedens 0..*" <--o "+journalpost 0..*" Journalpost
+
+Journalpost *--> "+korrespondansepart 0..*" Korrespondansepart
+Journalpost *--> "+avskrivning 0..*" Avskrivning
+Journalpost *--> "+dokumentflyt 0..*" Dokumentflyt
+
+Arkivstruktur::Registrering "+registrering 1..*" *--> "+dokumentbeskrivelse 0..*" Arkivstruktur::Dokumentbeskrivelse
+@enduml
+```
+
+For denne siste er jeg i tvil om jeg har modellert riktig, da
+originalfiguren har aggregeringslenker med pil begge veier, og det er
+en relasjon jeg ikke har funnet i beskrivelser av UML og ikke helt
+forstår hva betyr.
+
 Ønsket endring
 --------------
 
-Velge et fri programvarebasert tekstformat for vedlikeholde
-UML-diagrammer fremover, fortrinsvis PlantUML, og så omforme alle
-dagens UML-diagrammer til PlantUML-format.  Deretter må det lages
+Velg et fri programvarebasert tekstformat for vedlikeholde
+UML-diagrammer fremover.  Jeg anbefaler PlantUML-format, men er åpen
+for bedre alternativer hvis det finnes.  Deretter må alle dagens
+UML-diagrammer omformes til ønsket format.  Deretter må det lages
 byggeregler for å lage PNG eller SVG-utgaver automatisk fra
 tekstfilene for bruk i web- og PDF-utgave av spesifikasjonen.
+
+Jeg kan bidra med omforming og justering av byggeregler.
