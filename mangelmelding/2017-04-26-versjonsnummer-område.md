@@ -24,7 +24,7 @@ Spesifikasjonens del 7.2.1.7 (Dokumentobjekt) side 101 nevner ikke hva
 som er gyldige verdier for versjonsnummer i dokumentobjekt.  Den
 forklarer heller ikke hvilken verdi versjonnummeret som tildeltes et
 nytt dokument skal ha.  Skal det være 0, 1 eller et annet tall.  Den
-sier heller ingenting om versjoner skal tildeles stigende eller
+sier heller ingenting om versjoner skal tildeles med stigende eller
 fallende rekkefølge.
 
 Svarene på disse spørsmålene er heller ikke oppgitt i Noark
@@ -57,15 +57,15 @@ verdier feltet kan ha, samt forklare hva som skal gjøres hvis det går
 over maksgrensen?
 
 Gitt at det sjelden er mange versjoner av et dokument i arkivet, så
-kan det være greit å si at verdien er positivt 32-bits tall, dvs. at
+kan det være greit å si at verdien er et positivt 32-bits tall, dvs. at
 versjonsnummer går fra 0 til 2^31-1 = 2147483647.  Erfaring fra dagens
-arkiver tyder på at det holder.  Et spørmål med begrenset verdiområde
+arkiver tyder på at det holder.  Et spørsmål med begrenset verdiområde
 er hva som skal gjøres hvis en har kommet til versjon 2147483647 og
 ønsker å laste opp en ny versjon.  Det er to åpenbare muligheter.
 Enten må dokumentet nektes arkivert, eller så må det opprettes et nytt
 dokument med versjonsnummer 0.  Det siste virker å være eneste
-fornuftige løsning, da å nekte arkivering av et dokument vel ikke er
-lovlig.  Alternativt kan verdien stige eller synke i det uenderlige,
+fornuftige løsning, da å nekte arkivering av et dokument er vel ikke
+lovlig.  Alternativt kan verdien stige eller synke i det uendenlige,
 og implementasjoner må håndtere dette på vanlig måte.
 
 Det er uklart om det er greit med hull i versjonsnummer-serien.  Slike
