@@ -10,7 +10,7 @@ Vedlikeholde UML-diagrammer som tekstfiler med kommandolinjeverktøy for PNG-omf
         Dokumentdel  n/a
          Sidenummer  n/a
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-03-07 (github issue #76)
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -105,3 +105,11 @@ byggeregler for å lage PNG eller SVG-utgaver automatisk fra
 tekstfilene for bruk i web- og PDF-utgave av spesifikasjonen.
 
 Jeg kan bidra med omforming og justering av byggeregler.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/76 .
