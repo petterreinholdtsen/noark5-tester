@@ -57,16 +57,18 @@ verdier feltet kan ha, samt forklare hva som skal gjøres hvis det går
 over maksgrensen?
 
 Gitt at det sjelden er mange versjoner av et dokument i arkivet, så
-kan det være greit å si at verdien er et positivt 32-bits tall, dvs. at
-versjonsnummer går fra 0 til 2^31-1 = 2147483647.  Erfaring fra dagens
-arkiver tyder på at det holder.  Et spørsmål med begrenset verdiområde
-er hva som skal gjøres hvis en har kommet til versjon 2147483647 og
-ønsker å laste opp en ny versjon.  Det er to åpenbare muligheter.
-Enten må dokumentet nektes arkivert, eller så må det opprettes et nytt
-dokument med versjonsnummer 0.  Det siste virker å være eneste
-fornuftige løsning, da å nekte arkivering av et dokument er vel ikke
-lovlig.  Alternativt kan verdien stige eller synke i det uendenlige,
-og implementasjoner må håndtere dette på vanlig måte.
+kan det være greit å si at verdien for eksempel er et positivt 32-bits
+tall, dvs. at versjonsnummer går fra 0 til 2^31-1 = 2147483647.
+Erfaring fra dagens arkiver tyder på at det holder.  Et spørsmål med
+begrenset verdiområde er hva som skal gjøres hvis en har kommet til
+versjon 2147483647 og ønsker å laste opp en ny versjon.  Det er to
+åpenbare muligheter.  Enten må dokumentet nektes arkivert, eller så må
+det opprettes et nytt dokument med versjonsnummer 0.  Det siste virker
+å være eneste fornuftige løsning, da å nekte arkivering av et dokument
+er vel ikke lovlig.  Alternativt kan verdien stige eller synke i det
+uendenlige, og implementasjoner må håndtere dette på en eller annen
+måte.  Det kan gi problemer med lagring i SQL-databaser, som sjelden
+har heltallstyper som kan håndtere uendelig mange siffer.
 
 Det er uklart om det er greit med hull i versjonsnummer-serien.  Slike
 hull vil oppstå hvis en (midlertidig) versjon av det dokument blir
@@ -76,8 +78,24 @@ med versjonsnummerhull eller ikke.  Alternativet er at dokumenter får
 nye versjonsnummer hvis et dokument slettes, med de utfordringer det
 gir.
 
-Jeg tror det er best å telle versjonsnummer oppover fra 0, akseptere
-hull og ikke ha øvre begrensning på versjonsnummer.
+Det er flere alternativer her, og mitt forslag er at første
+versjonummer settes til 0, og at det telles oppover derfra.  Det
+sikrer at verdien kan håndteres som et ikke-negativt heltall og at
+samtlige mulige verdier uansett bitlengde på feltet er et lovlig
+versjonsnummer.  Det oppnår en ikke hvis en starter på 1.
+
+Jeg foreslår videre at det aksepteres hull i sekvensen, som slik
+dokumenterer at tidligere versjoner er slettet.
+
+Jeg er sterkt i tvil om det bør legges inn et øvre tak på verdiene.
+Hvis det legges inn et tak, så må det også beskrives hva som skal
+gjøres når en når taket.  Det blir dermed en enklere
+spesifikasjonstekst uten tak.  Ulempen er at det blir vanskelig å ha
+SQL-database som lagringsløsning uten en slik begrensing, og de som
+implementerer tjenestegrensesnittet med SQL-database kan måtte selv
+finne på hva de skal gjøre hvis versjonsnummeret blir for stort.
+Foreslår i første omgang ikke noe tak, da jeg er usikker på hva som
+bør beskrives i tilfelle taket nås.
 
 Ønsket endring
 --------------
@@ -92,11 +110,11 @@ Klargjør også om det er en minste eller største verdi for
 versjonsnummer, og hva som eventuelt skal gjøres hvis en kommer til
 grensen og ønsker laste opp nok en versjon.
 
-Endre definisjonen av versjonsnummer for klassen dokumentobjekt, endre
-"Identifikasjon av versjoner innenfor ett og samme dokument" til
+Konkret foreslår jeg å endre definisjonen av versjonsnummer for
+klassen dokumentobjekt, og legge til følgende etter "Identifikasjon av
+versjoner innenfor ett og samme dokument":
 
-> Identifikasjon av versjoner innenfor ett og samme dokument.  Første
-> versjon får nummer 0, deretter påfølgende heltall i stigende
+> Første versjon får nummer 0, deretter påfølgende heltall i stigende
 > rekkefølge (1, 2, 3, ...).  Det er ok med "hull" i
 > versjonsnummer-sekvensen, da dette dokumenterer hvilke tidligere
 > versjoner av dokumentet som er fjernet.
