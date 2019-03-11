@@ -205,8 +205,8 @@ class Importer(n5core.endpoint.Endpoint):
         rel = self.relbase + '/arkivstruktur/ny-dokumentobjekt/'
         info = self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, {})
         
-    def loaddir(self):
-        path = os.path.join(self.basedir, "arkivstruktur.xml")
+    def loaddir(self, basedir):
+        path = os.path.join(basedir, "arkivstruktur.xml")
         print(path)
         parser = etree.XMLParser(remove_blank_text=True)
         fh = open(path)
