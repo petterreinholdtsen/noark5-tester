@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<arkiv xmlns="http://www.arkivverket.no/standarder/noark5/arkivstruktur" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <systemID>2352ef5c-44d7-11e9-aa7c-c3509cea2e16</systemID>
+ <tittel>Arkivtittel</tittel>
+ <beskrivelse>Arkivbeskrivelse</beskrivelse>
+ <arkivstatus>Avsluttet</arkivstatus>
+ <dokumentmedium>Elektronisk arkiv</dokumentmedium>
+ <opprettetDato>2018-01-01T12:00:00Z</opprettetDato>
+ <opprettetAv>Arkivets Oppretter</opprettetAv>
+ <avsluttetDato>2018-12-31T12:00:00Z</avsluttetDato>
+ <avsluttetAv>Arkivets Avslutter</avsluttetAv>
+ <arkivskaper>
+  <arkivskaperID>5af99ff0-44d7-11e9-9020-0bd28a89a956</arkivskaperID>
+  <arkivskaperNavn>Arkiv Skaper</arkivskaperNavn>
+  <beskrivelse>Arkivskaperbeskrivelse</beskrivelse>
+ </arkivskaper>
+ <arkivdel>
+  <systemID>86901dd8-44d7-11e9-a179-f3deb50c8c40</systemID>
+  <tittel>Arkivdeltittel</tittel>
+  <beskrivelse>Arkivdelbeskrivelse</beskrivelse>
+  <arkivdelstatus>Avsluttet periode</arkivdelstatus>
+  <dokumentmedium>Elektronisk arkiv</dokumentmedium>
+  <opprettetDato>2018-01-01T12:00:01Z</opprettetDato>
+  <opprettetAv>Arkivdels Oppretter</opprettetAv>
+  <avsluttetDato>2018-12-31T12:00:00Z</avsluttetDato>
+  <avsluttetAv>Arkivdels Avslutter</avsluttetAv>
+  <arkivperiodeStartDato>2018-01-01</arkivperiodeStartDato>
+  <arkivperiodeSluttDato>2018-12-31</arkivperiodeSluttDato>
+
+  <mappe xsi:type="saksmappe">
+    <systemID>f017c06c-44d7-11e9-b28c-cf0ada64bffd</systemID>
+    <mappeID>mappe1</mappeID>
+    <tittel>Eating the cake - 1</tittel>
+    <offentligTittel>offentligTittel1</offentligTittel>
+    <beskrivelse>Beskrivelse for Mappe1</beskrivelse>
+    <noekkelord>nøkkelordMappe1</noekkelord>
+    <dokumentmedium>Elektronisk arkiv</dokumentmedium>
+    <opprettetDato>2018-01-02T12:00:00Z</opprettetDato>
+    <opprettetAv>Mappe OpprettetAv</opprettetAv>
+    <avsluttetDato>2018-12-01T12:00:00Z</avsluttetDato>
+    <avsluttetAv>Saksmappe Avsluttetav</avsluttetAv>
+    <referanseArkivdel>arkivdel57d6608566c0b9.14601960</referanseArkivdel>
+    <kryssreferanse>
+      <referanseTilMappe>Mappe2</referanseTilMappe>
+    </kryssreferanse>
+    <merknad>
+      <merknadstekst>enMerknad</merknadstekst>
+      <merknadstype>Merknad fra saksbehandler</merknadstype>
+      <merknadsdato>1865-02-13T00:00:00Z</merknadsdato>
+      <merknadRegistrertAv>enSaksbehandler</merknadRegistrertAv>
+    </merknad>
+    <kassasjon>
+      <kassasjonsvedtak>Kasseres</kassasjonsvedtak>
+      <kassasjonshjemmel>enHjemmel</kassasjonshjemmel>
+      <bevaringstid>45</bevaringstid>
+      <kassasjonsdato>1942-07-25</kassasjonsdato>
+    </kassasjon>
+    <registrering xsi:type="basisregistrering">
+      <systemID>41846752-44d8-11e9-be51-0fe5fe2cd1f8</systemID>
+      <opprettetDato>1863-10-18T00:00:00Z</opprettetDato>
+      <opprettetAv>Basisregistrering OpprettetAv</opprettetAv>
+      <arkivertDato>1863-10-10T00:00:00Z</arkivertDato>
+      <arkivertAv>Basisregistrering Arkivertav</arkivertAv>
+      <skjerming>
+        <tilgangsrestriksjon>Personalsaker</tilgangsrestriksjon>
+        <skjermingshjemmel>Unntatt etter Offentleglova</skjermingshjemmel>
+        <skjermingMetadata>Skjermet</skjermingMetadata>
+        <skjermingDokument>Skjerming av hele dokumentet</skjermingDokument>
+        <skjermingsvarighet>60</skjermingsvarighet>
+        <skjermingOpphoererDato>1942-07-25</skjermingOpphoererDato>
+      </skjerming>
+      <gradering>
+        <gradering>Strengt hemmelig (sikkerhetsgrad)</gradering>
+        <graderingsdato>1865-02-13T00:00:00Z</graderingsdato>
+        <gradertAv>PST</gradertAv>
+        <nedgraderingsdato>2070-02-13T12:00:00</nedgraderingsdato>
+        <nedgradertAv>PST</nedgradertAv>
+      </gradering>
+      <dokumentbeskrivelse>
+        <systemID>46e05242-44d8-11e9-9c03-4385e3848e70</systemID>
+        <dokumenttype>Ordrebekreftelser</dokumenttype>
+        <dokumentstatus>Dokumentet er ferdigstilt</dokumentstatus>
+        <tittel>mappe1 - registering1</tittel>
+        <beskrivelse>mappe1 - registering1</beskrivelse>
+        <forfatter>Dokumentbeskrivelse forfatter</forfatter>
+        <opprettetDato>1864-07-21T00:00:00Z</opprettetDato>
+        <opprettetAv>Dokumentbeskrivelse Opprettetav</opprettetAv>
+        <dokumentmedium>Elektronisk arkiv</dokumentmedium>
+        <referanseArkivdel>arkivdel57d6608566c0b9.14601960</referanseArkivdel>
+        <tilknyttetRegistreringSom>Hoveddokument</tilknyttetRegistreringSom>
+        <dokumentnummer>1</dokumentnummer>
+        <tilknyttetDato>1864-05-04T00:00:00Z</tilknyttetDato>
+        <tilknyttetAv>Dokumentbeskrivelse TilknyttetAv</tilknyttetAv>
+        <skjerming>
+          <tilgangsrestriksjon>skjeming dokumentbeskrivelse</tilgangsrestriksjon>
+          <skjermingshjemmel>Unntatt etter Offentleglova</skjermingshjemmel>
+          <skjermingMetadata>Skjermet</skjermingMetadata>
+          <skjermingDokument>Skjerming av hele dokumentet</skjermingDokument>
+          <skjermingsvarighet>40</skjermingsvarighet>
+          <skjermingOpphoererDato>1941-01-10</skjermingOpphoererDato>
+        </skjerming>
+        <dokumentobjekt>
+          <versjonsnummer>1</versjonsnummer>
+          <variantformat>Arkivformat</variantformat>
+          <format>text</format>
+          <formatDetaljer>UTF-8 encoded text</formatDetaljer>
+          <opprettetDato>1864-10-09T00:00:00Z</opprettetDato>
+          <opprettetAv>Dokumentobjekt OpprettetAv</opprettetAv>
+          <referanseDokumentfil>dokumenter/simple.txt</referanseDokumentfil>
+          <sjekksum>a3ce62f74f4d75a7f9476283ccedb75ae2854a4f1d079a839564584d3fa0c417</sjekksum>
+          <sjekksumAlgoritme>SHA-256</sjekksumAlgoritme>
+          <filstoerrelse>32</filstoerrelse>
+        </dokumentobjekt>
+      </dokumentbeskrivelse>
+      <registreringsID>mappe1/jrnpst-1</registreringsID>
+      <tittel>Eating the cake1 - Application to eat cake1</tittel>
+      <offentligTittel>Eating the cake1 - Application to eat cake1</offentligTittel>
+      <beskrivelse>Eating the cake1 - Application to eat cake1</beskrivelse>
+      <noekkelord>nøkkelordJrnpst1</noekkelord>
+      <forfatter>Basisregistrering Forfatter</forfatter>
+      <dokumentmedium>Elektronisk arkiv</dokumentmedium>
+      <korrespondansepart>
+        <korrespondanseparttype>Kopimottaker</korrespondanseparttype>
+        <korrespondansepartNavn>Riksarkivet</korrespondansepartNavn>
+        <postadresse>Sognsvann 12</postadresse>
+        <postnummer>0666</postnummer>
+        <poststed>Oslo</poststed>
+        <land>Norge</land>
+        <epostadresse>123@epost.no</epostadresse>
+        <telefonnummer>22221111</telefonnummer>
+        <kontaktperson>EnKontaktPerson</kontaktperson>
+        <administrativEnhet>DT</administrativEnhet>
+        <saksbehandler>Korrespondansepart Saksbehandler</saksbehandler>
+      </korrespondansepart>
+      <avskrivning>
+        <avskrivningsdato>2018-12-31</avskrivningsdato>
+        <avskrevetAv>Avskrivning AvskrevetAv</avskrevetAv>
+        <avskrivningsmaate>Besvart med e-post</avskrivningsmaate>
+      </avskrivning>
+    </registrering>
+    
+    <saksaar>2018</saksaar>
+    <sakssekvensnummer>1</sakssekvensnummer>
+    <saksdato>2018-01-01</saksdato>
+    <administrativEnhet>DT</administrativEnhet>
+    <saksansvarlig>Mappe Saksansvarlig</saksansvarlig>
+    <journalenhet>journalseksjonen</journalenhet>
+    <saksstatus>Avsluttet</saksstatus>
+    <sakspart>
+      <sakspartID>Sakspart1</sakspartID>
+      <sakspartNavn>Queen of Hearts</sakspartNavn>
+      <sakspartRolle>Queen</sakspartRolle>
+      <postadresse>Rabbithole 12</postadresse>
+      <postnummer>0666</postnummer>
+      <poststed>Oslo</poststed>
+      <land>Norge</land>
+      <epostadresse>queen@hearts.com</epostadresse>
+      <telefonnummer>22221122</telefonnummer>
+      <kontaktperson>Alice</kontaktperson>
+    </sakspart>
+  </mappe>
+  
+ </arkivdel>
+</arkiv>
