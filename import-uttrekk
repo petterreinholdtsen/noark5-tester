@@ -113,7 +113,9 @@ class Importer(n5core.endpoint.Endpoint):
                     self.output('ignoring field %s [%s]' % (field, sub.text))
         if self.verbose or self.dryrun:
             self.output("POST: %s" % data)
-        if not self.dryrun:
+        if self.dryrun:
+            info = None
+        else:
             if self.verbose:
                 print()
                 print("Creating %s: %s" % (name, data))
