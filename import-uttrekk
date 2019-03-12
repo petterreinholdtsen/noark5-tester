@@ -24,6 +24,13 @@ from lxml import etree
 
 import n5core.endpoint
 
+# FIXME figure out a better way to handle formats?
+formatmap = {
+    'pdf':   ('PDF', 'application/pdf'),
+    'pdf/a': ('RA-PDF', 'application/pdf'),
+    'text':  ('RA-TEXT', 'text/plain'),
+}
+
 strukturns = 'http://www.arkivverket.no/standarder/noark5/arkivstruktur'
 
 tagarkiv                 = '{%s}arkiv' % strukturns
@@ -96,6 +103,20 @@ class Importer(n5core.endpoint.Endpoint):
                     elif data[f] != info[f]:
                         print("error: field %s=%s do not match object value %s" %  (f, data[f], info[f]))
         return info
+
+    # Copied from import-email
+    def object_operation(self, info, relation):
+        """
+Return the URL/href for a given relation on the object represented by
+the json structure.
+
+    """
+        if info is None or '_links' not in info:
+            return None
+        for l in info['_links']:
+            if l['rel'] == relation:
+                return l['href']
+        return None
 
     def import_entity(self, name, rel, parentinfo, element, subs, exclude=()):
         self.nesting += 1
@@ -243,8 +264,32 @@ class Importer(n5core.endpoint.Endpoint):
         info = self.import_entity('dokumentobjekt', rel, parentinfo, element, {},
                                   exclude=exclude)
         
+        paths = list(element.iterchildren('{%s}referanseDokumentfil' % strukturns))
+        if 1 < len(paths):
+            raise ValueError('more than one referanseDokumentfil field is not allowed')
+        filepath = os.path.join(self.basedir, paths[0].text)
+        try:
+            with open(filepath) as content:
+                size = os.path.getsize(filepath)
+                format = formatmap[info['format']][1]
+                print("Opened %s size %d format %s" % (filepath, size, format))
+                uploadrel = self.relbase + '/arkivstruktur/fil/'
+                newfilehref = self.object_operation(info, uploadrel)
+                if not self.dryrun:
+                    try:
+                        (c, res) = self.post(str(newfilehref), content,
+                                             format, length=size)
+                    except urllib2.HTTPError as e:
+                        msg = e.read()
+                        self.output('unable to POST to %s: %s' % (newfilehref, msg))
+                        raise
+        except IOError as e:
+            self.output('unable to open %s' % filepath)
+            raise
+
     def loaddir(self, basedir):
-        path = os.path.join(basedir, "arkivstruktur.xml")
+        self.basedir = basedir
+        path = os.path.join(self.basedir, "arkivstruktur.xml")
         print(path)
         parser = etree.XMLParser(remove_blank_text=True)
         fh = open(path)
