@@ -160,8 +160,7 @@ the json structure.
     def import_arkivdel(self, parentinfo, element):
         subs = {
             tagmappe: ([], self.import_mappe),
-            # FIXME disabled until nikita handle ny-klassifikasjonssystem
-            #tagklassifikasjonssystem: ([], self.import_klassifikasjonssystem),
+            tagklassifikasjonssystem: ([], self.import_klassifikasjonssystem),
         }
         rel = self.relbase + '/arkivstruktur/ny-arkivdel/'
         self.import_entity('arkivdel', rel, parentinfo, element, subs)
