@@ -50,9 +50,15 @@ class Importer(n5core.endpoint.Endpoint):
         self.nesting = 0
         self.dryrun = False
         n5core.endpoint.Endpoint.__init__(self, baseurl)
+        self.stats = {}
 
     def output(self, msg):
         print("%s %s" % ('=' * self.nesting, msg))
+
+    def printstats(self):
+        print("Import list, entities and count")
+        for name in self.stats.keys():
+            print("-20s %d" % (name, self.stats[name]))
 
     # Copied from import-email
     def create_entity(self, name, rel, rels, data):
@@ -73,6 +79,9 @@ class Importer(n5core.endpoint.Endpoint):
             if self.verbose:
                 print("POST: %s" % data)
             (c, res) = self.json_post(url, data)
+            if name not in self.stats:
+                self.stats[name] = 0
+            self.stats[name] += 1
         except urllib2.HTTPError as e:
             msg = e.read()
             print("Error: ", msg)
@@ -241,6 +250,8 @@ def main():
     for basedir in args.basedir:
         i.loaddir(basedir)
     
+    i.printstats()
+
     return retval
 
 if __name__ == '__main__':
