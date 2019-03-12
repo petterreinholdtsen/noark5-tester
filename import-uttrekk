@@ -215,7 +215,18 @@ class Importer(n5core.endpoint.Endpoint):
 
     def import_dokumentobjekt(self, parentinfo, element):
         rel = self.relbase + '/arkivstruktur/ny-dokumentobjekt/'
-        info = self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, {})
+
+        # Exclude values related to the files that are handled during
+        # upload and not during dokumentobjekt creation.  Dropping
+        # filestoerrelse might seem like a bad idea, but it is most
+        # often a free text field that is hard to parse and incorrect
+        # file size would also give a checksum mismatch.  Thus
+        # incorrect file size would be detected during upload that
+        # way.
+        exclude = ('referanseDokumentfil', 'filstoerrelse')
+
+        info = self.import_entity('dokumentobjekt', rel, parentinfo, element, {},
+                                  exclude=exclude)
         
     def loaddir(self, basedir):
         path = os.path.join(basedir, "arkivstruktur.xml")
