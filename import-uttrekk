@@ -157,7 +157,11 @@ class Importer(n5core.endpoint.Endpoint):
             tagmappe: ([], self.import_mappe),
         }
         rel = self.relbase + '/arkivstruktur/ny-klasse/'
-        self.import_entity('klasse', rel, parentinfo, element, subs)
+
+        # FIXME ignore these while nikita fail to understand it
+        exclude = ('noekkelord')
+
+        self.import_entity('klasse', rel, parentinfo, element, subs, exclude=exclude)
 
     def import_mappe(self, parentinfo, element):
         attrtype = '{http://www.w3.org/2001/XMLSchema-instance}type'
@@ -206,14 +210,23 @@ class Importer(n5core.endpoint.Endpoint):
         subs = {
             tagdokumentbeskrivelse: ([], self.import_dokumentbeskrivelse),
         }
-        self.import_entity(name, rel, parentinfo, element, subs)
+
+        # FIXME ignore these while nikita fail to understand it
+        exclude = ('noekkelord')
+
+        self.import_entity(name, rel, parentinfo, element, subs, exclude=exclude)
 
     def import_dokumentbeskrivelse(self, parentinfo, element):
         subs = {
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
         }
         rel = self.relbase + '/arkivstruktur/ny-dokumentbeskrivelse/'
-        self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, subs)
+
+        # FIXME ignore these while nikita fail to understand it
+        exclude = ('forfatter','referanseArkivdel')
+
+        self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, subs,
+                           exclude=exclude)
 
     def import_dokumentobjekt(self, parentinfo, element):
         rel = self.relbase + '/arkivstruktur/ny-dokumentobjekt/'
