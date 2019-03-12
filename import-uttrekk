@@ -196,6 +196,9 @@ class Importer(n5core.endpoint.Endpoint):
             elif 'moeteregistrering' == etype:
                 name = 'moeteregistrering'
                 rel = self.relbase + '/arkivstruktur/ny-moeteregistrering/'
+            elif 'basisregistrering' == etype:
+                name = 'basisregistrering'
+                rel = self.relbase + '/arkivstruktur/ny-basisregistrering/'
             else:
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
