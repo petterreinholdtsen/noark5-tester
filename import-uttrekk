@@ -24,13 +24,6 @@ from lxml import etree
 
 import n5core.endpoint
 
-# FIXME figure out a better way to handle formats?
-formatmap = {
-    'pdf':   ('PDF', 'application/pdf'),
-    'pdf/a': ('RA-PDF', 'application/pdf'),
-    'text':  ('RA-TEXT', 'text/plain'),
-}
-
 strukturns = 'http://www.arkivverket.no/standarder/noark5/arkivstruktur'
 
 tagarkiv                 = '{%s}arkiv' % strukturns
@@ -41,6 +34,20 @@ tagmappe                 = '{%s}mappe' % strukturns
 tagregistrering          = '{%s}registrering' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
+
+
+# FIXME figure out a better way to handle formats?
+formatmap = {
+    'pdf':   ('PDF', 'application/pdf'),
+    'pdf/a': ('RA-PDF', 'application/pdf'),
+    'text':  ('RA-TEXT', 'text/plain'),
+}
+
+def format2mime(format):
+    if format in formatmap:
+        return formatmap[format][1]
+    else:
+        return 'application/octet-stream'
 
 # Copied from import-email
 def parselinks(links):
@@ -271,14 +278,14 @@ the json structure.
         try:
             with open(filepath) as content:
                 size = os.path.getsize(filepath)
-                format = formatmap[info['format']][1]
-                print("Opened %s size %d format %s" % (filepath, size, format))
+                mimetype = format2mime( info['format'])
+                print("Opened %s size %d mime type %s" % (filepath, size, mimetype))
                 uploadrel = self.relbase + '/arkivstruktur/fil/'
                 newfilehref = self.object_operation(info, uploadrel)
                 if not self.dryrun:
                     try:
                         (c, res) = self.post(str(newfilehref), content,
-                                             format, length=size)
+                                             mimetype, length=size)
                     except urllib2.HTTPError as e:
                         msg = e.read()
                         self.output('unable to POST to %s: %s' % (newfilehref, msg))
