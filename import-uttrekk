@@ -56,9 +56,9 @@ class Importer(n5core.endpoint.Endpoint):
         print("%s %s" % ('=' * self.nesting, msg))
 
     def printstats(self):
-        print("Import list, entities and count")
-        for name in self.stats.keys():
-            print("-20s %d" % (name, self.stats[name]))
+        print("Imported entries and their count")
+        for name in sorted(self.stats.keys()):
+            print("%-25s %d" % (name, self.stats[name]))
 
     # Copied from import-email
     def create_entity(self, name, rel, rels, data):
@@ -110,7 +110,7 @@ class Importer(n5core.endpoint.Endpoint):
                 if field not in exclude:
                     data[field] = sub.text
                 else:
-                    self.output('ignoring field %s [%s]' % (field, sub.text))
+                    self.output('ignoring %s field %s [%s]' % (name, field, sub.text))
         if self.verbose or self.dryrun:
             self.output("POST: %s" % data)
         if self.dryrun:
