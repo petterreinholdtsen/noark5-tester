@@ -279,7 +279,9 @@ the json structure.
             with open(filepath) as content:
                 size = os.path.getsize(filepath)
                 mimetype = format2mime( info['format'])
-                print("Opened %s size %d mime type %s" % (filepath, size, mimetype))
+                if self.verbose:
+                    print("Uploading %s size %d mime type %s" % (filepath,
+                                                                 size, mimetype))
                 uploadrel = self.relbase + '/arkivstruktur/fil/'
                 newfilehref = self.object_operation(info, uploadrel)
                 if not self.dryrun:
