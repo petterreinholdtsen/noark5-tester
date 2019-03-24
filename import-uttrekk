@@ -65,6 +65,7 @@ class Importer(n5core.endpoint.Endpoint):
         self.dryrun = False
         n5core.endpoint.Endpoint.__init__(self, baseurl)
         self.stats = {}
+        self.formats = {}
 
     def output(self, msg):
         print("%s %s" % ('=' * self.nesting, msg))
@@ -73,6 +74,10 @@ class Importer(n5core.endpoint.Endpoint):
         print("Imported entries and their count")
         for name in sorted(self.stats.keys()):
             print("%-25s %d" % (name, self.stats[name]))
+        print()
+        print("Imported formats and their count")
+        for format in sorted(self.formats.keys()):
+            print("%-25s %d" % (format, self.formats[format]))
 
     # Copied from import-email
     def create_entity(self, name, rel, rels, data):
@@ -295,6 +300,10 @@ the json structure.
         except IOError as e:
             self.output('unable to open %s' % filepath)
             raise
+        format = info['format']
+        if format not in self.formats:
+            self.formats[format] = 0
+        self.formats[format] += 1
 
     def loaddir(self, basedir):
         self.basedir = basedir
