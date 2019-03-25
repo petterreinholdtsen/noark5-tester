@@ -30,6 +30,8 @@ Se vedlagte UML-diagram som viser dagens entiteter i
 API-spesifikasjonen og tilsvarende entiteter i XML-skjema for version
 4 og 5.
 
+![uml-parter](2019-03-25-parter-til-xml-diagram.png)
+
 Ønsket endring
 --------------
 
