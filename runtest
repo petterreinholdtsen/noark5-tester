@@ -362,7 +362,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                 self.success("GET %s worked with code %d"  % (url, res.code))
                 self.verify(allow is not None, "GET header should include Allow for %s" % url)
                 ctype = res.info().getheader('Content-Type')
-                if self.verify(0 == ctype.find('application/vnd.noark5-v4+json'),
+                if self.verify(ctype and 0 == ctype.find('application/vnd.noark5-v4+json'),
                                "MIME type %s should be application/vnd.noark5-v4+json for url %s" % (ctype, url)):
                     #print "C:", content
                     try:
@@ -440,7 +440,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                     else:
                         self.failure("OPTIONS for URL %s missing Allow header" % url)
                 except urllib2.HTTPError as e:
-                    self.failure("OPTIONS failed for URL %s: %s" % (url, str(e)))
+                    self.failure("OPTIONS failed for URL %s: %s (%s)" % (url, str(e), e.read()))
             except urllib2.HTTPError as e:
                 if self.isknownmissing(url):
                     self.xfailure("unable to GET %s" % url)
@@ -681,7 +681,7 @@ Test basis requirements for NOARK 5 Core.
                 print putinfo
                 self.success("able to modify %s" % url)
             except urllib2.HTTPError as e:
-                self.failure("unable to modify %s" % url)
+                self.failure("unable to modify %s: %s (%s)" % (url, str(e), e.read()))
 
     def testDateFormats(self):
         """
@@ -896,7 +896,7 @@ or should it be rejected?
             #self.verify(c == '', "POST %s return nothing" % url)
             self.verify(200 == res.code, "file upload returned HTTP code 200")
         except urllib2.HTTPError, e:
-            print("POST %s failed: %s" % (url, e.read()))
+            print("POST %s failed: %s (%s)" % (url, str(e), e.read()))
 
         # Verify the pointer to the file to download
         (infostr, res) = self.json_get(rels['self'])
@@ -913,11 +913,11 @@ or should it be rejected?
             self.verify(c == xmldata,
                         "downloaded file should match uploaded file")
             ctype = res.info().getheader('Content-Type')
-            self.verify(0 == ctype.find('application/xml'),
+            self.verify(ctype and 0 == ctype.find('application/xml'),
                         "MIME type %s should be application/xml for url %s" %
                         (ctype, url))
         except urllib2.HTTPError as e:
-            self.failure("downloading %s failed: %s" % (url, e.read()))
+            self.failure("downloading %s failed: %s (%s)" % (url, str(e), e.read()))
 
     def runtests(self):
         try:
