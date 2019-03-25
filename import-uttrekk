@@ -164,9 +164,18 @@ the json structure.
 
     def import_arkiv(self, parentinfo, element):
         subs = {
+            tagarkiv: ([], self.import_underarkiv),
             tagarkivdel: ([], self.import_arkivdel),
         }
         rel = self.relbase + '/arkivstruktur/ny-arkiv/'
+        self.import_entity('arkiv', rel, parentinfo, element, subs)
+
+    def import_underarkiv(self, parentinfo, element):
+        subs = {
+            tagarkiv: ([], self.import_underarkiv),
+            tagarkivdel: ([], self.import_arkivdel),
+        }
+        rel = self.relbase + '/arkivstruktur/ny-underarkiv/'
         self.import_entity('arkiv', rel, parentinfo, element, subs)
 
     def import_arkivdel(self, parentinfo, element):
@@ -187,9 +196,22 @@ the json structure.
 
     def import_klasse(self, parentinfo, element):
         subs = {
+            tagklasse: ([], self.import_underklasse),
             tagmappe: ([], self.import_mappe),
         }
         rel = self.relbase + '/arkivstruktur/ny-klasse/'
+
+        # FIXME ignore these while nikita fail to understand it
+        exclude = ('noekkelord')
+
+        self.import_entity('klasse', rel, parentinfo, element, subs, exclude=exclude)
+
+    def import_underklasse(self, parentinfo, element):
+        subs = {
+            tagklasse: ([], self.import_underklasse),
+            tagmappe: ([], self.import_mappe),
+        }
+        rel = self.relbase + '/arkivstruktur/ny-underklasse/'
 
         # FIXME ignore these while nikita fail to understand it
         exclude = ('noekkelord')
