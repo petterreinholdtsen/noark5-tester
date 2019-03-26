@@ -19,6 +19,8 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
+se også mangelmelding/sendt/2018-09-07-format-png.txt
+
 M701
 
 Del 6.1.1.9 (Hente og overføre filer) skisserer hvordan lagre PDF og

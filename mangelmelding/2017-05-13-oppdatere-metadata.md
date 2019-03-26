@@ -55,7 +55,9 @@ andre metadata vil være å hente ut listen via den kjente relasjon en
 til listen http://rel.kxml.no/noark5/v4/api/metadata/dokumentmedium/.
 
 Her er for eksempel hvordan arkivstatus kan se ut når en tar GET mot
-http://localhost:49708/metadata/arkivstatus:
+href for relasjonen
+```http://rel.kxml.no/noark5/v4/api/metadata/arkivstatus/```:
+
 
 
 ```

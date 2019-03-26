@@ -1,5 +1,5 @@
-Hvordan skal felt med tallverdi formateres i JSON?
-==================================================
+Kan tallverdier formatteres som tekst når de sendes inn som JSON?
+=================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
@@ -10,7 +10,7 @@ Hvordan skal felt med tallverdi formateres i JSON?
         Dokumentdel  6.2 (Validering av data)
          Sidenummer  28
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-03-26
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -61,3 +61,11 @@ avsnittet som starter med "Restriksjoner som er dokumenterte under":
 
 > Merk at tallfelt som overføres som JSON alltid skal overføres
 > formatert som et JSON Number, dvs. uten anførselstegn.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/83 .

@@ -24,8 +24,9 @@ Korrespondanse mellom organisajoner og etater har gjerne intern og
 ekstern referanse som gjør det enklere for mottaker å finne korrekt
 sak/mappe.  I offentlig forvaltning brukes gjerne saksid
 (dvs. saksår/saksnummer), mens ikke-offentlige instanser gjerne har
-andre strukturer på sine referanser.  Disse verdiene er ofte oppgitt i
-brevhodet som 'Vår referanse' og 'Deres referanse'.
+andre strukturer på sine referanser (f.eks. initialer til
+brevskribent).  Disse verdiene er ofte oppgitt i brevhodet som 'Vår
+referanse' og 'Deres referanse'.
 
 I Noark 4 var det et felt i tabellen AVSMOT (avsender/mottaker) som
 het AM.REF (referanse) som kunne brukes til denne eksterne referansen.
@@ -36,7 +37,7 @@ en Noark 5-løsning.
 Feltet er et svært aktuelt felt å bruke blant annet i integrasjoner
 med andre systemer, der det eksterne systemets ID kan lagres som en
 ekstern referanse for å kunne søke opp aktuelle dokumenter og saker.
-Det er dessuten svært nyttig å legge inn ekstern referanse i arkviet
+Det er dessuten svært nyttig å legge inn ekstern referanse i arkivet
 for å effektivt kunne søke etter når en skal finne aktuell sak/mappe
 for innkommende brev.
 

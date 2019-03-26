@@ -30,7 +30,9 @@ FIXME er eksempellisten komplett?
 Et eksempel er i del 7.2.1.7 (Dokumentobjekt) på side 104 i
 tjenestegrensesnittspesifikasjonen, der det er et attributt som heter
 mimeType.  Dette attributtet finnes ikke i metadatakatalogene eller i
-Noark 5-standarden versjon 4.0.
+Noark 5-standarden versjon 4.0 eller versjon 5.0.
+
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/77
 
 Det kan virke som om feltene dokumentobjekt.format og
 dokumentobjekt.mimeType representerer samme informasjon, men er det

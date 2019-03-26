@@ -25,6 +25,9 @@ systemID være utfylt".  Men I selve listen med attributter på side 81
 og 82 så er ikke systemID nevnt.  Skulle systemID vært med i
 attributtlisten?
 
+FIXME Hvordan er forholdet mellom arkivskaper and arkiv?  kan
+arkivskaper eksistere uten arkiv?
+
 Ønsket endring
 --------------
 

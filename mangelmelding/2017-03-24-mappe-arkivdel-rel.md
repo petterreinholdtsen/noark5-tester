@@ -71,6 +71,9 @@ Jeg mistenker f.eks at /arkivdel/ og /referanseArkivdel/ omhandler
 samme relasjon, dvs. hvordan finne "foreldrearkivdel" for den gitte
 mappen.  Jeg mistenker det samme for /klasse/ og /referanseKlasse/.
 
+Se også mangelmeldingen ny-underarkiv om relasjonene for
+mappe/ny-mappe/undermappe.
+
 Ønsket endring
 --------------
 

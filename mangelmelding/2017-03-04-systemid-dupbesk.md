@@ -21,9 +21,9 @@ Beskrivelse
 
 Det er flere beskrivelser av SystemID i objektbeskrivelsene
 dokumentet, og de er litt forskjellige fra gang til gang.  Det er
-bedre å ha en samlet beskrivelse av SystemID som det refereres til, og
-kun skrive det som er unikt/spesielt for et gitt objekt i
-objektbeskrivelsene.
+kanskje bedre å ha en samlet beskrivelse av SystemID som det refereres
+til hver kan den brukes i en klasse, og kun skrive det som er
+unikt/spesielt for et gitt objekt i objektbeskrivelsene?
 
 FIXME nevn eksempler.
 

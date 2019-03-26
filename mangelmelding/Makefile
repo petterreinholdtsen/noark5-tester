@@ -14,8 +14,11 @@ mangler-liste.xml: *.md Makefile
 validate-docbook: mangler.xml mangler-liste.xml Makefile
 	xmllint --xinclude --postvalid mangler.xml
 mangler.pdf: validate-docbook mangler.xml mangler-liste.xml Makefile
-	xmlto --with-fop pdf mangler.xml
-
+	# Try to make text smaller, to avoid too many pages
+	xmlto --with-fop \
+		--stringparam body.font.master=9 \
+		pdf \
+		mangler.xml
 clean:
 	$(RM) mangler-liste.xml *~
 distclean: clean
