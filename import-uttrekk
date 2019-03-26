@@ -36,6 +36,31 @@ tagregistrering          = '{%s}registrering' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
 
+# List of fields to ignore during import until Nikita handle them correctly
+excludes = { 'klasse': ('noekkelord',),
+             
+             'saksmappe' : (
+                 # FIXME these need to be created before using
+                 'administrativEnhet', 'saksansvarlig',
+             ),
+             
+             'registrering': ('noekkelord',),
+             'basisregistrering': ('noekkelord',),
+             'journalpost': ('noekkelord',),
+             'moeteregistrering': ('noekkelord',),
+             
+             'dokumentbeskrivelse' : ('forfatter','referanseArkivdel'),
+             
+             # Exclude values related to the files that are handled
+             # during upload and not during dokumentobjekt creation.
+             # Dropping filestoerrelse might seem like a bad idea, but
+             # it is most often a free text field that is hard to
+             # parse and incorrect file size would also give a
+             # checksum mismatch and get rejected anyway.  Thus
+             # incorrect file size would be detected during upload
+             # that way.
+             'dokumentobjekt': ('referanseDokumentfil', 'filstoerrelse'),
+}
 
 # FIXME figure out a better way to handle formats?
 formatmap = {
@@ -131,7 +156,7 @@ the json structure.
                 return l['href']
         return None
 
-    def import_entity(self, name, rel, parentinfo, element, subs, exclude=()):
+    def import_entity(self, name, rel, parentinfo, element, subs):
         self.nesting += 1
         data = {}
         for sub in element.iterchildren():
@@ -141,10 +166,11 @@ the json structure.
                 subs[sub.tag][0].append(sub)
             field = sub.tag.replace('{%s}' % strukturns, '')
             if None != sub.text:
-                if field not in exclude:
-                    data[field] = sub.text
-                else:
-                    self.output('ignoring %s field %s [%s]' % (name, field, sub.text))
+                if name in excludes:
+                    if field not in excludes[name]:
+                        data[field] = sub.text
+                    else:
+                        self.output('ignoring %s field %s [%s]' % (name, field, sub.text))
         if self.verbose or self.dryrun:
             self.output("POST: %s" % data)
         if self.dryrun:
@@ -202,10 +228,7 @@ the json structure.
             substr = ""
         rel = self.relbase + '/arkivstruktur/ny-%sklasse/' % substr
 
-        # FIXME ignore these while nikita fail to understand it
-        exclude = ('noekkelord')
-
-        self.import_entity('klasse', rel, parentinfo, element, subs, exclude=exclude)
+        self.import_entity('klasse', rel, parentinfo, element, subs)
 
     def import_mappe(self, parentinfo, element, sub=False):
         attrtype = '{http://www.w3.org/2001/XMLSchema-instance}type'
@@ -215,7 +238,6 @@ the json structure.
         else:
             substr = ""
         rel = self.relbase + '/arkivstruktur/ny-%smappe/' % substr
-        exclude = ()
         if attrtype in element.keys():
             etype = element.get(attrtype)
             if 'moetemappe' == etype:
@@ -224,20 +246,13 @@ the json structure.
             elif 'saksmappe' == etype:
                 name = 'saksmappe'
                 rel = self.relbase + '/sakarkiv/ny-%ssaksmappe/' % substr
-                exclude = (
-                    # FIXME create these before using
-                    'administrativEnhet', 'saksansvarlig',
-                    # These seem to conflict with something else?
-                    #'mappeID',
-                    #'saksaar', 'sakssekvensnummer',
-                )
             else:
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
             tagmappe: ([], partial(self.import_mappe, sub=True) ),
             tagregistrering: ([], self.import_registrering),
         }
-        self.import_entity(name, rel, parentinfo, element, subs, exclude=exclude)
+        self.import_entity(name, rel, parentinfo, element, subs)
 
     def import_registrering(self, parentinfo, element):
         name = 'registrering'
@@ -259,38 +274,19 @@ the json structure.
         subs = {
             tagdokumentbeskrivelse: ([], self.import_dokumentbeskrivelse),
         }
-
-        # FIXME ignore these while nikita fail to understand it
-        exclude = ('noekkelord')
-
-        self.import_entity(name, rel, parentinfo, element, subs, exclude=exclude)
+        self.import_entity(name, rel, parentinfo, element, subs)
 
     def import_dokumentbeskrivelse(self, parentinfo, element):
         subs = {
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
         }
         rel = self.relbase + '/arkivstruktur/ny-dokumentbeskrivelse/'
-
-        # FIXME ignore these while nikita fail to understand it
-        exclude = ('forfatter','referanseArkivdel')
-
-        self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, subs,
-                           exclude=exclude)
+        self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, subs)
 
     def import_dokumentobjekt(self, parentinfo, element):
         rel = self.relbase + '/arkivstruktur/ny-dokumentobjekt/'
 
-        # Exclude values related to the files that are handled during
-        # upload and not during dokumentobjekt creation.  Dropping
-        # filestoerrelse might seem like a bad idea, but it is most
-        # often a free text field that is hard to parse and incorrect
-        # file size would also give a checksum mismatch.  Thus
-        # incorrect file size would be detected during upload that
-        # way.
-        exclude = ('referanseDokumentfil', 'filstoerrelse')
-
-        info = self.import_entity('dokumentobjekt', rel, parentinfo, element, {},
-                                  exclude=exclude)
+        info = self.import_entity('dokumentobjekt', rel, parentinfo, element, {})
         
         paths = list(element.iterchildren('{%s}referanseDokumentfil' % strukturns))
         if 1 < len(paths):
