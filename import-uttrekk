@@ -166,11 +166,10 @@ the json structure.
                 subs[sub.tag][0].append(sub)
             field = sub.tag.replace('{%s}' % strukturns, '')
             if None != sub.text:
-                if name in excludes:
-                    if field not in excludes[name]:
-                        data[field] = sub.text
-                    else:
+                if name in excludes and field in excludes[name]:
                         self.output('ignoring %s field %s [%s]' % (name, field, sub.text))
+                else:
+                    data[field] = sub.text
         if self.verbose or self.dryrun:
             self.output("POST: %s" % data)
         if self.dryrun:
