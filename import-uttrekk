@@ -182,7 +182,7 @@ the json structure.
         subs = {
             tagmappe: ([], self.import_mappe),
             tagklassifikasjonssystem: ([], self.import_klassifikasjonssystem),
-            tagregistrering: ([], self.importRegistrering),
+            tagregistrering: ([], self.import_registrering),
         }
         rel = self.relbase + '/arkivstruktur/ny-arkivdel/'
         self.import_entity('arkivdel', rel, parentinfo, element, subs)
@@ -241,11 +241,11 @@ the json structure.
             else:
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
-            tagregistrering: ([], self.importRegistrering),
+            tagregistrering: ([], self.import_registrering),
         }
         self.import_entity(name, rel, parentinfo, element, subs, exclude=exclude)
 
-    def importRegistrering(self, parentinfo, element):
+    def import_registrering(self, parentinfo, element):
         name = 'registrering'
         rel = self.relbase + '/arkivstruktur/ny-registrering/'
         attrtype = '{http://www.w3.org/2001/XMLSchema-instance}type'
