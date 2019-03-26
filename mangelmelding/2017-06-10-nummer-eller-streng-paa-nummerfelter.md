@@ -42,11 +42,11 @@ illustrasjon på hvordan feltet kan se ut, med og uten anførsestegn:
 Spesifikasjonen beskriver ikke eksplisitt om en tallverdi skal ha
 anførselstegn rundt seg eller ikke.  Tallet 12 og strengen "12"
 representerer begge verdien 12. Hvis det er ønskelig at det ikke skal
-være mulig for en klient å velge å bruke anførses rundt tallverdier så bør
-det nevnes eksplisitt i spesifikasjonen.  Det er enklest å
-implementere mottakerenden av tjenestegrensesnittet hvis det ikke er
+være mulig for en klient å velge å bruke anførses rundt tallverdier så
+bør det nevnes eksplisitt i spesifikasjonen.  Det er enklest å
+implementere tjenersiden av tjenestegrensesnittet hvis det ikke er
 tillatt med anførselstegn rundt tallverdier, mens det er enklest å
-implementere senderenden hvis det er valgfritt.
+implementere klientsiden hvis det er valgfritt.
 
 Det bør spesifiseres hva som forventes av sender og mottaker av
 tjenestegrensesnittet.  Jeg anbefaler at en ikke lar det være
