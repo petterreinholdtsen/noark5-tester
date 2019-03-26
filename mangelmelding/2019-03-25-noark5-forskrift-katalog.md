@@ -44,7 +44,7 @@ Følgende står i [Riksarkivarens forskrift), paragraf
 >    nivå under rotkatalogen.
 
 Dette stemmer ikke overens med det som står i Noark 5 version 3.1 side
-97 og Noar 4.0 side 99 (i PDF, mangler sidetall):
+97 og Noark 4.0 side 99 (i PDF, mangler sidetall):
 
 > Filene i en avleveringspakke
 [...]
@@ -54,14 +54,14 @@ Dette stemmer ikke overens med det som står i Noark 5 version 3.1 side
 >    måned. Det er ingen krav til navngiving av dokumentfilene, men
 >    filenes endelse skal angi arkivformat: pdf, tif, txt osv.
 
-I Noark 5 versjon 5 side 98 står derimot følgende i krav 6.4.15:
+I Noark 5 versjon 5 side 98 står det derimot følgende i krav 6.4.15:
 
 > Dokumentene skal ligge i en underkatalog kalt DOKUMENT. Denne
 > katalogen kan struktureres i nye underkataloger etter fritt
 > valg. Dokumentfilene endelse skal angi arkivformat: pdf, tif, txt
 > osv.
 
-På side 109 i del 6.4.9 (Arkivdokumentene) står derimot følgende:
+På side 109 i del 6.4.9 (Arkivdokumentene) står det derimot følgende:
 
 > Arkivdokumentene skal lagres i en egen underkatalog i
 > avleveringspakken, og denne underkatalogen kan struktureres i nye
