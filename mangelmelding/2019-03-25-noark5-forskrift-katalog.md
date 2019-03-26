@@ -61,29 +61,38 @@ I Noark 5 versjon 5 side 98 står det derimot følgende i krav 6.4.15:
 > valg. Dokumentfilene endelse skal angi arkivformat: pdf, tif, txt
 > osv.
 
-På side 109 i del 6.4.9 (Arkivdokumentene) står det derimot følgende:
+På Noark 5 versjon 5 side 109 i del 6.4.9 (Arkivdokumentene) står det
+derimot følgende:
 
 > Arkivdokumentene skal lagres i en egen underkatalog i
 > avleveringspakken, og denne underkatalogen kan struktureres i nye
-> underkataloger etter behov. Referansen fra arkivstrukturen til
-> dokumentfilene vil ligge i dokumentobjektet, dvs. pÃ¥ laveste nivÃ¥
-> i strukturen. Alle dokumentfiler som det blir referert til i
-> arkivstruktur.xml, skal vÃ¦re med i uttrekket. Dessuten mÃ¥ ikke
+> underkataloger etter behov.  Referansen fra arkivstrukturen til
+> dokumentfilene vil ligge i dokumentobjektet, dvs. på laveste nivå i
+> strukturen. Alle dokumentfiler som det blir referert til i
+> arkivstruktur.xml, skal være med i uttrekket.  Dessuten må ikke
 > uttrekket inneholde noen dokumentfiler som mangler referanse fra
-> dokumentobjektet. Referansen fra arkivstrukturen skal vÃ¦re relativ
-> til dokumentfilene, dvs.  inneholde hele "stien" til dokumentet -
+> dokumentobjektet. Referansen fra arkivstrukturen skal vre relativ
+> til dokumentfilene, dvs.  inneholde hele «stien» til dokumentet -
 > f.eks. slik: dokumenter/2010/januar/123456789.pdf.
 
-Underkatalogen skal altså enten hete "DOKUMENT" eller "dokumenter",
+Underkatalogen skal altså enten hete «DOKUMENT» eller «dokumenter»,
 men den kan ikke hete begge deler samtidig og det er dermed ikke mulig
 å følge både standard og forskrift samtidig.  Er det noen grunn til å
 bruke store bokstaver i katalognavnene?
 
+Dagens praksis er at katalogen heter «dokumenter», hvilket ikke er
+overrraskende når det har vært spesifisiert i Noark 3 fra 2013-03-22
+og 4 fra 2016-12-01.  Det kan for eksempel ses i testfilene Arkade 5
+under src/Arkivverket.Arkade.CLI.Tests/TestData/N5-archive/ og
+src/Arkivverket.Arkade.Core.Tests/TestData/Noark5/ samt [Documasters
+Noark Extraction validator
+samples](https://github.com/documaster/noark-extraction-validator-samples/tree/master/0.2.0/invalid-pdfa/extraction).
 
 Ønsket endring
 --------------
 
 Det viktigste er at det brukes samme katalognavn overalt.  Jeg
 foreslår å endre Riksarkivarens forskrift og Noark 5-standarden til å
-bruke katalognavn med små bokstaver, dvs.  "dokumenter" og
-"rapporter", for å unngå å gi inntrykk av å rope i beskrivelsen.
+bruke katalognavn med små bokstaver, dvs.  «dokumenter» og
+«rapporter», for å være i tråd med mangeårig innarbeidet praksis med
+bakgrunn i spesifikasjonen fra Noark 3 og 4.
