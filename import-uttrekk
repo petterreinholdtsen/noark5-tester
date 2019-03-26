@@ -20,6 +20,7 @@ import argparse
 import json
 import os
 import urllib2
+from functools import partial
 from lxml import etree
 
 import n5core.endpoint
@@ -162,20 +163,16 @@ the json structure.
         self.nesting -= 1
         return info
 
-    def import_arkiv(self, parentinfo, element):
+    def import_arkiv(self, parentinfo, element, sub=False):
         subs = {
-            tagarkiv: ([], self.import_underarkiv),
+            tagarkiv: ([], partial(self.import_arkiv, sub=True)),
             tagarkivdel: ([], self.import_arkivdel),
         }
-        rel = self.relbase + '/arkivstruktur/ny-arkiv/'
-        self.import_entity('arkiv', rel, parentinfo, element, subs)
-
-    def import_underarkiv(self, parentinfo, element):
-        subs = {
-            tagarkiv: ([], self.import_underarkiv),
-            tagarkivdel: ([], self.import_arkivdel),
-        }
-        rel = self.relbase + '/arkivstruktur/ny-underarkiv/'
+        if sub:
+            substr = "under"
+        else:
+            substr = ""
+        rel = self.relbase + '/arkivstruktur/ny-%sarkiv/' % substr
         self.import_entity('arkiv', rel, parentinfo, element, subs)
 
     def import_arkivdel(self, parentinfo, element):
@@ -194,43 +191,39 @@ the json structure.
         rel = self.relbase + '/arkivstruktur/ny-klassifikasjonssystem/'
         self.import_entity('klassifikasjonssystem', rel, parentinfo, element, subs)
 
-    def import_klasse(self, parentinfo, element):
+    def import_klasse(self, parentinfo, element, sub=False):
         subs = {
-            tagklasse: ([], self.import_underklasse),
+            tagklasse: ([], partial(self.import_klasse, sub=True)),
             tagmappe: ([], self.import_mappe),
         }
-        rel = self.relbase + '/arkivstruktur/ny-klasse/'
+        if sub:
+            substr = "under"
+        else:
+            substr = ""
+        rel = self.relbase + '/arkivstruktur/ny-%sklasse/' % substr
 
         # FIXME ignore these while nikita fail to understand it
         exclude = ('noekkelord')
 
         self.import_entity('klasse', rel, parentinfo, element, subs, exclude=exclude)
 
-    def import_underklasse(self, parentinfo, element):
-        subs = {
-            tagklasse: ([], self.import_underklasse),
-            tagmappe: ([], self.import_mappe),
-        }
-        rel = self.relbase + '/arkivstruktur/ny-underklasse/'
-
-        # FIXME ignore these while nikita fail to understand it
-        exclude = ('noekkelord')
-
-        self.import_entity('klasse', rel, parentinfo, element, subs, exclude=exclude)
-
-    def import_mappe(self, parentinfo, element):
+    def import_mappe(self, parentinfo, element, sub=False):
         attrtype = '{http://www.w3.org/2001/XMLSchema-instance}type'
         name = 'mappe'
-        rel = self.relbase + '/arkivstruktur/ny-mappe/'
+        if sub:
+            substr = "under"
+        else:
+            substr = ""
+        rel = self.relbase + '/arkivstruktur/ny-%smappe/' % substr
         exclude = ()
         if attrtype in element.keys():
             etype = element.get(attrtype)
             if 'moetemappe' == etype:
                 name = 'moetemappe'
-                rel = self.relbase + '/arkivstruktur/ny-moetemappe/'
+                rel = self.relbase + '/arkivstruktur/ny-%smoetemappe/' % substr
             elif 'saksmappe' == etype:
                 name = 'saksmappe'
-                rel = self.relbase + '/sakarkiv/ny-saksmappe/'
+                rel = self.relbase + '/sakarkiv/ny-%ssaksmappe/' % substr
                 exclude = (
                     # FIXME create these before using
                     'administrativEnhet', 'saksansvarlig',
@@ -241,6 +234,7 @@ the json structure.
             else:
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
+            tagmappe: ([], partial(self.import_mappe, sub=True) ),
             tagregistrering: ([], self.import_registrering),
         }
         self.import_entity(name, rel, parentinfo, element, subs, exclude=exclude)
