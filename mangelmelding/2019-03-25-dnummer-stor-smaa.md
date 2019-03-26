@@ -32,7 +32,7 @@ brukes over alt.  Foreslår derfor at dNummer endres til DNummer eller
 DNummer endres til dNummer over det hele.  dNummer virker å være mest
 i tråd med andre feltnavn, som har kamelformat.
 
-I tillegg til D-nummer, hva med H-nummer?  De er omtalt i
+I tillegg til D-nummer, hva med H-nummer som omtalt i
 "[Hjelpenummer for personer uten kjent
 fødselsnummer](https://sh.ehelse.no/hkode/arkiv/Delte%20dokumenter/KITH/upload/939/R11-98Hjelpenummer.pdf)"
 av Torbjørn Nystadnes, Kompetansesenter for IT i helsevesenet AS
