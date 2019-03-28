@@ -24,12 +24,16 @@ Det bør beskrives på en entydig og klar måte hvor arkivdokumentfilene
 skal ligge i en avleveringspakke.  I dag spriker beskrivelsen mellom
 forskrift, Noark 5-spesifikasjon og praksis.
 
-Følgende står i [Riksarkivarens forskrift), paragraf
-5-31b](https://lovdata.no/dokument/SF/forskrift/2017-12-19-2286/KAPITTEL_5):
+Følgende står i [Riksarkivarens forskrift), paragraf 5-31 b) og
+c)](https://lovdata.no/dokument/SF/forskrift/2017-12-19-2286/KAPITTEL_5):
 
 > § 5-31. Organisering av datafiler i avleverings- eller deponeringspakke
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
 > (1) Filene som utgjør arkivuttrekket, skal være organisert på følgende måte:
+> 
 [...]
+> 
 > b) For arkivdokumenter skal det opprettes en katalog med navnet
 >    DOKUMENT på første nivå under rotkatalogen på vedkommende
 >    lagringsenhet. Dokumentfilene skal samles på andre nivå under
@@ -38,17 +42,14 @@ Følgende står i [Riksarkivarens forskrift), paragraf
 >    i én katalog med et entydig navn. Filformat for arkivdokumenter
 >    angis ved filendelse, f.eks. XML, PDF eller TIF.
 
-> c) Elektroniske utskrifter fra datasystemet skal lagres under en
->    katalog med navnet RAPPORT på første nivå under rotkatalogen på
->    vedkommende lagringsenhet. Rapportfilene skal samles på andre
->    nivå under rotkatalogen.
-
-Dette stemmer ikke overens med det som står i Noark 5 version 3.1 side
-97 og Noark 4.0 side 99 (i PDF, mangler sidetall):
+Katalognavnet 'DOKUMENT' er forskjellig fra det som står i Noark 5
+version 3.1 side 97 og Noark 4.0 side 99 (i PDF, mangler sidetall):
 
 > Filene i en avleveringspakke
+>
 [...]
-> F. Dokumentfilene. Disse skal ligge i en underkatalog kalt
+>
+> F) Dokumentfilene. Disse skal ligge i en underkatalog kalt
 >    dokumenter.  Denne katalogen kan struktureres i nye
 >    underkataloger etter fritt valg, f.eks. en underkatalog for hver
 >    måned. Det er ingen krav til navngiving av dokumentfilene, men
@@ -75,15 +76,19 @@ derimot følgende:
 > til dokumentfilene, dvs.  inneholde hele «stien» til dokumentet -
 > f.eks. slik: dokumenter/2010/januar/123456789.pdf.
 
-Underkatalogen skal altså enten hete «DOKUMENT» eller «dokumenter»,
-men den kan ikke hete begge deler samtidig og det er dermed ikke mulig
-å følge både standard og forskrift samtidig.  Er det noen grunn til å
-bruke store bokstaver i katalognavnene?
+Underkatalogen skal altså enten hete «DOKUMENT» eller «dokumenter» alt
+etter hvor en leser, men er ikke mulig at en og samme katalog kan hete
+begge deler samtidig og det er dermed ikke mulig å følge både standard
+og forskrift samtidig.  Er det noen gode grunner til å bruke store
+bokstaver i katalognavnene?  Det virker mer fornuftig på meg å bruke
+små bokstaver i katalognavn.
 
 Dagens praksis er at katalogen heter «dokumenter», hvilket ikke er
 overrraskende når det har vært spesifisiert i Noark 3 fra 2013-03-22
-og 4 fra 2016-12-01.  Det kan for eksempel ses i testfilene Arkade 5
-under src/Arkivverket.Arkade.CLI.Tests/TestData/N5-archive/ og
+og 4 fra 2016-12-01.  Dagens praksis kan for eksempel observeres i
+testfilene som følger med [Arkivverkets Arkade
+5](https://github.com/arkivverket/arkade5/) under
+src/Arkivverket.Arkade.CLI.Tests/TestData/N5-archive/ og
 src/Arkivverket.Arkade.Core.Tests/TestData/Noark5/ samt [Documasters
 Noark Extraction validator
 samples](https://github.com/documaster/noark-extraction-validator-samples/tree/master/0.2.0/invalid-pdfa/extraction).
