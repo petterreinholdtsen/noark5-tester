@@ -10,7 +10,7 @@ Korriger staving av attributtnavn «skjermingOpphørerDato»
         Dokumentdel  7.2.1.19 (Skjerming)
          Sidenummer  40
         Linjenummer  n/a
-    Innsendingsdato  Ikke sendt inn
+    Innsendingsdato  2019-03-28
  ------------------  ---------------------------------
 
 Beskrivelse
@@ -28,16 +28,24 @@ Merk at tilsvarende gjelder for en rekke andre felt i UML-skjemaene.
 Ved å gjøre "awk '/[æøåÆØÅ].*:/ {print $1}' media/*uml | sort | uniq
 -c | sort -n" ser en følgende felter med æøå i seg: avskrivningsmåte,
 elektroniskSignaturSikkerhetsnivå, endringsløpenummer, filstørrelse,
-fødselsnummer, gårdsnummer, journalår, konverteringsverktøy, møtedato,
-møtenummer, møteregistreringsstatus, møteregistreringstype,
-møtesakstype, møtested, nøkkelord, referanseForløper,
-referanseForrigeMøte, referanseFraMøteregistrering,
+fødselsnummer, gårdsnummer, journalår (mangelmelding #35),
+konverteringsverktøy, møtedato, møtenummer, møteregistreringsstatus,
+møteregistreringstype, møtesakstype, møtested, nøkkelord,
+referanseForløper, referanseForrigeMøte, referanseFraMøteregistrering,
 referanseNesteMøte, referanseTilMøteregistrering, referanseUtlåntTil,
 saksår, skjermingOpphørerDato, utførtKassasjon, utlåntDato og
 utlåntTil.  Jeg vil sende inn egen mangelmelding for hver av disse
-disse hvis de ikke blir fikset i spesifikasjonsteksten raskt.
+disse frem til de er fikset i spesifikasjonsteksten.
 
 Ønsket endring
 --------------
 
 Endre alle forekomster av «skjermingOpphørerDato» til «skjermingOpphoererDato»
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/89 .
