@@ -1,5 +1,5 @@
-Klargjør om attributtnavn «skjermingOpphørerDato» er korrekt
-============================================================
+Korriger staving av attributtnavn «skjermingOpphørerDato»
+=========================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
@@ -7,8 +7,8 @@ Klargjør om attributtnavn «skjermingOpphørerDato» er korrekt
         Alvorlighet  kommentar
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  
-         Sidenummer  
+        Dokumentdel  7.2.1.19 (Skjerming)
+         Sidenummer  40
         Linjenummer  n/a
     Innsendingsdato  2017-04-18
  ------------------  ---------------------------------
@@ -16,14 +16,15 @@ Klargjør om attributtnavn «skjermingOpphørerDato» er korrekt
 Beskrivelse
 -----------
 
+Gjelder side 40, 44, 55 og 152.
+
 Spesifikasjonen bruker attributtnavnet «skjermingOpphørerDato» (med ø)
-flere steder:
-
-FIXME fullfør mangelmelding
-
-M505 skjermingOpphoererDato
+i beskrivelsen av datatype Skjerming og i UML-diagrammene
+uml-arkivenheter-som-har-noe-med-bevaring-og-kassasjon-aa-gjoere
+uml-arkivstruktur-arkiv-og-arkivdel og uml-arkivstruktur-skjerming.
+Dette er en skrivefeil for metadatafelt M505 skjermingOpphoererDato.
 
 Ønsket endring
 --------------
 
-FIXME
+Endre alle forekomster av «skjermingOpphørerDato» til «skjermingOpphoererDato»
