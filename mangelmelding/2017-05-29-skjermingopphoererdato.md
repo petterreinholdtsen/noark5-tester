@@ -32,11 +32,10 @@ fødselsnummer, gårdsnummer, journalår, konverteringsverktøy, møtedato,
 møtenummer, møteregistreringsstatus, møteregistreringstype,
 møtesakstype, møtested, nøkkelord, referanseForløper,
 referanseForrigeMøte, referanseFraMøteregistrering,
-referanseNesteMøte, referanseTilMøteregistrering, referanseUtlånttil,
-referanseUtlåntTil, saksår, skjermingOpphørerDato, utførtKassasjon,
-utlåntDato og utlåntTil.  Jeg vil sende inn egen mangelmelding for
-hver av disse disse hvis de ikke blir fikset i spesifikasjonsteksten
-raskt.
+referanseNesteMøte, referanseTilMøteregistrering, referanseUtlåntTil,
+saksår, skjermingOpphørerDato, utførtKassasjon, utlåntDato og
+utlåntTil.  Jeg vil sende inn egen mangelmelding for hver av disse
+disse hvis de ikke blir fikset i spesifikasjonsteksten raskt.
 
 Ønsket endring
 --------------
