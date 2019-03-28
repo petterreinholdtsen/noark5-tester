@@ -93,6 +93,12 @@ src/Arkivverket.Arkade.Core.Tests/TestData/Noark5/ samt [Documasters
 Noark Extraction validator
 samples](https://github.com/documaster/noark-extraction-validator-samples/tree/master/0.2.0/invalid-pdfa/extraction).
 
+Det virker å være minst jobb totalt sett å endre forskrift og en av
+formuleringene i Noark 5 versjon 5 (som kom 2018-12-06) og ikke har
+implementert så langt, enn å endre alle uttrekkssystem som er laget
+for Noark 3 og 4, samt verktøy som Arkade 5 som er laget for å
+verifisere slike uttrekk.
+
 Ønsket endring
 --------------
 
