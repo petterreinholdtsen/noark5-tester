@@ -25,18 +25,18 @@ uml-arkivstruktur-arkiv-og-arkivdel og uml-arkivstruktur-skjerming.
 Dette er en skrivefeil for metadatafelt M505 skjermingOpphoererDato.
 
 Merk at tilsvarende gjelder for en rekke andre felt i UML-skjemaene.
-Ved å gjøre "egrep -i '[æøå].*:' media/*uml|cut -d: -f2-|cut -d+
--f2-|awk '{print $1}'|sort -u" ser en følgende felter med æøå i seg:
-avskrivningsmåte, elektroniskSignaturSikkerhetsnivå,
-endringsløpenummer, filstørrelse, fødselsnummer, gårdsnummer,
-journalår, konverteringsverktøy, møtedato, møtenummer,
-møteregistreringsstatus, møteregistreringstype, møtesakstype,
-møtested, nøkkelord, referanseForløper, referanseForrigeMøte,
-referanseFraMøteregistrering, referanseNesteMøte,
-referanseTilMøteregistrering, referanseUtlånttil, referanseUtlåntTil,
-saksår, skjermingOpphørerDato, utførtKassasjon, utlåntDato og
-utlåntTil.  Jeg vil sende inn egen mangelmelding for hver av disse
-disse hvis de ikke blir fikset i spesifikasjonsteksten raskt.
+Ved å gjøre "awk '/[æøåÆØÅ].*:/ {print $1}' media/*uml | sort | uniq
+-c | sort -n" ser en følgende felter med æøå i seg: avskrivningsmåte,
+elektroniskSignaturSikkerhetsnivå, endringsløpenummer, filstørrelse,
+fødselsnummer, gårdsnummer, journalår, konverteringsverktøy, møtedato,
+møtenummer, møteregistreringsstatus, møteregistreringstype,
+møtesakstype, møtested, nøkkelord, referanseForløper,
+referanseForrigeMøte, referanseFraMøteregistrering,
+referanseNesteMøte, referanseTilMøteregistrering, referanseUtlånttil,
+referanseUtlåntTil, saksår, skjermingOpphørerDato, utførtKassasjon,
+utlåntDato og utlåntTil.  Jeg vil sende inn egen mangelmelding for
+hver av disse disse hvis de ikke blir fikset i spesifikasjonsteksten
+raskt.
 
 Ønsket endring
 --------------
