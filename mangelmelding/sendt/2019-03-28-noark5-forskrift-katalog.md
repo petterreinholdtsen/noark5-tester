@@ -10,7 +10,7 @@ Samkjør katalognavn i forskrift og standard for hvor arkivdokumenter skal plass
         Dokumentdel  krav 6.4.15:
          Sidenummer  98
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-03-28
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -28,11 +28,10 @@ Følgende står i [Riksarkivarens forskrift), paragraf 5-31 b) og
 c)](https://lovdata.no/dokument/SF/forskrift/2017-12-19-2286/KAPITTEL_5):
 
 > § 5-31. Organisering av datafiler i avleverings- eller deponeringspakke
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 >
 > (1) Filene som utgjør arkivuttrekket, skal være organisert på følgende måte:
 > 
-[...]
+> [...]
 > 
 > b) For arkivdokumenter skal det opprettes en katalog med navnet
 >    DOKUMENT på første nivå under rotkatalogen på vedkommende
@@ -41,6 +40,9 @@ c)](https://lovdata.no/dokument/SF/forskrift/2017-12-19-2286/KAPITTEL_5):
 >    et enkelt arkivdokument består av flere filer, skal disse samles
 >    i én katalog med et entydig navn. Filformat for arkivdokumenter
 >    angis ved filendelse, f.eks. XML, PDF eller TIF.
+
+(Forskriften nevner også katalogen 'RAPPORT', men den finner jeg ikke
+omtalt i noen Noark 5-standard.)
 
 Katalognavnet 'DOKUMENT' er forskjellig fra det som står i Noark 5
 version 3.1 side 97 og Noark 4.0 side 99 (i PDF, mangler sidetall):
@@ -93,11 +95,11 @@ src/Arkivverket.Arkade.Core.Tests/TestData/Noark5/ samt [Documasters
 Noark Extraction validator
 samples](https://github.com/documaster/noark-extraction-validator-samples/tree/master/0.2.0/invalid-pdfa/extraction).
 
-Det virker å være minst jobb totalt sett å endre forskrift og en av
-formuleringene i Noark 5 versjon 5 (som kom 2018-12-06) og ikke har
-implementert så langt, enn å endre alle uttrekkssystem som er laget
-for Noark 3 og 4, samt verktøy som Arkade 5 som er laget for å
-verifisere slike uttrekk.
+Det virker å være minst jobb og lavest kostnader for samfunnet totalt
+sett å endre forskrift og en av formuleringene i Noark 5 versjon 5
+(som kom 2018-12-06) og ingen har implementert så langt, enn å endre
+alle uttrekkssystem som er laget for Noark 3 og 4, samt verktøy som
+Arkade 5 som er laget for å verifisere slike uttrekk.
 
 Ønsket endring
 --------------
@@ -107,3 +109,11 @@ foreslår å endre Riksarkivarens forskrift og Noark 5-standarden til å
 bruke katalognavn med små bokstaver, dvs.  «dokumenter» og
 «rapporter», for å være i tråd med mangeårig innarbeidet praksis med
 bakgrunn i spesifikasjonen fra Noark 3 og 4.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/88 .
