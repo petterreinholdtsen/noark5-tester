@@ -52,3 +52,12 @@ index 96e18b2..9f95936 100644
  
  *Type:* ***Class***
 ```
+
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/90 .
