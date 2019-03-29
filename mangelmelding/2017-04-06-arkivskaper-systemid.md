@@ -28,8 +28,10 @@ ikke er tilstrekkelig.
 Ønsket endring
 --------------
 
-Fjern informasjonen om restriksjoner på Arkivskaprs systemID, da den
+Fjern informasjonen om restriksjoner på Arkivskapers systemID, da den
 kun forvirrer og er redundant.
+
+Konkret er det snakk om følgende endring:
 
 ```
 diff --git a/kapitler/07-tjenester_og_informasjonsmodell.md b/kapitler/07-tjenester_og_informasjonsmodell.md
