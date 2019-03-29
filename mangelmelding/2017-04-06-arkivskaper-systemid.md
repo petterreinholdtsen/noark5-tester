@@ -22,8 +22,8 @@ Beskrivelse
 Beskrivelsen av del 7.2.1.4 (Arkivskaper) på side 81 og 82 er litt
 forvirrende.  Under restriksjoner står det at systemID skal være
 utfylt, men ingen forklaring om hvorfor det er omtalt der og heller
-ingen forklaring om hvorfor beskrivelsen som del av Arkivenhet ikke er
-tilstrekkelig.
+ingen forklaring om hvorfor beskrivelsen som er en del av Arkivenhet 
+ikke er tilstrekkelig.
 
 Ønsket endring
 --------------
