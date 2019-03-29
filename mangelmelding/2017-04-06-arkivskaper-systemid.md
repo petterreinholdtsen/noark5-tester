@@ -1,4 +1,4 @@
-Mangler systemID i attributtlisten for arkivskaper?
+Forvirrende om systemID-attributten til Arkivskaper
 ===================================================
 
  ------------------  ---------------------------------
@@ -19,22 +19,34 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-Etter listen med attributter i del 7.2.1.4 (Arkivskaper) på side 81
-står det i restriksjoner på side 82 at "Etter registrering skal
-systemID være utfylt".  Men I selve listen med attributter på side 81
-og 82 så er ikke systemID nevnt.  Skulle systemID vært med i
-attributtlisten?
-
-FIXME Hvordan er forholdet mellom arkivskaper and arkiv?  kan
-arkivskaper eksistere uten arkiv?
+Beskrivelsen av del 7.2.1.4 (Arkivskaper) på side 81 og 82 er litt
+forvirrende.  Under restriksjoner står det at systemID skal være
+utfylt, men ingen forklaring om hvorfor det er omtalt der og heller
+ingen forklaring om hvorfor beskrivelsen som del av Arkivenhet ikke er
+tilstrekkelig.
 
 Ønsket endring
 --------------
 
-Legg inn følgende attributtbeskrivelse før arkivskaperID på side 81:
+Fjern informasjonen om restriksjoner på Arkivskaprs systemID, da den
+kun forvirrer og er redundant.
 
- Navn     | Merknad   | Multipl. |Kode | Type
- ---------+-----------+----------+-----+---------------------------
- systemID |           | [1..1]   |     | SystemID
-
-FIXME vurder om forslaget er tilstrekkelig.
+```
+diff --git a/kapitler/07-tjenester_og_informasjonsmodell.md b/kapitler/07-tjenester_og_informasjonsmodell.md
+index 96e18b2..9f95936 100644
+--- a/kapitler/07-tjenester_og_informasjonsmodell.md
++++ b/kapitler/07-tjenester_og_informasjonsmodell.md
+@@ -426,12 +426,6 @@ Table: Attributter
+ | arkivskaperNavn | Definisjon: Navn på organisasjonen som har skapt arkivet . Kilde: Registreres manuelt ved opprettelsen av arkivet. Kommentarer: (ingen). M023 | \[1..1\] | | string | 
+ | beskrivelse | Definisjon: Tekstlig beskrivelse av arkivenheten. Kilde: Registreres  manuelt. Kommentarer: Tilsvarende attributt finnes ikke i Noark 4 (men noen tabeller hadde egne attributter for merknad som kunne brukes som et beskrivelsesfelt). M021 | \[0..1\] | | string |
+ 
+-Table: Restriksjoner
+-
+-| **Navn**                                          | **Merknad** |
+-| ------------------------------------------------- | ----------- |
+-| Ny - Etter registrering skal systemID være utfylt |             |
+-
+ #### Basisregistrering
+ 
+ *Type:* ***Class***
+```
