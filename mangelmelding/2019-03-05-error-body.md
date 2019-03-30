@@ -40,7 +40,7 @@ Det er helt ulikt hvordan det gjøres i Evrys implementasjon:
 }
 ```
 
-Returverdien bør ses i sammenheng med hvordan andre resultater fra API
+Returverdien bør ses i sammenheng med hvordan andre resultater fra APIet
 ser ut.  Det vil for eksempel være enklere for en API-klient hvis det
 alltid returneres et JSON-objekt (aka {...}) både på toppnivå, som
 søkeresultat og for enkeltoppføringer.  Jeg tenker her spesielt på at
@@ -102,7 +102,7 @@ og kan forenkle implementeringen.
 
 Et spørsmål som må avklares er om teksten i "message" alltid skal ha
 samme språk, eller om API-tjenermaskinen kan velge om det skal sendes
-over på f.eks. engelsk, bokmål, nynorsk.  Det er enklere for
+over på f.eks. engelsk, bokmål eller nynorsk.  Det er enklere for
 API-klienter å maskinelt tolke meldingen hvis meldingene er kjente og
 alltid har et fast språk, mens det er vanskeligere for klienten hvis
 meldingen må oversettes på klientsiden før presentasjon til en bruker,
@@ -117,8 +117,8 @@ trebokstavs språkkode i tråd med ISO 639:
   "error": {
     "code": 404
     "message": {
-       "en": "File not found: {info-om-instans-sti/navn}",
-       "nb": "Fant ikke filen: {info-om-instans-sti/navn}"
+       "en": "Not Found: {info-om-instans-sti/navn}",
+       "nb": "Fant ikke : {info-om-instans-sti/navn}"
     }
     "more_info": "https://url/til/dokumentasjon/som/forklarer/feilen/"
   }
@@ -142,8 +142,8 @@ som lyder som følger:
 >  * HTTP statuskoder og meldinger i HTTP-hodefelt
 >  * Et JSON-objekt som HTTP-responsens innhold (aka "body") med
 >    ytterligere detaljer for å forstå hva som gikk galt.  Denne har
->    en attributt "error" som peker til et JSON-objekt med feltene
->    "code", "message" og "more_info".
+>    en attributt "feil" som peker til et JSON-objekt med feltene
+>    "kode", "beskrivelse" og "merInfo".
 >
 > Som et eksempel, hvis en forsøker å hente ned en instans
 > "arkivstruktur/arkivdel/9d5bda48-52b5-11e9-abc0-002354090596/" som
@@ -151,18 +151,18 @@ som lyder som følger:
 > 
 > ```
 > {
->   "error": {
->     "code": 404
->     "message": "File not found: arkivstruktur/arkivdel/9d5bda48-52b5-11e9-abc0-002354090596/"
->     "more_info": "https://url/til/dokumentasjon/som/forklarer/feilen/"
+>   "feil": {
+>     "kode": 404
+>     "beskrivelse": "Not Found: arkivstruktur/arkivdel/9d5bda48-52b5-11e9-abc0-002354090596/"
+>     "merInfo": "https://url/til/dokumentasjon/som/forklarer/feilen/"
 >   }
 > }
 > ```
 >
-> | Felt                  | Beskrivelse                                                                   |
-> |-----------------------|-------------------------------------------------------------------------------|
-> | code                  | Feilkoden, samme som HTTP statuskoden til feilmeldingen.                      |
-> | message               | En kort melding som beskriver feilen                                          |
-> | more_info (valgfritt) | En URL med peker til der mer informasjon om feilen med forslag til løsninger. |
+> | Felt                  | Beskrivelse                                                                                |
+> |-----------------------|--------------------------------------------------------------------------------------------|
+> | kode                  | Feilkoden, samme som HTTP statuskoden til feilmeldingen                                    |
+> | beskrivelse           | En kort melding som beskriver feilen                                                       |
+> | merInfo (valgfritt)   | En URL med peker til en ressurs med mer informasjon om feilen og med forslag til løsninger |
 >
-> Lenken i more_info kan peke til en leverandørspesifikk side med informasjon om feilsøking.
+> Lenken i merInfo kan peke til en leverandørspesifikk side med informasjon om feilsøking.
