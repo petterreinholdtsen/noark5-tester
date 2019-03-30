@@ -146,14 +146,14 @@ som lyder som følger:
 >    "code", "message" og "more_info".
 >
 > Som et eksempel, hvis en forsøker å hente ned en instans
-> "arkivdel/9d5bda48-52b5-11e9-abc0-002354090596" som ikke finnes, så
-> vil JSON-responsen være strukturert på denne måten:
+> "arkivstruktur/arkivdel/9d5bda48-52b5-11e9-abc0-002354090596/" som
+> ikke finnes, så vil JSON-responsen være strukturert på denne måten:
 > 
 > ```
 > {
 >   "error": {
 >     "code": 404
->     "message": "File not found: {info-om-instans-sti/navn}"
+>     "message": "File not found: arkivstruktur/arkivdel/9d5bda48-52b5-11e9-abc0-002354090596/"
 >     "more_info": "https://url/til/dokumentasjon/som/forklarer/feilen/"
 >   }
 > }
