@@ -109,7 +109,8 @@ meldingen må oversettes på klientsiden før presentasjon til en bruker,
 med mindre alle mulige meldinger er spesifisert i API-spesifikasjonen
 slik at klienter kan oversette alle mulige meldinger.  En mulig
 løsning her er å gi ut meldingen på to språk, et fast og en
-oversettelse, ala dette:
+oversettelse, ala dette, der meldingene er markert med to eller
+trebokstavs språkkode i tråd med ISO 639:
 
 ```
 {
