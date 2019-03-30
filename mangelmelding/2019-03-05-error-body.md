@@ -40,22 +40,20 @@ Det er helt ulikt hvordan det gjøres i Evrys implementasjon:
 }
 ```
 
-Returverdien bør ses i sammenheng med hvordan andre resultater fra APIet
-ser ut.  Det vil for eksempel være enklere for en API-klient hvis det
-alltid returneres et JSON-objekt (aka {...}) både på toppnivå, som
-søkeresultat og for enkeltoppføringer.  Jeg tenker her spesielt på at
-en bør tenke på feilmeldinger når en bestemmer hvordan tomme lister
-([mangelmelding
+Returverdien bør ses i sammenheng med hvordan andre resultater fra
+APIet ser ut.  Det vil for eksempel være enklere for en API-klient
+hvis det alltid returneres et JSON-objekt (det vil si omkranset av
+{...}) både på toppnivå, som søkeresultat og for enkeltoppføringer.
+Jeg tenker her spesielt på at en bør tenke på formattering av
+feilmeldinger når en bestemmer hvordan tomme lister ([mangelmelding
 #18](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/18)
 og listeresultater ([mangelmelding
 12](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/12))
 skal formatteres.
 
-Det er mange måter å gjøre dette på.  Det kan være lurt å se på
-hvordan [Google
-Drive](https://developers.google.com/drive/api/v3/handle-errors) og
-[Amazon
-S3](https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html)
+Det er mange måter å gjøre dette på.  Det kan være nyttig å se på hva
+[Google Drive](https://developers.google.com/drive/api/v3/handle-errors) og
+[Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html)
 har spesifisert rundt feilmeldinger.  En kan også hente inspirasjon
 fra bloggposten [REST API Error Codes
 101](https://blog.restcase.com/rest-api-error-codes-101/) som går
@@ -93,30 +91,74 @@ Amazon S3s feilresponser kan se slik ut:
 ```
 
 Jeg foreslår at feilmeldinger struktureres som JSON-objekt med
-"error"-attributt ala det Google Drive bruker.  Ved å strukturere
-JSON-responsen som JSON-objekt med "error"-attributt gis API-klienter
-mulighet til å oppdage feil ved se etter "error"-attributtet i
+"feil"-attributt ala det Google Drive bruker.  Ved å strukturere
+JSON-responsen som JSON-objekt med "feil"-attributt gis API-klienter
+mulighet til å oppdage feil ved se etter "feil"-attributtet i
 JSON-responsen i tillegg til å sjekke HTTP-statuskoden.  Det gjør det
 mulig for klientkoden å kun forholde seg til JSON-responsen internt,
-og kan forenkle implementeringen.
-
-Et spørsmål som må avklares er om teksten i "message" alltid skal ha
-samme språk, eller om API-tjenermaskinen kan velge om det skal sendes
-over på f.eks. engelsk, bokmål eller nynorsk.  Det er enklere for
-API-klienter å maskinelt tolke meldingen hvis meldingene er kjente og
-alltid har et fast språk, mens det er vanskeligere for klienten hvis
-meldingen må oversettes på klientsiden før presentasjon til en bruker,
-med mindre alle mulige meldinger er spesifisert i API-spesifikasjonen
-slik at klienter kan oversette alle mulige meldinger.  En mulig
-løsning her er å gi ut meldingen på to språk, et fast og en
-oversettelse, ala dette, der meldingene er markert med to eller
-trebokstavs språkkode i tråd med ISO 639:
+og kan forenkle implementeringen for API-klienter.  Det kan dermed bli
+seende omtrent slik ut:
 
 ```
 {
-  "error": {
-    "code": 404
-    "message": {
+  "feil": {
+    "kode": 404
+    "beskrivelse": "Not Found: arkivstruktur/arkivdel/9d5bda48-52b5-11e9-abc0-002354090596/"
+    "merInfo": "https://url/til/dokumentasjon/som/forklarer/feilen/"
+  }
+}
+```
+
+Det kan være hensiktsmessig å returnere informasjon om flere feil i
+samme melding, f.eks. hvis oppretting av en entitetsinstans blir
+avvist på grunn av feil i attributter, der det er feil i flere
+attributter.  I så fall bør det legges til et liste-attributt med
+individuelle feil, ala det Google Drive-feilmeldingene legger opp til.
+Kanskje noe ala dette kunne fungere:
+
+```
+{
+  "feil": {
+    "kode": 400,
+    "beskrivelse": "Bad Request: arkivstruktur/arkivdel/9d5bda48-52b5-11e9-abc0-002354090596/",
+    "merInfo": "https://url/til/dokumentasjon/som/forklarer/feilen/",
+    "feil": [
+       {
+         "begrunnelse" : "illegal value in tittel",
+         "beskrivelse": "can not be empty or only contain whitespace"
+       },
+       {
+         "begrunnelse" : "illegal value in dokumentmedium",
+         "beskrivelse": "must have value from Dokumentmedium metadata set"
+       },
+    ]
+  }
+}
+```
+
+Selv om dette utvilsomt kan være nyttig med detaljert informasjon om
+feilen, så foreslår jeg å gå for en enklere modell, for å gjøre det
+enklere å implementere API-et.  Et alternativ kan være å utbrodere i
+"beskrivelse", hvis det feltet gjøres til et fritekstfelt uten kjente
+verdier.
+
+Et spørsmål som må avklares er om teksten i attributten "beskrivelse"
+alltid skal ha samme språk, eller om API-tjenermaskinen kan velge om
+det skal sendes over på f.eks. engelsk, bokmål eller nynorsk.  Det er
+enklere for API-klienter å maskinelt tolke meldingen hvis meldingene
+er kjente og alltid har et fast språk, mens det er vanskeligere for
+klienten hvis meldingen må oversettes på klientsiden før presentasjon
+til en bruker, med mindre alle mulige meldinger er spesifisert i
+API-spesifikasjonen slik at klienter kan oversette alle mulige
+meldinger.  En mulig løsning her er å gi ut meldingen på to språk, et
+fast og en oversettelse, ala dette, der meldingene er markert med to
+eller trebokstavs språkkode i tråd med ISO 639:
+
+```
+{
+  "feil": {
+    "kode": 404
+    "beskrivelse": {
        "en": "Not Found: {info-om-instans-sti/navn}",
        "nb": "Fant ikke : {info-om-instans-sti/navn}"
     }
@@ -146,7 +188,7 @@ som lyder som følger:
 >    "kode", "beskrivelse" og "merInfo".
 >
 > Som et eksempel, hvis en forsøker å hente ned en instans
-> "arkivstruktur/arkivdel/9d5bda48-52b5-11e9-abc0-002354090596/" som
+> ".../arkivstruktur/arkivdel/9d5bda48-52b5-11e9-abc0-002354090596/" som
 > ikke finnes, så vil JSON-responsen være strukturert på denne måten:
 > 
 > ```
