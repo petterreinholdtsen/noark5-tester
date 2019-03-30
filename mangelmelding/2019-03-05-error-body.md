@@ -92,13 +92,23 @@ Amazon S3s feilresponser kan se slik ut:
 </Error>
 ```
 
+Jeg foreslår at feilmeldinger struktureres som JSON-objekt med
+"error"-attributt ala det Google Drive bruker.  Ved å strukturere
+JSON-responsen som JSON-objekt med "error"-attributt gis API-klienter
+mulighet til å oppdage feil ved se etter "error"-attributtet i
+JSON-responsen i tillegg til å sjekke HTTP-statuskoden.  Det gjør det
+mulig for klientkoden å kun forholde seg til JSON-responsen internt,
+og kan forenkle implementeringen.
+
 Et spørsmål som må avklares er om teksten i "message" alltid skal ha
 samme språk, eller om API-tjenermaskinen kan velge om det skal sendes
 over på f.eks. engelsk, bokmål, nynorsk.  Det er enklere for
 API-klienter å maskinelt tolke meldingen hvis meldingene er kjente og
 alltid har et fast språk, mens det er vanskeligere for klienten hvis
-meldingen må oversettes på klientsiden før presentasjon til en bruker.
-En mulig løsning her er å gi ut meldingen på to språk, et fast og en
+meldingen må oversettes på klientsiden før presentasjon til en bruker,
+med mindre alle mulige meldinger er spesifisert i API-spesifikasjonen
+slik at klienter kan oversette alle mulige meldinger.  En mulig
+løsning her er å gi ut meldingen på to språk, et fast og en
 oversettelse, ala dette:
 
 ```
@@ -116,6 +126,7 @@ oversettelse, ala dette:
 
 Jeg foreslår at meldingene alltid er på samme språk, og har gått for
 engelsk i mitt forslag.
+
 
 Ønsket endring
 --------------
@@ -147,14 +158,10 @@ som lyder som følger:
 > }
 > ```
 >
-> | Felt      | Beskrivelse                                                                   |
-> |-----------|-------------------------------------------------------------------------------|
-> | code      | Feilkoden, samme som HTTP statuskoden til feilmeldingen.                      |
-> | message   | En kort melding som beskriver feilen                                          |
-> | more_info | En URL med peker til der mer informasjon om feilen med forslag til løsninger. |
-
-Ved å strukturere JSON-responsen som JSON-objekt med "error"-attributt
-gis API-klienter mulighet til å oppdage feil ved se etter
-"error"-attributtet i JSON-responsen i tillegg til å sjekke
-HTTP-statuskoden.  Det gjør det mulig for klientkoden å kun forholde
-seg til JSON-responsen internt, og kan forenkle implementeringen.
+> | Felt                  | Beskrivelse                                                                   |
+> |-----------------------|-------------------------------------------------------------------------------|
+> | code                  | Feilkoden, samme som HTTP statuskoden til feilmeldingen.                      |
+> | message               | En kort melding som beskriver feilen                                          |
+> | more_info (valgfritt) | En URL med peker til der mer informasjon om feilen med forslag til løsninger. |
+>
+> Lenken i more_info kan peke til en leverandørspesifikk side med informasjon om feilsøking.
