@@ -1,10 +1,10 @@
-Hvordan defineres relasjoner mellom mappe og undermappe?
-========================================================
+Hvordan håndteres undermappe i mappe?
+=====================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
-        Alvorlighet  kommentar
+        Alvorlighet  protest
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
         Dokumentdel  7.2.1.16
@@ -25,55 +25,106 @@ Listen over relasjonsnøkler for klassen Mappe på sidene 133-134 viser
 at en kan få ut oversikt over undermapper ved å benytte relasjonen
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/, men har
 ingen tilsvarende relasjon ny-undermappe/ for å *opprette* en ny
-undermappe.  Hvordan er det mening at en skal opprette en nytt
-undermappe knyttet til en mappe?
+undermappe.  Det er ikke beskrevet hvordan det er mening at en skal
+opprette en nytt undermappe knyttet til en mappe.
 
 I listen over relasjonsnøkler finnes relasjonene
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/ og
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/, men det er
-uklart hva som er forskjellen på relasjonene 'mappe' og 'undermappe'.
-I følge UML-skjema er enhvert mappe som er koblet under en annen mappe
-en undermappe.  Det virker dermed som om relasjonene for 'mappe' og
-'undermappe' er redundante.
+uklart fra beskrivelsen hva som er forskjellen på relasjonene 'mappe'
+og 'undermappe'.  Det virker rimelig å anta at
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ henviser til
+entitetstype og skal brukes for å identifisere 'self'-relasjonens
+entitet, mens
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/ er
+operasjonen for å hente ut undermapper.  I følge UML-skjema er enhvert
+mappe som er koblet under en annen mappe en undermappe.  Det bør
+beskrives i spesifikasjonen hva som er forskjellen på mappe- og
+undermappe-relasjonene for klassen Mappe, og hvordan en oppretter en
+ny undermappe.
 
-Det virker dermed nærliggende å tro at relasjonen
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/ er en
-skrivefeil.  Hvis det ikke er en skrivefeil bør det forklares i
-spesifikasjonen hva som er forskjellen på mappe- og
-undermappe-relasjonene for klassen Mappe.
+Det er ikke klart fra spesifikasjonen hvordan en finner
+"foreldremappen" til en mappe i en mappe.  Er det attributten
+referanseForelderMappe med verditype SystemID som er tiltenkt denne
+rollen?  For andre entiteter er foreldre-entitet tilgjengelig med
+navngitte relasjoner som oppgir href til foreldre-entiteten.  For
+eksempel for entiteten Arkivdel er det en navngitt relasjon 'arkiv'
+med tilhørende relasjonsnøkkel
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/ som jeg
+forventer peker til foreldrearkivet.
 
-En mulig tolkning er at relasjonen 'mappe' peker til
-"foreldre"-mappen, mens 'undermappe' peker til undermapper, men en
-slik tolkning gir ikke mening når det eksisterer en relasjon
-'ny-mappe' men ingen 'ny-undermappe'.
+Det er ikke mulig å bruke en tilsvarende relasjon for å referere til
+en foreldrentitet av samme type som seg selv, da det ville føre til
+følgende innhold i _links:
 
-Jeg foreslår at relasjonen 'undermappe' fjernes og at kun relasjonene
-'mappe/' og 'ny-mappe/' brukes til å finne og opprette undermappe.
-Følgende brukes for å illustrere dette.
+"_links": [
+  {
+    "rel": "self",
+    "href": "somewhere"
+  },
+  {
+    "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/",
+    "href": "somewhere"
+  },
+  {
+    "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/",
+    "href": "somewhere-else"
+  },
+  ...
+}
+
+Dette fungerer ikke, da en ikke kan ha to relasjoner som peker til to
+ulike href.
+
+En mulig løsning er å lage en relasjon 'foreldermappe", ala dette:
+
+"_links": [
+  {
+    "rel": "self",
+    "href": "somewhere"
+  },
+  {
+    "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/",
+    "href": "somewhere"
+  },
+  {
+    "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/foreldermappe/",
+    "href": "somewhere-else"
+  },
+  ...
+}
+
+En kan tilsvarende ha en relasjon til undermapper ved å søke etter
+mapper med gjeldende mappe som foreldermappe.
+
+"_links": [
+  ...
+  {
+    "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/",
+    "href": "<base>/arkivstruktur/mappe/?$filter=foreldermappe eq <denne mappens SystemID>"
+  },
+  ...
+}
 
 For å opprette en undermappe skal POST til href som er knyttet til
 følgende relasjon brukes:
 
  * http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/
 
-For å hente en liste av undermappe skal GET til href som er knyttet
-til følgende relasjon brukes:
+Merk, det er en tilsvarende utfordring for arkiv/underarkiv i del
+7.2.1.1 side 57 og klasse/underklasse i del 7.2.1.12 side 116.
+Løsningen som velges for mappe/undermappe bør også gjelde for
+arkiv/underarkiv og klasse/underklasse og dokumenteres tilsvarende
+der.
 
- * http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/
-
-Merk, det er en tilsvarende situasjon for arkiv/underarkiv i del
-7.2.1.1 side 57, der det kun finnes relasjon 'ny-arkiv' for å opprette
-'arkiv', og ingen relasjon 'ny-underarkiv'.  Det finnes derimot
-relasjoner for å liste opp både 'arkiv' og 'underarkiv'.
+Merk at relasjon for underarkiv/underklasse/undermappe er oppgitt to
+ganger i spesifikasjonen, rapportert som [endringsforslag
+#84](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/pull/84).
 
 Ønsket endring
 --------------
 
-FIXME lag forslag som gjør det mulig å finne foreldremappe samtidig som undermapper kan lages og listes opp.
-
-Fjern duplikat-Aggregation med kilde undermappe som er både på side
-133 og 132.
-
-Fjern relasjonen
-`http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/` fra
-listen over relasjonsnøkler på side 134.
+FIXME beskriv klart hvordan det mulig å finne foreldremappe samtidig
+som undermapper kan lages og listes opp.  Bør kanskje inn i kapittel 6
+som generell beskrivelse, som så henvises til fra entitetsbeskrivelsen
+til arkiv, klasse og mappe?
