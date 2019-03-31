@@ -20,10 +20,11 @@ tilgjengelig fra
 Beskrivelse
 -----------
 
-Relasjonslenkene er i dag ikke strukturert i tråd med forslaget i
-[JSON Hypertext Application
-Language](https://tools.ietf.org/html/draft-kelly-json-hal-08), som
-beskriver følgnde struktur:
+I kapittel 2 er det sagt at normativ referanse for webtjenester med
+REST/HATEOAS er [JSON Hypertext Application
+Language](https://tools.ietf.org/html/draft-kelly-json-hal-08).  Men
+relasjonslenkene er i dag ikke strukturert i tråd med den
+spesifikasjonen, som beskriver følgnde struktur:
 
 ```
 {
@@ -60,6 +61,7 @@ Endre alle _links-oppføringer fra dette formatet:
 
 til dette:
 
+```
 "_links": {
   "self" : { "href": "<base>/arkivstruktur/mappe/7b3989b0-53d7-11e9-bd4e-17d6c4d53856/" }
   "http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/" : {
