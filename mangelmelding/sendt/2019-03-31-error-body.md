@@ -10,7 +10,7 @@ Hvilken nyttelast skal returneres ved feil?
         Dokumentdel  6
          Sidenummer  28
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-03-31
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -19,7 +19,7 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-Det bør beskrives hva som skal returneres i HTTP "body" når det
+Det bør beskrives hva som skal returneres i HTTP «body» når det
 returneres en feil, for å sikre at API-klienter vet hvordan de kan
 finne ut mer om hva som feilet.  I dag gjøres dette på to ulike måter
 i utkastene til implementasjon av API-spesifikasjonen.  Slik gjøres
@@ -91,9 +91,9 @@ Amazon S3s feilresponser kan se slik ut:
 ```
 
 Jeg foreslår at feilmeldinger struktureres som JSON-objekt med
-"feil"-attributt ala det Google Drive bruker.  Ved å strukturere
-JSON-responsen som JSON-objekt med "feil"-attributt gis API-klienter
-mulighet til å oppdage feil ved se etter "feil"-attributtet i
+«feil»-attributt ala det Google Drive bruker.  Ved å strukturere
+JSON-responsen som JSON-objekt med «feil»-attributt gis API-klienter
+mulighet til å oppdage feil ved se etter «feil»-attributtet i
 JSON-responsen i tillegg til å sjekke HTTP-statuskoden.  Det gjør det
 mulig for klientkoden å kun forholde seg til JSON-responsen internt,
 og kan forenkle implementeringen for API-klienter.  Det kan dermed bli
@@ -139,10 +139,10 @@ Kanskje noe ala dette kunne fungere:
 Selv om dette utvilsomt kan være nyttig med detaljert informasjon om
 feilen, så foreslår jeg å gå for en enklere modell, for å gjøre det
 enklere å implementere API-et.  Et alternativ kan være å utbrodere i
-"beskrivelse", hvis det feltet gjøres til et fritekstfelt uten kjente
+«beskrivelse», hvis det feltet gjøres til et fritekstfelt uten kjente
 verdier.
 
-Et spørsmål som må avklares er om teksten i attributten "beskrivelse"
+Et spørsmål som må avklares er om teksten i attributten «beskrivelse»
 alltid skal ha samme språk, eller om API-tjenermaskinen kan velge om
 det skal sendes over på f.eks. engelsk, bokmål eller nynorsk.  Det er
 enklere for API-klienter å maskinelt tolke meldingen hvis meldingene
@@ -162,7 +162,7 @@ eller trebokstavs språkkode i tråd med ISO 639:
        "en": "Not Found: {info-om-instans-sti/navn}",
        "nb": "Fant ikke : {info-om-instans-sti/navn}"
     }
-    "more_info": "https://url/til/dokumentasjon/som/forklarer/feilen/"
+    "merInfo": "https://url/til/dokumentasjon/som/forklarer/feilen/"
   }
 }
 ```
@@ -182,13 +182,13 @@ som lyder som følger:
 > API-et returnerer to nivåer av tilbakemeldinger ved feil:
 > 
 >  * HTTP statuskoder og meldinger i HTTP-hodefelt
->  * Et JSON-objekt som HTTP-responsens innhold (aka "body") med
+>  * Et JSON-objekt som HTTP-responsens innhold (aka «body») med
 >    ytterligere detaljer for å forstå hva som gikk galt.  Denne har
->    en attributt "feil" som peker til et JSON-objekt med feltene
->    "kode", "beskrivelse" og "merInfo".
+>    en attributt «feil» som peker til et JSON-objekt med feltene
+>    «kode», «beskrivelse» og «merInfo».
 >
 > Som et eksempel, hvis en forsøker å hente ned en instans
-> ".../arkivstruktur/arkivdel/9d5bda48-52b5-11e9-abc0-002354090596/" som
+> «.../arkivstruktur/arkivdel/9d5bda48-52b5-11e9-abc0-002354090596/» som
 > ikke finnes, så vil JSON-responsen være strukturert på denne måten:
 > 
 > ```
@@ -208,3 +208,11 @@ som lyder som følger:
 > | merInfo (valgfritt)   | En URL med peker til en ressurs med mer informasjon om feilen og med forslag til løsninger |
 >
 > Lenken i merInfo kan peke til en leverandørspesifikk side med informasjon om feilsøking.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/93 .
