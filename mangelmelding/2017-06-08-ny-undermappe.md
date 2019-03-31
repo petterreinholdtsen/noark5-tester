@@ -21,12 +21,12 @@ Beskrivelse
 
 Dette gjelder del 7.2.1.16 (Mappe).
 
-Listen over relasjonsnøkler for klassen Mappe på sidene 133-134 viser
+Listen over relasjonsnøkler for entiteten Mappe på sidene 133-134 viser
 at en kan få ut oversikt over undermapper ved å benytte relasjonen
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/, men har
 ingen tilsvarende relasjon ny-undermappe/ for å *opprette* en ny
 undermappe.  Det er ikke beskrevet hvordan det er mening at en skal
-opprette en nytt undermappe knyttet til en mappe.
+opprette en ny undermappe knyttet til en mappe.
 
 I listen over relasjonsnøkler finnes relasjonene
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe/ og
@@ -37,10 +37,10 @@ http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/ henviser til
 entitetstype og skal brukes for å identifisere 'self'-relasjonens
 entitet, mens
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/ er
-operasjonen for å hente ut undermapper.  I følge UML-skjema er enhvert
+operasjonen for å hente ut undermapper.  I følge UML-skjema er enhver
 mappe som er koblet under en annen mappe en undermappe.  Det bør
 beskrives i spesifikasjonen hva som er forskjellen på mappe- og
-undermappe-relasjonene for klassen Mappe, og hvordan en oppretter en
+undermappe-relasjonene for entiteten Mappe, og hvordan en oppretter en
 ny undermappe.
 
 Det er ikke klart fra spesifikasjonen hvordan en finner
@@ -101,7 +101,7 @@ mapper med gjeldende mappe som foreldermappe.
   ...
   {
     "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/",
-    "href": "<base>/arkivstruktur/mappe/?$filter=foreldermappe eq <denne mappens SystemID>"
+    "href": "<base>/arkivstruktur/mappe/?$filter=foreldermappe eq <denne mappens systemID>"
   },
   ...
 }
