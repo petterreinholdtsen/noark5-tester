@@ -57,6 +57,7 @@ Det er ikke mulig å bruke en tilsvarende relasjon for å referere til
 en foreldrentitet av samme type som seg selv, da det ville føre til
 følgende innhold i _links:
 
+```
 "_links": [
   {
     "rel": "self",
@@ -72,12 +73,15 @@ følgende innhold i _links:
   },
   ...
 }
+```
 
 Dette fungerer ikke, da en ikke kan ha to relasjoner som peker til to
 ulike href.
 
-En mulig løsning er å lage en relasjon 'foreldermappe", ala dette:
+En mulig løsning er å lage en relasjon 'foreldermappe" eller
+"forelder", ala dette:
 
+```
 "_links": [
   {
     "rel": "self",
@@ -93,10 +97,12 @@ En mulig løsning er å lage en relasjon 'foreldermappe", ala dette:
   },
   ...
 }
+```
 
 En kan tilsvarende ha en relasjon til undermapper ved å søke etter
 mapper med gjeldende mappe som foreldermappe.
 
+```
 "_links": [
   ...
   {
@@ -105,6 +111,7 @@ mapper med gjeldende mappe som foreldermappe.
   },
   ...
 }
+```
 
 For å opprette en undermappe skal POST til href som er knyttet til
 følgende relasjon brukes:
@@ -117,9 +124,9 @@ Løsningen som velges for mappe/undermappe bør også gjelde for
 arkiv/underarkiv og klasse/underklasse og dokumenteres tilsvarende
 der.
 
-Merk at relasjon for underarkiv/underklasse/undermappe er oppgitt to
-ganger i spesifikasjonen, rapportert som [endringsforslag
-#84](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/pull/84).
+Merk at relasjon for underarkiv/underklasse/undermappe er ført opp med
+duplikater i spesifikasjonen, å rydde opp i dette er sendt inn som
+[endringsforslag #84](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/pull/84).
 
 Ønsket endring
 --------------
