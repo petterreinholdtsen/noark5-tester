@@ -51,7 +51,8 @@ noen relasjoner som ikke er omtalt i spesifikasjonen:
  * http://rel.kxml.no/noark5/v4/api/arkivstruktur/utvid-til-saksmappe/
 
 Flere av disse relasjonene ser ut til å være operasjoner det ville
-vært nyttig å ha med i spesifikasjonen.
+vært nyttig å ha med i spesifikasjonen.  For eksempel er det ellers
+uklart hvordan lage en ny basisregistrering knyttet til en mappe.
 
 Det er til gjengjeld også noen relasjoner som kun finnes i
 spesifikasjonen og ikke i eksempelet.
