@@ -19,7 +19,8 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-Dette gjelder del 7.2.1.16 (Mappe).
+Dette gjelder del 7.2.1.16 (Mappe) side 134, men tilsvarende problem
+eksisterer for 7.2.1.1 (Arkiv ) side 57 og 7.2.1.12 (Klasse) side 116.
 
 Listen over relasjonsnøkler for entiteten Mappe på sidene 133-134 viser
 at en kan få ut oversikt over undermapper ved å benytte relasjonen
@@ -124,9 +125,9 @@ Løsningen som velges for mappe/undermappe bør også gjelde for
 arkiv/underarkiv og klasse/underklasse og dokumenteres tilsvarende
 der.
 
-Merk at relasjon for underarkiv/underklasse/undermappe er ført opp med
-duplikater i spesifikasjonen, å rydde opp i dette er sendt inn som
-[endringsforslag #84](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/pull/84).
+Merk videre at relasjon for underarkiv/underklasse/undermappe er ført
+opp med duplikater i spesifikasjonen, å rydde opp i dette er sendt inn
+som [endringsforslag #84](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/pull/84).
 
 Ønsket endring
 --------------
@@ -135,3 +136,58 @@ FIXME beskriv klart hvordan det mulig å finne foreldremappe samtidig
 som undermapper kan lages og listes opp.  Bør kanskje inn i kapittel 6
 som generell beskrivelse, som så henvises til fra entitetsbeskrivelsen
 til arkiv, klasse og mappe?
+
+Foreslår at det legges inn et nytt avsnitt om hvordan slike skal
+håndteres før overskriften "Slette objekter (Delete)":
+
+#### Rekursive entitetshierarkier
+
+Noen entiteter kan ha samme type entitet under seg, og slik danne et
+rekursivt hierarki av instanser.  Det gjelder Arkiv, Klasse og Mappe,
+og entiter som arver fra disse (som Saksmappe og Moetemappe).
+
+Da det er ikke mulig å la samme relasjon peke til flere ulike href-er,
+så må dette håndteres litt annerledes enn relasjoner mellom entiteter
+av ulik type.  Listen over under-instanser til en gitt instans kan
+hentes ut ved å følge href for relasjonen
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/underxx/, der xx er
+byttet ut med navnet på entitet.  Eksempler på slike relasjoner
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/underarkiv/ og
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/.
+
+Av samme grunn er det ikke mulig å la foreldrerelasjonen gjenbruke
+entitetens relasjon.  En kan der finne foreldreinstans ved å følge
+href for relasjonen
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/forelderxx/.  Eksempler
+på slike relasjoner
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/forelderarkiv/ og
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/foreldermappe/.
+
+JSON-listen over relasjoner for en mappe midt i et slikt hierarki kan
+for eksempel se slik ut:
+
+```Python
+"_links": [
+  {
+    "rel": "self",
+    "href": "<base>/arkivstruktur/mappe/7b3989b0-53d7-11e9-bd4e-17d6c4d53856/"
+  },
+  {
+    "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/",
+    "href": "<base>/arkivstruktur/mappe/7b3989b0-53d7-11e9-bd4e-17d6c4d53856/"
+  },
+  {
+    "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/foreldermappe/",
+    "href": "<base>/arkivstruktur/mappe/6787ba68-53d7-11e9-a583-8f084aaf5d19/"
+  },
+  {
+    "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/",
+    "href": "<base>/arkivstruktur/mappe/?$filter=foreldermappe eq 7b3989b0-53d7-11e9-bd4e-17d6c4d53856"
+  },
+  ...
+}
+```
+
+I tillegg til dette tillegget til kapittel 6, så skal attributt
+"referanseForelderMappe" fjernes fra Mappe, da det i stedet brukes en
+relasjon med tilhørende relasjonsnøkkel.
