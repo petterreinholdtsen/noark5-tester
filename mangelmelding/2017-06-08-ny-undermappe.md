@@ -45,7 +45,7 @@ undermappe-relasjonene for entiteten Mappe, og hvordan en oppretter en
 ny undermappe.
 
 Det er ikke klart fra spesifikasjonen hvordan en finner
-"foreldremappen" til en mappe i en mappe.  Er det attributten
+«foreldremappen» til en mappe i en mappe.  Er det attributten
 referanseForelderMappe med verditype SystemID som er tiltenkt denne
 rollen?  For andre entiteter er foreldre-entitet tilgjengelig med
 navngitte relasjoner som oppgir href til foreldre-entiteten.  For
@@ -79,8 +79,8 @@ følgende innhold i _links:
 Dette fungerer ikke, da en ikke kan ha to relasjoner som peker til to
 ulike href.
 
-En mulig løsning er å lage en relasjon 'foreldermappe" eller
-"forelder", ala dette:
+En mulig løsning er å lage en relasjon «foreldermappe» eller
+«forelder», ala dette:
 
 ```
 "_links": [
@@ -138,7 +138,7 @@ som generell beskrivelse, som så henvises til fra entitetsbeskrivelsen
 til arkiv, klasse og mappe?
 
 Foreslår at det legges inn et nytt avsnitt om hvordan slike skal
-håndteres før overskriften "Slette objekter (Delete)":
+håndteres før overskriften «Slette objekter (Delete)»:
 
 #### Rekursive entitetshierarkier
 
@@ -189,5 +189,7 @@ for eksempel se slik ut:
 ```
 
 I tillegg til dette tillegget til kapittel 6, så skal attributt
-"referanseForelderMappe" fjernes fra Mappe, da det i stedet brukes en
-relasjon med tilhørende relasjonsnøkkel.
+«referanseForelderMappe» fjernes fra Mappe, og ny relasjon
+«foreldermappe» legges inn, da det i stedet for attributt brukes
+relasjon med tilhørende relasjonsnøkkel.  Tilsvarende for arkiv og
+klasse.
