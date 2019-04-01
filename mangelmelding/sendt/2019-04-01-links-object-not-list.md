@@ -1,5 +1,5 @@
-Strukturer _links i tråd med siste utkast for HAL-lenker
-========================================================
+Strukturer _links i tråd med med referert IETF-utkast for JSON HAL
+==================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
@@ -10,7 +10,7 @@ Strukturer _links i tråd med siste utkast for HAL-lenker
         Dokumentdel  6.1.1.1 (Oppkobling og ressurslenker)
          Sidenummer  11
         Linjenummer  n/a
-    Innsendingsdato  Ikke sendt inn
+    Innsendingsdato  2019-04-01
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -24,7 +24,7 @@ I kapittel 2 er det sagt at normativ referanse for webtjenester med
 REST/HATEOAS er IETF-utkastet [JSON Hypertext Application
 Language](https://tools.ietf.org/html/draft-kelly-json-hal-08).  Men
 relasjonslenkene er i dag ikke strukturert i tråd med den
-spesifikasjonen, som beskriver følgnde struktur:
+spesifikasjonen, som beskriver følgende struktur:
 
 ```
 {
@@ -79,3 +79,16 @@ til dette:
   ...
 }
 ```
+
+Endringen er så grunnleggende at klienter som fungerer med opprinnelig
+_links-struktur vil ikke fungere med ny struktur, og både klienter- og
+tjenerimplementasjoner må skrives om til å håndtere den nye
+strukturen.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/94 .
