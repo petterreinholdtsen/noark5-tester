@@ -1,4 +1,4 @@
-Definert måte å hente ut produktinformasjon ofratjenestegrensesnittet
+Definert måte å hente ut produktinformasjon fra tjenestegrensesnittet
 =====================================================================
 
  ------------------  ---------------------------------
@@ -85,5 +85,5 @@ side 13:
 > 
 > Det kan være en sikkerhetsmessig fordel å unngå å fortelle
 > potensielle angripere hvilken versjon som kjører på maskinen.  Det
-> kan derofr være lurt å kun gjøre dette endepunktet tilgjengelig for
+> kan derfor være lurt å kun gjøre dette endepunktet tilgjengelig for
 > innloggede brukere.
