@@ -19,6 +19,11 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
+Gjelder Kapittel 6.X (Utvid objekter til andre typer) og beskrivelser
+av
+Mappe/Saksmappe/Moetemappe/Registrering/Basisregistrering/Journalpost
+i kapittel 7.
+
 Arv i datamodellen er synlig i følgende forhold:
 
  * mappe -> saksmappe
@@ -38,7 +43,9 @@ utvid-til-saksmappe:
  * "href": "http://n5test.kxml.no/api/sakarkiv/Saksmappe/12345/utvid-til-saksmappe"
  * "rel": "http://rel.kxml.no/noark5/v4/utvid-til-saksmappe"
 
-FIXME spesifikasjonen nevner ikke 'utvid-til-saksmappe, den kommer fra http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/
+FIXME spesifikasjonen nevner ikke relasjonen
+"http://rel.kxml.no/noark5/v4/utvid-til-saksmappe', den kommer fra
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/
 
 Hvis vi ser på forholdet registrering -> basisregistrering, så ser vi
 at under "arkivdel" kan du kun opprette en registrering:
@@ -82,3 +89,7 @@ opprette mappe, saksmappe, byggesaksmappe eller møtemappe.  Hvis
 "utvid-til-"-strategien skal brukes så må det klargjøres i
 spesifikasjonen hvordan dette skal håndteres når det gjelder
 klassifikasjonssystem knyttet til arkivdel.
+
+Lag ny del i kapittel 6 om hvordan entiteter som er subtyper av en
+basistype håndteres, gjerne før delen "Utvid objekter til andre
+typer".
