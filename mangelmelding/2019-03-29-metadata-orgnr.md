@@ -28,6 +28,13 @@ i tjenestegrensesnittet som SakspartEnhet.organisasjonsnummer,
 Korrespondansepart.organisasjonsnummer og
 NasjonaleIdentifikatorer.Enhetsidentifikator.
 
+Det at organisasjonsnummer mangler i XML-skjema til
+avleveringsformatet for Noark 5 versjon 3, 4 og 5 gjør det [uklart
+hvordan partinformasjon skal
+avleveres](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/80),
+samt gjør at avleveringsformatet ikke kan brukes som utvekslingsformat
+mellom implementasjoner av tjenestegrensesnittet.
+
 Ønsket endring
 --------------
 
