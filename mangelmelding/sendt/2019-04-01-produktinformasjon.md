@@ -1,5 +1,5 @@
-Definert måte å hente ut produktinformasjon fra tjenestegrensesnittet
-=====================================================================
+Definer måte å hente ut produktinformasjon fra tjenestegrensesnittet
+====================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
@@ -10,7 +10,7 @@ Definert måte å hente ut produktinformasjon fra tjenestegrensesnittet
         Dokumentdel  6
          Sidenummer  13
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-01
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -87,3 +87,11 @@ side 13:
 > potensielle angripere hvilken versjon som kjører på maskinen.  Det
 > kan derfor være lurt å kun gjøre dette endepunktet tilgjengelig for
 > innloggede brukere.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/98 .
