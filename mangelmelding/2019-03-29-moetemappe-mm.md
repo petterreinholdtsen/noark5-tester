@@ -24,8 +24,8 @@ Det mangler beskrivelse av pakken MøteOgUtvalgsbehandling i kapittel
 er allerede på plass.
 
 Det må bestemmes innhold for aktuelle relasjons-URL.  Foreslår
-"moeteutvalg" som URL-del på samme nivå som "arkivstruktur",
-"sakarkiv" og "metadata".  Aktuelle relasjoner for entitetene blir da
+«moeteutvalg» som URL-del på samme nivå som «arkivstruktur»,
+«sakarkiv» og «metadata».  Aktuelle relasjoner for entitetene blir da
 
  * http://rel.arkivverket.no/noark5/v4/api/moeteutvalg/moetemappe/
  * http://rel.arkivverket.no/noark5/v4/api/moeteutvalg/moeteregistrering/
@@ -42,7 +42,8 @@ pakkenavnet som er brukt i
 media/uml-arkivstruktur-omfattende-forklart.emf og
 media/uml-arkivstruktur-mappe-til-saksmappe.emf.
 
-Foreslår følgende endring av navn på entiteter med som starter på "møte":
+Foreslår følgende endring av navn på entiteter som inneholder «møte»
+til å bruke «moete» i stedet:
 
 | Fra                     | Til                      |
 |-------------------------|--------------------------|
@@ -51,7 +52,7 @@ Foreslår følgende endring av navn på entiteter med som starter på "møte":
 | MøtedeltakerFunksjon    | MoetedeltakerFunksjon    |
 | Møteregistreringsstatus | Moeteregistreringsstatus |
 | Møteregistreringstype   | Moeteregistreringstype   |
-| Møtesakstype            | Møtesakstype             |
+| Møtesakstype            | Moetesakstype            |
 
 De to første entietene er ikke beskrevet i dagens spesifikasjon.  I
 tillegg bør det introduseres en ny entitet Moetedeltaker.  Atributtene
