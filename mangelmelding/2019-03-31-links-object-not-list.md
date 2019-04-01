@@ -7,7 +7,7 @@ Strukturer _links i tråd med siste utkast for HAL-lenker
         Alvorlighet  kommentar
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  6.1.1.1 (Oppkobling og ressurslenker0
+        Dokumentdel  6.1.1.1 (Oppkobling og ressurslenker)
          Sidenummer  11
         Linjenummer  n/a
     Innsendingsdato  Ikke sendt inn
@@ -21,7 +21,7 @@ Beskrivelse
 -----------
 
 I kapittel 2 er det sagt at normativ referanse for webtjenester med
-REST/HATEOAS er [JSON Hypertext Application
+REST/HATEOAS er IETF-utkastet [JSON Hypertext Application
 Language](https://tools.ietf.org/html/draft-kelly-json-hal-08).  Men
 relasjonslenkene er i dag ikke strukturert i tråd med den
 spesifikasjonen, som beskriver følgnde struktur:
@@ -37,14 +37,22 @@ spesifikasjonen, som beskriver følgnde struktur:
 }
 ```
 
-Ved å bruke en slik struktur håndheves kravet om at alle rel-navn skal
-være unike av seg selv.
+Ved å bruke en slik struktur håndheves automatisk kravet om at alle
+rel-navn skal være unike av seg selv.  Det vil også gjøre enklere å
+implementere klienter, som ikke trenger å gå igjennom alle elementer i
+en liste, men kan slå opp relasjonsnavnet/objektmedlemmet den ser
+etter i _links-strukturen direkte.
+
+API-spesifikasjonen henviser altså til en beskrivelse av
+_links-strukturen som er forskjellig fra det som er spesifisert i
+spesifikasjonen.  Enten bør henvisningen fjernes eller så bør
+strukturen bringes i tråd med JSON Hypertext Application Language.
 
 Ønsket endring
 --------------
 
-Endre beskrivelsen av relasjonslenker i del 6.1.1.1 på side 11, samt
-alle andre _links-oppføringer fra dette formatet:
+Foreslår å endre beskrivelsen av relasjonslenker i del 6.1.1.1 på side
+11, samt alle andre _links-oppføringer fra dette formatet:
 
 ```
 "_links": [
@@ -64,10 +72,10 @@ til dette:
 
 ```
 "_links": {
-  "self" : { "href": "<base>/arkivstruktur/mappe/7b3989b0-53d7-11e9-bd4e-17d6c4d53856/" }
+  "self" : { "href": "<base>/arkivstruktur/mappe/7b3989b0-53d7-11e9-bd4e-17d6c4d53856/" },
   "http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/" : {
     "href": "<base>/arkivstruktur/mappe/7b3989b0-53d7-11e9-bd4e-17d6c4d53856/"
   },
   ...
-]
+}
 ```
