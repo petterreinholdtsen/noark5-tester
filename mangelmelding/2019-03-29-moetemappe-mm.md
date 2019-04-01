@@ -64,8 +64,8 @@ forslag baserer seg på denne beskrivelsen, men med følgende endringer:
 
  * saksbehandler, fra attributt til relasjon mot Bruker-entitet
  * administrativEnhet, fra attributt til relasjon mot AdministrativEnhet-entitet
- * referanseForrigeMoete, fra attributt til relasjon mot Moetemappe-entiteter,
- * referanseNesteMoete, fra attributt til relasjon mot Moetemappe-entiteter,
+ * referanseForrigeMoete, fra attributt til relasjon mot Moetemappe-entiteter
+ * referanseNesteMoete, fra attributt til relasjon mot Moetemappe-entiteter
  * referanseTilMoeteregistrering, fra attributt til relasjon mot Moeteregistrering
  * referanseFraMoeteregistrering, fra attributt til relasjon mot Moeteregistrering
  * moetedeltaker, blir en attributt med type MoeteDeltaker
