@@ -60,9 +60,11 @@ tillegg bør det introduseres en ny entitet Moetedeltaker.  Atributtene
 til entitetene Møteregistrering og Møtemappe var allerede beskrevet i
 UML-diagrammet media/uml-arkivstruktur-omfattende-forklart.emf.  Mitt
 forslag baserer seg på denne beskrivelsen, men endrer saksbehandler,
-administrativEnhet, referanseForrigeMoete og referanseNesteMoete til å
-være relasjoner til Bruker-, AdministrativEnhet-, og
-Moetemappe-entitetene, samt moetedeltaker til å være en attributt.
+administrativEnhet til å være relasjoner til Bruker-,
+AdministrativEnhet-entiteter, referanseForrigeMoete og
+referanseNesteMoete til Moetemappe-entitetene,
+referanseTilMoeteregistrering og referanseFraMoeteregistrering til
+Moeteregistrering samt moetedeltaker til å være en attributt.
 
 Det konkrete endringsforslaget er for omfattende til at det gir mening
 å ta det med her.  Jeg har laget en git-gren med endringene, og vil
