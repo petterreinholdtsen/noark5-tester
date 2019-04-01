@@ -51,3 +51,18 @@ FIXME versjon og versjonsdato kan være sikkerhetsmessig utfordrende å gi ut.
 --------------
 
 FIXME skriv konkret forslag.  hvor bør teksten inn?
+
+Det legges inn en ny relasjon
+`http://rel.kxml.no/noark5/v4/api/tjenesteinfo/` på toppnivå der GET
+på tlihørende href returnerer en struktur ala dette:
+
+
+```Python
+{
+  "leverandoer": "Nikita-prosjektet",
+  "produkt": "Nikita Noark 5-kjerne",
+  "versjon": "0.3",
+  "versjonsdato": "2019-03-22",
+  "protokollversjon": "1.0 Beta"
+}
+```
