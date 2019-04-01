@@ -22,7 +22,8 @@ Beskrivelse
 Det mangler beskrivelse av pakken MøteOgUtvalgsbehandling i kapittel
 7, den er kun omtalt i noen UML-diagrammer.  Aktuelle kodelister og
 relasjoner fra Mappe til Møtemappe og fra Basisregistrering til
-Møteregistrering er allerede på plass.
+Møteregistrering er allerede på plass.  Nåværende pakkenavn er veldig
+tunglest.  Hva med å bygge navn til "Moeter" i stedet?
 
 Det må bestemmes innhold for aktuelle relasjons-URL.  Foreslår
 «moeter» som URL-del på samme nivå som «arkivstruktur», «sakarkiv» og
@@ -38,10 +39,10 @@ moeteregistrering flyttes til denne pakken.
 --------------
 
 Det må legges inn en ny pakke i kapittel 7 med entitetene som mangler.
-Foreslår at den får navnet MoeteOgUtvalgsbehandling, basert på
-pakkenavnet som er brukt i
+Foreslår at den får navnet Moeter, og at referanser til
+MøterOgUtvalgsbehandling i
 media/uml-arkivstruktur-omfattende-forklart.emf og
-media/uml-arkivstruktur-mappe-til-saksmappe.emf.
+media/uml-arkivstruktur-mappe-til-saksmappe.emf endres til Moeter.
 
 Foreslår følgende endring av navn på entiteter som inneholder «møte»
 til å bruke «moete» i stedet:
@@ -59,12 +60,15 @@ De to første entietene er ikke beskrevet i dagens spesifikasjon.  I
 tillegg bør det introduseres en ny entitet Moetedeltaker.  Atributtene
 til entitetene Møteregistrering og Møtemappe var allerede beskrevet i
 UML-diagrammet media/uml-arkivstruktur-omfattende-forklart.emf.  Mitt
-forslag baserer seg på denne beskrivelsen, men endrer saksbehandler,
-administrativEnhet til å være relasjoner til Bruker-,
-AdministrativEnhet-entiteter, referanseForrigeMoete og
-referanseNesteMoete til Moetemappe-entitetene,
-referanseTilMoeteregistrering og referanseFraMoeteregistrering til
-Moeteregistrering samt moetedeltaker til å være en attributt.
+forslag baserer seg på denne beskrivelsen, men med følgende endringer:
+
+ * saksbehandler, fra attributt til relasjon mot Bruker-entitet
+ * administrativEnhet, fra attributt til relasjon mot AdministrativEnhet-entitet
+ * referanseForrigeMoete, fra attributt til relasjon mot Moetemappe-entiteter,
+ * referanseNesteMoete, fra attributt til relasjon mot Moetemappe-entiteter,
+ * referanseTilMoeteregistrering, fra attributt til relasjon mot Moeteregistrering
+ * referanseFraMoeteregistrering, fra attributt til relasjon mot Moeteregistrering
+ * moetedeltaker, blir en attributt med type MoeteDeltaker
 
 Det konkrete endringsforslaget er for omfattende til at det gir mening
 å ta det med her.  Jeg har laget en git-gren med endringene, og vil
