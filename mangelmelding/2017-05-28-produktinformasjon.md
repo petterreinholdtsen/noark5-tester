@@ -1,14 +1,14 @@
-Definert måte å hente ut produktinformasjon om tjenestegrensesnittet
-====================================================================
+Definert måte å hente ut produktinformasjon ofratjenestegrensesnittet
+=====================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
         Alvorlighet  kommentar
-       Meldingstype  trenger klargjøring
+       Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  n/a
-         Sidenummer  n/a
+        Dokumentdel  6
+         Sidenummer  13
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
@@ -24,24 +24,13 @@ Det er nyttig å kunne hente ut informasjon via selve webtjenesten om
 programvaren som tilbyr tjenestegrensesnittet.  Dette er
 hensiktsmessig når det skal feilsøkes (vite hvilket produkt og versjon
 som benyttes hvis oppførselen har endret seg over tid), og også når
-det skal lages uttrekk med navn på systemet/løsningen.
+det skal lages uttrekk med navn på systemet/løsningen (i
+arkivuttrekk.xml sitt systemName-felt).
 
 Det hadde dermed vært en fordel om det ble definert i spesifikasjonen
 for tjenestegrensesnittet en relasjon på toppnivå som peker til URL
 der slik informasjon kan finnes.  Det kan f.eks. returneres et
-JSON-objekt med aktuelle attributter.  Vi ønsker oss noe ala dette:
-
- * `leverandoer` - tekststreng med navn på leverandør av
-               tjenestegrensesnittimplementasjonen.
- * `produkt` - tekststreng med navn på produktet som leverer
-               tjenestegrensesnittet.
- * `versjon` - tekststreng med versjon for produktet fra leverandøren.
- 
- * `versjonsdato` - tekststreng med dato for når produktet ble lansert
-               / programmet ble sist oppdatert.
- * `protokollversjon` - tekststreng med versjon av
-               tjenestegrensesnittspesifikasjonen som støttes.
-               For dagens utgave vil verdien være '1.0 beta'.
+JSON-objekt med aktuelle attributter.
 
 Det kan være en sikkerhetsmessig utfordring å dele ut versjon og
 versjonsdato offentlig, når det er sikkerhetsproblemer med en gitt
@@ -55,29 +44,46 @@ diskusjonen i [mangelmelding
 om hvordan en skal håndtere ikke-kompatible endringer i
 API-spesifikasjonen
 
-FIXME sjekk om listen er riktig og komplett.
-
 Ønsket endring
 --------------
 
-FIXME skriv konkret forslag.  hvor bør teksten inn?
+Legg inn ny relasjon/href i det som returneres fra toppnivå, dvs del
+6.1.1.1 (Oppkobling og ressurslenker), med relasjonsnøkkel
+`http://rel.kxml.no/noark5/v4/api/admin/system/`.
 
-Det legges inn en ny relasjon
-`http://rel.kxml.no/noark5/v4/api/tjenesteinfo/` på toppnivå der GET
-på tlihørende href returnerer en struktur ala dette:
+Legg inn følgende del foran del 6.1.1.2 (Finne objekter (Read)) på
+side 13:
 
-
-```Python
-{
-  "leverandoer": "Nikita-prosjektet",
-  "produkt": "Nikita Noark 5-kjerne",
-  "versjon": "0.3",
-  "versjonsdato": "2019-03-22",
-  "protokollversjon": "1.0 Beta"
-}
-```
-
-Det trengs en ny entitetsbeskrivelse i kapittel 7 for dette.  Tenker
-den kan legges inn helt på slutten.  Kanskje den bør legges inn som
-del av 'admin'-pakke i stedet for å lage et nytt toppnivå i
-relasjons-URLene?
+> #### Systeminformasjon
+> 
+> Når en tar GET mot href for relasjonsnøkkelen
+> `http://rel.arkivverket.no/noark5/v4/api/admin/system/`, så får en informasjon
+> om API-tjenersystemet.  Responsen inneholder følgende felter:
+> 
+>  * `leverandoer` - tekststreng med navn på leverandør av
+>                tjenestegrensesnittimplementasjonen.
+>  * `produkt` - tekststreng med navn på produktet som leverer
+>                tjenestegrensesnittet.
+>  * `versjon` - tekststreng med versjon for produktet fra leverandøren.
+>  * `versjonsdato` - tekststreng med dato for når produktet ble lansert
+>                / programmet ble sist oppdatert.
+>  * `protokollversjon` - tekststreng med versjon av
+>                tjenestegrensesnittspesifikasjonen som støttes.
+>                For dagens utgave vil verdien være '1.0 beta'.
+> 
+> Responsen kan for eksempel se slik ut:
+> 
+> ```Python
+> {
+>   "leverandoer": "Hoffleverandøren",
+>   "produkt": "Arkivsystemet Noark 5 kjerne",
+>   "versjon": "0.1",
+>   "versjonsdato": "2019-03-22",
+>   "protokollversjon": "1.0 Beta"
+> }
+> ```
+> 
+> Det kan være en sikkerhetsmessig fordel å unngå å fortelle
+> potensielle angripere hvilken versjon som kjører på maskinen.  Det
+> kan derofr være lurt å kun gjøre dette endepunktet tilgjengelig for
+> innloggede brukere.
