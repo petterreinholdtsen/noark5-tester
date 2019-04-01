@@ -20,17 +20,16 @@ Beskrivelse
 -----------
 
 Arkivdel-attributtene med navn referanseForloeper(M202) og
-referanseArvtager(M203) bør gjøres om til en som peker/relasjon mellom
-Arkivdel-instanser.
+referanseArvtager(M203) bør gjøres om til en peker/relasjon mellom
+Arkivdel-instanser.  Denne relasjonen fungerer på samme måte som
+forrige/neste- og til/fra-relasjonene i Moetemappe og
+Moeteregistrering.  I tillegg til relasjonene, så trengs det
+relasjonsnøkler til bruk i _links-listene.
 
-Denne relasjonen er lik forrige/neste- og til/fra-relasjonene i
-Moetemappe og Moeteregistrering.  Foreslår at relasjons-navnene gjøres
-kortere og mer beskrivende, og at en bruker
-forrigeArkivdel/nesteArkivdel i stedet for de lange feltnavnene for
-M202/M203 som brukes i XML.
-
-I tillegg til relasjonene, så trengs det relasjonsnøkler som peker til
-forrige/neste arkivdel.
+Foreslår at relasjons-navnene gjøres kortere og mer beskrivende, og at
+en bruker forrigeArkivdel/nesteArkivdel i stedet for de feltnavnene
+for M202/M203 som brukes i XML.  Da er det mer klart hva slags entitet
+relasjonen peker på.
 
 Det bør kanskje nevnes i spesifikasjonen av hvis en oppdaterer en slik
 relasjon på den ene "siden", så skal den automatisk legges inn på den
