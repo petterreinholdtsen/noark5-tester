@@ -20,8 +20,8 @@ Beskrivelse
 -----------
 
 Det mangler beskrivelse av pakken MøteOgUtvalgsbehandling i kapittel
-7.  Aktuelle kodelister og relasjoner for Mappe og Basisregistrering
-er allerede på plass.
+7.  Aktuelle kodelister og relasjoner fra Mappe til Møtemappe og fra
+Basisregistrering til Møteregistrering er allerede på plass.
 
 Det må bestemmes innhold for aktuelle relasjons-URL.  Foreslår
 «moeteutvalg» som URL-del på samme nivå som «arkivstruktur»,
@@ -66,4 +66,4 @@ attributt.
 Det konkrete endringsforslaget er for omfattende til at det gir mening
 å ta det med her.  Jeg har laget en git-gren med endringene, og vil
 knytte det til denne mangelmeldingen via github.  Har der med
-plantuml-diagram som viser entietene og relasjonene til denne pakken.
+plantuml-diagram som viser entitetene og relasjonene til denne pakken.
