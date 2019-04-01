@@ -5,10 +5,10 @@ Strukturer _links i tråd med siste utkast for HAL-lenker
            Prosjekt  Noark 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
         Alvorlighet  kommentar
-       Meldingstype  
+       Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  
-         Sidenummer  
+        Dokumentdel  6.1.1.1 (Oppkobling og ressurslenker0
+         Sidenummer  11
         Linjenummer  n/a
     Innsendingsdato  Ikke sendt inn
  ------------------  ---------------------------------
@@ -43,7 +43,8 @@ være unike av seg selv.
 Ønsket endring
 --------------
 
-Endre alle _links-oppføringer fra dette formatet:
+Endre beskrivelsen av relasjonslenker i del 6.1.1.1 på side 11, samt
+alle andre _links-oppføringer fra dette formatet:
 
 ```
 "_links": [
