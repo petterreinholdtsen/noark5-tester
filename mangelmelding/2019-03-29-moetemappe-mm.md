@@ -1,14 +1,14 @@
-Mangler beskrivelse av Moetemappe og Moeteregistrering
-======================================================
+Mangler beskrivelse av pakken MøteOgUtvalgsbehandling
+=====================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
         Alvorlighet  protest
-       Meldingstype  
+       Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  
-         Sidenummer  
+        Dokumentdel  7
+         Sidenummer  n/a
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
@@ -20,7 +20,8 @@ Beskrivelse
 -----------
 
 Det mangler beskrivelse av pakken MøteOgUtvalgsbehandling i kapittel
-7.  Kodelister og referanser er dog allerede på plass.
+7.  Aktuelle kodelister og relasjoner for Mappe og Basisregistrering
+er allerede på plass.
 
 Det må bestemmes innhold for aktuelle relasjons-URL.  Foreslår
 "moeteutvalg" som URL-del på samme nivå som "arkivstruktur",
@@ -29,10 +30,39 @@ Det må bestemmes innhold for aktuelle relasjons-URL.  Foreslår
  * http://rel.arkivverket.no/noark5/v4/api/moeteutvalg/moetemappe/
  * http://rel.arkivverket.no/noark5/v4/api/moeteutvalg/moeteregistrering/
 
-Foreslår videre at kodelister som kun brues av moetemappe og
+Foreslår videre at kodelister som kun brukes av moetemappe og
 moeteregistrering flyttes til denne pakken.
 
 Ønsket endring
 --------------
 
-FIXME se gitgren moeteutvalg.
+Det må legges inn en ny pakke i kapittel 7 med entitetene som mangler.
+Foreslår at den får navnet MoeteOgUtvalgsbehandling, basert på
+pakkenavnet som er brukt i
+media/uml-arkivstruktur-omfattende-forklart.emf og
+media/uml-arkivstruktur-mappe-til-saksmappe.emf.
+
+Foreslår følgende endring av navn på entiteter med som starter på "møte":
+
+| Fra                     | Til                      |
+|-------------------------|--------------------------|
+| Møteregistrering        | Moeteregistrering        |
+| Møtemappe               | Moetemappe               |
+| MøtedeltakerFunksjon    | MoetedeltakerFunksjon    |
+| Møteregistreringsstatus | Moeteregistreringsstatus |
+| Møteregistreringstype   | Moeteregistreringstype   |
+| Møtesakstype            | Møtesakstype             |
+
+De to første entietene er ikke beskrevet i dagens spesifikasjon.  I
+tillegg bør det introduseres en ny entitet Moetedeltaker.  Atributtene
+til entitetene Møteregistrering og Møtemappe var allerede beskrevet i
+UML-diagrammet media/uml-arkivstruktur-omfattende-forklart.emf.  Mitt
+forslag baserer seg på denne beskrivelsen, men endrer saksbehandler og
+administrativEnhet til å være relasjoner til Bruker- og
+AdministrativEnhet-entitetene, samt moetedeltaker til å være en
+attributt.
+
+Det konkrete endringsforslaget er for omfattende til at det gir mening
+å ta det med her.  Jeg har laget en git-gren med endringene, og vil
+knytte det til denne mangelmeldingen via github.  Har der med
+plantuml-diagram som viser entietene og relasjonene til denne pakken.
