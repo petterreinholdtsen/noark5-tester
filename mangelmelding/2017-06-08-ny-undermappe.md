@@ -81,9 +81,6 @@ UUID-er i href-er.  HATEOAS-prinsippene legger opp til at en gitt i
 _links kun skal forekomme en gang.  En kan ikke ha to identiske
 relasjoner som peker til to ulike href-verdier.
 
-Dette fungerer ikke, da en ikke kan ha to identiske relasjoner som peker til to
-ulike href.
-
 En mulig løsning er å lage en relasjon «foreldermappe» eller
 «forelder», ala dette:
 
@@ -91,15 +88,15 @@ En mulig løsning er å lage en relasjon «foreldermappe» eller
 "_links": [
   {
     "rel": "self",
-    "href": "somewhere"
+    "href": "http://localhost:49708/api/arkivstruktur/mappe/5a441fae-557b-11e9-9b92-002354090596/"
   },
   {
     "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/",
-    "href": "somewhere"
+    "href": "http://localhost:49708/api/arkivstruktur/mappe/5a441fae-557b-11e9-9b92-002354090596/"
   },
   {
     "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/foreldermappe/",
-    "href": "somewhere-else"
+    "href": "http://localhost:49708/api/arkivstruktur/mappe/69d5a4f6-557b-11e9-bbbd-ff44b1a15f30/"
   },
   ...
 }
@@ -108,22 +105,57 @@ En mulig løsning er å lage en relasjon «foreldermappe» eller
 En kan tilsvarende ha en relasjon til undermapper ved å søke etter
 mapper med gjeldende mappe som foreldermappe.
 
-En alternativ og kanskje mer generisk navnestruktur for slik
-relasjonslenker kan være å skille dem med skråstreker, dvs. bruke
-`http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/forelder/` og
-`http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/under/`.
-
-
 ```
 "_links": [
   ...
   {
     "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/",
-    "href": "<base>/arkivstruktur/mappe/?$filter=foreldermappe eq <denne mappens systemID>"
+    "href": "http://localhost:49708/api/arkivstruktur/mappe/?$filter=foreldermappe eq <denne mappens systemID>"
   },
   ...
 }
 ```
+
+Oversikten over undermapper kan så se ut ala dette, gitt at forslag om
+formattering av lister fra
+[mangelmelding #12](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/12)
+blir tatt i bruk:
+
+```
+{ "results" : [
+    { "mappeID": "1234/2017",
+      "tittel": "testmappe 1",
+      ...
+    "_links" : [
+      { "rel": "self",
+        "href": "http://localhost/noark5v4/api/arkivstruktur/mappe/f97b1a9a-557c-11e9-bad4-63d81e3ee1f6/"
+      },
+      ...
+    },
+    { "mappeID": "1235/2017",
+      "tittel": "testmappe 2",
+      ...
+    "_links" : [
+      { "rel": "self",
+        "href": "http://localhost/noark5v4/api/arkivstruktur/mappe/1e29f8de-557d-11e9-b479-83abafe61152/"
+      },
+      ...
+    }
+  ],
+  "count" : 2,
+  "_links" : [
+    { "rel": "self",
+      "href": "http://localhost:49708/api/arkivstruktur/mappe/?$filter=foreldermappe eq 5a441fae-557b-11e9-9b92-002354090596"
+    }
+  ]
+}
+```
+
+En alternativ og kanskje mer generisk navnestruktur for slik
+relasjonsnøkler kan være å skille dem med skråstreker, dvs. bruke
+`http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/forelder/` og
+`http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/under/`.
+
 
 For å opprette en undermappe skal POST til href som er knyttet til
 følgende relasjon brukes:
@@ -146,18 +178,21 @@ som [endringsforslag #84](https://github.com/arkivverket/noark5-tjenestegrensesn
 --------------
 
 Foreslår at det legges inn et nytt avsnitt i kapittel 6 om hvordan
-slike skal håndteres før overskriften «Slette objekter (Delete)»:
+rekursive relasjoner skal håndteres før overskriften «Slette objekter
+(Delete)»:
 
 > #### Rekursive entitetshierarkier
 > 
 > Noen entiteter kan ha samme type entitet under seg, og slik danne et
 > rekursivt hierarki av instanser.  Det gjelder Arkiv, Klasse og Mappe,
 > og entiter som arver fra disse (som Saksmappe og Moetemappe).
-> 
-> Da det er ikke mulig å la samme relasjon peke til flere ulike
-> href-er, så må dette håndteres litt annerledes enn relasjoner mellom
-> entiteter av ulik type.  Listen over under-instanser til en gitt
-> instans kan hentes ut ved å følge href for relasjonen
+>
+
+> Da det ikke er i tråd med HATEOAS-prinsippene å la samme relasjon
+> peke til flere ulike href-er, så må dette håndteres litt annerledes
+> enn relasjoner mellom entiteter av ulik type.  Listen over
+> under-instanser til en gitt instans kan hentes ut ved å følge href
+> for relasjonen
 > http://rel.kxml.no/noark5/v4/api/arkivstruktur/underxx/, der xx er
 > navnet på entitet.  Eksempler på slike relasjoner
 > http://rel.kxml.no/noark5/v4/api/arkivstruktur/underarkiv/ og
@@ -178,19 +213,19 @@ slike skal håndteres før overskriften «Slette objekter (Delete)»:
 > "_links": [
 >   {
 >     "rel": "self",
->     "href": "<base>/arkivstruktur/mappe/7b3989b0-53d7-11e9-bd4e-17d6c4d53856/"
+>     "href": "http://localhost:49708/api/arkivstruktur/mappe/7b3989b0-53d7-11e9-bd4e-17d6c4d53856/"
 >   },
 >   {
 >     "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/",
->     "href": "<base>/arkivstruktur/mappe/7b3989b0-53d7-11e9-bd4e-17d6c4d53856/"
+>     "href": "http://localhost:49708/api/arkivstruktur/mappe/7b3989b0-53d7-11e9-bd4e-17d6c4d53856/"
 >   },
 >   {
 >     "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/foreldermappe/",
->     "href": "<base>/arkivstruktur/mappe/6787ba68-53d7-11e9-a583-8f084aaf5d19/"
+>     "href": "http://localhost:49708/api/arkivstruktur/mappe/6787ba68-53d7-11e9-a583-8f084aaf5d19/"
 >   },
 >   {
 >     "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/",
->     "href": "<base>/arkivstruktur/mappe/?$filter=foreldermappe eq 7b3989b0-53d7-11e9-bd4e-17d6c4d53856"
+>     "href": "http://localhost:49708/api/arkivstruktur/mappe/?$filter=foreldermappe eq 7b3989b0-53d7-11e9-bd4e-17d6c4d53856"
 >   },
 >   ...
 > }
