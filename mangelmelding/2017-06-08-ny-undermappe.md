@@ -103,6 +103,12 @@ En mulig løsning er å lage en relasjon «foreldermappe» eller
 En kan tilsvarende ha en relasjon til undermapper ved å søke etter
 mapper med gjeldende mappe som foreldermappe.
 
+En alternativ og kanskje mer generisk navnestruktur for slik
+relasjonslenker kan være å skille dem med skråstreker, dvs. bruke
+`http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/forelder/` og
+`http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/under/`.
+
+
 ```
 "_links": [
   ...
@@ -123,7 +129,9 @@ Merk, det er en tilsvarende utfordring for arkiv/underarkiv i del
 7.2.1.1 side 57 og klasse/underklasse i del 7.2.1.12 side 116.
 Løsningen som velges for mappe/undermappe bør også gjelde for
 arkiv/underarkiv og klasse/underklasse og dokumenteres tilsvarende
-der.
+der.  Det er også tilsvarende utfordring for entiteter som kan peke
+til seg selv av andre grunner en å danne et hierarki, slik Arkivdel,
+Moetemappe og Moeteregistrering kan.  
 
 Merk videre at relasjon for underarkiv/underklasse/undermappe er ført
 opp med duplikater i spesifikasjonen, å rydde opp i dette er sendt inn
@@ -132,13 +140,8 @@ som [endringsforslag #84](https://github.com/arkivverket/noark5-tjenestegrensesn
 Ønsket endring
 --------------
 
-FIXME beskriv klart hvordan det mulig å finne foreldremappe samtidig
-som undermapper kan lages og listes opp.  Bør kanskje inn i kapittel 6
-som generell beskrivelse, som så henvises til fra entitetsbeskrivelsen
-til arkiv, klasse og mappe?
-
-Foreslår at det legges inn et nytt avsnitt om hvordan slike skal
-håndteres før overskriften «Slette objekter (Delete)»:
+Foreslår at det legges inn et nytt avsnitt i kapittel 6 om hvordan
+slike skal håndteres før overskriften «Slette objekter (Delete)»:
 
 > #### Rekursive entitetshierarkier
 > 
@@ -146,12 +149,12 @@ håndteres før overskriften «Slette objekter (Delete)»:
 > rekursivt hierarki av instanser.  Det gjelder Arkiv, Klasse og Mappe,
 > og entiter som arver fra disse (som Saksmappe og Moetemappe).
 > 
-> Da det er ikke mulig å la samme relasjon peke til flere ulike href-er,
-> så må dette håndteres litt annerledes enn relasjoner mellom entiteter
-> av ulik type.  Listen over under-instanser til en gitt instans kan
-> hentes ut ved å følge href for relasjonen
+> Da det er ikke mulig å la samme relasjon peke til flere ulike
+> href-er, så må dette håndteres litt annerledes enn relasjoner mellom
+> entiteter av ulik type.  Listen over under-instanser til en gitt
+> instans kan hentes ut ved å følge href for relasjonen
 > http://rel.kxml.no/noark5/v4/api/arkivstruktur/underxx/, der xx er
-> byttet ut med navnet på entitet.  Eksempler på slike relasjoner
+> navnet på entitet.  Eksempler på slike relasjoner
 > http://rel.kxml.no/noark5/v4/api/arkivstruktur/underarkiv/ og
 > http://rel.kxml.no/noark5/v4/api/arkivstruktur/undermappe/.
 > 
@@ -192,7 +195,7 @@ håndteres før overskriften «Slette objekter (Delete)»:
 > hvordan en implementerer oppslag i foreldre- og undermapper.
 
 I tillegg til dette tillegget til kapittel 6, så skal attributt
-«referanseForelderMappe» fjernes fra Mappe, og ny relasjon
-«foreldermappe» legges inn, da det i stedet for attributt brukes
-relasjon med tilhørende relasjonsnøkkel.  Tilsvarende for arkiv og
-klasse.
+«referanseForelderMappe» fjernes fra Mappe, og relasjonen for
+«undermappe» endres til toveis og ha «foreldermappe 0..1» på
+motstående side, da det i stedet for attributt brukes relasjon med
+tilhørende relasjonsnøkkel.  Tilsvarende for arkiv og klasse.
