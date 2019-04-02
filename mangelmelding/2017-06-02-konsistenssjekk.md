@@ -56,24 +56,28 @@ relasjon i _links hvis konsistenssjekken har oppdaget noe rart, og så
 peke href-verdien til et sted der detaljer om hva som ble oppdaget
 returneres.  Det gjør at klienter som ikke forstår
 konsistenssjekk-tilbakemeldingen kan ignorere den, mens klienter som
-forstår relasjonen kan vise frem detaljene til brukeren i tilfelle det
-bare er en skrivefeil.
+forstår relasjonen kan vise frem detaljene til brukeren, i tilfelle
+det for eksempel er skrivefeil som brukeren kan korrigere.
 
-Konsistenssjekk-resultatene bør antagelig ha en typeklasse,
-alvorlighet og en beskrivelse.  Det kan bli en utfordring å gi gode
-beskrivelser hvis resultatet skal kunne oversettes til flere språk.
+Det som trengs for å få dette til er en definisjon av hva
+Konsistenssjekk-resultatene skal returnerer, og å definere en
+relasjonsnøkkel som API-klienter kan se etter etter å ha opprettet
+eller endret en instans.
 
 Ønsket endring
 --------------
 
 FIXME dokumenter hvordan dette skal gjøres og hvordan resultatet fra
-konsistenssjekken skal se ut.
+konsistenssjekken skal se ut.  Det trengs en beskrivelse i kapittel 6
+av mekanismen med eksempler.  Trengs det også en klassebeskrivelse i
+kapittel 7?
 
-Foreslår ny entitet KonsistensVarsel med følgende felt:
+Ide: ny entitet KonsistensVarsel med følgende felt:
 
  * felt
- * varslingstype
- * melding
+ * type
+ * alvorlighet
+ * beskrivelse
 
 Eksempel på GET mot href for konsistenssjekk-relasjon:
 
@@ -89,6 +93,6 @@ Eksempel på GET mot href for konsistenssjekk-relasjon:
 }
 ```
 
-Ny kodeliste for varslingstyper?
+FIXME Ny kodeliste for varslingstyper og alvorlighet?
 
-Hvilet språk skal meldingene ha?
+FIXME Hvilket språk skal meldingene ha?  Hvordan skal en håndtere flere språk?
