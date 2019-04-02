@@ -62,21 +62,26 @@ følgende innhold i _links:
 "_links": [
   {
     "rel": "self",
-    "href": "somewhere"
+    "href": "http://localhost:49708/api/arkivstruktur/mappe/5a441fae-557b-11e9-9b92-002354090596/"
   },
   {
     "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/",
-    "href": "somewhere"
+    "href": "http://localhost:49708/api/arkivstruktur/mappe/5a441fae-557b-11e9-9b92-002354090596/"
   },
   {
     "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/",
-    "href": "somewhere-else"
+    "href": "http://localhost:49708/api/arkivstruktur/mappe/69d5a4f6-557b-11e9-bbbd-ff44b1a15f30/"
   },
   ...
 }
 ```
 
-Dette fungerer ikke, da en ikke kan ha to relasjoner som peker til to
+Merk hvordan rel for mappe er listet opp to ganger med to ulike
+UUID-er i href-er.  HATEOAS-prinsippene legger opp til at en gitt i
+_links kun skal forekomme en gang.  En kan ikke ha to identiske
+relasjoner som peker til to ulike href-verdier.
+
+Dette fungerer ikke, da en ikke kan ha to identiske relasjoner som peker til to
 ulike href.
 
 En mulig løsning er å lage en relasjon «foreldermappe» eller
