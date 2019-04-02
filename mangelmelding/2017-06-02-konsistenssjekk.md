@@ -68,3 +68,27 @@ beskrivelser hvis resultatet skal kunne oversettes til flere språk.
 
 FIXME dokumenter hvordan dette skal gjøres og hvordan resultatet fra
 konsistenssjekken skal se ut.
+
+Foreslår ny entitet KonsistensVarsel med følgende felt:
+
+ * felt
+ * varslingstype
+ * melding
+
+Eksempel på GET mot href for konsistenssjekk-relasjon:
+
+```
+{
+  "results": [
+    {
+      "felt": "dokumentdato",
+      "varslingstype": "Usannsynlig verdi",
+      "melding" : "Datoen er i fremtiden"
+    }
+  ]
+}
+```
+
+Ny kodeliste for varslingstyper?
+
+Hvilet språk skal meldingene ha?
