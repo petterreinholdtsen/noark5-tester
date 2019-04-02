@@ -234,8 +234,8 @@ rekursive relasjoner skal håndteres før overskriften «Slette objekter
 > Merk at konkrete href-verdier ikke er standardisert, det er valgfritt
 > hvordan en implementerer oppslag i foreldre- og undermapper.
 
-I tillegg til dette tillegget til kapittel 6, så skal attributt
-«referanseForelderMappe» fjernes fra Mappe, og relasjonen for
-«undermappe» endres til toveis og ha «foreldermappe 0..1» på
+I tillegg til dette tillegget til kapittel 6, så foreslår jeg at
+attributt «referanseForelderMappe» fjernes fra Mappe, og relasjonen
+for «undermappe» endres til toveis og ha «foreldermappe 0..1» på
 motstående side, da det i stedet for attributt brukes relasjon med
 tilhørende relasjonsnøkkel.  Tilsvarende for arkiv og klasse.
