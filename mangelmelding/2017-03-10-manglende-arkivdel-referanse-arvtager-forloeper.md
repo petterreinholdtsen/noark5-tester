@@ -66,4 +66,3 @@ Dokumenter i spesifikasjonen at hvis en legger inn en slik lenke fra
 en Arkivdel til en annen, så vil tilsvarende lenke dukke opp hos den
 motstående instansen av Arkivdel.
 
-FIXME formuler konkret forslag og plassering.
