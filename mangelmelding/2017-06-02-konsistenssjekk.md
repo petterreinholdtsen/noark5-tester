@@ -32,6 +32,9 @@ Her er noen eksempler på slike konsistenssjekker:
    dokumentdato være før journaldato i normale tilfeller, og
    dokumentdato vil ikke være veldig langt inn i for- eller fremtiden.
 
+ * Sammenligne metadata i opplastet fil med metadata registrert i
+   arkivstrukturen, rapporter hvis de ikke ligner.
+
  * Graderte dokumenter er nyere enn foreldelsesfristene for
    graderingen.
 
@@ -42,6 +45,11 @@ Her er noen eksempler på slike konsistenssjekker:
 
  * Det opplastede dokumentet har et format som ikke aksepteres av
    arkivverket for langtidsoppbevaring.
+
+ * Det opplastede dokumentet er et interakivt regneark, eller et
+   regneark som gjør oppslag i ekstern database som del av
+   beregninger, som dermed ikke kan automatisk konverteres til PDF på
+   meningsfylt vis.
 
 Slike feil er ofte resultat av manuelle skrivefeil, og bør oppdages så
 raskt som mulig for å holde kvaliteten i arkivsystemet oppe.
@@ -64,8 +72,22 @@ Konsistenssjekk-resultatene skal returnerer, og å definere en
 relasjonsnøkkel som API-klienter kan se etter etter å ha opprettet
 eller endret en instans.
 
+http://edu.oslomet.no/ark2100/h16/syllabus/DQ%20Ouzounov.pdf
+
 Ønsket endring
 --------------
+
+Jeg er litt usikker på hvordan denne mekanismen legges inn i
+spesififikasjonen.  Holder det med en beskrivelse av mekanismen med
+eksempler i kapittel 6, eller trengs det også entitetsbeskrivelser i
+kapittel 7?
+
+
+FIXME kanskje behandle konsistenssjekk-resultater som en variant av
+feilmelding, der alvorlighet ikke er fatal, men litt lavere (dvs. når
+kode=200 i forslaget i [mangelmelding
+#93](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/93)?
+
 
 FIXME dokumenter hvordan dette skal gjøres og hvordan resultatet fra
 konsistenssjekken skal se ut.  Det trengs en beskrivelse i kapittel 6
@@ -92,6 +114,12 @@ Eksempel på GET mot href for konsistenssjekk-relasjon:
   ]
 }
 ```
+
+Kodeliste.KonsistensVarselNivaa:
+  * Kritisk = 4
+  * Alvorlig = 3
+  * Advarsel = 2
+  * Tips = 1
 
 FIXME Ny kodeliste for varslingstyper og alvorlighet?
 
