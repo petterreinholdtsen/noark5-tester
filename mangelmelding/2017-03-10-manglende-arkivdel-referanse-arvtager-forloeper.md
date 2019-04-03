@@ -1,5 +1,5 @@
-Relasjoner mellom Arkivdel-instanser bør ikke være attributter med SystemID-verdier
-===================================================================================
+Relasjoner mellom Arkivdel-instanser bør være relasjoner, ikke attributter
+==========================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
@@ -20,29 +20,31 @@ Beskrivelse
 -----------
 
 Arkivdel-attributtene med navn referanseForloeper (M202) og
-referanseArvtager (M203) bør gjøres om til en peker/relasjon mellom
-Arkivdel-instanser.  Denne relasjonen fungerer på samme måte som
+referanseArvtager (M203) bør endres til pekere/relasjoner mellom
+Arkivdel-instanser.  Det er jo rent faktisk peker mellom to
+Arkivdel-instanser.  Relasjonen fungerer på samme måte som
 forrige/neste- og til/fra-relasjonene i Moetemappe og
-Moeteregistrering, og som en underklasse/undermappe bare at den går
-begge veier.  I tillegg til relasjonene, så trengs det relasjonsnøkler
-til bruk i _links-listene.
+Moeteregistrering, og ligner på relasjonen underklasse/undermappe bare
+at den går begge veier.  I tillegg til relasjoner, så trengs det
+relasjonsnøkler til bruk i _links-listene.
 
 Se [mangelmelding
 #100](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/100)
-for konkret forslag til hvordan undermappe med venner skal håndteres.
+for konkret forslag til hvordan undermappe, underarkiv og underklasse håndteres.
 
-Foreslår at relasjons-navnene gjøres kortere og mer beskrivende, og at
-en bruker forrigeArkivdel/nesteArkivdel i stedet for de feltnavnene
-for M202/M203 som brukes i XML, slik at relasjonsnavnet inneholder
-hvilken entitetstype relasjonen peker på.
+Foreslår at relasjons-navnene gjøres kortere og mer beskrivende med
+entitetsnavn i relasjonsnavnet.  Konkret foreslår jeg at en bruker
+forrigeArkivdel/nesteArkivdel i stedet for de feltnavnene for
+M202/M203 som brukes i XML, slik at relasjonsnavnet inneholder hvilken
+entitetstype relasjonen peker på.
 
-Det bør kanskje nevnes i spesifikasjonen av hvis en oppdaterer en slik
-relasjon på den ene "siden", så skal den automatisk legges inn på den
-andre siden relasjonen.  Det gjelder i grunnen alle slike relasjoner,
-så det hører kanskje hjemme i kapittel 6 eller i den generelle delen
-om UML-diagrammene i kapittel 7?  Foreslår at det legges inn en
-beskrivelse i kapittel 6, samt oppdaterte attributter/relasjoner i
-kapittel 7.
+Det bør nevnes i spesifikasjonen av hvis en oppdaterer en slik
+relasjon på den ene "siden", så skal den automatisk dukke opp på den
+andre siden av relasjonen.  Det gjelder i grunnen alle slike
+relasjoner, så det hører kanskje hjemme i kapittel 6 eller i den
+generelle delen om UML-diagrammene i kapittel 7?  Foreslår at det
+legges inn en beskrivelse i kapittel 6, samt oppdaterte
+attributter/relasjoner i kapittel 7.
 
 Ønsket endring
 --------------
@@ -62,7 +64,12 @@ Legg inn to nye oppføringer i tabellen over relasjonsnøkler på side
 | REST\_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/forrigearkivdel/          |
 | REST\_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/nestearkivdel/            |
 
-Dokumenter i spesifikasjonen at hvis en legger inn en slik lenke fra
-en Arkivdel til en annen, så vil tilsvarende lenke dukke opp hos den
-motstående instansen av Arkivdel.
+Legg til følgende formulering i kapittel 6 under overskriften
+«Oppdatere referanser mellom objekter», like før overskriften «For å
+opprette ny referanse»:
 
+> Når en oppdaterer en toveis relasjon mellom to instanser med navn på
+> begge sider , så blir den også synlig i den andre ennen av
+> relasjonen.  For eksempel hvis en legger inn en lenke fra en
+> Arkivdel A til forrige Arkivdel B, så blir det automatisk en lenke
+> til neste Arkivdel A i Arkivdel B.
