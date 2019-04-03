@@ -10,7 +10,7 @@ Hvordan håndteres undermappe i mappe?
         Dokumentdel  7.2.1.16
          Sidenummer  134
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-03
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -239,3 +239,11 @@ attributt «referanseForelderMappe» fjernes fra Mappe, og relasjonen
 for «undermappe» endres til toveis og ha «foreldermappe 0..1» på
 motstående side, da det i stedet for attributt brukes relasjon med
 tilhørende relasjonsnøkkel.  Tilsvarende for arkiv og klasse.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/100 .
