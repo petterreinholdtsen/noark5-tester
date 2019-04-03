@@ -69,7 +69,8 @@ Legg til følgende formulering i kapittel 6 under overskriften
 opprette ny referanse»:
 
 > Når en oppdaterer en toveis relasjon mellom to instanser med navn på
-> begge sider , så blir den også synlig i den andre ennen av
+> begge sider , så blir den også synlig i den andre enden av
 > relasjonen.  For eksempel hvis en legger inn en lenke fra en
-> Arkivdel A til forrige Arkivdel B, så blir det automatisk en lenke
-> til neste Arkivdel A i Arkivdel B.
+> Arkivdel A til forrige Arkivdel B ved hjelp av «forrigearkivdel», så
+> blir det automatisk en lenke til neste Arkivdel A i Arkivdel B
+> synlig i «nestearkivdel».
