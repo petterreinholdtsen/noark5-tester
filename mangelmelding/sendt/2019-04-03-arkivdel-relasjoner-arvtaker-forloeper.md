@@ -10,7 +10,7 @@ Relasjoner mellom Arkivdel-instanser bør være relasjoner, ikke attributter
         Dokumentdel  7.2.1.2 (Arkivdel)
          Sidenummer  66
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-03
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -77,3 +77,11 @@ opprette ny referanse»:
 > Arkivdel A til forrige Arkivdel B ved hjelp av «forrigearkivdel», så
 > blir det automatisk en lenke til neste Arkivdel A i Arkivdel B
 > synlig i «nestearkivdel».
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/101 .
