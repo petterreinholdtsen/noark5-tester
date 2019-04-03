@@ -19,10 +19,13 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-Arkivdel-attributtene med navn referanseForloeper (M202) og
-referanseArvtager (M203) bør endres til pekere/relasjoner mellom
-Arkivdel-instanser.  Det er jo rent faktisk peker mellom to
-Arkivdel-instanser.  Relasjonen fungerer på samme måte som
+Arkivdel-attributtene med navn «referanseForloeper» (M202) og
+«referanseArvtager» (M203) bør endres til pekere/relasjoner mellom
+Arkivdel-instanser.  I XML-en er de attributter for å unngå unødig
+duplisering av infomrasjon, men i API-et bør dette være relasjoner.
+Det vil gjøre det klart at dette er pekere mellom Arkivdel-instanser,
+og sikre at begge sider av en slik lenke oppdateres som når alle andre
+relasjoner i API-et oppdateres.  Relasjonen fungerer på samme måte som
 forrige/neste- og til/fra-relasjonene i Moetemappe og
 Moeteregistrering, og ligner på relasjonen underklasse/undermappe bare
 at den går begge veier.  I tillegg til relasjoner, så trengs det
@@ -39,7 +42,7 @@ M202/M203 som brukes i XML, slik at relasjonsnavnet inneholder hvilken
 entitetstype relasjonen peker på.
 
 Det bør nevnes i spesifikasjonen av hvis en oppdaterer en slik
-relasjon på den ene "siden", så skal den automatisk dukke opp på den
+relasjon på den ene «siden», så skal den automatisk dukke opp på den
 andre siden av relasjonen.  Det gjelder i grunnen alle slike
 relasjoner, så det hører kanskje hjemme i kapittel 6 eller i den
 generelle delen om UML-diagrammene i kapittel 7?  Foreslår at det
@@ -69,7 +72,7 @@ Legg til følgende formulering i kapittel 6 under overskriften
 opprette ny referanse»:
 
 > Når en oppdaterer en toveis relasjon mellom to instanser med navn på
-> begge sider , så blir den også synlig i den andre enden av
+> begge sider, så blir den også synlig i den andre enden av
 > relasjonen.  For eksempel hvis en legger inn en lenke fra en
 > Arkivdel A til forrige Arkivdel B ved hjelp av «forrigearkivdel», så
 > blir det automatisk en lenke til neste Arkivdel A i Arkivdel B
