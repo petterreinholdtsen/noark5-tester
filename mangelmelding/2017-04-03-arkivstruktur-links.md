@@ -190,6 +190,57 @@ og ser slik ut: :
 Ønsket endring
 --------------
 
-FIXME formuler konkret forslag?  hvor da?  Kanskje beskriv under 7.2.1
-(Arkivstruktur) hvilke relasjonslenker som skal være del av resultatet
-som returneres?
+I starten av dokumentdel 7.2.1 (Arkivstruktur) på side 37 legges det
+inn følgende tekst:
+
+> Når en gjør GET mot href til relasjosnnøkkel
+> http://rel.kxml.no/noark5/v4/api/arkivstruktur/, så returneres liste
+> over relasjonsnøkler til de ulike entitetene som er tilgjengelig.
+> Disse kan brukes til å søke etter instanser av hver enkelt entitet.
+> I tillegg er det relasjonsnøkler for å opprette entiteter på
+> toppnivå i arkivstrukturen, hvis brukeren har tilgang til å opprette
+> nye instanser (her ny-arkiv og ny-arkivskaper).  Resultatet kan for
+> eksempel starte slik:
+>
+> ```Python
+> {
+>   "_links": [
+>     {
+>       "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/",
+>       "href": "http://localhost:49708/api/arkivstruktur/arkiv{?$filter&$orderby&$top&$skip&$search}",
+>       "templated": true
+>     },
+>     {
+>       "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/",
+>       "href": "http://localhost:49708/api/arkivstruktur/ny-arkiv",
+>     },
+>     ...
+>   ]
+> }
+> ```
+>
+> Følgende relasjonsnøkler skal listes opp fra en implementasjon som
+> støtter Arkivstruktur-pakken:
+>
+> | **Relasjonsnøkkel**                                                   |
+> |-----------------------------------------------------------------------|
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkiv/                 |
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivdel/              |
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/arkivskaper/           |
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/basisregistrering/     |
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentbeskrivelse/   |
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentobjekt/        |
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/klasse/                |
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/klassifikasjonssystem/ |
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/                 |
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/registrering/          |
+>
+> Følgende relasjonsnøkler skal tilsvarende listes opp for privilgerte brukere
+> etter innlogging:
+>
+> | **Relasjonsnøkkel**                                                   |
+> |-----------------------------------------------------------------------|
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/              |
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivskaper/        |
+
+FIXME beskriv tilsvarende for Sakarkiv-pakken og Admin-pakken?
