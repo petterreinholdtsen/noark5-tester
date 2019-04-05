@@ -34,5 +34,6 @@ Bytt ut «date» med «datetime» som type for mottattDato (M104) i
 tabellen over attributter for Journalpost, og oppdater alle aktuelle
 UML-diagrammer.
 
-Når diagrammer som PlantUML er tatt i bruk i master-grenen, så skal
-jeg sende inn konkret endringsforslag for å fikse dette.
+Når diagrammer som PlantUML er tatt i bruk i master-grenen
+([mangelmelding #76](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/76)),
+så skal jeg sende inn konkret endringsforslag for å fikse dette.
