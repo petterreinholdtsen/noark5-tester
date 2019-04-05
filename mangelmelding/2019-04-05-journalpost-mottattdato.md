@@ -21,16 +21,16 @@ Beskrivelse
 
 Gjelder også UML-diagrammer på side 54, 197, 198, 202 og 203.
 
-Listen over attributter i Journalpost har 'date' som type for
-'mottattDato' (M104).  I metadatakatalog.xsd for Noark 5 versjon 4 er
-typen derimot definert til enten 'date' og 'datetime'.  Antar at
-XSD-filen er korrekt, og da må datatypen i API-grensesnittet være
-'datetime'.
+Listen over attributter i Journalpost har «date» som type for
+«mottattDato» (M104).  I metadatakatalog.xsd for Noark 5 versjon 4 er
+M104-typen derimot definert til enten «date» og «datetime».  Hvis en
+antar at XSD-filen er korrekt, så må datatypen i beskrivelsen av
+API-et endres til «datetime».
 
 Ønsket endring
 --------------
 
-Bytt ut 'date' med 'datetime' som type for mottattDato (M104) i
+Bytt ut «date» med «datetime» som type for mottattDato (M104) i
 tabellen over attributter for Journalpost, og oppdater alle aktuelle
 UML-diagrammer.
 
