@@ -1,14 +1,14 @@
-Mekanisme for å identifisere entiteters klasse i entitetslister
-===============================================================
+Beskriv metode for å identifisere entiteter i instanslister
+===========================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
-        Alvorlighet  kommentar
-       Meldingstype  trenger klargjøring
+        Alvorlighet  protest
+       Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  
-         Sidenummer  
+        Dokumentdel  6.1.1.1 Finne objekter (Read)
+         Sidenummer  13
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
@@ -19,21 +19,24 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-Som bruker av API-et savner jeg en mekanisme som kan brukes for å
-identifisere klassen til en entitet i en liste med entiteter, der det
-finnes flere underklasser.  Eksempler på dette er saksmapper som er en
-underklasse av mapper, journalposter som er underklasse av
-basisregistreringer som igjen er underklasse av registreringer, og
-korrespondansepartperson som er underklasse av korrespondansepart.
+Som bruker av API-et savner jeg en beskrivelse av hvordan en kan
+identifisere entiteten til en instans i en liste med instanseer, der
+det finnes flere underentiteter.  Eksempler på dette er Saksmappe som
+er en undergruppe av Mappe og Journalpost som er undergruppe av
+Basisregistrering som igjen er undergruppe av Registrering.
 
-Utgangspunktet er at relasjonenes rel-innhold er standardisert i
+Utgangspunktet er at relasjonenes relasjonsnøkkel er standardisert i
 spesifikasjonen, mens href-innholdet er implementasjonsavhengig.
 Dermed kan en ikke se på innholdet i href-feltet for å gjette på
 klassetype.
 
-En utsnitt av en liste med mapper kan for eksempel se slik ut:
+Det som ser ut til å være en god metode for å finne entitetstypen til
+en instans er å se etter 'self'-relasjonen, deretter se etter en
+relasjon med samme href-verdi.  Denne andre relasjonens
+relasjonsnøkkel identifiseres entitetens type.  Det ser typisk slik
+ut:
 
-```
+```Python
 { "results": [
   { ...
     "_links": [
@@ -41,57 +44,59 @@ En utsnitt av en liste med mapper kan for eksempel se slik ut:
    {
       "href" : "http://something/arkivstruktur/mappe/2624ed49-dc39-47d5-8966-52f9fdc75868/ny-registrering/",
       "rel" : "http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering/",
-      "templated" : false
     }, {
       "href" : "http://something/arkivstruktur/mappe/2624ed49-dc39-47d5-8966-52f9fdc75868/registrering/",
       "rel" : "http://rel.kxml.no/noark5/v4/api/arkivstruktur/registrering/",
-      "templated" : false
-    }, {
-      "href" : "http://something/sakarkiv/saksmappe/2624ed49-dc39-47d5-8966-52f9fdc75868/",
-      "rel" : "self",
-      "templated" : false
-    } ]
-   },
-   ]
-}
-```
-
-En metode for å finne klassen til en entitet kunne være å oppgi samme
-href to ganger med to ulike rel-verdier, en for 'self' som over, og en
-med klassenavnet som relasjon.  Det ville dermed se slik ut:
-
-```
-{ "results": [
-  { ...
-    "_links": [
-    ...
-   {
-      "href" : "http://something/arkivstruktur/mappe/2624ed49-dc39-47d5-8966-52f9fdc75868/ny-registrering/",
-      "rel" : "http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering/",
-      "templated" : false
-    }, {
-      "href" : "http://something/arkivstruktur/mappe/2624ed49-dc39-47d5-8966-52f9fdc75868/registrering/",
-      "rel" : "http://rel.kxml.no/noark5/v4/api/arkivstruktur/registrering/",
-      "templated" : false
     }, {
       "href" : "http://something/sakarkiv/saksmappe/2624ed49-dc39-47d5-8966-52f9fdc75868/",
       "rel" : "http://rel.kxml.no/noark5/v4/api/sakarkiv/saksmappe/",
-      "templated" : false
     }, {
       "href" : "http://something/sakarkiv/saksmappe/2624ed49-dc39-47d5-8966-52f9fdc75868/",
       "rel" : "self",
-      "templated" : false
     } ]
    },
    ]
 }
 ```
 
-Hvis alle implementasjoner har slike relasjoner for hver entitet så
-vil det være trivielt for API-klienter å finne ut hvilken klasse en
-gitt entitet har i en liste med foreldre-entiteter i et arvetre.
+For å sikre at alle implementasjoner har slike relasjoner for hver
+instans, så må det beskrives eksplisitt i spesifikasjonen.  Da vil det
+være trivielt for API-klienter å finne ut hvilken klasse en gitt
+instans har i en liste med foreldre-instanser i et arvetre.
+
+Jeg tenker her på når en f.eks. søker i alle Registrering-instanser,
+så kan denne prosedyren brukes for å finne ut hvilke
+Registrering-instanser som egentlig er Saksmappe.
 
 Ønsket endring
 --------------
 
-FIXME formuler og finn ut hvor spesifikasjonen bør endres.
+Foreslår at det legges inn en ny underoverskrift mellom 6.1.1.1
+(Oppkobling og ressurslenker) og 6.1.1.2 (Finne objekter (Read)) på
+side 13 som lyder slik:
+
+> #### Identifisere entitetstype
+>
+> En kan identifisere hvilken entitet en oppføring har ved å først
+> identifisere "self"-relasjonsnøkkelen i "_links"-listen, deretter
+> identifisere hvilken annen oppføring som har samme href som
+> "self"-relasjonsnøkkelen.  Relasjonsnøkkelen til oppføringen som har
+> samme href som "self" representerer entitetsrelasjonsnøkkelen til
+> "self".    Dette kan se slik ut:
+>
+> ```Python
+> { "results": [
+>   { ...
+>     "_links": [
+>       {
+>         "rel": "self",
+>         "href": "http://localhost:49708/api/sakarkiv/saksmappe/2624ed49-dc39-47d5-8966-52f9fdc75868/"
+>       }, {
+>         "rel": "http://rel.kxml.no/noark5/v4/api/sakarkiv/saksmappe/",
+>         "href": "http://localhost:49708/api/sakarkiv/saksmappe/2624ed49-dc39-47d5-8966-52f9fdc75868/"
+>       },
+>       ...
+>     ]
+>   } ]
+> }
+> ```
