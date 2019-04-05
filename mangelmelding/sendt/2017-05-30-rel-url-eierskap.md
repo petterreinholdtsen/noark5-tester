@@ -7,7 +7,7 @@ Bør relasjonnavn bruke DNS-navn eid av Arkivverket?
         Alvorlighet  kommentar
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  6.1.1.1
+        Dokumentdel  6.1.1.1 (Oppkobling og ressurslenker)
          Sidenummer  12
         Linjenummer  n/a
     Innsendingsdato  2017-05-30

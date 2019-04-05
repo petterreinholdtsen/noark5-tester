@@ -7,7 +7,7 @@ Klargjør JSON-respons når database eller lister er tomme
         Alvorlighet  kommentar
        Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  6.1.1.1
+        Dokumentdel  6.1.1.1 (Oppkobling og ressurslenker)
          Sidenummer  13
         Linjenummer  n/a
     Innsendingsdato  2017-04-04

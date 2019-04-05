@@ -1,17 +1,17 @@
 Uklar beskrivelse om opprettelse av journalpost og bruken av arv
 ================================================================
 
-------------------- ---------------------------------
-           Prosjekt NOARK 5 Tjenestegresesnitt
-           Kategori Versjon 1.0 beta
-        Alvorlighet protest
-       Meldingstype utelatt
-    Brukerreferanse thomas.sodring@hioa.no
-        Dokumentdel 7.2.3.11
-         Sidenummer 239
-        Linjenummer n/a
-    Innsendingsdato 2017-05-09
-------------------- ---------------------------------
+ ------------------  ---------------------------------
+           Prosjekt  NOARK 5 Tjenestegresesnitt
+           Kategori  Versjon 1.0 beta
+        Alvorlighet  protest
+       Meldingstype  utelatt
+    Brukerreferanse  thomas.sodring@hioa.no
+        Dokumentdel  7.2.3.11
+         Sidenummer  239
+        Linjenummer  n/a
+    Innsendingsdato  2017-05-09
+ ------------------  ---------------------------------
 
 Beskrivelse
 -----------
