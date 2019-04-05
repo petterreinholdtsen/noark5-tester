@@ -1,5 +1,5 @@
-Definer mekanisme for tilbakemelding på konsistenssjekk
-=======================================================
+Definer mekanisme for å returnere tilbake resultater fra automatisk konsistenssjekk
+===================================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
@@ -72,7 +72,12 @@ Konsistenssjekk-resultatene skal returnerer, og å definere en
 relasjonsnøkkel som API-klienter kan se etter etter å ha opprettet
 eller endret en instans.
 
-http://edu.oslomet.no/ark2100/h16/syllabus/DQ%20Ouzounov.pdf
+Merk at en slik automatisert mekanisme for å returnere resultatene fra
+konsisstenssjekk kan være et første steg på veien mot full
+datakvalitetsmåling av arkivet, slik det for eksempel er beskrevet i
+"<ahref="http://edu.oslomet.no/ark2100/h16/syllabus/DQ%20Ouzounov.pdf">Assessing
+data quality in records management systems as implemented in Noark
+5</a>" av Dimitar Ouzounov.
 
 Ønsket endring
 --------------
