@@ -137,6 +137,29 @@ Eksempel på GET mot href for konsistenssjekk-relasjon:
 }
 ```
 
+Alterantiv som kan brukes til både feil og utfordringer...
+
+{
+  "feilkode": 401,
+  "_links": [
+      ...
+      { "rel": "mangelrel" },
+      ...
+  ],
+  "_embedded": {
+      "mangelrel" : { "count": 1,
+        "results": [
+          {
+            "felt": "dokumentdato",
+            "varslingstype": "Usannsynlig verdi",
+            "melding" : "Datoen er i fremtiden"
+          }
+        ]
+      }
+  }
+}  
+
+
 Kodeliste.KonsistensVarselNivaa:
   * Kritisk = 4
   * Alvorlig = 3
