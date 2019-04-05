@@ -72,6 +72,23 @@ Konsistenssjekk-resultatene skal returnerer, og å definere en
 relasjonsnøkkel som API-klienter kan se etter etter å ha opprettet
 eller endret en instans.
 
+En kan se på konsistenssjekk-resultater som en generalisert mekanisme
+for feilmeldinger (se
+[mangelmelding #93](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/93)).
+Alvorlige resultater fører til at opprettelsen av objektet blir
+avvist, mens mindre alvorlige resultater kun gir varsling om
+problemer.
+
+Hvis en bruker en ektra relasjon i _links, så vil det lite
+hensiktsmessig være mulig å returnere samme struktur for feil og
+problemer, da listen over feil som gjorde at opprettelsen ble avvist
+jo må mellomlagres i ubestemt tidsrom, hvilket gjør det unødig
+komplisert å lage API-tjenesten som må ta vare på informasjon om
+forkastede instanser utenom normal datastruktur.  Et alternativ kan
+være å bruke _embedded-mekanismen beskrevet i utkastet til [JSON
+Hypertext Application
+Language](https://tools.ietf.org/html/draft-kelly-json-hal-08).
+
 Merk at en slik automatisert mekanisme for å returnere resultatene fra
 konsisstenssjekk kan være et første steg på veien mot full
 datakvalitetsmåling av arkivet, slik det for eksempel er beskrevet i
