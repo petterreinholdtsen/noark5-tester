@@ -197,7 +197,7 @@ og ser slik ut: :
 I starten av dokumentdel 7.2.1 (Arkivstruktur) på side 37 legges det
 inn følgende tekst:
 
-> Når en gjør GET mot href til relasjosnnøkkel
+> Når en gjør GET mot href til relasjonsnøkkel
 > http://rel.kxml.no/noark5/v4/api/arkivstruktur/, så returneres liste
 > over relasjonsnøkler til de ulike entitetene som er tilgjengelig.
 > Disse kan brukes til å søke etter instanser av hver enkelt entitet.
@@ -250,7 +250,7 @@ inn følgende tekst:
 
 Det legges inn tilsvarende tekstblokk først i 7.2.3 (Sakarkiv) på side 195:
 
-> Når en gjør GET mot href til relasjosnnøkkel
+> Når en gjør GET mot href til relasjonsnøkkel
 > http://rel.kxml.no/noark5/v4/api/sakarkiv/, så returneres liste over
 > relasjonsnøkler til de ulike entitetene som er tilgjengelig.
 > Følgende relasjonsnøkler skal listes opp fra en implementasjon som
@@ -264,7 +264,7 @@ Det legges inn tilsvarende tekstblokk først i 7.2.3 (Sakarkiv) på side 195:
 
 Dernest, tilsvarende tekstblokk først i 7.2.4 (Admin) på side 252:
 
-> Når en gjør GET mot href til relasjosnnøkkel
+> Når en gjør GET mot href til relasjonsnøkkel
 > http://rel.kxml.no/noark5/v4/api/admin/, så returneres liste over
 > relasjonsnøkler til de ulike entitetene som er tilgjengelig.
 > Følgende relasjonsnøkler skal listes opp fra en implementasjon som
@@ -287,7 +287,7 @@ Dernest, tilsvarende tekstblokk først i 7.2.4 (Admin) på side 252:
 
 Til slutt, tilsvarende tekstblokk først i 7.2.5 (LoggingOgSporing) på side 264:
 
-> Når en gjør GET mot href til relasjosnnøkkel
+> Når en gjør GET mot href til relasjonsnøkkel
 > http://rel.kxml.no/noark5/v4/api/loggingogsporing/, så returneres
 > liste over relasjonsnøkler til de ulike entitetene som er
 > tilgjengelig.  Følgende relasjonsnøkler skal listes opp fra en
