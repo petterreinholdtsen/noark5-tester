@@ -99,7 +99,7 @@ konsisstenssjekk kan være et første steg på veien mot full
 datakvalitetsmåling av arkivet, slik det for eksempel er beskrevet i
 "[Assessing data quality in records management systems as implemented
 in Noark
-5]()(http://edu.oslomet.no/ark2100/h16/syllabus/DQ%20Ouzounov.pdf)" av
+5](http://edu.oslomet.no/ark2100/h16/syllabus/DQ%20Ouzounov.pdf)" av
 Dimitar Ouzounov.
 
 Resultaten fra slik datakvalitet-sjekk bør inneholde
