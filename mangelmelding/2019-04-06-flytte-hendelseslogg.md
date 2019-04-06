@@ -20,17 +20,22 @@ Beskrivelse
 -----------
 
 Bør entiteten Hendelseslogg flytte til pakken LoggingOgSporing?  Det
-er uklart hvorfor pakken finnes, når den kun inneholder en eneste
-entitet.  Når en i tillegg ser at Arkivstruktur.Hendelseslogg arver
-fra LoggingOgSporing.Endringslog, så er det litt uklart hvorfor de er
-delt mellom to pakker på den måten.  Skal det være greit å lage en
-API-implementasjon som ikke har med logging og sporing?  Det vil jo
-gjøre det umulig å ha med hele Arkivstruktur, som altså inneholder
-Hendelseslogg.  Alternativ tolkning, at det skal være greit å lage en
-API-implementasjon som ikke inneholder Arkivstruktur, gir ikke mening.
+er uklart hvorfor pakken LoggingOgSporing er en separat pakke, når den
+kun inneholder en eneste entitet, Endringslogg.  Når en i tillegg ser
+at Arkivstruktur.Hendelseslogg arver fra LoggingOgSporing.Endringslogg
+slik at det blir en hard avhengighet fra Arkivstruktur til
+LoggingOgSporing, så er det litt uklart hvorfor disse to entitetene er
+fordelt mellom to pakker på den måten.  Er pakken LoggingOgSporing
+valgri, på samme måte som Sakarkig og Moeter?  Skal det være
+akseptabelt å lage en API-implementasjon som ikke har med logging og
+sporing?  Det vil jo gjøre det umulig å ha med hele Arkivstruktur, som
+altså inneholder Hendelseslogg.  En alternativ tolkning er at det skal
+være greit å lage en API-implementasjon som ikke inneholder
+Arkivstruktur, men jeg synes ikke den gir mening.
 
 Et alternativ til å flytte Hendelseslogg til LoggingOgSporing er å
-flytte Endringslogg til Arkivstruktur.
+flytte Endringslogg til Arkivstruktur.  Da forsvinner pakken
+LoggingOgSporing.
 
 Ønsket endring
 --------------
