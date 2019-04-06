@@ -22,8 +22,9 @@ Beskrivelse
 Det er ikke forklart i spesifikasjonen hva som skal returneres når en
 tar GET mot href som pekes til av relasjonsnøkkelen
 `http://rel.kxml.no/noark5/v4/api/arkivstruktur/`,
-`http://rel.kxml.no/noark5/v4/api/sakarkiv/` og
-`http://rel.kxml.no/noark5/v4/api/administrasjon/`.
+`http://rel.kxml.no/noark5/v4/api/sakarkiv/`,
+`http://rel.kxml.no/noark5/v4/api/administrasjon/` og
+`http://rel.kxml.no/noark5/v4/api/loggingogsporing/`.
 
 Her er det lille som står om temaet i spesifikasjonen.  I del 6.1.1.1
 (Oppkobling og ressurslenker) på side side 12 står det:
@@ -237,6 +238,7 @@ inn følgende tekst:
 > | http://rel.kxml.no/noark5/v4/api/arkivstruktur/klassifikasjonssystem/ |
 > | http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/                 |
 > | http://rel.kxml.no/noark5/v4/api/arkivstruktur/registrering/          |
+> | http://rel.kxml.no/noark5/v4/api/arkivstruktur/hendelseslogg/         |
 >
 > Følgende relasjonsnøkler skal tilsvarende listes opp for privilgerte brukere
 > etter innlogging:
@@ -260,8 +262,7 @@ Det legges inn tilsvarende tekstblokk først i 7.2.3 (Sakarkiv) på side 195:
 > | http://rel.kxml.no/noark5/v4/api/sakarkiv/presedens/                  |
 > | http://rel.kxml.no/noark5/v4/api/sakarkiv/saksmappe/                  |
 
-Og til slutt, tilsvarende tekstblokk først i 7.2.4 (Admin) på side
-252:
+Dernest, tilsvarende tekstblokk først i 7.2.4 (Admin) på side 252:
 
 > Når en gjør GET mot href til relasjosnnøkkel
 > http://rel.kxml.no/noark5/v4/api/admin/, så returneres liste over
@@ -283,3 +284,15 @@ Og til slutt, tilsvarende tekstblokk først i 7.2.4 (Admin) på side
 > | http://rel.kxml.no/noark5/v4/api/admin/ny-administrativenhet/         |
 > | http://rel.kxml.no/noark5/v4/api/admin/ny-bruker/                     |
 > | http://rel.kxml.no/noark5/v4/api/admin/ny-rettighet/                  |
+
+Til slutt, tilsvarende tekstblokk først i 7.2.5 (LoggingOgSporing) på side 264:
+
+> Når en gjør GET mot href til relasjosnnøkkel
+> http://rel.kxml.no/noark5/v4/api/loggingogsporing/, så returneres
+> liste over relasjonsnøkler til de ulike entitetene som er
+> tilgjengelig.  Følgende relasjonsnøkler skal listes opp fra en
+> implementasjon som støtter LoggingOgSporing-pakken:
+>
+> | **Relasjonsnøkkel**                                                   |
+> |-----------------------------------------------------------------------|
+> | http://rel.kxml.no/noark5/v4/api/loggingogsporing/endringslogg/       |
