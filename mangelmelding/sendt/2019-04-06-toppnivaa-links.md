@@ -10,7 +10,7 @@ Beskriv hva som returneres når en henter ut informasjon fra toppnivå-relasjons
         Dokumentdel  7.2.1 (Arkivstruktur)
          Sidenummer  37
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-06
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -296,3 +296,11 @@ Til slutt, tilsvarende tekstblokk først i 7.2.5 (LoggingOgSporing) på side 264
 > | **Relasjonsnøkkel**                                                   |
 > |-----------------------------------------------------------------------|
 > | http://rel.kxml.no/noark5/v4/api/loggingogsporing/endringslogg/       |
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/107 .
