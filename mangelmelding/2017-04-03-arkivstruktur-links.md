@@ -23,7 +23,7 @@ Det er ikke forklart i spesifikasjonen hva som skal returneres når en
 tar GET mot href som pekes til av relasjonsnøkkelen
 `http://rel.kxml.no/noark5/v4/api/arkivstruktur/`,
 `http://rel.kxml.no/noark5/v4/api/sakarkiv/`,
-`http://rel.kxml.no/noark5/v4/api/administrasjon/` og
+`http://rel.kxml.no/noark5/v4/api/admin/` og
 `http://rel.kxml.no/noark5/v4/api/loggingogsporing/`.
 
 Her er det lille som står om temaet i spesifikasjonen.  I del 6.1.1.1
@@ -268,7 +268,7 @@ Dernest, tilsvarende tekstblokk først i 7.2.4 (Admin) på side 252:
 > http://rel.kxml.no/noark5/v4/api/admin/, så returneres liste over
 > relasjonsnøkler til de ulike entitetene som er tilgjengelig.
 > Følgende relasjonsnøkler skal listes opp fra en implementasjon som
-> støtter Sakarkiv-pakken:
+> støtter Admin-pakken:
 >
 > | **Relasjonsnøkkel**                                                   |
 > |-----------------------------------------------------------------------|
