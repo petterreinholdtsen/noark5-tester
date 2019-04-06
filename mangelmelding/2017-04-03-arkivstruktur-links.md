@@ -1,5 +1,5 @@
-Beskriv hva som returneres når en henter ut informasjon fra arkivstruktur-relasjonsnøkkelen
-===========================================================================================
+Beskriv hva som returneres når en henter ut informasjon fra toppnivå-relasjonsnøkler
+====================================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
@@ -21,7 +21,9 @@ Beskrivelse
 
 Det er ikke forklart i spesifikasjonen hva som skal returneres når en
 tar GET mot href som pekes til av relasjonsnøkkelen
-`http://rel.kxml.no/noark5/v4/api/arkivstruktur/`.
+`http://rel.kxml.no/noark5/v4/api/arkivstruktur/`,
+`http://rel.kxml.no/noark5/v4/api/sakarkiv/` og
+`http://rel.kxml.no/noark5/v4/api/administrasjon/`.
 
 Her er det lille som står om temaet i spesifikasjonen.  I del 6.1.1.1
 (Oppkobling og ressurslenker) på side side 12 står det:
@@ -37,17 +39,18 @@ I tillegg står det på side 13:
 > | Relasjonsnøkkel (rel)                           | Beskrivelse                                          |
 > |-------------------------------------------------|------------------------------------------------------|
 > | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ | Arkivkjerne støtter konformitetsnivå 1 arkivstruktur |
->   [...]
+> | http://rel.kxml.no/noark5/v4/api/sakarkiv/      | Arkivkjerne støtter konformitetsnivå for sakarkiv (2a) |
 >
 > Relasjonsnøkler under de forskjellige konformitetsnivå listes ut i
 > kapittel 7 sammen med beskrivelse av klasser.
 
 Det står ingenting om hvilke relasjoner som skal listes opp for
-../arkivstruktur/.  Det burde være beskrevet i spesifikasjonen.
-Tilsvarende bør det beskrives for .../sakarkiv/.
+../arkivstruktur/, ../sakarkiv/ og ../admin/.  Det burde være
+beskrevet i spesifikasjonen.
 
-Det finnes to eksempler på hvordan det kan se ut, det ene er fra
- `http://rel.kxml.no/noark5/v4/api/arkivstruktur/`, som ser slik ut:
+Det finnes to eksempler på hvordan det kan se ut for
+../arkivstruktur/, det ene er fra
+`http://rel.kxml.no/noark5/v4/api/arkivstruktur/`, som ser slik ut:
 
 ```Python
 {
@@ -243,4 +246,40 @@ inn følgende tekst:
 > | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/              |
 > | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivskaper/        |
 
-FIXME beskriv tilsvarende for Sakarkiv-pakken og Admin-pakken?
+Det legges inn tilsvarende tekstblokk først i 7.2.3 (Sakarkiv) på side 195:
+
+> Når en gjør GET mot href til relasjosnnøkkel
+> http://rel.kxml.no/noark5/v4/api/sakarkiv/, så returneres liste over
+> relasjonsnøkler til de ulike entitetene som er tilgjengelig.
+> Følgende relasjonsnøkler skal listes opp fra en implementasjon som
+> støtter Sakarkiv-pakken:
+>
+> | **Relasjonsnøkkel**                                                   |
+> |-----------------------------------------------------------------------|
+> | http://rel.kxml.no/noark5/v4/api/sakarkiv/journalpost/                |
+> | http://rel.kxml.no/noark5/v4/api/sakarkiv/presedens/                  |
+> | http://rel.kxml.no/noark5/v4/api/sakarkiv/saksmappe/                  |
+
+Og til slutt, tilsvarende tekstblokk først i 7.2.4 (Admin) på side
+252:
+
+> Når en gjør GET mot href til relasjosnnøkkel
+> http://rel.kxml.no/noark5/v4/api/admin/, så returneres liste over
+> relasjonsnøkler til de ulike entitetene som er tilgjengelig.
+> Følgende relasjonsnøkler skal listes opp fra en implementasjon som
+> støtter Sakarkiv-pakken:
+>
+> | **Relasjonsnøkkel**                                                   |
+> |-----------------------------------------------------------------------|
+> | http://rel.kxml.no/noark5/v4/api/admin/administrativenhet/            |
+> | http://rel.kxml.no/noark5/v4/api/admin/bruker/                        |
+> | http://rel.kxml.no/noark5/v4/api/admin/rettighet/                     |
+>
+> Følgende relasjonsnøkler skal tilsvarende listes opp for privilgerte brukere
+> etter innlogging:
+>
+> | **Relasjonsnøkkel**                                                   |
+> |-----------------------------------------------------------------------|
+> | http://rel.kxml.no/noark5/v4/api/admin/ny-administrativenhet/         |
+> | http://rel.kxml.no/noark5/v4/api/admin/ny-bruker/                     |
+> | http://rel.kxml.no/noark5/v4/api/admin/ny-rettighet/                  |
