@@ -22,7 +22,8 @@ Beskrivelse
 
 Det bør beskrives hvordan API-et kan tilby de samme operasjonene og
 lagringsmuligheten som GeoIntegrasjon tilbyr via sitt
-SOAP-grensesnitt.
+SOAP-grensesnitt.  Pakke for GeoIntegrasjon er beskrevet i tekst og
+UML-diagram, men ikke integrert i spesifikasjonen.
 
 https://www.geointegrasjon.no
 
