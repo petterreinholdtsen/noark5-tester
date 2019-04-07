@@ -19,14 +19,14 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-Bør entiteten Hendelseslogg flytte til pakken LoggingOgSporing?  Det
+Bør entiteten Hendelseslogg flyttes til pakken LoggingOgSporing?  Det
 er uklart hvorfor pakken LoggingOgSporing er en separat pakke, når den
 kun inneholder en eneste entitet, Endringslogg.  Når en i tillegg ser
 at Arkivstruktur.Hendelseslogg arver fra LoggingOgSporing.Endringslogg
 slik at det blir en hard avhengighet fra Arkivstruktur til
-LoggingOgSporing, så er det litt uklart hvorfor disse to entitetene er
-fordelt mellom to pakker på den måten.  Er pakken LoggingOgSporing
-valgri, på samme måte som Sakarkig og Moeter?  Skal det være
+LoggingOgSporing, så er det uklart hvorfor disse to entitetene er
+fordelt mellom to pakker på denne måten.  Er pakken LoggingOgSporing
+valgfri, på samme måte som Sakarkiv og Moeter?  Skal det være
 akseptabelt å lage en API-implementasjon som ikke har med logging og
 sporing?  Det vil jo gjøre det umulig å ha med hele Arkivstruktur, som
 altså inneholder Hendelseslogg.  En alternativ tolkning er at det skal
@@ -41,7 +41,7 @@ LoggingOgSporing.
 --------------
 
 Flytt omtalen av Hendelseslogg i kapittel 7.2.1.10 på side 111 fra
-Arkivstruktur til LoggingOgSporing, og oppdatert alle relaterte
+Arkivstruktur til LoggingOgSporing, og oppdater alle relaterte
 UML-diagrammer til å reflektere ny pakkeplassering.
 
 Når diagrammer som PlantUML er tatt i bruk i master-grenen
