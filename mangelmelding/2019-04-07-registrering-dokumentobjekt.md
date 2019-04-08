@@ -1,4 +1,4 @@
-Direkte relasjon fra registrering til dokumentobjekt mangler
+Direkte relasjon mellom dokumentobjekt og registrering mangler
 ============================================================
 
  ------------------  ---------------------------------
@@ -7,8 +7,8 @@ Direkte relasjon fra registrering til dokumentobjekt mangler
         Alvorlighet  protest
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  ?
-         Sidenummer  ?
+        Dokumentdel  7.2.1.18
+         Sidenummer  146
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
@@ -18,6 +18,8 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 
 Beskrivelse
 -----------
+
+Gjelder også Del 7.2.1.7 side 99.
 
 I følge arkivstruktur.xsd for Noark 5 versjon 4 så kan en registrering
 enten ha "dokumentbeskrivelse" eller "dokumentobjekt" under seg.
@@ -47,7 +49,38 @@ Dette er definisjonen av registrering fra arkivstruktur.xsd:
 </xs:complexType>
 ```
 
+
 Ønsket endring
 --------------
 
-FIXME
+Under Del 7.2.1.18 Registrering legges det inn følgende Relasjoner:
+
+| **Relasjon**                        | **Kilde**                              | **Mål**                        | **Merknad** |
+| ----------------------------------- | -------------------------------------- | ------------------------------ | ----------- |
+| **Aggregation** (Bi-Directional)    | dokumentobjekt 0..* Dokumentobjekt     | registrering 1..* Registrering |             |
+
+
+Under same del legges det inn følgende relasjonsnøkler:
+
+| **Tag**   | **Verdi**                                                                |
+| --------- | ------------------------------------------------------------------------ |
+| REST\_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/dokumentobjekt/           |
+| REST\_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentobjekt/        |
+
+
+Under Del 7.2.1.18 Registrering legges det inn følgende relasjonsnøkler:
+
+Under Del 7.2.1.7  legges det inn følgende Relasjoner:
+
+| **Relasjon**                        | **Kilde**                              | **Mål**                        | **Merknad** |
+| ----------------------------------- | -------------------------------------- | ------------------------------ | ----------- |
+| **Aggregation** (Bi-Directional)    | dokumentobjekt 0..* Dokumentobjekt     | registrering 1..* Registrering |             |
+
+
+Under same del legges det inn følgende relasjonsnøkler:
+
+| **Tag**   | **Verdi**                                                                |
+| --------- | ------------------------------------------------------------------------ |
+| REST\_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/registrering/           |
+
+
