@@ -35,32 +35,32 @@ vi ser på forholdet mappe -> saksmappe, så ser vi at relasjonene som
 returneres når en lager en ny arkivdel inkluderer
 
  * "href": "http://localhost:49708/api/arkivstruktur/Arkivdel/12345/ny-mappe"
- * "rel": "http://rel.kxml.no/noark5/v4/api/ny-mappe"
+ * "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-mappe"
 
 For å opprette en saksmappe må en bruke relasjonen
 utvid-til-saksmappe:
 
  * "href": "http://n5test.kxml.no/api/sakarkiv/Saksmappe/12345/utvid-til-saksmappe"
- * "rel": "http://rel.kxml.no/noark5/v4/utvid-til-saksmappe"
+ * "rel": "http://rel.kxml.no/noark5/v4/arkivstruktur/utvid-til-saksmappe"
 
 FIXME spesifikasjonen nevner ikke relasjonen
-"http://rel.kxml.no/noark5/v4/utvid-til-saksmappe', den kommer fra
+"http://rel.kxml.no/noark5/v4/arkivstruktur/utvid-til-saksmappe', den kommer fra
 http://rel.kxml.no/noark5/v4/api/arkivstruktur/mappe/
 
 Hvis vi ser på forholdet registrering -> basisregistrering, så ser vi
 at under "arkivdel" kan du kun opprette en registrering:
 
  * "href": "http://localhost:49708/api/arkivstruktur/Arkivdel/12345/ny-registrering",
- * "rel": "http://rel.kxml.no/noark5/v4/api/ny-registrering",
+ * "rel": "http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering",
 
 mens under "mappe" kan en opprette både en "registrering" og en
 "basisregistrering:"
 
  * "href": "http://n5test.kxml.no/api/arkivstruktur/Mappe/12345/ny-registrering"
- * "rel": "http://rel.kxml.no/noark5/v4/ny-registrering"
+ * "rel": "http://rel.kxml.no/noark5/v4/arkivstruktur/ny-registrering"
 
  * "uri": "http://n5test.kxml.no/api/arkivstruktur/Mappe/12345/ny-basisregistrering"
- * "rel": "http://rel.kxml.no/noark5/v4/ny-basisregistrering"
+ * "rel": "http://rel.kxml.no/noark5/v4/arkivstruktur/ny-basisregistrering"
 
 Det er dermed ikke konsistent beskrevet i spesifikasjonen hvordan arv
 håndteres.

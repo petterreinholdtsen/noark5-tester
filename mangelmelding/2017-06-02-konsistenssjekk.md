@@ -215,8 +215,8 @@ FIXME Hvilket språk skal meldingene ha?  Hvordan skal en håndtere flere språk
       { "rel": "../arkivstruktur/arkiv/",
         "href": "somewhere/asfdasfsf/"
       }
-      { "rel": "mangelrel/datakvalitet/",
-        "href": "somewhere/asfdasfsf/datakvalitet"
+      { "rel": "mangelrel/datakontroll/",
+        "href": "somewhere/asfdasfsf/datakontroll"
       },
       ...
   ],

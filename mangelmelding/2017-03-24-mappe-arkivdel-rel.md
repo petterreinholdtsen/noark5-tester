@@ -19,6 +19,9 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
+Det er noe å lære fra
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/28
+
 Gjelder side 133 og 134.
 
 Spesifikasjonens del 7.2.1.16 (Mappe) lister opp en rekke relasjoner
