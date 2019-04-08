@@ -10,7 +10,7 @@ Bør entiteten Hendelseslogg flytte til pakken LoggingOgSporing?
         Dokumentdel  7.2.1.10 (Hendelseslogg)
          Sidenummer  111
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-08
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -47,3 +47,11 @@ UML-diagrammer til å reflektere ny pakkeplassering.
 Når diagrammer som PlantUML er tatt i bruk i master-grenen
 ([mangelmelding #76](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/76)),
 så skal jeg sende inn konkret endringsforslag for å fikse dette.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/110 .
