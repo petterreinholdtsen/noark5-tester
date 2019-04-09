@@ -7,10 +7,10 @@ Beskriv metode for å identifisere entiteter i instanslister
         Alvorlighet  protest
        Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  6.1.1.1 Finne objekter (Read)
+        Dokumentdel  6.1.1.1 (Finne objekter (Read))
          Sidenummer  13
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-09
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -28,7 +28,7 @@ arver fra Registrering.
 Utgangspunktet er at relasjonenes relasjonsnøkkel er standardisert i
 spesifikasjonen, mens href-innholdet er implementasjonsavhengig.
 Dermed kan en ikke se på innholdet i href-feltet for å gjette på
-klassetype.
+entitetstype.
 
 Det som ser ut til å være en god metode for å finne entitetstypen til
 en instans er å se etter 'self'-relasjonen, deretter se etter en
@@ -42,26 +42,30 @@ ut:
     "_links": [
     ...
    {
-      "href" : "http://something/arkivstruktur/mappe/2624ed49-dc39-47d5-8966-52f9fdc75868/ny-registrering/",
       "rel" : "http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-registrering/",
+      "href" : "http://something/arkivstruktur/mappe/2624ed49-dc39-47d5-8966-52f9fdc75868/ny-registrering/"
     }, {
-      "href" : "http://something/arkivstruktur/mappe/2624ed49-dc39-47d5-8966-52f9fdc75868/registrering/",
       "rel" : "http://rel.kxml.no/noark5/v4/api/arkivstruktur/registrering/",
+      "href" : "http://something/arkivstruktur/mappe/2624ed49-dc39-47d5-8966-52f9fdc75868/registrering/"
     }, {
-      "href" : "http://something/sakarkiv/saksmappe/2624ed49-dc39-47d5-8966-52f9fdc75868/",
       "rel" : "http://rel.kxml.no/noark5/v4/api/sakarkiv/saksmappe/",
+      "href" : "http://something/sakarkiv/saksmappe/2624ed49-dc39-47d5-8966-52f9fdc75868/"
     }, {
-      "href" : "http://something/sakarkiv/saksmappe/2624ed49-dc39-47d5-8966-52f9fdc75868/",
       "rel" : "self",
+      "href" : "http://something/sakarkiv/saksmappe/2624ed49-dc39-47d5-8966-52f9fdc75868/"
     } ]
    },
    ]
 }
 ```
 
+Her kan en se at 'self har samme href som
+`http://rel.kxml.no/noark5/v4/api/sakarkiv/saksmappe/`, hvilket betyr
+at instansen er en saksmappe.
+
 For å sikre at alle implementasjoner har slike relasjoner for hver
 instans, så må det beskrives eksplisitt i spesifikasjonen.  Da vil det
-være trivielt for API-klienter å finne ut hvilken klasse en gitt
+være trivielt for API-klienter å finne ut hvilken entitet en gitt
 instans har i en liste med foreldre-instanser i et arvetre.
 
 Jeg tenker her på når en f.eks. søker i alle Registrering-instanser,
@@ -100,3 +104,11 @@ side 13 som lyder slik:
 >   } ]
 > }
 > ```
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/119 .
