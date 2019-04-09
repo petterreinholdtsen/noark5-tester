@@ -20,10 +20,10 @@ Beskrivelse
 -----------
 
 Som bruker av API-et savner jeg en beskrivelse av hvordan en kan
-identifisere entiteten til en instans i en liste med instanseer, der
+identifisere entiteten til en instans i en liste med instanser, der
 det finnes flere underentiteter.  Eksempler på dette er Saksmappe som
-er en undergruppe av Mappe og Journalpost som er undergruppe av
-Basisregistrering som igjen er undergruppe av Registrering.
+arver fra Mappe og Journalpost som arver fra Basisregistrering som igjen
+arver fra Registrering.
 
 Utgangspunktet er at relasjonenes relasjonsnøkkel er standardisert i
 spesifikasjonen, mens href-innholdet er implementasjonsavhengig.
@@ -33,7 +33,7 @@ klassetype.
 Det som ser ut til å være en god metode for å finne entitetstypen til
 en instans er å se etter 'self'-relasjonen, deretter se etter en
 relasjon med samme href-verdi.  Denne andre relasjonens
-relasjonsnøkkel identifiseres entitetens type.  Det ser typisk slik
+relasjonsnøkkel identifiserer entitetens type.  Det vil typisk se slik
 ut:
 
 ```Python
@@ -66,7 +66,7 @@ instans har i en liste med foreldre-instanser i et arvetre.
 
 Jeg tenker her på når en f.eks. søker i alle Registrering-instanser,
 så kan denne prosedyren brukes for å finne ut hvilke
-Registrering-instanser som egentlig er Saksmappe.
+Registrering-instanser som egentlig er Journalposter.
 
 Ønsket endring
 --------------
