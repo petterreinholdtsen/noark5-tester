@@ -68,8 +68,6 @@ Under same del legges det inn følgende relasjonsnøkler:
 | REST\_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentobjekt/        |
 
 
-Under Del 7.2.1.18 Registrering legges det inn følgende relasjonsnøkler:
-
 Under Del 7.2.1.7  legges det inn følgende Relasjoner:
 
 | **Relasjon**                        | **Kilde**                              | **Mål**                        | **Merknad** |
