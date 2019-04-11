@@ -2,8 +2,8 @@ Definisjonsfeil for «arkivskaperNavn» og «tilknyttetRegistreringSom» i metad
 ========================================================================================
 
  ------------------  ---------------------------------
-           Prosjekt  Noark 5 versjon 4
-           Kategori  Metadatakatalog
+           Prosjekt  NOARK 5
+           Kategori  Versjon 4.0
         Alvorlighet  protest
        Meldingstype  trenger klargjøring
     Brukerreferanse  celinefredriksen89@yahoo.com
@@ -16,7 +16,7 @@ Definisjonsfeil for «arkivskaperNavn» og «tilknyttetRegistreringSom» i metad
 Beskrivelse
 -----------
 
-Gjelder også side 23/24.
+Gjelder også side 26.
 
 I [metadatakatalogen](https://www.arkivverket.no/forvaltning-og-utvikling/noark-standarden/noark-5/noark5-standarden/_/attachment/download/f52e37da-31ed-4bf0-9fbf-69f0357aa25c:025a30b602a65d74377b9e0c22a0f2fb8eab84df/Noark5v4%20vedl1%20Metadatakatalog.pdf)
 (side 11) for Noark 5 versjon 4 er det en feil tilknyttet definisjonen
