@@ -1,3 +1,5 @@
+Dette er en mangelmelding som kun er registrert på github, og ikke er sendt inn til Arkivverkets postmottak. 
+
 Definisjonsfeil for «arkivskaperNavn» og «tilknyttetRegistreringSom» i metadatakatalogen
 ========================================================================================
 
