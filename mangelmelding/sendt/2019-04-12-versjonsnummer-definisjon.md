@@ -10,7 +10,7 @@ Hva er gyldighetsområdet for versjonsnummer (M005) i dokumentobjekt?
         Dokumentdel  7.2.1.7
          Sidenummer  101
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-12
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -22,7 +22,7 @@ Beskrivelse
 
 Spesifikasjonens del 7.2.1.7 (Dokumentobjekt) side 101 nevner ikke hva
 som er gyldige verdier for versjonsnummer i dokumentobjekt.  Den
-forklarer heller ikke hvilken verdi versjonnummeret som tildeltes et
+forklarer heller ikke hvilken verdi versjonsnummeret som tildeltes et
 nytt dokument skal ha.  Skal det være 0, 1 eller et annet tall.  Den
 sier heller ingenting om versjoner skal tildeles med stigende eller
 fallende rekkefølge.
@@ -30,7 +30,7 @@ fallende rekkefølge.
 Svarene på disse spørsmålene er heller ikke oppgitt i Noark
 5-spesifikasjonen, hverken versjon 4 eller 5.  Noark
 5-spesifikasjonens versjon 4 del 5.6 (Dokumentbeskrivelse og
-Dokumentobjekt) side 71 sier bare at versjonummer er
+Dokumentobjekt) side 71 sier bare at versjonsnummer er
 
 > Identifikasjon av versjoner innenfor samme dokument.  Se også
 > merknad 1 nedenfor.
@@ -79,7 +79,7 @@ nye versjonsnummer hvis et dokument slettes, med de utfordringer det
 gir.
 
 Det er flere alternativer her, og mitt forslag er at første
-versjonummer settes til 0, og at det telles oppover derfra.  Det
+versjonsnummer settes til 0, og at det telles oppover derfra.  Det
 sikrer at verdien kan håndteres som et ikke-negativt heltall og at
 samtlige mulige verdier uansett bitlengde på feltet er et lovlig
 versjonsnummer.  Det oppnår en ikke hvis en starter på 1.
@@ -97,12 +97,16 @@ finne på hva de skal gjøre hvis versjonsnummeret blir for stort.
 Foreslår i første omgang ikke noe tak, da jeg er usikker på hva som
 bør beskrives i tilfelle taket nås.
 
+Se forøvrig [mangelmelding
+#69](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/69)
+for en relatert diskusjon.
+
 Ønsket endring
 --------------
 
 Klargjør hva som er første verdi for versjonsnummer lastet inn i
 tjenestegrensesnittet, og om neste dokument får større eller mindre
-versjon enn første dokument.  Dokumenter at versjonummer deles ut
+versjon enn første dokument.  Dokumenter at versjonsnummer deles ut
 sekvensielt uten hull, men at hull kan oppstå når tidligere versjoner
 slettes.
 
@@ -111,10 +115,19 @@ versjonsnummer, og hva som eventuelt skal gjøres hvis en kommer til
 grensen og ønsker laste opp nok en versjon.
 
 Konkret foreslår jeg å endre definisjonen av versjonsnummer for
-entitetn dokumentobjekt, og legge til følgende etter "Identifikasjon av
-versjoner innenfor ett og samme dokument":
+entiteten dokumentobjekt i del 7.2.1.7 (Dokumentobjekt) på side 99, og
+legge til følgende etter "Identifikasjon av versjoner innenfor ett og
+samme dokument" på side 101:
 
 > Første versjon får nummer 0, deretter påfølgende heltall i stigende
 > rekkefølge (1, 2, 3, ...).  Det er ok med "hull" i
 > versjonsnummer-sekvensen, da dette dokumenterer hvilke tidligere
 > versjoner av dokumentet som er fjernet.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/126 .
