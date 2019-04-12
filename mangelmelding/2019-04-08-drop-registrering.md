@@ -1,14 +1,14 @@
-Slå sammen basisregistrering og registrering til kombinert registrering?
-========================================================================
+Slå sammen «basisregistrering» og «registrering» til kombinert «registrering»?
+==============================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
-        Alvorlighet  
-       Meldingstype  
+        Alvorlighet  kommentar
+       Meldingstype  trenger avklaring
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  
-         Sidenummer  
+        Dokumentdel  7.2.1.5 (Basisregistrering)
+         Sidenummer  82
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
@@ -20,18 +20,21 @@ tilgjengelig fra
 Beskrivelse
 -----------
 
-For å forberede overgang til versjon 5, der basisregistrering og
-registrering er slått sammen til en entitet med navn registrering, så
-bør en se på om det er mulig å gjøre det samme i
-tjenestegrensesnittet, for å slippe å måtte gjøre denne endringen
-senere.  Vil det skape problemer ved eksport for deponering?
+Gjelder også del 7.2.1.18 (Registrering) side 145.
+
+For å forberede overgang til Noark 5 versjon 5, der typene
+«basisregistrering» og «registrering» er slått sammen til en entitet
+med navn «registrering», så bør en se på om det er mulig å gjøre det
+samme i tjenestegrensesnittet, for å slippe å måtte gjøre denne
+endringen senere.  Vil det skape problemer ved import eller eksport
+for deponering i tråd med XML-skjema for Noark 5 versjon 4?
 
 I arkivstruktur.xsd fra
 https://github.com/arkivverket/schemas/tree/avlevering-wip/N5/v5.0 ser
 en følgende nye definisjon av registrering:
 
 
-```
+```XML
 <xs:complexType name="registrering">
   <xs:sequence>
     <xs:element name="systemID" type="n5mdk:systemID"/>
@@ -70,17 +73,35 @@ en følgende nye definisjon av registrering:
 </xs:complexType>
 ```
 
-Det eneste påkrevde feltet som er lagt til 'registrering' er 'tittel'.
-Det betyr at en slik endring gjør at en ikke lenger vil være i stand
-til å importere data som er strukturert i henhold til
+Listen er i sum unionen av feltene som er i Noark 5 versjon 4 for
+«registrering» og «basisregistrering».
+
+Det eneste påkrevde feltet som er lagt til den nye «registrering» er
+«tittel».  Det betyr at en slik endring gjør at en ikke lenger vil
+være i stand til å importere data som er strukturert i henhold til
 avleveringsformatet beskrevet i XML-skjema for versjon 4 uten å måtte
-finne på en tittel for alle instanser av 'registrering'.
+finne på en tittel for alle instanser av «registrering».  En løsning
+på dette er å spesifisere en tittelstreng som skal settes ved import
+på alle «registrering»-instanser.  Den kan for eksempel være «n/a»,
+«[blank]», «[mangler]», «[registrering]», «[importert registrering]»
+eller noe annet som brukere av API-et vil gjenkjenne som importert
+registrering uten tittel.
 
 Det er ikke noe problem for eksport, da en vil kunne eksportere alle
-instanser av en slik kombinert 'registrering' som 'basisregistrering'
+instanser av en slik kombinert «registrering» som «basisregistrering»
 hvis en eksporterer som versjon 4.
 
 Ønsket endring
 --------------
 
-FIXME finn ut hva som kan gjøres
+Slå sammen entitetene Registring og Basisregistrering i kapittel 7
+under navnet Registrering, beskriv der at Noark 5 versjon 4-entietene
+disse er slått sammen for å være fremoverkompatibel med versjon 5, og
+skriv hvilken tittel som skal settes ved import av
+Registrering-instanser.  Foreslår «[importert registrering]» som slik
+tittel.
+
+Beskrivelse, relasjoner, relasjonsnøkler, attributter og restriksjoner
+må slås sammen til en samlet oversikt.
+
+FIXME finn ut hvor og hvordan det skal inni teksten
