@@ -1,5 +1,3 @@
-Dette er en mangelmelding som kun er registrert på github, og ikke er sendt inn til Arkivverkets postmottak. 
-
 Definisjonsfeil for «arkivskaperNavn» og «tilknyttetRegistreringSom» i metadatakatalogen
 ========================================================================================
 
@@ -12,7 +10,7 @@ Definisjonsfeil for «arkivskaperNavn» og «tilknyttetRegistreringSom» i metad
         Dokumentdel  n/a
          Sidenummer  11
         Linjenummer  n/a
-    Innsendingsdato  Ikke sendt inn
+    Innsendingsdato  2019-04-11
  ------------------  ---------------------------------
 
 Beskrivelse
@@ -49,3 +47,6 @@ Respons
 -------
 
 Ingen respons fra Arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/124 .
