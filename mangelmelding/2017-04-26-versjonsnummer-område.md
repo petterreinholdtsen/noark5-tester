@@ -71,8 +71,8 @@ måte.  Det kan gi problemer med lagring i SQL-databaser, som sjelden
 har heltallstyper som kan håndtere uendelig mange siffer.
 
 Det er uklart om det er greit med hull i versjonsnummer-serien.  Slike
-hull vil oppstå hvis en (midlertidig) versjon av det dokument blir
-lagret i arkivet for å å bli erstattet med en endelig versjon og det
+hull vil oppstå hvis en (midlertidig) versjon av et dokument blir
+lagret i arkivet for å bli erstattet med en endelig versjon og den
 midlertidige versjonen slettes.  Det bør nevnes om det er akseptabelt
 med versjonsnummerhull eller ikke.  Alternativet er at dokumenter får
 nye versjonsnummer hvis et dokument slettes, med de utfordringer det
@@ -84,8 +84,8 @@ sikrer at verdien kan håndteres som et ikke-negativt heltall og at
 samtlige mulige verdier uansett bitlengde på feltet er et lovlig
 versjonsnummer.  Det oppnår en ikke hvis en starter på 1.
 
-Jeg foreslår videre at det aksepteres hull i sekvensen, som slik
-dokumenterer at tidligere versjoner er slettet.
+Jeg foreslår videre at det aksepteres hull i sekvensen, som da vil også
+dokumentere at tidligere versjoner er slettet.
 
 Jeg er sterkt i tvil om det bør legges inn et øvre tak på verdiene.
 Hvis det legges inn et tak, så må det også beskrives hva som skal
@@ -111,7 +111,7 @@ versjonsnummer, og hva som eventuelt skal gjøres hvis en kommer til
 grensen og ønsker laste opp nok en versjon.
 
 Konkret foreslår jeg å endre definisjonen av versjonsnummer for
-klassen dokumentobjekt, og legge til følgende etter "Identifikasjon av
+entitetn dokumentobjekt, og legge til følgende etter "Identifikasjon av
 versjoner innenfor ett og samme dokument":
 
 > Første versjon får nummer 0, deretter påfølgende heltall i stigende
