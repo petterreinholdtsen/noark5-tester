@@ -1,5 +1,5 @@
-Snu relasjonene til Merknad?
-============================
+Snu relasjonene til Merknad i relasjonstabellene?
+=================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
@@ -10,7 +10,7 @@ Snu relasjonene til Merknad?
         Dokumentdel  7.2.1.17 (Merknad)
          Sidenummer  141
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-13
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -20,7 +20,8 @@ tilgjengelig fra
 Beskrivelse
 -----------
 
-Gjelder også side 83 og 90.
+Gjelder også Basisregistrering side 83, Dokumentbeskrivelse side 90 og
+Mappe side 131.
 
 Relasjonen fra Merknad til Mappe, Basisregistrering og
 Dokumentbeskrivelse beskrevet på side 142 i del 7.2.1.17 (Merknad) er
@@ -45,6 +46,7 @@ Her er relasjonene slik de fordeler seg i dag i kapittel 7:
 |     22 | **Aggregation** (Bi-Directional)          |
 |     49 | **Generalization** (Source → Destination) |
 
+Dette gjelder altså de seks relasjonene det finnes færrest av.
 Kan det være en god ide å sørge for at alle rettede relasjonene i
 spesifikasjonen konsistent enten går fra kilde til mål eller fra mål
 til kilde, for å redusere sjansen for at at de som leser
@@ -79,3 +81,11 @@ til dette:
 Alternativt, hvis retningen er ment å være vesentlig, beskriv i detalj
 i spesifikasjonen hva som skal forstås ut fra retningen på disse
 relasjonene.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/135 .
