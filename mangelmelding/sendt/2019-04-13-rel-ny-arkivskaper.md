@@ -1,5 +1,5 @@
-Klargjør relasjonsnavn for ny-arkivskaper
-=========================================
+Klargjør relasjonsnøkkelnavn for ny-arkivskaper
+===============================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
@@ -7,10 +7,10 @@ Klargjør relasjonsnavn for ny-arkivskaper
         Alvorlighet  kommentar
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  7.2.1.4
+        Dokumentdel  7.2.1.4 (Arkivskaper)
          Sidenummer  80
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-13
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -33,4 +33,17 @@ http://n5test.kxml.no/api/arkivstruktur.
 Ønsket endring
 --------------
 
-FIXME finn ut hva som skal foreslås.
+Noen bør vurdere hva som er riktig her.  For meg virker det naturlig
+og korrekt å bruke relasjonsnøkkel
+`http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivskaper/` for
+denne operasjonen, og det trengs dermed ingen endring i
+spesifikasjonen, men derimot i demo-programmet som kjører på n5test,
+men tar det opp her uansett i tilfelle det er feil.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/134 .
