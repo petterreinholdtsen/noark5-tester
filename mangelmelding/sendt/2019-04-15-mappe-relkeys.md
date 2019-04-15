@@ -1,16 +1,16 @@
-Samkjør relasjonsliste for mappe i spesifikasjon og på rel.kxml.no
-==================================================================
+Korriger relasjonsnøkkelliste for Mappe
+=======================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
            Kategori  Versjon 1.0 beta
-        Alvorlighet  kommentar
+        Alvorlighet  protest
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  7.2.1.16
+        Dokumentdel  7.2.1.16 (Mappe)
          Sidenummer  133
-        Linjenummer  
-    Innsendingsdato  ikke sendt inn
+        Linjenummer  n/a
+    Innsendingsdato  2019-04-15
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -18,9 +18,6 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 
 Beskrivelse
 -----------
-
-Det er noe å lære fra
-https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/28
 
 Gjelder side 133 og 134.
 
@@ -35,7 +32,7 @@ eksempelet.
 
 Selv om vi antar eksempelet har en skrivefeil, og
 http://rel.kxml.no/noark5/v4/ skulle vært
-http://rel.kxml.no/noark5/v4/api/arkivstruktur/, så er det likefult
+http://rel.kxml.no/noark5/v4/api/arkivstruktur/, så er det likefullt
 noen relasjoner som ikke er omtalt i spesifikasjonen:
 
  * http://rel.kxml.no/noark5/v4/api/arkivstruktur/avslutt-mappe/
@@ -71,14 +68,51 @@ spesifikasjonen og ikke i eksempelet.
  * http://rel.kxml.no/noark5/v4/api/metadata/dokumentmedium/
  * http://rel.kxml.no/noark5/v4/api/metadata/mappetype/
 
-Jeg mistenker f.eks at /arkivdel/ og /referanseArkivdel/ omhandler
-samme relasjon, dvs. hvordan finne "foreldrearkivdel" for den gitte
-mappen.  Jeg mistenker det samme for /klasse/ og /referanseKlasse/.
+Jeg mistenker for eksempel at /arkivdel/ og /referanseArkivdel/
+omhandler samme relasjon, dvs. hvordan finne "foreldrearkivdel" for
+den gitte mappen.  Jeg mistenker det samme for /klasse/ og
+/referanseKlasse/.
 
-Se også mangelmeldingen ny-underarkiv om relasjonene for
-mappe/ny-mappe/undermappe.
+Problemet er relatert til [mangelmelding
+#28](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/28)
+om opprettelse av journalpost og bruken av arv og [mangelmelding
+#100](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/100)
+om relasjonene for mappe/ny-mappe/undermappe.
 
 Ønsket endring
 --------------
 
-FIXME beskriv konkret forslag til endring
+Jeg er litt i tvil om hva som er riktig løsning her, da det kommer an
+på hvordan arv skal håndteres og hvordan relasjoner skal representeres
+som JSON og ved oppretting og oppdatering, men foreslår i første
+omgang at følgende nye relasjonsnøkler legges inn i tabellen i
+Dokumentdel 7.2.1.16 (Mappe) på side 133:
+
+| **Tag**   | **Verdi**                                                                |
+| --------- | ------------------------------------------------------------------------ |
+| REST\_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-basisregistrering/     |
+| REST\_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-journalpost/           |
+| REST\_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-moeteregistrering/     |
+
+Følgende relasjonsnøkler skal så fjernes:
+
+| **Tag**   | **Verdi**                                                                |
+| --------- | ------------------------------------------------------------------------ |
+| REST\_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/              |
+| REST\_REL | http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-klasse/                |
+
+I tillegg trenger rel.kxml.no oppdatering slik at den stemmer overens
+med spesifikasjonen.
+
+Merk at denne tilnærmingen er basert på at en velger tilnærmingen med
+ny-entitettype i stedet for utvid-til-entitettype.  Merk videre at det
+forsatt er problemer med referanse-attributtene som heller bør
+representeres som relasjoner til Bruker og Mappe.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/140 .
