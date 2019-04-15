@@ -99,6 +99,11 @@ virksomhetsspesifikkeMetadata kan brukes til å ta vare på og avlevere
 disse?  Hvordan kan de legges inn i og søkes etter via denne
 spesifikasjonen?
 
+Dagens definisjon av Nasjonalidentifikator innholder attributten
+"beskrivelse".  Det er uklart hva dette feltet skal inneholde, og jeg
+finner ikke tilsvarende felt i GeoIntegrasjon.  Kanskje det bør
+droppes?
+
 Det står ingenting om hvordan entitetene som arver fra
 NasjonalIdentifikator skal avleveres, og verdiene har så vidt jeg kan
 se ikke en plass i arkivstruktur.xml til Noark 5 versjon 4 og 5.  For
