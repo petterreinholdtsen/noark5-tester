@@ -64,34 +64,40 @@ Det kan jo gjøres enklere ved å "pakke ut" matrikkelnummer slik:
 }
 ```
 
-Tilsvarende kan Posisjon "pakkes ut" slik at entiteten ser slik ut,
-for å slippe egen Punkt-datatype:
+Tilsvarende kan Posisjon "pakkes ut" slik at en instans for posisjonen
+til Oslo i UTM32N ser slik ut.
 
 
 ```
 {
-   "x": 10,
-   "y": 69,
+   "x": 596933,
+   "y": 6642781,
    "z": 100,
-   "koordinatsystem": KoordinatsystemKode
+   "koordinatsystem": "EPSG:32632"
    "_links": ...
 }
 ```
 
-Tilsvarende kan gjøres for de andre datatypene.  Er det en grunn til å
-lage egne datatyper for de fleste av disse?  For posisjon vil det
-trengs informasjon om koordinatsystem og koordinat, og spesielt
-koordinatsystem vil trenge en kodeliste over kjente koordinatsystemer.
-GeoIntegrasjon bruker navn fra SOSI på koordinatsystemer.  Det er
-kanskje bedre å basere seg på navn fra en mer internasjonal standard
-som GML, som ser ut til å bruke navn definert av
-[EPSG](http://www.epsg.org/)?
+Merk at 'z' her er et valgfritt felt for høyde.  Jeg har ikke funnet
+beskrivelse av Koordinat-typen til GeoIntegrasjon, så jeg vet ikke om
+den kun inneholder x og y.
 
-GeoIntegrasjon ser ut til å ha endel flere eksterne referanser enn
-dagens API-spesifikasjon legger opp til, kalt Kjerne::EksternNøkkel.
-Har noen sjekket om virksomhetsspesifikkeMetadata kan brukes til å ta
-vare på og avlevere disse?  Hvordan kan de legges inn i og søkes etter
-via denne spesifikasjonen?
+Tilsvarende utpakking kan gjøres for de andre datatypene.  Er det en
+grunn til å lage datatyper i stedet for å pakke dem ut?  Vil de bli
+gjenbrukt separat, eller alltid via NasjonalIdentifikator?  For
+posisjon vil det trengs informasjon om koordinatsystem, og
+koordinatsystem vil trenge en kodeliste over kjente koordinatsystemer.
+GeoIntegrasjon bruker navn fra SOSI på koordinatsystemer.  Jeg tror
+det er bedre å basere seg på navn fra en mer internasjonal standard
+som GML, som ser ut til å bruke navn definert av
+[EPSG](http://www.epsg.org/).
+
+GeoIntegrasjon ser i tillegg ut til å ha endel flere eksterne
+referanser enn dagens API-spesifikasjon legger opp til, kalt
+Kjerne::EksternNøkkel.  Har noen sjekket om
+virksomhetsspesifikkeMetadata kan brukes til å ta vare på og avlevere
+disse?  Hvordan kan de legges inn i og søkes etter via denne
+spesifikasjonen?
 
 Det står ingenting om hvordan entitetene som arver fra
 NasjonalIdentifikator skal avleveres, og verdiene har så vidt jeg kan
