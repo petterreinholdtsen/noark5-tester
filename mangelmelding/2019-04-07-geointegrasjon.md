@@ -104,6 +104,11 @@ Dagens definisjon av Nasjonalidentifikator innholder attributten
 finner ikke tilsvarende felt i GeoIntegrasjon.  Kanskje det bør
 droppes?
 
+Definisjonen av Personidentifikator virker uheldig, der en kan ende
+opp med en identifikator uten innhold hvis hverken foedselsnummer
+eller dNummer er satt.  Hva er tanken her?  Det virker mer naturlig å
+dele entiteten i to, en for foedselsnummer og en annen for dNummer.
+
 Det står ingenting om hvordan entitetene som arver fra
 NasjonalIdentifikator skal avleveres, og verdiene har så vidt jeg kan
 se ikke en plass i arkivstruktur.xml til Noark 5 versjon 4 og 5.  For
@@ -119,3 +124,8 @@ definere virksomhetsspesifikke felter som skal brukes ved avlevering?
 Fullfør dokumentdel 7.2.1.22 (NasjonaleIdentifikatorer) slik at det er
 klart og entydig hvordan slike ID-er skal registreres, hentes frem og
 søkes i.
+
+Ta i bruk Enhetsidentifikator or Personidentifikator i Sakspart og
+Korrespondansepart.
+
+Jeg har laget et utkast i min git-gren 'geointegrasjon'.
