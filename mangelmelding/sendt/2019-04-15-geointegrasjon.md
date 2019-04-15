@@ -10,7 +10,7 @@ Fullfør beskrivelsen av Nasjonalidentifikator (GeoIntegrasjon)
         Dokumentdel  7.2.1.22 (NasjonaleIdentifikatorer)
          Sidenummer  157
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-15
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -128,4 +128,12 @@ søkes i.
 Ta i bruk Enhetsidentifikator or Personidentifikator i Sakspart og
 Korrespondansepart.
 
-Jeg har laget et utkast i min git-gren 'geointegrasjon'.
+Jeg har laget et utkast som jeg skal sende inn som endringsforslag.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/141 .
