@@ -10,7 +10,7 @@ La Dokumentobjekt arve fra Arkivenhet?
         Dokumentdel  7.2.1.7 (Dokumentobjekt)
          Sidenummer  99
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-15
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -20,10 +20,10 @@ tilgjengelig fra
 Beskrivelse
 -----------
 
-Jeg er fortalt at Arkivverket planlegger å la entiteten Dokumentobjekt
-i tjenestegrensesnittet arve fra Arkivenhet.  Det betyr slik jeg
-forstår det at følgende attributter tas ut av Dokumentobjekt og heller
-hentes fra Arkivenhet:
+Jeg er fortalt av Arkivverket at en planlegger å la entiteten
+Dokumentobjekt i tjenestegrensesnittet arve fra Arkivenhet.  Det betyr
+slik jeg forstår det at følgende attributter tas ut av Dokumentobjekt
+og heller hentes/arves fra Arkivenhet:
 
  * systemID
  * opprettetDato
@@ -53,14 +53,22 @@ er klar over dette.
 --------------
 
 Endre entitetsbeskrivelse av 7.2.1.7 (Dokumentobjekt), legg inn at den
-arver fra Arkivenhet, fjern atributtene systemID, opprettetDato og
-opprettetAv, samt skriv følgende på slutten av beskrivelsen for
-entiteten på side 99:
+arver fra Arkivenhet, fjern attributtene systemID, opprettetDato og
+opprettetAv fra tabellen over attributter, samt skriv følgende på
+slutten av beskrivelsen for entiteten på side 99:
 
 > Ved avlevering i tråd med XML-skjema for Noark 5 versjon 4 så
-> droppes følgende felte arvet fra Arkivenhet: oppdatertDato,
-> oppdatertAv, referanseOppdatertAv og referanseOpprettetAv.  Disse
-> ikke har korresponderende felt i XML.
+> droppes følgende felt arvet fra Arkivenhet: «oppdatertDato»,
+> «oppdatertAv», «referanseOppdatertAv» og «referanseOpprettetAv».  Disse
+> ikke har korresponderende felt i avleveringsformatet.
 
-I tillegg må filen uml-class-dokumentobjekt.iuml oppdateres og nye
-UML-diagrammer i PDF-format bygges med endringen inkludert.
+I tillegg må filen uml-class-dokumentobjekt.iuml oppdateres og det
+bygges nye UML-diagrammer i PNG-format der endringen er inkludert.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/139 .
