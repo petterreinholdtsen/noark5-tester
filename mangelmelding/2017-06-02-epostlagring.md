@@ -19,6 +19,10 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
+Aktuelle PRONOM-koder...
+https://www.nationalarchives.gov.uk/PRONOM/fmt/950
+https://www.nationalarchives.gov.uk/PRONOM/fmt/278
+
 FIXME sjekk om det samme gjelder versjon 4.
 
 Se også docs/epostlagring.md
