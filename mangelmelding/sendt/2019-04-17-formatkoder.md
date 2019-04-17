@@ -10,7 +10,7 @@ Beskriv bruken av PRONOM-koder i format-feltet (M701)
         Dokumentdel  7.2.2.10 (Format)
          Sidenummer  172
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-17
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -89,3 +89,11 @@ Bytt ut alle oppføringer i tabellen over "attributter" til å ha unike
 PRONOM-koder i "Kode"-kolonnen.
 
 Jeg sender inn konkret forslag til endring som patch via github.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/143 .
