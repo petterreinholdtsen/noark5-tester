@@ -1,5 +1,5 @@
-Slå sammen «basisregistrering» og «registrering» til kombinert «registrering»?
-==============================================================================
+Slå sammen «basisregistrering» og «registrering» til kombinert «registrering» som i 5v5?
+========================================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
@@ -10,7 +10,7 @@ Slå sammen «basisregistrering» og «registrering» til kombinert «registreri
         Dokumentdel  7.2.1.5 (Basisregistrering)
          Sidenummer  82
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-18
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -74,8 +74,12 @@ en følgende nye definisjon av registrering:
 </xs:complexType>
 ```
 
-Listen over feltnavn er unionen av feltene som er i Noark 5 versjon 4
-for «registrering» og «basisregistrering».
+I følge Arkivverket i [mangelmelding
+#118](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/118)
+skal det ikke være mulig knytte Dokumentobjekt direkte til
+Registrering, så den biten kan vi anse som en skrivefeil som er arvet
+fra versjon 4.  Listen over feltnavn forøvrig er unionen av feltene
+som er i Noark 5 versjon 4 for «registrering» og «basisregistrering».
 
 Det eneste påkrevde feltet som er lagt til den nye «registrering» fra
 version 5 i forhold til «registrering» fra version 4 er «tittel».  Det
@@ -107,3 +111,11 @@ Beskrivelse, relasjoner, relasjonsnøkler, attributter og restriksjoner
 for disse to entitetene må slås sammen til en samlet oversikt.
 
 Jeg sender inn konkret forslag til endring som patch via github.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/145 .
