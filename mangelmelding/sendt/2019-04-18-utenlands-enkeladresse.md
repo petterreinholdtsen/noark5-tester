@@ -10,7 +10,7 @@ Hvordan skal utenlandske adresser representeres i EnkeltAdresse?
         Dokumentdel  7.2.3.3 (EnkeltAdresse)
          Sidenummer  212
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-18
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -82,7 +82,7 @@ representeres som en streng.
 Ønsket endring
 --------------
 
-I dokumentdel 7.2.3.3 (EnkeltAdresse) på side 212, split EnkelAdresse
+I dokumentdel 7.2.3.3 (EnkeltAdresse) på side 212, splitt EnkelAdresse
 i to entiteter som arver fra EnkelAdresse, NorskAdresse og
 UtenlandsAdresse og gjør EnkelAdresse til en virtuell entitet.  Kun
 NorskAdresse skal være koblet til kodelisten med Postnummer, og den
@@ -154,3 +154,11 @@ postens postnummerliste endres til
 http://www.bring.no/radgivning/sende-noe/adressetjenester/postnummer .
 
 Jeg sender inn konkret forslag til endring som patch via github.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/146 .
