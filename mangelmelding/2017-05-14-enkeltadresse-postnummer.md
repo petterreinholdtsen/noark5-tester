@@ -19,6 +19,9 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
+Gjelder også kodelistene i del 7.2.2.25 (Postnummer) på side 185 og
+del 7.2.2.18 (Land) på side 179.
+
 Se også endringsforslag
 [#80](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/pull/80)
 og
@@ -41,7 +44,7 @@ Det er ikke omtalt i spesifikasjonen hva Postnummer-kodelisten skal
 inneholde, hverken på klasseoversikten på side 165 og side 199 eller i
 del 7.2.2.25 (Postnummer) på side 185.  Det er heller ikke omtalt i
 spesifikasjonen hva Land-kodelisten skal inneholde, hverken på
-klasseoversikten på side 165 og side 199 eller i del 7.2.2.18 (Land)
+UML-diagrammet på side 165 og side 199 eller i del 7.2.2.18 (Land)
 på side 179.  Det er rimelig å anta at kodelistene vil ha samme
 struktur som de øvrige kodelistene, dvs. inneholde navn og kode.
 
