@@ -10,7 +10,7 @@ Hvordan vedlikeholdes kodeliste-oppføringer?
         Dokumentdel  7.2.2 (Kodelister)
          Sidenummer  165
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-19
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -24,13 +24,13 @@ sider.
 
 Det fremgår ikke fra spesifikasjonen hvordan kodelister og andre
 metadatalister får nye oppføringer, eller hvordan utdaterte
-oppføringer fjernes.  Det er ikke oppgitt noen ny-* type relasjoner
+oppføringer fjernes.  Det er ikke oppgitt noen ny-\* type relasjoner
 for disse, og det er ikke nevnt noe om hvor de kan finnes.  Uten slike
 operasjoner vil det ikke være mulig å vedlikeholde kodelistene via
 API-et.
 
 Det mangler både informasjon om hvordan POST for nye oppføringer skal
-fungere (dvs. hvordan ny-* URL der slike POST skal gjøres skal finnes)
+fungere (dvs. hvordan ny-\* URL der slike POST skal gjøres skal finnes)
 og hva som er den unike URL for hver enkelt metadataoppføring der PUT
 og DELETE skal utføres.
 
@@ -49,14 +49,14 @@ finnes relasjonsnøkler for .../ny-arkivskaper/ og .../ny-arkiv/ for å
 lage nye instanser av arkivskaper og arkiv.  Ideen er å definiere et
 nytt relasjonsnøkkeltre med base
 http://rel.arkivverket.no/noark5/v4/api/metadata/ der alle
-ny-*-relasjonene for oppretting av nye metadataoppføringer listes opp,
+ny-\*-relasjonene for oppretting av nye metadataoppføringer listes opp,
 tilsvarende det som beskrives i mangelmelding #107 for arkivstruktur
 og sakarkiv.  Det nye relasjonsnøkkeltreet bør inneholde lenke til
-alle kodelister som er tilgjengelig.  Slike ny-*-relasjoner skal kun
+alle kodelister som er tilgjengelig.  Slike ny-\*-relasjoner skal kun
 være synlige for priviligerte brukere som har rett til å opprette nye
 kodelisteoppføringer.  I tillegg til POST må i hvert fall operasjonene
-GET og OPTIONS (helst også PATCH) fungere på disse ny-*-oppføringene,
-tilsvarende for andre ny-*-operasjoner.
+GET og OPTIONS (helst også PATCH) fungere på disse ny-\*-oppføringene,
+tilsvarende for andre ny-\*-operasjoner.
 
 En tilsvarende ide for oppdatering og sletting er å gi hver
 kodeliste-oppføring en SystemID og 'self'-relasjonnøkkel, for eksempel
@@ -148,7 +148,7 @@ Legg inn i starten av dokumentdel 7.2.2 (Kodelister) en gjennomgang av
 hvordan kodelister representeres i JSON og hva som gjelder generelt
 for slike kodelister, der det står at de har SystemID og "self"-relasjonsnøkkel
 som kan brukes ved oppdatering og sletting.  Definer relasjonsnøkler
-ny-* for å opprette nye kodelisteoppføringer for hver enkelt
+ny-\* for å opprette nye kodelisteoppføringer for hver enkelt
 kodeliste.
 
 Beskriv videre i samme del hvilke relasjonsnøkler som skal være
@@ -156,3 +156,11 @@ tilgjengelig på metadata-nivåen under toppen, ala det som er beskrevet
 i mangelmelding #107 for andre deler av API-et.
 
 Jeg sender inn konkret forslag til endring som patch via github.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/147 .
