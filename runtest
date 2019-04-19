@@ -41,7 +41,7 @@ import urlparse
 import xml.etree.ElementTree
 import n5core.endpoint
 
-noarkrelbase = 'http://rel.kxml.no/noark5/v4/api/'
+noarkrelbase = 'http://rel.arkivverket.no/noark5/v4/api/'
 nikitarelbase = 'http://nikita.arkivlab.no/noark5/v4/'
 
 class Noark5Tester (n5core.endpoint.Endpoint):
