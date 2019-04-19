@@ -40,8 +40,8 @@ som viser overnevte eksempel):
 },
 ```
 
-Det er ikke beskrevet når "beskrivelse" skal brukes og når den kan
-droppes.  Det er også uklart hvorfor "beskrivelse" er tatt med i hver
+Det er ikke beskrevet når «beskrivelse» skal brukes og når den kan
+droppes.  Det er også uklart hvorfor «beskrivelse» er tatt med i hver
 JSON-representasjon av instanser, når den kan hentes ut fra
 kodelistene ved behov.
 
@@ -54,17 +54,20 @@ bruker kodeverdien direkte, dvs. slik:
 "graderingskode": "B",
 ```
 
-Se forøvrig mangelmelding oppdatere-metadata, med forslag om ny
-attributt "aktiv" for kodelister, hvis bruk bør beskrives hvis det
-forslaget blir tatt inn i spesifikasjonen.
+Se forøvrig [mangelmelding
+#147](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/147),
+med forslag om ny attributt «aktiv» for kodelister, hvis bruk bør
+beskrives hvis det forslaget blir tatt inn i spesifikasjonen.
 
 Ønsket endring
 --------------
 
 Beskriv i kapittel 6 hvordan JSON-strukturer som bruker
 kodeliste-verdier skal se ut, hva som skal sendes inn ved oppretting
-og endring og hva som sendes tilbake når en ber om en eller
-flereinstans.  Endre alle eksempler til å følge denne notasjonen.
+og endring og hva som sendes tilbake når en ber om en eller flere
+instanser.  Endre alle eksempler til å følge denne notasjonen.
+Beskriv kodeliste-attributten «aktiv» og forklar hvordan klienter skal
+forholde seg til den ved å ikke bruke verdier der «aktiv» er «false».
 
 Bruk kortformen der kun kode-verdi brukes ved oppretting, endring og
 opplisting av instanser.
