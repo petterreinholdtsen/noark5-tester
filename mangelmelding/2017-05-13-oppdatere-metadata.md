@@ -148,7 +148,7 @@ Legg inn i starten av dokumentdel 7.2.2 (Kodelister) en gjennomgang av
 hvordan kodelister representeres i JSON og hva som gjelder generelt
 for slike kodelister, der det står at de har SystemID og "self"-relasjonsnøkkel
 som kan brukes ved oppdatering og sletting.  Definer relasjonsnøkler
-ny-* for å opprette nye kodelisteoppføringer for hver enkel
+ny-* for å opprette nye kodelisteoppføringer for hver enkelt
 kodeliste.
 
 Beskriv videre i samme del hvilke relasjonsnøkler som skal være
