@@ -827,8 +827,7 @@ or should it be rejected?
         journalentrydata = {
             'tittel' : 'test',
         }
-        # FIXME figure out how the spec expect us to add journalpost
-        createjournalentryrel = nikitarelbase + 'ny-journalpost/'
+        createjournalentryrel = noarkrelbase + 'sakarkiv/ny-journalpost/'
         journalentryinfo = self.createEntity('journalentry',
                                              createjournalentryrel,
                                              self.parselinks(casefileinfo['_links']),
