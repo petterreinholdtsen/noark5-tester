@@ -170,7 +170,7 @@ def getFileSize(filehandle):
     return size
 
 def main():
-    relbase = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur'
+    relbase = 'http://rel.arkivverket.no/noark5/v4/api/arkivstruktur'
     baseurl = "http://localhost:8092/noark5v4/"
     parser = argparse.ArgumentParser()
     parser.add_argument("--baseurl", help="(default is %s)" % baseurl)

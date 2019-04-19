@@ -4,7 +4,7 @@
 """
 
 Connect to the REST API of a Noark 5 service and check that it behaves
-as it should.  See also http://rel.kxml.no/noark5/konformitetsniva/
+as it should.  See also http://rel.arkivverket.no/noark5/konformitetsniva/
 
 """
 # Copyright (C) 2017 Petter Reinholdtsen <pere@hungry.com>
@@ -385,11 +385,11 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                 self.failure("_links %s with double slashes in %s" % (l['href'], url))
                             # Ignore non-standard relations
                             if 'href' in l \
-                               and -1 == l['rel'].find("//rel.kxml.no/noark5/") \
+                               and -1 == l['rel'].find("//rel.arkivverket.no/noark5/") \
                                and 'self' != l['rel']:
                                 self.xfailure("unofficial relation %s" % l['rel'])
                             elif 'href' in l and \
-                                 -1 != l['rel'].find("//rel.kxml.no/noark5/"):
+                                 -1 != l['rel'].find("//rel.arkivverket.no/noark5/"):
                                 href = l['href']
                                 # The spec do not say if 'templated' is required or not
                                 #if 'templated' not in l:

@@ -78,7 +78,7 @@ If there are more than one elemet, ask the user to pick one.
                 pass
 
 def main():
-    relbase = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur'
+    relbase = 'http://rel.arkivverket.no/noark5/v4/api/arkivstruktur'
     baseurl = "http://localhost:8092/noark5v4/"
     
     parser = argparse.ArgumentParser()

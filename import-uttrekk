@@ -84,7 +84,7 @@ def parselinks(links):
     return rels
 
 class Importer(n5core.endpoint.Endpoint):
-    relbase = 'http://rel.kxml.no/noark5/v4/api'
+    relbase = 'http://rel.arkivverket.no/noark5/v4/api'
     
     def __init__(self, baseurl):
         self.nesting = 0
@@ -332,7 +332,7 @@ the json structure.
     #    print(etree.tostring(tree))
 
 def main():
-    relbase = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur'
+    relbase = 'http://rel.arkivverket.no/noark5/v4/api/arkivstruktur'
     baseurl = "http://localhost:8092/noark5v4/"
     
     parser = argparse.ArgumentParser()

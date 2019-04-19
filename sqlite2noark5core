@@ -9,12 +9,12 @@ import n5core.endpoint
 import sqlite3
 import urllib2
 
-createfondsrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
-createseriesrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
-createcasefilerel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-saksmappe/'
+createfondsrel = 'http://rel.arkivverket.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
+createseriesrel = 'http://rel.arkivverket.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
+createcasefilerel = 'http://rel.arkivverket.no/noark5/v4/api/sakarkiv/ny-saksmappe/'
 createrecordrel = 'http://nikita.arkivlab.no/noark5/v4/ny-journalpost/'
-corrpartrel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepartenhet/'
-createdocdescrel = 'http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-dokumentbeskrivelse/'
+corrpartrel = 'http://rel.arkivverket.no/noark5/v4/api/sakarkiv/ny-korrespondansepartenhet/'
+createdocdescrel = 'http://rel.arkivverket.no/noark5/v4/api/arkivstruktur/ny-dokumentbeskrivelse/'
 
 def parselinks(links):
         rels = {}

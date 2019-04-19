@@ -17,7 +17,7 @@ import urllib2
 
 import n5core.endpoint
 
-relbase = 'http://rel.kxml.no/noark5/v4/api'
+relbase = 'http://rel.arkivverket.no/noark5/v4/api'
 nikitabase = 'http://nikita.arkivlab.no/noark5/v4'
 
 def decodeheader(s):
@@ -400,7 +400,7 @@ are in.
             self.recordMapping(fileinfo, recordinfo, 'journalpost')
             # FIXME consider journalpost and korrespondansepart (from
             # to/from/cc)
-            corrpartrel = 'http://rel.kxml.no/noark5/v4/api/sakarkiv/ny-korrespondansepartenhet/'
+            corrpartrel = 'http://rel.arkivverket.no/noark5/v4/api/sakarkiv/ny-korrespondansepartenhet/'
             parts = {
                 'from' : 'EA',
                 'to'   : 'EM',
