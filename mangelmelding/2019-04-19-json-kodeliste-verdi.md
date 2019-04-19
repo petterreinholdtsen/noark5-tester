@@ -1,5 +1,5 @@
-Klarere, entydig og mer kompakt representasjon av kodeliste-verdier i JSON?
-===========================================================================
+Klarere, entydig og mer kompakt representasjon av kodeliste-verdier i JSON for instanser
+========================================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
