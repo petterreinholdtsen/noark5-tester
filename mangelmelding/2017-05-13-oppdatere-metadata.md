@@ -34,7 +34,7 @@ fungere (dvs. hvordan ny-* URL der slike POST skal gjøres skal finnes)
 og hva som er den unike URL for hver enkelt metadataoppføring der PUT
 og DELETE skal utføres.
 
-I GeoIntegrasjons-spesifikasjonen har alle oppføringer i kodenlister
+I GeoIntegrasjons-spesifikasjonen har alle oppføringer i kodelister
 en bolsk verdi "erGyldig" som jeg antar markerer om kodeverdien kan
 brukes ved oppretting og endring av instanser som bruker kodelisten,
 for å sikre at utdaterte kodelisteverdier fortsatt er registrert i
@@ -44,7 +44,7 @@ ide også for tjenestegrensesnittet.  Foreslår at dette feltet heter
 skal være satt for verdier som ikke skal brukes.
 
 En ide for oppretting er å gjøre tilsvarende som for
-http://localhost:8092/noark5v4/hateoas-api/arkivstruktur , der det
+http://localhost:49708/api/arkivstruktur , der det
 finnes relasjonsnøkler for .../ny-arkivskaper/ og .../ny-arkiv/ for å
 lage nye instanser av arkivskaper og arkiv.  Ideen er å definiere et
 nytt relasjonsnøkkeltre med base
@@ -61,7 +61,7 @@ tilsvarende for andre ny-*-operasjoner.
 En tilsvarende ide for oppdatering og sletting er å gi hver
 kodeliste-oppføring en SystemID og 'self'-relasjonnøkkel, for eksempel
 for dokumentmedium href vil være
-`http://localhost:8092/noark5v4/hateoas-api/metadata/dokumentmedium/&lt;systemID&gt;/`,
+`http://localhost:49708/api/metadata/dokumentmedium/&lt;systemID&gt;/`,
 som så kan brukes til PUT og DELETE-opperasjoner ved oppdatering og
 sletting.  Den bør naturligvis også fungere for GET for å kunne vite
 hva som kan endres, selv om den normale måten å få ut kodelister og
@@ -146,9 +146,9 @@ bruker den aktuelle kodeliste-verdien.
 
 Legg inn i starten av dokumentdel 7.2.2 (Kodelister) en gjennomgang av
 hvordan kodelister representeres i JSON og hva som gjelder generelt
-for slike, der det står at de har SystemID og "self"-relasjonsnøkkel
+for slike kodelister, der det står at de har SystemID og "self"-relasjonsnøkkel
 som kan brukes ved oppdatering og sletting.  Definer relasjonsnøkler
-ny-* for å opprette nye kodelisteoppføringer for hver enkelt
+ny-* for å opprette nye kodelisteoppføringer for hver enkel
 kodeliste.
 
 Beskriv videre i samme del hvilke relasjonsnøkler som skal være
