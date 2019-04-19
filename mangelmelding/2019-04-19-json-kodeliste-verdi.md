@@ -1,14 +1,14 @@
-Entydig og mer kompakt representasjon av kodeliste-verdier i JSON?
-==================================================================
+Klarere, entydig og mer kompakt representasjon av kodeliste-verdier i JSON?
+===========================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegresesnitt
-           Kategori  Versjon 1.0 beta
+           Kategori  versjon git 2019-04-19
         Alvorlighet  protest
        Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  
-         Sidenummer  
+        Dokumentdel  6.1.1.6 (Utvid objekter til andre typer)
+         Sidenummer  34
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
@@ -45,13 +45,18 @@ droppes.  Det er også uklart hvorfor "beskrivelse" er tatt med i hver
 JSON-representasjon av instanser, når den kan hentes ut fra
 kodelistene ved behov.
 
-Det er enklere for API-klienter og kortere som JSON (dvs. mer effektiv
-protokoll) hvis slike henvisninger til kodelisteverdier dropper
-JOSN-objekt og i stedet bruker kodeverdien direkte, dvs. slik:
+Det er enklere for API-klienter og kortere som JSON (hvilket betyr en
+mer nettverkseffektiv protokoll) hvis slike henvisninger til
+kodelisteverdier dropper bruken av JOSN-objekt (aka {...}) og i stedet
+bruker kodeverdien direkte, dvs. slik:
 
 ```Python
 "graderingskode": "B",
 ```
+
+Se forøvrig mangelmelding oppdatere-metadata, med forslag om ny
+attributt "aktiv" for kodelister, hvis bruk bør beskrives hvis det
+forslaget blir tatt inn i spesifikasjonen.
 
 Ønsket endring
 --------------
@@ -63,3 +68,5 @@ flereinstans.  Endre alle eksempler til å følge denne notasjonen.
 
 Bruk kortformen der kun kode-verdi brukes ved oppretting, endring og
 opplisting av instanser.
+
+Jeg sender inn konkret forslag til endring som patch via github.
