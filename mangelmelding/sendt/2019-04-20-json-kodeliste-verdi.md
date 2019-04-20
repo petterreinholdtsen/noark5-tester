@@ -10,7 +10,7 @@ Klarere, entydig og mer kompakt representasjon av kodeliste-verdier i JSON for i
         Dokumentdel  6.1.1.6 (Utvid objekter til andre typer)
          Sidenummer  34
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-20
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -42,7 +42,7 @@ overnevnte eksempel):
 ```
 
 Det er ikke beskrevet når «beskrivelse» skal brukes og når den kan
-droppes i JSON som representerer en arkivstrukturinstans.  Det er også
+droppes i JSON som representerer en kodelisteverdi.  Det er også
 uklart hvorfor «beskrivelse» er tatt med i hver JSON-representasjon av
 instanser, når den kan hentes ut fra kodelistene ved behov.
 
@@ -54,6 +54,9 @@ bruker kodeverdien direkte som string, dvs. slik:
 ```Python
 "graderingskode": "B",
 ```
+
+Dette krever at alle kodeliste-koder er unike for en gitt kodeliste,
+hvilket bør stå eksplisitt i spesifikkasjonen.
 
 Se forøvrig [mangelmelding
 #147](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/147),
@@ -72,6 +75,15 @@ Beskriv kodeliste-attributten «aktiv» og forklar hvordan klienter skal
 forholde seg til den ved å ikke bruke verdier der «aktiv» er «false».
 
 Bruk kortformen der kun kode-verdi brukes ved oppretting, endring og
-opplisting av instanser.
+opplisting av instanser.  Nevn i kapittel 7.2.2 (Kodelister) at alle
+oppføringer i kodelister må ha unike kode-verdier.
 
 Jeg sender inn konkret forslag til endring som patch via github.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/148 .
