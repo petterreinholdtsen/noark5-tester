@@ -21,7 +21,7 @@ Beskrivelse
 -----------
 
 I kapittel 6 vises det hvordan verdier fra kodelister skal
-representeres i JSON.  Det er ikke gjort konsistent.  Flere eksempeler 
+representeres i JSON.  Det er ikke gjort konsistent.  Flere eksempler 
 viser det slik:
 
 ```Python
@@ -30,11 +30,10 @@ viser det slik:
     "beskrivelse": "Opprettet av saksbehandler"
 },
 ```
-*Kommentar: "også lenger den i". Forstårikke dette, og usikker hva som
-skal stå her*
 
-Et annet eksempl viser det slik (også lenger den i samme JSON-struktur
-som viser overnevte eksempel):
+Et annet eksempel inneholder ikke «beskrivelse» (også lenger ned i den
+samme JSON-strukturen som bruker både «kode» og «beskrivelse» i
+overnevnte eksempel):
 
 ```Python
 "graderingskode": {
