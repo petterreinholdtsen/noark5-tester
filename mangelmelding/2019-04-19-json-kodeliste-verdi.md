@@ -41,14 +41,14 @@ som viser overnevte eksempel):
 ```
 
 Det er ikke beskrevet når «beskrivelse» skal brukes og når den kan
-droppes.  Det er også uklart hvorfor «beskrivelse» er tatt med i hver
-JSON-representasjon av instanser, når den kan hentes ut fra
-kodelistene ved behov.
+droppes i JSON som representerer en arkivstrukturinstans.  Det er også
+uklart hvorfor «beskrivelse» er tatt med i hver JSON-representasjon av
+instanser, når den kan hentes ut fra kodelistene ved behov.
 
 Det er enklere for API-klienter og kortere som JSON (hvilket betyr en
 mer nettverkseffektiv protokoll) hvis slike henvisninger til
-kodelisteverdier dropper bruken av JOSN-objekt (aka {...}) og i stedet
-bruker kodeverdien direkte, dvs. slik:
+kodelisteverdier dropper bruken av JSON-objekt (aka {...}) og i stedet
+bruker kodeverdien direkte som string, dvs. slik:
 
 ```Python
 "graderingskode": "B",
@@ -56,8 +56,9 @@ bruker kodeverdien direkte, dvs. slik:
 
 Se forøvrig [mangelmelding
 #147](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/147),
-med forslag om ny attributt «aktiv» for kodelister, hvis bruk bør
-beskrives hvis det forslaget blir tatt inn i spesifikasjonen.
+med forslag om ny attributt «aktiv» for kodelister, hvis bruk
+antagelig bør beskrives på samme sted hvis det forslaget blir tatt inn
+i spesifikasjonen.
 
 Ønsket endring
 --------------
