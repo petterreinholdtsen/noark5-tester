@@ -1,8 +1,8 @@
 Utvid muligheten til å søke på sekundærentiteter
-========================================================================================
+================================================
 
  ------------------  ---------------------------------
-           Prosjekt  Noark 5 Tjenestegrenesnitt
+           Prosjekt  Noark 5 Tjenestegrensesnitt
            Kategori  versjon git 2019-04-22
         Alvorlighet  protest
        Meldingstype  utelatt
@@ -19,14 +19,17 @@ tilgjengelig fra
 
 Beskrivelse
 -----------
+
 Det er en svakhet i tjenestegrensesnitt når det gjelder hvordan en klient skal søke på
 sekundærentiteter. Primærentiteter er de entitetene som utgjør arkivstruktur
-feks *arkiv ... dokumentobjekt*. Sekundærentiteter er entitetene som 'henger' på
+for eksempel *arkiv ... dokumentobjekt*. Sekundærentiteter er entitetene som 'henger' på
 de primære. Eksempler er *merknad*, *noekkelord* og *forfatter*.
 
-Det er mulig å søke på disse med $expand på OData men det gjør at klienten selv
-må sammenstille resultatene. For å få en liste av på merknader på tvers av mappen, registrering
-og dokumentbeskrivelse gjør man følgende:
+Det er mulig å søke på disse med $expand på OData men det gjør at
+klienten selv må sammenstille resultatene.  Med OData-notasjonen
+beskrevet i dagens spesifikasjon, for å få en liste av på merknader
+med type 'B' på tvers av mappen, registrering og dokumentbeskrivelse
+filtrerer man slik:
 
     ../arkivstruktur/mappe/?$expand=merknad&$filter=merknad/any(m:m/merknadstype/kode eq 'B')
     ../arkivstruktur/registreging/?$expand=merknad&$filter=merknad/any(m:m/merknadstype/kode eq 'B')
@@ -42,5 +45,6 @@ søk. Fordelen med dette er at klienten kan *oppdage' at det er mulig å søke p
 Ønsket endring
 --------------
 
+FIXME
 
 Jeg sender inn konkret forslag til endring som patch via github.
