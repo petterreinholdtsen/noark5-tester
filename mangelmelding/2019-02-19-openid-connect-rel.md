@@ -4,7 +4,7 @@ Klargjør entydige krav til innloggingssystem
 Bør samkjøres med 2017-04-04-login-access.md.
 
  ------------------  ---------------------------------
-           Prosjekt  NOARK 5 Tjenestegresesnitt
+           Prosjekt  NOARK 5 Tjenestegrensesnitt
            Kategori  Versjon 1.0 beta
         Alvorlighet  protest
        Meldingstype  utelatt

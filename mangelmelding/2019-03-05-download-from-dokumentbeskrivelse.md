@@ -2,7 +2,7 @@ Nedlasting av alternative filformater direkte fra dokumentbeskrivelse?
 ======================================================================
 
  ------------------  ---------------------------------
-           Prosjekt  Noark 5 Tjenestegresesnitt
+           Prosjekt  Noark 5 Tjenestegrensesnitt
            Kategori  Versjon 1.0 beta
         Alvorlighet  kommentar
        Meldingstype  trenger klargjøring

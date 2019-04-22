@@ -4,7 +4,7 @@ Klargjøring av innlogging og tilgangskontroll
 Bør samkjøres med 2019-02-19-openid-connect-rel.md.
 
  ------------------  ---------------------------------
-           Prosjekt  Noark 5 Tjenestegresesnitt
+           Prosjekt  Noark 5 Tjenestegrensesnitt
            Kategori  Versjon 1.0 beta
         Alvorlighet  
        Meldingstype  
