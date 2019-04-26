@@ -1,5 +1,5 @@
-Alle sekundær entiteter med 0..* forhold må ha systemID
-================================================
+Beskriv hvordan Kryssreferanser opprettes
+=========================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegrensesnitt
@@ -19,6 +19,9 @@ tilgjengelig fra
 
 Beskrivelse
 -----------
+
+Det er uklart fra spesifikasjonen hvordan en skal opprette en ny
+Kryssreferanse-instans.
 
 arkivdel:
 
