@@ -10,7 +10,7 @@ La Kryssreferanse arve fra Arkivenhet?
         Dokumentdel  7.2.1.15 (Kryssreferanse)
          Sidenummer  129
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-04-28
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -75,3 +75,11 @@ I tillegg må filen uml-class-kryssreferanse.iuml oppdateres og det
 bygges nye UML-diagrammer i PNG-format der endringen er inkludert.
 
 Jeg sender inn konkret forslag til endring som patch via github.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/151 .
