@@ -27,7 +27,7 @@ Det vil sikre at det blir mulig via API-et og finne ut hvem som
 opprettet en kryssreferanse, når den ble opprettet, og samt
 tilsvarende informasjon om når det ble endret/oppdatert.  Det kan være
 vesentlig ved kontroll og etterprøving av avgjørelser gjort av
-forvalningen å vite når en ble kjent med sammenheng mellom saker,
+forvaltningen å vite når en ble kjent med sammenheng mellom saker,
 mapper og dokumenter, og slike kryssreferanser bør derfor dateres.
 
 Endringen betyr at Kryssreferanse får følgende attributter arvet fra
@@ -47,7 +47,7 @@ til å sette verdier i opprettetAv og oppdatertAv når entiteten lages.
 Det må bli tema for en annen mangelmelding.
 
 Ingen av disse nye feltene kan overleveres i avleveringsformatet til
-Noark 5 versjon 4 eller versjon 5.  Det bør sies noe i spesifikasjonen
+Noark 5 versjon 4 eller versjon 5.  Det bør nevnes i spesifikasjonen
 om hva som skal gjøres med disse nye verdiene ved avlevering.  Skal
 feltene kastes ved avlevering?  I så tilfelle bør det dokumenteres i
 spesifikasjonen, slik at de som implementerer eksport for avlevering
