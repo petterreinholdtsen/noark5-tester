@@ -1,16 +1,16 @@
-Beskriv hvordan Kryssreferanser opprettes, endres og slettes
+Beskriv hvordan kryssreferanser opprettes, endres og slettes
 ============================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegrensesnitt
-           Kategori  versjon git 2019-04-23
+           Kategori  Versjon 1.0 beta
         Alvorlighet  protest
        Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  7.2.1.15 Kryssreferanse
+        Dokumentdel  7.2.1.15 (Kryssreferanse)
          Sidenummer  130
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-05-02
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -107,9 +107,9 @@ returnere en liste av kryssreferanse. Dette burde se slik ut:
       "referanseTilRegistrering" : "1fa94a89-3550-470b-a220-92dd4d709044",
       "_links" : [
         {
-          "href" : "http://localhost:49708/api/arkivstruktur/basisregistrering/1fa94a89-3550-470b-a220-92dd4d709044", 
+          "href" : "http://localhost:49708/api/arkivstruktur/basisregistrering/1fa94a89-3550-470b-a220-92dd4d709044",
           "rel"  : "http://rel.kxml.no/noark5/v4/api/arkivstruktur/registrering/"
-        }    
+        }
       ]
     }
   ]
@@ -130,9 +130,10 @@ beskrives et endepunkt for kryssreferanser, så blir det mulig å søke
 opp kryssreferanser i systemet.  Dette kan være viktig kontekst for
 metadata.
 
-Det mangler også en beskrivelse av kjente begrensninger rundt 
-Kryssreferanse som er definert i Noark 5v4 standarden (01.12.2016). 
-På side 76 står det følgende begrensninger som gjelder for Kryssreferanse:
+Det mangler også en beskrivelse av kjente begrensninger rundt
+Kryssreferanse som er definert i Noark 5v4 standarden (01.12.2016).
+På side 76 står det følgende begrensninger som gjelder for
+Kryssreferanse:
 
 > *Kryssreferanse kan knyttes en eller flere ganger til klasse, mappe
 > og basisregistrering. Referansen går en vei, dvs. den kan kun være
@@ -144,6 +145,11 @@ På side 76 står det følgende begrensninger som gjelder for Kryssreferanse:
 Dette er en viktig presisering som må inn i tjenestegrensesnittet,
 enten med en henvisning til Noark 5v4-standarden eller ved å kopiere
 inn teksten.
+
+Merk at forslaget i mangelmelding #145 om å slå sammen registrering og
+basisregistrering vil påvirke kryssreferaser, og at mangelmelding #46
+og eksempel på kryssreferanse er begge relevante for denne
+mangelmeldingen.
 
 Ønsket endring
 --------------
@@ -158,3 +164,11 @@ Følgende endringer ønskes
    4-standarden i tjenestegrensesnittet.
 
 Jeg sender inn konkret forslag til endring som patch via github.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/155 .
