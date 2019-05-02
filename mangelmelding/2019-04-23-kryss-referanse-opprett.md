@@ -24,7 +24,7 @@ Det er uklart fra spesifikasjonen hvordan Kryssreferanse-instanser
 skal opprettes og forvaltes. Det er angitt en relasjonsnøkkel
 `http://rel.kxml.no/noark5/v4/api/arkivstruktur/ny-kryssreferanse/`
 knyttet til basisregistrering (side 83), mappe (133) og klasse (side
-117). Det er ikke beskrevet hvordan koblingen til den andre entitieten
+117). Det er ikke beskrevet hvordan koblingen til den andre entiteten
 skal spesifiseres. Det er viktig at dette er spesifisert entydig,
 ellers er det sannsynlig at det vil håndteres ulikt av ulike
 API-implementasjoner.  Et forslag er å bruke $ref (side 20) der det
@@ -147,6 +147,6 @@ Følgende endringer ønskes
 1. Beskriv entydig at $ref må brukes
 2. Hele URL-en må være med som parameter til $ref
 3. Kryssreferanse må arve fra Arkivenhet
-4. Presisering fra Noark standarden taes med i tjenestegrensesnittet
+4. Presisering fra Noark standarden tas med i tjenestegrensesnittet
 
 Jeg sender inn konkret forslag til endring som patch via github.
