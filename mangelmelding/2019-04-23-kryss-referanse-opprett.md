@@ -48,7 +48,7 @@ POST http://localhost:49708/api/arkivstruktur/mappe/cf8e1d0d-e94d-4d07-b5ed-46ba
 
 Det finnes helt sikkert også andre måter å gjøre dette på.
 
-Når det ikke står eksplisitt i spesifikasjonen hvordan slike skal
+Når det står ikke eksplisitt i spesifikasjonen hvordan slike skal
 opprettes, så overlates det til de som implementerer API-et å lage sin
 egen metode, hvilket fører til leverandørinnlåsing.  Det er viktig at
 klienter får en entydig måte å håndtere dette.
@@ -75,7 +75,7 @@ relasjon og attributt, og det er enklere for API-klienter om en kun
 representerer disse verdiene som relasjoner.
 
 Følgende JSON-fragment viser hvordan en implementasjon av mappe med en
-eller flere kryssreferanser kan se ut:
+eller flere kryssreferanser burde se ut:
 
 ```Python
 {
@@ -97,7 +97,7 @@ eller flere kryssreferanser kan se ut:
 
 GET mot href for relasjonsnøkkelen
 `http://rel.kxml.no/noark5/v4/api/arkivstruktur/kryssreferanse/` vil
-returnere en liste av kryssreferanse. Dette kan se slik ut:
+returnere en liste av kryssreferanse. Dette burde se slik ut:
 
 
 ```Python
