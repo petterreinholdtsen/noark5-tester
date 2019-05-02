@@ -46,7 +46,7 @@ for eksempel se slik ut:
 POST http://localhost:49708/api/arkivstruktur/mappe/cf8e1d0d-e94d-4d07-b5ed-46ba2df0465e/ny-kryssreferanse/$ref?$id=api/arkivstruktur/basisregistrering/1fa94a89-3550-470b-a220-92dd4d709044
 ```
 
-Det finnes helt sikkert også andre måter å gjøre dette på. 
+Det finnes helt sikkert også andre måter å gjøre dette på.
 
 Når det ikke står eksplisitt i spesifikasjonen hvordan slike skal
 opprettes, så overlates det til de som implementerer API-et å lage sin
@@ -134,19 +134,27 @@ Det mangler også en beskrivelse av kjente begrensninger rundt
 Kryssreferanse som er definert i Noark 5v4 standarden (01.12.2016). 
 På side 76 står det følgende begrensninger som gjelder for Kryssreferanse:
 
-*Kryssreferanse kan knyttes en eller flere ganger til klasse, mappe og
-basisregistrering. Referansen går en vei, dvs. den kan kun være en referanse til en arkivenhet. I og med at kryssreferanser knyttes til Mappe og Basisregistrering, vil det si at Referanser også knyttes til alle utvidelsene (spesialiseringer) under disse (Saksmappe, Møtemappe og Journalpost, Møteregistrering).*
+> *Kryssreferanse kan knyttes en eller flere ganger til klasse, mappe
+> og basisregistrering. Referansen går en vei, dvs. den kan kun være
+> en referanse til en arkivenhet. I og med at kryssreferanser knyttes
+> til Mappe og Basisregistrering, vil det si at Referanser også
+> knyttes til alle utvidelsene (spesialiseringer) under disse
+> (Saksmappe, Møtemappe og Journalpost, Møteregistrering).*
 
-Dette er en viktig presisering som må inn i tjenestegrensesnittet.
+Dette er en viktig presisering som må inn i tjenestegrensesnittet,
+enten med en henvisning til Noark 5v4-standarden eller ved å kopiere
+inn teksten.
 
 Ønsket endring
 --------------
 
 Følgende endringer ønskes
 
-1. Beskriv entydig at $ref må brukes
-2. Hele URL-en må være med som parameter til $ref
-3. Kryssreferanse må arve fra Arkivenhet
-4. Presisering fra Noark standarden tas med i tjenestegrensesnittet
+1. Beskriv entydig at $ref må brukes når en oppretter en ny kryssreferanse.
+2. Gjør det klart at hele URL-en må være med som parameter til $ref,
+   og at URL-en må være hentet fra href utlevert fra API-tjenesten.
+3. Endre kryssreferanse til å arve fra Arkivenhet.
+4. Nevn begresninger for kryssreferanser fra Noark 5 versjon
+   4-standarden i tjenestegrensesnittet.
 
 Jeg sender inn konkret forslag til endring som patch via github.
