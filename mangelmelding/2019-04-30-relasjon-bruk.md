@@ -34,10 +34,9 @@ til, for eksempel slik det vises relasjonen mellom Klasse og Mappe:
 Hvorfor er det navn på begge siden av relasjonen (henholdsvis 'mappe'
 og 'klasse'), og hvordan skal disse navnene representeres i API-et?
 
-Se
-https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/38
-og ide til notasjon i
-https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/45 .
+Se mangelmelding #38 og ide til notasjon i #45.  Denne utfordringen er
+relatert til mangelmeldingene #49, #100, #101, #151 og #155.
+
 
 Ønsket endring
 --------------
