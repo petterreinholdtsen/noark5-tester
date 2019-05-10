@@ -55,13 +55,13 @@ Her er noen eksempler på slike konsistenssjekker:
 Slike feil er ofte resultat av manuelle skrivefeil, og bør oppdages så
 raskt som mulig for å holde kvaliteten i arkivsystemet oppe.
 
-Slik konsistenssjekk kan gjøres når ny entitet opprettes med POST Til
+Slik konsistenssjekk kan gjøres når ny entitet opprettes med POST til
 ny-* eller når en entitet oppdateres med PUT.  Det er dermed fint om
 resultatet fra slike konsistenssjekker kan være del av svaret som
 kommer fra POST og PUT.
 
 En lite inngripende måte å gjøre dette på er å legge ved en ekstra
-relasjon i _links hvis konsistenssjekken har oppdaget noe rart, og så
+relasjon i \_links hvis konsistenssjekken har oppdaget noe rart, og så
 peke href-verdien til et sted der detaljer om hva som ble oppdaget
 returneres.  Det gjør at klienter som ikke forstår
 konsistenssjekk-tilbakemeldingen kan ignorere den, mens klienter som
@@ -69,7 +69,7 @@ forstår relasjonen kan vise frem detaljene til brukeren, i tilfelle
 det for eksempel er skrivefeil som brukeren kan korrigere.
 
 Det som trengs for å få dette til er en definisjon av hva
-konsistenssjekk-resultatene skal returnerer, og å definere en
+konsistenssjekk-resultatene skal returnere, og å definere en
 relasjonsnøkkel som API-klienter kan se etter etter å ha opprettet
 eller endret en instans.
 
@@ -80,10 +80,10 @@ Alvorlige resultater fører til at opprettelsen av objektet blir
 avvist, mens mindre alvorlige resultater kun gir varsling om
 problemer.
 
-Hvis en bruker en ektra relasjon i _links, så vil det lite
-hensiktsmessig være mulig å returnere samme struktur for feil og
+Hvis API-et bruker en ektra relasjon i \_links, så vil det være lite
+hensiktsmessig å returnere samme struktur for feil og
 problemer, da listen over feil som gjorde at opprettelsen ble avvist
-jo må mellomlagres i ubestemt tidsrom, hvilket gjør det mer komplisert
+må mellomlagres i ubestemt tidsrom, hvilket gjør det mer komplisert
 å lage API-tjenesten som må ta vare på informasjon om forkastede
 instanser utenom normal datastruktur.  På den andre siden kan det være
 nyttig å ta vare på slike feilmeldinger for analyse og identifikasjon
@@ -94,86 +94,10 @@ Application
 Language](https://tools.ietf.org/html/draft-kelly-json-hal-08), der
 alle detaljer følger med i responsen fra API-et.
 
-Merk at en slik automatisert mekanisme for å returnere resultatene fra
-konsisstenssjekk kan være et første steg på veien mot full
-datakvalitetsmåling av arkivet, slik det for eksempel er beskrevet i
-"[Assessing data quality in records management systems as implemented
-in Noark
-5](http://edu.oslomet.no/ark2100/h16/syllabus/DQ%20Ouzounov.pdf)" av
-Dimitar Ouzounov.
-
-Resultaten fra slik datakvalitet-sjekk bør inneholde
-
- * entitet som ble forsøkt opprettet, og eventuelt instans hvis den ble opprettet
- * alvorlighet på feilen (for eksempel kritisk, alvorlig, advarsel, tips)
- * navn på felt(er) som ga utslag i konsistenssjekken
- * type feil
- * beskrivelse/melding som beskriver sjekk som feilet
-
-Kritiske feil bør føre til at opprettelsen/endring avvises, mens de
-øvrige bør aksepteres med API-klient bør om mulig be bruker bekrefte
-verdiene på nytt.
-
-Resultatet fra slike kvalitetssjekker bør samles slik at
-arkivansvarlig kan holde et øye med mengden slike feil.
-
-For å kunne identifisere hvilke klient-type som produserer hvilke
-typer feil, så bør API-et utvides til å kreve at klienten
-identifiserer seg selv, for eksempel ved å bruke HTTP-hodetfelet
-"User-Agent".  En vil dermed kunne hente ut statistikk over hva slags
-feil ulike klienter produserer, som kan brukes til å identifisere
-systematiske feil forårsaket av en defekt i klientprogrammet.
-
-Ønsket endring
---------------
-
-Jeg er litt usikker på hvordan denne mekanismen legges inn i
-spesififikasjonen.  Holder det med en beskrivelse av mekanismen med
-eksempler i kapittel 6, eller trengs det også entitetsbeskrivelser i
-kapittel 7?
 
 
-FIXME kanskje behandle konsistenssjekk-resultater som en variant av
-feilmelding, der alvorlighet ikke er fatal, men litt lavere (dvs. når
-kode=200 i forslaget i [mangelmelding
-#93](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/93)?
 
-FIXME bør inneholde informasjon om hvilken entitet det gjelder
-
-FIXME bør tillate API å ta vare på feilmeldinger en periode, med kjent utløpsdato, for analyse.  bør inkludere klientinformasjon.
-
-FIXME klient bør fortelle hva slags type den er.
-
-
-FIXME dokumenter hvordan dette skal gjøres og hvordan resultatet fra
-konsistenssjekken skal se ut.  Det trengs en beskrivelse i kapittel 6
-av mekanismen med eksempler.  Trengs det også en klassebeskrivelse i
-kapittel 7?
-
-Ide: ny entitet KonsistensVarsel med følgende felt:
-
- * entitet som ble forsøkt opprettet, og eventuelt instans hvis den ble opprettet
- * felt med feilet sjekk
- * type feil
- * alvorlighet på feilen
- * beskrivelse/melding som beskriver sjekk som feilet
-
-Eksempel på GET mot href for konsistenssjekk-relasjon:
-
-```
-{
-  "results": [
-    {
-      "felt": "dokumentdato",
-      "varslingstype": "Usannsynlig verdi",
-      "melding" : "Datoen er i fremtiden"
-    }
-  ]
-}
-```
-
-Alterantiv som kan brukes til både feil og utfordringer...
-
+```Python
 {
   "feilkode": 401,
   "_links": [
@@ -193,7 +117,90 @@ Alterantiv som kan brukes til både feil og utfordringer...
       }
   }
 }  
+```
 
+Merk at en slik automatisert mekanisme for å returnere resultatene fra
+konsisstenssjekk kan være et første steg på veien mot full
+datakvalitetsmåling av arkivet, slik det for eksempel er beskrevet i
+"[Assessing data quality in records management systems as implemented
+in Noark
+5](http://edu.oslomet.no/ark2100/h16/syllabus/DQ%20Ouzounov.pdf)" av
+Dimitar Ouzounov.
+
+Resultaten fra slik datakvalitet-sjekk bør inneholde
+
+ * entitet som ble forsøkt opprettet, og eventuelt instans hvis den ble opprettet
+ * alvorlighet på feilen (for eksempel kritisk, alvorlig, advarsel, tips)
+ * navn på felt(er) som ga utslag i konsistenssjekken
+ * type feil
+ * beskrivelse/melding som beskriver sjekk som feilet
+
+Kritiske feil bør føre til at opprettelsen/endring avvises, mens de
+øvrige bør aksepteres men API-klient bør om mulig be bruker bekrefte
+verdiene på nytt.
+
+Resultatet fra slike kvalitetssjekker bør samles slik at
+arkivansvarlig kan holde et øye med mengden slike feil.
+
+For å kunne identifisere hvilke klient-type som produserer hvilke
+typer feil, så bør API-et utvides til å kreve at klienten
+identifiserer seg selv, for eksempel ved å bruke HTTP-hodetfelet
+"User-Agent".  En vil dermed kunne hente ut statistikk over hva slags
+feil ulike klienter produserer, som kan brukes til å identifisere
+systematiske feil forårsaket av en defekt i klientprogrammet.
+
+# Ønsket endring
+--------------
+
+Denne endringsforslaget medfører følgende:
+
+1. Identifiser og beskriv konsistenssjekk-relasjon  
+2. Beskriv konsistenssjekk entitet/nyttelast
+3. Det introduseres en ny REL under administrasjon
+4. Krav om identifsering av klienter
+
+
+
+## Identifiser og beskriv konsistenssjekk-relasjon  
+
+
+
+## Beskriv konsistenssjekk entitet/nyttelast
+
+
+En konsistensvarsel har følgende felt:
+
+ * entitet: som ble forsøkt opprettet, og eventuelt instans hvis den ble opprettet
+ * felt: med feilet sjekk
+ * varslingstype: type feil
+ * melding: beskrivelse/melding som beskriver sjekk som feilet
+ * alvorlighet: alvorlighet på feilen
+
+
+Følgende JSON viser resultatet av en GET mot en href for konsistenssjekk-relasjon etter opprettelse av en journalpost der dokumentetsDato (M103) er satt til en dato i fremtiden.
+
+```
+{
+  "results": [
+    {
+      "entitet": "journalpost",
+      "systemID": "21a8652d-54cc-40da-80f2-c487708f2879",
+      "felt": "dokumentdato",
+      "varslingstype": "Usannsynlig verdi",
+      "melding" : "Datoen er i fremtiden",
+      "alvorlighet" : "Advarsel",
+      "_links": [
+        ... self osv ...
+	   { 
+	    "rel": "http://rel.kxml.no/noark5/v4/api/sakarkiv/journalpost/",
+        "href": "https://nikita.oslomet.no/noark5v4/api/sakarkiv/journalpost/21a8652d-54cc-40da-80f2-c487708f2879"
+       }
+    }
+  ]
+}
+```
+
+Det foreslåes da å introdusere en kodeliste for alvirlighet:
 
 Kodeliste.KonsistensVarselNivaa:
   * Kritisk = 4
@@ -201,34 +208,31 @@ Kodeliste.KonsistensVarselNivaa:
   * Advarsel = 2
   * Tips = 1
 
-FIXME Ny kodeliste for varslingstyper og alvorlighet?
+pere: Kommentar. Skal vi lage en tabell tilnærming med kode og beskrivelse her??
 
-FIXME Hvilket språk skal meldingene ha?  Hvordan skal en håndtere flere språk?
+I nåværende forslag forslag skal meldingene være på bokmål. Senere kan det spesifiseres hvordan andr målform/språk skal håndteres.
+
+pere: Kommentar. Dette gjelder vel generelt alt i TG. Kodestatusverdier osv skal kunne hente us på bokmål og nynorsk.
+
+## Ny REL under administrasjon-pakke
+
+Arkivkjernen lagrer disse konsistens vurderingene. Dersom klienter er identifisert via "User-agent", kan vurderingene søkes ut per klient med OData.
+
+> http://rel.kxml.no/noark5/v4/api/admin/konsistenssjekk
+
+Et oppslag mot HREFen til overnevnte REL vil da returnere en sideindellt liste av alle
+konsistensjekk. Det er selvfølgelig kun en autorisert bruker som har tilgang til å hente ut informasjon om alle kvalitetsvurderinger. Disse kan videre filtreres med OData spørringer.
+
+## Krav om identifsering av klienter
 
 
-{
-  "_links": [
-      ...
-      { "rel": "self",
-        "href": "somewhere/asfdasfsf/"
-      }
-      { "rel": "../arkivstruktur/arkiv/",
-        "href": "somewhere/asfdasfsf/"
-      }
-      { "rel": "mangelrel/datakontroll/",
-        "href": "somewhere/asfdasfsf/datakontroll"
-      },
-      ...
-  ],
-  "_embedded": {
-      "mangelrel" : { "count": 1,
-        "results": [
-          {
-            "felt": "dokumentdato",
-            "varslingstype": "Usannsynlig verdi",
-            "melding" : "Datoen er i fremtiden"
-          }
-        ]
-      }
-  }
-}  
+Det bør legges til en egen underkappitel i kappitel "Kapittel 6 KONSEPTER OG PRINSIPPER" der de forskjelige verdiene i HTTP-headers som forventes å være brukt. 
+
+
+> "User-Agent": Identifikasjon av klient. Klienten kan identifiseres med system navn og versjon nummer.
+
+
+
+Kommentar til pere. Tid på lagring trenger vi ikke å ta medr. De lagres
+FIXME bør tillate API å ta vare på feilmeldinger en periode, med kjent utløpsdato, for analyse.  bør inkludere klientinformasjon.
+.
