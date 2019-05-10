@@ -10,7 +10,7 @@ To ulike relasjonsnøkler til administrativenhet?
         Dokumentdel  7.2.4.2 (Bruker)
          Sidenummer  259
         Linjenummer  n/a
-    Innsendingsdato  Ikke sendt inn
+    Innsendingsdato  2019-05-10
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -45,6 +45,8 @@ entiteten, dvs. `administrativenhet`, ikke `enhet`.
 Ønsket endring
 --------------
 
-Endre relasjonsnøkkel `http://rel.kxml.no/noark5/v4/api/admin/enhet/` i
-7.2.4.2 (Bruker) til
-`http://rel.kxml.no/noark5/v4/api/admin/administrativenhet/`.
+Endre relasjonsnøkkel `http://rel.kxml.no/noark5/v4/api/admin/enhet/`
+i 7.2.4.2 (Bruker) til
+`http://rel.kxml.no/noark5/v4/api/admin/administrativenhet/`.  Endre
+tilsvarende navn i tabellen over relasjoner fra `enhet` til
+`administrativenhet`.
