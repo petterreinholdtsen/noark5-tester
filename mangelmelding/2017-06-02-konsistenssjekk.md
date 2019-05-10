@@ -157,7 +157,7 @@ Denne endringsforslaget medfører følgende:
 1. Identifiser og beskriv konsistenssjekk-relasjon  
 2. Beskriv konsistenssjekk entitet/nyttelast
 3. Det introduseres en ny REL under administrasjon
-4. Krav om identifsering av klienter
+4. Krav om identifisering av klienter
 
 
 
@@ -200,7 +200,7 @@ Følgende JSON viser resultatet av en GET mot en href for konsistenssjekk-relasj
 }
 ```
 
-Det foreslåes da å introdusere en kodeliste for alvirlighet:
+Det foreslåes da å introdusere en kodeliste for alvorlighet:
 
 Kodeliste.KonsistensVarselNivaa:
   * Kritisk = 4
@@ -220,13 +220,13 @@ Arkivkjernen lagrer disse konsistens vurderingene. Dersom klienter er identifise
 
 > http://rel.kxml.no/noark5/v4/api/admin/konsistenssjekk
 
-Et oppslag mot HREFen til overnevnte REL vil da returnere en sideindellt liste av alle
+Et oppslag mot HREFen til ovennevnte REL vil da returnere en sideinndelt liste av alle
 konsistensjekk. Det er selvfølgelig kun en autorisert bruker som har tilgang til å hente ut informasjon om alle kvalitetsvurderinger. Disse kan videre filtreres med OData spørringer.
 
-## Krav om identifsering av klienter
+## Krav om identifisering av klienter
 
 
-Det bør legges til en egen underkappitel i kappitel "Kapittel 6 KONSEPTER OG PRINSIPPER" der de forskjelige verdiene i HTTP-headers som forventes å være brukt. 
+Det bør legges til en egen underkappitel i kapittel "Kapittel 6 KONSEPTER OG PRINSIPPER" der de forskjellige verdiene i HTTP-headers som forventes å være brukt. 
 
 
 > "User-Agent": Identifikasjon av klient. Klienten kan identifiseres med system navn og versjon nummer.
