@@ -149,6 +149,9 @@ identifiserer seg selv, for eksempel ved å bruke HTTP-hodetfelet
 feil ulike klienter produserer, som kan brukes til å identifisere
 systematiske feil forårsaket av en defekt i klientprogrammet.
 
+Sjekk også
+https://en.wikipedia.org/wiki/Object_Constraint_Language
+
 # Ønsket endring
 --------------
 
