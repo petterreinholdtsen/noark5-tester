@@ -1,5 +1,5 @@
-Mangelfult beskrevet entitet Admin.Tilgang uten relasjonsnøkkel
-===============================================================
+Entiteten Admin.Tilgang mangler relasjonsnøkkel
+===============================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegrensesnitt
@@ -19,18 +19,26 @@ tilgjengelig fra [https://github.com/petterreinholdtsen/noark5-tester/](https://
 Beskrivelse
 -----------
 
-I Admin-pakken er entiteten Tilgang beskrevet, men den er så vidt jeg
+Entiteten Tilgang er beskrevet i Admin-pakken, men den er så vidt jeg
 kan se ikke brukt noe sted, hverken i relasjoner til Bruker eller
-AdministrativEnhet.  Det er uklart hva som er entitetens
-relasjonsnøkkel.  Kan det være
-http://rel.kxml.no/noark5/v4/api/admin/rettighet/?  Har entiteten
-byttet navn fra Rettighet til Tilgang i et tidligere utkast uten at
-relasjonsnøkkelen er oppdatert?
+AdministrativEnhet.
 
-Det mangler en beskrivelse om hvordan denne entieten skal fungere, og
-hvordan den skal kobles til brukere.
+Det er uklart hva som er entitetens relasjonsnøkkel.  Kan det være
+`http://rel.kxml.no/noark5/v4/api/admin/rettighet/`?  Har entiteten
+byttet navn fra Rettighet til Tilgang i et tidligere utkast uten at
+relasjonsnøkkelen er oppdatert?  Det må enten defineres en
+relasjonsnøkkel for Tilgang, og legges inn en forklaring på
+`http://rel.kxml.no/noark5/v4/api/admin/rettighet/`, eller så må
+`http://rel.kxml.no/noark5/v4/api/admin/rettighet/` bytte navn til
+`http://rel.kxml.no/noark5/v4/api/admin/tilgang/`.  Det siste virker
+mest fornuftig på meg.
+
+Det mangler forøvrig en beskrivelse om hvordan denne entieten skal
+fungere, og hvordan den skal kobles til brukere.  Det får være tema
+for en annen mangelmelding.
 
 Ønsket endring
 --------------
 
-FIXME
+Endre relasjonsnøkkel http://rel.kxml.no/noark5/v4/api/admin/rettighet/  til
+http://rel.kxml.no/noark5/v4/api/admin/tilgang/.
