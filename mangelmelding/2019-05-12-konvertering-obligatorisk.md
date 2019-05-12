@@ -30,6 +30,9 @@ for å være foroverkompatibel med versjon 5.0.
 Dette er relatert til mangelmelding #71 om overgang til Noark 5
 versjon 5.
 
+Dette er basert på en misforståelse med opphav i feilaktig liste over
+endringer i arkivstruktur.xsd fra Arkivverket.
+
 Ønsket endring
 --------------
 
