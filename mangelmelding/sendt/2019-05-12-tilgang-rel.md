@@ -10,7 +10,7 @@ Entiteten Admin.Tilgang mangler relasjonsnøkkel
         Dokumentdel  7.2.4.3 (Tilgang)
          Sidenummer  263
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-05-12
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -42,3 +42,11 @@ for en annen mangelmelding.
 
 Endre relasjonsnøkkel http://rel.kxml.no/noark5/v4/api/admin/rettighet/  til
 http://rel.kxml.no/noark5/v4/api/admin/tilgang/.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/180 .
