@@ -1,5 +1,5 @@
-Legg inn nye kodelisteverdier fra Noark 5 versjon 4.0 
-=====================================================
+Legg inn manglende kodelisteverdier fra Noark 5 versjon 4.0 metadatakatalog.xsd
+===============================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegrensesnitt
@@ -10,7 +10,7 @@ Legg inn nye kodelisteverdier fra Noark 5 versjon 4.0
         Dokumentdel  7.2.2.3 (Avskrivningsmåte)
          Sidenummer  168
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-05-12
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -26,10 +26,10 @@ I [metadatakatalog.xsd for Noark 5 versjon
 er det tatt inn noen nye verdier i metadatafeltene M087
 korrespondanseparttype og M619 avskrivningsmaate.
 
-M087 korrespondanseparttype har fått ny akseptert verdi "Medavsender".
+M087 korrespondanseparttype har fått ny akseptert verdi «Medavsender».
 
-M619 avskrivningsmaate har fått nye aksepterte verdier "Besvart med
-notat" og "Saken ble avsluttet".
+M619 avskrivningsmaate har fått nye aksepterte verdier «Besvart med
+notat» og «Saken ble avsluttet».
 
 Disse verdiene må inn i de aktuelle kodelistene.
 
@@ -50,3 +50,11 @@ i Attributter-tabellen:
 | **Navn**                | **Merknad** | **Multipl.** | **Kode** | **Type** |
 | ----------------------- | ----------- | ------------ | -------- | -------- |
 | Medavsender             |             |              | IS       |          |
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/175 .
