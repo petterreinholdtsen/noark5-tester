@@ -20,7 +20,7 @@ tilgjengelig fra
 Beskrivelse
 -----------
 
-Korrespondanse mellom organisajoner og etater har gjerne intern og
+Korrespondanse mellom organisasjoner og etater har gjerne intern og
 ekstern referanse som gjør det enklere for mottaker å finne korrekt
 sak/mappe.  I offentlig forvaltning brukes gjerne saksid
 (dvs. saksår/saksnummer), mens ikke-offentlige instanser gjerne har
@@ -43,7 +43,7 @@ for innkommende brev.
 
 Det kan argumenteres med at slik referanse skal knyttes til en part,
 og ikke et dokument, men i og med at ekstern referanse vil hentes fra
-et konkret dokument virker det mest naturlig å knytte det til entieten
+et konkret dokument virker det mest naturlig å knytte det til entiteten
 Dokumentbeskrivelse.
 
 Tilsvarende eksterne referanse felt finnes i
@@ -74,7 +74,7 @@ side 97:
 
 | **Navn**         | **Merknad**  | **Multipl.** | **Type** |
 |------------------|--------------|--------------|----------|
-| eksternReferanse | Ekstern referanse på innkommende dokumenter.  Brukes til søk, kan ikke avlevers på deponi-formatet til Noark 5 versjon 4 og 5. | \[0..1\] | string |
+| eksternReferanse | Ekstern referanse på innkommende dokumenter.  Brukes til søk, kan ikke avleveres på deponi-formatet til Noark 5 versjon 4 og 5. | \[0..1\] | string |
 
 Jeg sender inn konkret endringsforslag til API-spesifikasjonen for å
 fikse dette, men det hadde vært nyttig med tilbakemelding på
