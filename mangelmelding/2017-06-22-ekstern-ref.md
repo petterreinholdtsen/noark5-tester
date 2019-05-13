@@ -1,5 +1,5 @@
-Savner standardisert felt for ekstern dokumentreferanse
-=======================================================
+Mangler standardisert felt for ekstern referanse
+================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5
@@ -7,8 +7,8 @@ Savner standardisert felt for ekstern dokumentreferanse
         Alvorlighet  kommentar
        Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com>
-        Dokumentdel  
-         Sidenummer  
+        Dokumentdel  7.2.1.6 (Dokumentbeskrivelse)
+         Sidenummer  89
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
@@ -41,15 +41,26 @@ Det er dessuten svært nyttig å legge inn ekstern referanse i arkivet
 for å effektivt kunne søke etter når en skal finne aktuell sak/mappe
 for innkommende brev.
 
-Tilsvarende felt finnes i GeoIntegrasjons-standarden omtalt på
+Det kan argumenteres med at slik referanse skal knyttes til en part,
+og ikke et dokument, men i og med at ekstern referanse vil hentes fra
+et konkret dokument virker det mest naturlig å knytte det til entieten
+Dokumentbeskrivelse.
+
+Tilsvarende eksterne referanse felt finnes i
+GeoIntegrasjons-standarden omtalt på
 `http://geointegrasjon.no/standard/`, både som felt noekkel (muligens
 det samme som SakEksternNoekkel, referanseEksternNoekkel,
 referanseMappeEksternNoekkel etc.) under punkt 4.4.5 EksternNoekkel
 eller feltet deresReferanse under punkt 4.4.8 Korrespondansepart, som
 begge ser ut til å ha felt for eksterne referanser.
 
-Vi foreslår at et tekststrengfelt for ekstern referanse legges inn i
-metadatakatalogen og i dokumentbeskrivelse.
+Da feltet er etterlyst og i bruk, så virker det fornuftig at det
+legges inn et standardisert tekststrengfelt for ekstern referanse inn
+i metadatakatalogen og under dokumentbeskrivelse i arkivstruktur.xsd.
+
+Et alternativ er å bruke et felt i virksomhetsspesifikkeMetadata hos
+Dokumentbeskrivelse eller Sakspart, jamfør endringsforslag #78.  Det
+vil ikke kreve endring i XML-skjema.
 
 Denne mangelmeldingen er basert på tips fra Mona Henriksen i
 Fredrikstad kommune, som etterlyste tilsvarende felt i Arkivfaglig
@@ -58,4 +69,14 @@ forum på Facebook i 2016.
 Ønsket endring
 --------------
 
-FIXME finn på feltnavn og hvor det bør inn i Noark 5-standarden.
+Legg inn ny attributt i tabell under 7.2.1.6 (Dokumentbeskrivelse) på
+side 97:
+
+| **Navn**         | **Merknad**  | **Multipl.** | **Type** |
+|------------------|--------------|--------------|----------|
+| eksternReferanse | Ekstern referanse på innkommende dokumenter.  Brukes til søk, kan ikke avlevers på deponi-formatet til Noark 5 versjon 4 og 5. | \[0..1\] | string |
+
+Jeg sender inn konkret endringsforslag til API-spesifikasjonen for å
+fikse dette, men det hadde vært nyttig med tilbakemelding på
+endringsforslag #78 og denne mangelmeldingen for å konkret vite
+hvordan det er best å skrive inn dette i spesifikasjonen.
