@@ -10,7 +10,7 @@ Mangler standardisert felt for ekstern referanse
         Dokumentdel  7.2.1.6 (Dokumentbeskrivelse)
          Sidenummer  89
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-05-14
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -77,9 +77,17 @@ side 97:
 
 | **Navn**         | **Merknad**  | **Multipl.** | **Type** |
 |------------------|--------------|--------------|----------|
-| eksternReferanse | Ekstern referanse på innkommende dokumenter.  Brukes til søk, kan ikke avleveres på deponi-formatet til Noark 5 versjon 4 og 5. | \[0..1\] | string |
+| eksternReferanse | Ekstern referanse på innkommende dokumenter.  Brukes til søk via API-et og kan ikke avleveres på deponi-formatet til Noark 5 versjon 4 og 5 som eget felt. | \[0..1\] | string |
 
 Jeg sender inn konkret endringsforslag til API-spesifikasjonen for å
 fikse dette, men det hadde vært nyttig med tilbakemelding på
 endringsforslag #78 og denne mangelmeldingen for å konkret vite
 hvordan det er best å skrive inn dette i spesifikasjonen.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/184 .
