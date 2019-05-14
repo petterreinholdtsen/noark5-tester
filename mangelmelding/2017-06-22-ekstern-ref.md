@@ -60,7 +60,10 @@ i metadatakatalogen og under dokumentbeskrivelse i arkivstruktur.xsd.
 
 Et alternativ er å bruke et felt i virksomhetsspesifikkeMetadata hos
 Dokumentbeskrivelse eller Sakspart, jamfør endringsforslag #78.  Det
-vil ikke kreve endring i XML-skjema.
+vil ikke kreve endring i XML-skjema, men åpner for at ulike
+API-klienter velger ulike feltnavn for denne verdien med tilhørende
+innlåsingseffekt og manglende samvirke.  Risikoen for dette kan
+reduseres med en katalog over felles og velkjente feltnavn.
 
 Denne mangelmeldingen er basert på tips fra Mona Henriksen i
 Fredrikstad kommune, som etterlyste tilsvarende felt i Arkivfaglig
