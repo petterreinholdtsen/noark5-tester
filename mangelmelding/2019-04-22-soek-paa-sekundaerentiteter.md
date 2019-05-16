@@ -25,6 +25,10 @@ sekundærentiteter. Primærentiteter er de entitetene som utgjør arkivstruktur
 for eksempel *arkiv ... dokumentobjekt*. Sekundærentiteter er entitetene som 'henger' på
 de primære. Eksempler er *merknad*, *noekkelord* og *forfatter*.
 
+Ta utfordringen med å finne en merknad med et spesielt ord, alle
+instanser med et gitt nøkkelord eller alle dokumenter med en gitt
+forfatter.  Hvordan skal dette gjøres via API-et?
+
 Det er mulig å søke på disse med $expand på OData men det gjør at
 klienten selv må sammenstille resultatene.  Med OData-notasjonen
 beskrevet i dagens spesifikasjon, for å få en liste av på merknader
