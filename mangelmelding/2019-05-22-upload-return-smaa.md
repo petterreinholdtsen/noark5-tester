@@ -59,11 +59,11 @@ index eeede3e..24ff88a 100644
 +headere for content-type og content-length.  Når overføringen er
 +fullført og filopplastingen vellykket, så returneres statuskode 201.
  
- ```
+ \```
  POST http://localhost:49708/api/arkivstruktur/Dokumentobjekt/a895c8ed-c15a-43f6-86de-86a626433785/referanseFil
 @@ -993,12 +994,16 @@ Content-Length: 111111
  Pdf data
- ```
+ \```
  
 +Respons: 201 Created
 +
