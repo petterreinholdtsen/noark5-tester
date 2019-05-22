@@ -45,3 +45,11 @@ antar jeg disse relasjonene er med ved en inkurie, og foreslår å
 fjerne dem.
 
 Jeg sender inn konkret forslag til endring som patch via github.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/193 .
