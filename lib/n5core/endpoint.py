@@ -32,6 +32,8 @@ class Endpoint:
         self.baseurl = baseurl
         self._browser = mechanize.Browser()
         self.verbose = False
+        self.relbaseurl = 'https://rel.arkivverket.no/noark5/v4/api/'
+        self.nikitarelbaseurl = "https://nikita.arkivlab.no/noark5/v4/"
 
     def expandurl(self, path):
 #        print(self.baseurl, path)
@@ -40,9 +42,8 @@ class Endpoint:
         url = urlparse.urljoin(self.baseurl, path)
         return url
     def login(self, username = None, password = None):
-        baserel = "https://nikita.arkivlab.no/noark5/v4/"
-        url7519 = self.findRelation("%slogin/rfc7519/" % baserel)
-        url6749 = self.findRelation("%slogin/rfc6749/" % baserel)
+        url7519 = self.findRelation("%slogin/rfc7519/" % self.nikitarelbaseurl)
+        url6749 = self.findRelation("%slogin/rfc6749/" % self.nikitarelbaseurl)
         if url7519 is not None:
             url = url7519
             try:

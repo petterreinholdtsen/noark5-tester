@@ -17,9 +17,6 @@ import urllib2
 
 import n5core.endpoint
 
-relbase = 'http://rel.arkivverket.no/noark5/v4/api'
-nikitabase = 'http://nikita.arkivlab.no/noark5/v4'
-
 def decodeheader(s):
     if s is None:
         return s
@@ -83,10 +80,10 @@ def mime2format(mimestr):
 
 class MboxImporter(n5core.endpoint.Endpoint):
     def __init__(self):
-        self.baseurl = 'http://localhost:8092/noark5v4/'
+        baseurl = 'http://localhost:8092/noark5v4/'
         self.mbox = 'input.mbox'
         parser = argparse.ArgumentParser()
-        parser.add_argument("--baseurl", help="(default is %s)" % self.baseurl)
+        parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
         parser.add_argument("--mta", help="behave as mta, read single email from stdin",
                             action="store_true")
         parser.add_argument("--mbox", help="(default is %s)" % self.mbox)
@@ -100,7 +97,7 @@ class MboxImporter(n5core.endpoint.Endpoint):
         self.usesaksmappe = args.saksmappe
         self.storageurl = args.storageurl
         if args.baseurl:
-            self.baseurl = args.baseurl
+            baseurl = args.baseurl
         if args.mta and args.mbox:
             raise Exception("invalid combination of arguments, can not use --mta and --mbox together")
         if args.mbox:
@@ -108,7 +105,7 @@ class MboxImporter(n5core.endpoint.Endpoint):
         self.mta = args.mta
         self.docobjurl = None
         self.parentmap = {}
-        n5core.endpoint.Endpoint.__init__(self,self.baseurl)
+        n5core.endpoint.Endpoint.__init__(self, baseurl)
         self.verbose = args.verbose
 
     def objectOperation(self, info, relation):
@@ -200,7 +197,7 @@ user to pick one.
     def getDocObjUrl(self):
         """ Cache href to the list of dokumentobject """
         if not self.docobjurl:
-            self.docobjurl = self.findRelation(relbase + '/arkivstruktur/dokumentobjekt/')
+            self.docobjurl = self.findRelation('%sarkivstruktur/dokumentobjekt/' % self.relbaseurl)
         return self.docobjurl
 
     def findSeries(self):
@@ -213,7 +210,7 @@ Store the info about the entity in self.seriesinfo
             (c, res) = self.json_get(self.storageurl)
             self.seriesinfo = json.loads(c)
             return self.seriesinfo
-        fondshref = self.findRelation(relbase + '/arkivstruktur/arkiv/')
+        fondshref = self.findRelation('%sarkivstruktur/arkiv/' % self.relbaseurl)
         (c, res) = self.json_get(fondshref)
         fondsinfo = json.loads(c)
         info = self.pickUnlessOne(fondsinfo, 'arkiv')
@@ -221,7 +218,7 @@ Store the info about the entity in self.seriesinfo
             return None
 
         serieshref = self.objectOperation(info,
-                                          relbase + '/arkivstruktur/arkivdel/')
+                                          '%sarkivstruktur/arkivdel/' % self.relbaseurl)
         (c, res) = self.json_get(serieshref)
         seriesinfo = json.loads(c)
         #print()
@@ -313,12 +310,12 @@ are in.
             'beskrivelse' : None,
         }
         if self.usesaksmappe:
-            casefilerel = relbase + '/sakarkiv/ny-saksmappe/'
+            casefilerel = '%ssakarkiv/ny-saksmappe/' % self.relbaseurl
             fileinfo = self.createEntity('saksmappe', casefilerel,
                                          parselinks(self.seriesinfo['_links']),
                                          filedata)
         else:
-            filerel = relbase + '/arkivstruktur/ny-mappe/'
+            filerel = '%sarkivstruktur/ny-mappe/' % self.relbaseurl
             fileinfo = self.createEntity('mappe', filerel,
                                          parselinks(self.seriesinfo['_links']),
                                          filedata)
@@ -332,7 +329,7 @@ are in.
 
 
     def createDocumentObject(self, docdescinfo, docobjdata, content, created):
-        docobjrel = relbase + '/arkivstruktur/ny-dokumentobjekt/'
+        docobjrel = '%sarkivstruktur/ny-dokumentobjekt/' % self.relbaseurl
         docobjinfo = self.createEntity('dokumentobjekt', docobjrel,
                                        parselinks(docdescinfo['_links']),
                                        docobjdata)
@@ -340,7 +337,7 @@ are in.
         self.recordMapping(docdescinfo, docobjinfo, 'dokumentobjekt')
 
         newfilehref = self.objectOperation(docobjinfo,
-                                           relbase + '/arkivstruktur/fil/')
+                                           '%sarkivstruktur/fil/' % self.relbaseurl)
         # Make sure all parts going into the POST are type str by
         # converting newfilehref to str.  This avoid a
         # UnicodeDecodeError when the content is not UTF-8.
@@ -363,9 +360,9 @@ are in.
         return True
 
     def addMessageToFile(self, fileinfo, message):
-        recordrel = relbase + '/arkivstruktur/ny-basisregistrering/'
-        recordentryrel = nikitabase + '/ny-journalpost/'
-        docdescrel = relbase + '/arkivstruktur/ny-dokumentbeskrivelse/'
+        recordrel = '%sarkivstruktur/ny-basisregistrering/' % self.relbaseurl
+        recordentryrel = '%ssakarkiv/ny-journalpost/' % self.relbaseurl
+        docdescrel = '%sarkivstruktur/ny-dokumentbeskrivelse/' % self.relbaseurl
 
         created = []
         content = message.as_string()
