@@ -239,7 +239,7 @@ if a match is found.
         searchurl = self.docobjurl + '?filter=' +\
             urllib.quote_plus("filnavn eq '%s'" % messageid)
         print(searchurl)
-        
+
         (s, res) = self.json_get(searchurl)
         docobjsinfo = json.loads(s)
         for d in docobjsinfo['results']:
@@ -305,7 +305,7 @@ are in.
     def createNewFile(self, message):
         filedata = {
             'tittel' : decodeheader(message['subject']),
-             # Workaround for bogus ny-* values
+             # FIXME Workaround for bogus ny-* values
             'offentligTittel' : None,
             'beskrivelse' : None,
         }
