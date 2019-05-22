@@ -40,7 +40,7 @@ class Endpoint:
         url = urlparse.urljoin(self.baseurl, path)
         return url
     def login(self, username = None, password = None):
-        baserel = "http://nikita.arkivlab.no/noark5/v4/"
+        baserel = "https://nikita.arkivlab.no/noark5/v4/"
         url7519 = self.findRelation("%slogin/rfc7519/" % baserel)
         url6749 = self.findRelation("%slogin/rfc6749/" % baserel)
         if url7519 is not None:
