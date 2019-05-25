@@ -776,6 +776,17 @@ or should it be rejected?
                                       self.parselinks(fondinfo['_links']),
                                       seriesdata)
         
+        # Test file with UTF-8 character longer than 3 bytes (problem
+        # with some MySQL backend engines.
+        u8filedata = {
+            "tittel"             : u"Fly high, try the 🛫 created %s" % now,
+        }
+        createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
+        u8fileinfo = self.createEntity('file', createfilerel,
+                                     self.parselinks(serieinfo['_links']),
+                                     u8filedata)
+
+
         filedata = {
 #            "mappeID"            : "2017/01",
 #            "offentligTittel"    : "Public title of the test file created %s" % now,
