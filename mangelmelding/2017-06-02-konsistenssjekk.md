@@ -42,7 +42,8 @@ Her er noen eksempler på slike konsistenssjekker:
  * Navn og organisasjonsnummer på KorrespondansepartEnhet stemmer ikke
    over ens med det som står i brønnøysundsregisteret.
 
- * Postnummeret brukt i en korrespondanseenhet finnes ikke.
+ * Postnummeret brukt i en korrespondanseenhet er ikke i listen over
+   kjente postnummer.
 
  * Det opplastede dokumentet har et format som ikke aksepteres av
    arkivverket for langtidsoppbevaring.
@@ -51,6 +52,12 @@ Her er noen eksempler på slike konsistenssjekker:
    regneark som gjør oppslag i ekstern database som del av
    beregninger, som dermed ikke kan automatisk konverteres til PDF på
    meningsfylt vis.
+   
+ * Det opplastede dokumentet har ikke et klart språk, jamfør
+   <URL:https://www.digi.no/artikler/kommentar-den-digitale-borger-og-klarsprak/466014>
+
+ * Hvilken målform dokumentet i hovedsak består av, og hvorvidt dette
+   er målformen det trengs mer eller mindre av.
 
 Slike feil er ofte resultat av manuelle skrivefeil, og bør oppdages så
 raskt som mulig for å holde kvaliteten i arkivsystemet oppe.
