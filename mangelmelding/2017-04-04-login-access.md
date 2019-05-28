@@ -6,10 +6,10 @@ Bør samkjøres med 2019-02-19-openid-connect-rel.md.
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegrensesnitt
            Kategori  Versjon 1.0 beta
-        Alvorlighet  
-       Meldingstype  
+        Alvorlighet  protest
+       Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  4.1
+        Dokumentdel  4.1 Autentisering
          Sidenummer  9
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
