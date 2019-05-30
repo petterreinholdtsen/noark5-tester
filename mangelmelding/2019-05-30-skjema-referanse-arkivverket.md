@@ -33,13 +33,22 @@ med DNS-navn eid av Arkivverket, eventuelt la skjema.arkivverket.no
 peke til skjema.kxml.no og endre URL i 6.1.1.8 til
 http://skjema.arkivverket.no/arkivverket/noark5/v4.0/.
 
-
 Det er uklart for meg hvorfor det henvises til et XML-skjema på
 eksternt nettsted i spesifikasjonen.  Det åpner jo for at
 overføringsformat kan endres uavhengig av spesifikasjonen.
 Beskrivelsen av JSON er og bør være i spesifikasjonsteksten, og XML
 bør som nevnt i mangelmelding #57 droppes.  Foreslår derfor å fjerne
-kapittel 6.1.1.8 fra spesifikasjonen.
+denne delen av kapittel 6.1.1.8 fra spesifikasjonen.
+
+Ett XML-skjema vil uansett ikke kunne beskrive overføringsformatet i
+protokollen, da det som overføres for eksempel vil være forskjellig
+ved POST og GET.  Et konkret eksempel er at POST for oppretting av nye
+Arkiv-instanser ikke vil inneholde SystemID, mens alle GET av
+eksisterende Arkiv-instanser alltid skal inneholde SystemID.  Det
+betyr at minoccurs er "0" for systemID i POST mens den minoccurs er
+"1" for systemID i GET.  Jeg mener slike ting må beskrives i
+spesifikasjonen der en kan definere klart og entydig hvordan ulike
+atributter og relasjoner skal brukes.
 
 Ønsket endring
 --------------
