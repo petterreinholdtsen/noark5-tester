@@ -10,7 +10,7 @@ Bruk enhetlige href-eksempler i spesifikasjonen
         Dokumentdel  6 (Konsepter og prinsipper)
          Sidenummer  11
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-05-30
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -43,3 +43,11 @@ dem og når de ulike brukes.
 
 Bytt alle forekomster av de tre overnevnte nettadressene i
 spesifikasjonen med https://n5.example.com/api/.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/197 .
