@@ -28,7 +28,7 @@ I 6.1.1.8 (Overføringsformat) på side 25 står det følgende:
 Av årsaker beskrevet i mangelmelding #23 bør URL til autorativ kilde
 for spesifikasjonens skjema eies av Arkivverket, eller i hvert fall
 sikre at Arkivverket i fremtiden kan peke URL-en til et sted de
-kontrollerer.  Det kan løses ved å Legg ut aktuelle skjema på en URL
+kontrollerer.  Det kan løses ved å legge ut aktuelle skjemaer på en URL
 med DNS-navn eid av Arkivverket, eventuelt la skjema.arkivverket.no
 peke til skjema.kxml.no og endre URL i 6.1.1.8 til
 http://skjema.arkivverket.no/arkivverket/noark5/v4.0/.
@@ -39,7 +39,7 @@ eksternt nettsted i spesifikasjonen.  Det åpner jo for at
 overføringsformat kan endres uavhengig av spesifikasjonen.
 Beskrivelsen av JSON er og bør være i spesifikasjonsteksten, og XML
 bør som nevnt i mangelmelding #57 droppes.  Foreslår derfor å fjerne
-denne delen av spesifikasjonen.
+kapittel 6.1.1.8 fra spesifikasjonen.
 
 Ønsket endring
 --------------
