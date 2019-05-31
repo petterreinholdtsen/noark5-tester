@@ -10,7 +10,7 @@ Autorativ kilde til skjema for overføringsformat bør være under arkivverket.n
         Dokumentdel  6.1.1.8 (Overføringsformat)
          Sidenummer  25
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-05-31
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -36,19 +36,21 @@ http://skjema.arkivverket.no/arkivverket/noark5/v4.0/.
 Det er uklart for meg hvorfor det henvises til et XML-skjema på
 eksternt nettsted i spesifikasjonen.  Det åpner jo for at
 overføringsformat kan endres uavhengig av spesifikasjonen.
-Beskrivelsen av JSON er og bør være i spesifikasjonsteksten, og XML
-bør som nevnt i mangelmelding #57 droppes.  Foreslår derfor å fjerne
-denne delen av kapittel 6.1.1.8 fra spesifikasjonen.
+Beskrivelsen av overføringsformatet er og bør være i
+spesifikasjonsteksten, og er allerede delvis beskrevet for JSON (og
+XML bør som nevnt i mangelmelding #57 droppes).  Foreslår derfor å
+fjerne denne delen av kapittel 6.1.1.8 fra spesifikasjonen.
 
-Ett XML-skjema vil uansett ikke kunne beskrive overføringsformatet i
-protokollen, da det som overføres for eksempel vil være forskjellig
-ved POST og GET.  Et konkret eksempel er at POST for oppretting av nye
-Arkiv-instanser ikke vil inneholde SystemID, mens alle GET av
-eksisterende Arkiv-instanser alltid skal inneholde SystemID.  Det
-betyr at minoccurs er "0" for systemID i POST mens den minoccurs er
-"1" for systemID i GET.  Jeg mener slike ting må beskrives i
-spesifikasjonen der en kan definere klart og entydig hvordan ulike
-atributter og relasjoner skal brukes.
+Det holder uansett ikke med ett XML-skjema for å beskrive
+overføringsformatet i protokollen, da kravene til det som overføres
+for eksempel vil være forskjellig ved POST og GET.  Et konkret
+eksempel er at POST for oppretting av nye Arkiv-instanser ikke skal
+inneholde SystemID, mens alle GET av eksisterende Arkiv-instanser
+alltid skal inneholde SystemID.  Det betyr at minoccurs er "0" for
+Arkiv.systemID i POST mens den minoccurs er "1" for Arkiv.systemID i
+GET.  Jeg mener slike ting må beskrives i spesifikasjonen der en kan
+definere klart og entydig hvordan ulike attributter og relasjoner skal
+brukes.
 
 Ønsket endring
 --------------
@@ -58,3 +60,11 @@ Fjern følgende fra 6.1.1.8 (Overføringsformat) på side 25:
 > Overføringsformat skal være i henhold til følgende skjema for begge innholdstyper:
 > 
 >   - http://skjema.kxml.no/arkivverket/noark5/v4.0/
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/198 .
