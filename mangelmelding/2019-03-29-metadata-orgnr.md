@@ -7,8 +7,8 @@ Mangler organisasjonsnummer i metadatakatalogen?
         Alvorlighet  kommentar
        Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  
-         Sidenummer  
+        Dokumentdel  n/a
+         Sidenummer  n/a
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
  ------------------  ---------------------------------
@@ -20,11 +20,12 @@ Beskrivelse
 -----------
 
 jeg finner ikke en metadatadefinisjon for organisasjonsnummer i
-metadatakatalogen for både Noark 5 versjon 3, 4 og 5.  Et slikt felt
-hadde vært nyttig for å knytte sammen saker og koble organisasjoner
-registrert i enhetsregisteret med arkivsaker og dokumenter.  Feltet
-finnes i GeoIntegrasjon som Kontakt:organisasjonsnummer samt er omtalt
-i tjenestegrensesnittet som SakspartEnhet.organisasjonsnummer,
+metadatakatalogen for hverken Noark 5 versjon 3, 4 og 5.  Et slikt
+felt hadde vært nyttig for å knytte sammen saker og koble
+organisasjoner registrert i Norges enhetsregister med arkivsaker og
+dokumenter.  Feltet finnes i GeoIntegrasjon som
+Kontakt:organisasjonsnummer samt er omtalt i tjenestegrensesnittet som
+SakspartEnhet.organisasjonsnummer,
 Korrespondansepart.organisasjonsnummer og
 NasjonaleIdentifikatorer.Enhetsidentifikator.
 
@@ -38,4 +39,6 @@ mellom implementasjoner av tjenestegrensesnittet.
 Ønsket endring
 --------------
 
-FIXME
+Legg inn felt for organisasjonsnummer i metadatakatalogen og bruk det
+i XML-skjemaet for arkivstruktur.xml i typene part og
+korrespondansepart.
