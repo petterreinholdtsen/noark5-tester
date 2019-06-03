@@ -88,5 +88,5 @@ protokollen, samt forklare at Navn blir navn i JSON-lister.
 Endre eksempler til å bruke **navn** i stedet for **beskrivelse** i
 JSON og beskriv i starten av 7.2.2 at kodelisteverdienes navn i
 tabellen henvises til med JSON-attributten `navn`.  Alternativt kan en
-gjøre som foreslått i mangelmelding #148 å alltid bruke kode-verdien i
+gjøre som foreslått i mangelmelding [#148](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/148) å alltid bruke kode-verdien i
 JSON-instanser, og dermed unngå hele spørsmålet.
