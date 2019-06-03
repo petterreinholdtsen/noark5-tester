@@ -69,13 +69,13 @@ Tilsvarende eksempel hentet fra Dokumentmedium:
 | Elektronisk arkiv                       |             |              | E        |          |
 | Blandet fysisk og elektronisk arkiv     |             |              | B        |          |
 
-Kapittel 6 og 7 bør være bruke konsistent navngiving av den tekstlige
+Kapittel 6 og 7 bør bruke konsistent navngiving av den tekstlige
 beskrivelsen av en kode i en kodeliste.  Enten bør det brukes **navn**
 i eksemplene i kapittel 6, eller så bør alle tabellene i kapittel 7
 bytte overskrift til **Beskrivelse**.
 
 Uansett bør det forklares nærmere hvordan kodeliste-verdier skal
-refereres brukes i JSON, jamfør [mangelmelding
+refereres i JSON, jamfør [mangelmelding
 #148](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/148).
 
 Jeg foreslår å endre i kapittel 6 til **navn**, da det er kortere enn
@@ -88,5 +88,4 @@ protokollen, samt forklare at Navn blir navn i JSON-lister.
 Endre eksempler til å bruke **navn** i stedet for **beskrivelse** i
 JSON og beskriv i starten av 7.2.2 at kodelisteverdienes navn i
 tabellen henvises til med JSON-attributten `navn`.  Alternativt kan en
-gjøre som foreslått i mangelmelding [#148](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/148) å alltid bruke kode-verdien i
-JSON-instanser, og dermed unngå hele spørsmålet.
+gjøre som foreslått i mangelmelding [#148](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/148) og alltid bruke kode-verdien i JSON-instanser, og dermed unngå hele spørsmålet.
