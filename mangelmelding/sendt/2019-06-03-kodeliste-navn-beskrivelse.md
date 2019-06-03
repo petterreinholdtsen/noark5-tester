@@ -10,7 +10,7 @@ Feil attributtnavn for kodelisteverdier i kapittel 6?
         Dokumentdel  6.1.1.3 (Opprette objekter (Create))
          Sidenummer  17
         Linjenummer  ?
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-06-03
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -88,4 +88,16 @@ protokollen, samt forklare at Navn blir navn i JSON-lister.
 Endre eksempler til å bruke **navn** i stedet for **beskrivelse** i
 JSON og beskriv i starten av 7.2.2 at kodelisteverdienes navn i
 tabellen henvises til med JSON-attributten `navn`.  Alternativt kan en
-gjøre som foreslått i mangelmelding [#148](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/148) og alltid bruke kode-verdien i JSON-instanser, og dermed unngå hele spørsmålet.
+gjøre som foreslått i mangelmelding
+[#148](https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/148)
+og alltid bruke kode-verdien i JSON-instanser, og dermed unngå hele
+spørsmålet.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/202 .
+
