@@ -40,8 +40,8 @@ Her er det som står i spesifikasjonen om innlogging/autentisering i dag:
 > For REST er Basic autentication minimum for autentisering og en bør
 > støtte SAML 2.0 og OpenID Connect.
 
-Det mangler en forklaring på hva som menes med "Single Sign On bør
-støttes".  Hva konkret betyr dette?  Er det Kerberos-autentisering ala
+Det mangler en forklaring på hva som menes med «Single Sign On bør
+støttes».  Hva konkret betyr dette?  Er det Kerberos-autentisering ala
 det Microsoft Active Directory tilbyr, eller noe annet?
 
 Det mangler også referanser til standardene som definerer
@@ -61,22 +61,22 @@ ikke-autentiserte HTTP-forespørsler skal sette WWW-Authenticate med
 realm, slik at nettlesere vet at de skal spørre brukeren om brukernavn
 og passord, og klienter automatisk kan se at Basic autentisering er
 støttet.  Det bør gjøres klart om Basic-innlogging skal brukes på en
-bestemt URL til å sette en "cookie" som så brukes videre i
+bestemt URL til å sette en «cookie» som så brukes videre i
 grensesnittet, eller om brukernavn og passord skal brukes til enhver
 REST-forespørsel i hele grensesnittet.  Førstnevnte alternativ kan
 gjøre det enklere å støtte ulike innloggingsmekanismer.
 
-Evrys API støtter i dag Basic-authentisering, men det er uklart for en
+Evrys API støtter i dag Basic-autentisering, men det er uklart for en
 klient hvordan bruke den, da WWW-Authentication-hodefeltet ikke blir
 satt med realm som nettlesere kjenner igjen.  I stedet settes dette
-hodefeltet til "Bearer" (5 ganger, uvisst av hvilken grunn).  Dette
+hodefeltet til «Bearer» (5 ganger, uvisst av hvilken grunn).  Dette
 illustrerer behovet for å definere nærmere hvordan innlogging skal
-gjøres.  "Bearer" er forøvrig beskrevet relatert til Oauth 2.0 i [RFC
+gjøres.  «Bearer» er forøvrig beskrevet relatert til Oauth 2.0 i [RFC
 6750](https://www.rfc-editor.org/rfc/rfc6750.txt).
 
 En måte å annonsere at OpenID Connect er støttet i
 tjenestegrensesnittet, er å annonsere en relasjon i _links på toppnivå
-til ".well-known/openid-configuration", som så kan følges for å finne
+til «.well-known/openid-configuration», som så kan følges for å finne
 detaljene om hvordan logge inn med OpenID Connect.  Dette forutsetter
 at _links på toppnivå er tilgjengelig uten innlogging, slik det er i
 Nikita.  Ved å gjøre toppnivå tilgjengelig uten innlogging så får
@@ -152,7 +152,7 @@ innloggingsmekanismer som er tilgjengelig.  Alternativt, definert kun
 en innloggingsmekanisme og krev at alle implementasjoner bruker kun
 denne.
 
-Forklar klarere hva som menes med "Single Sign On bør støttes".
+Forklar klarere hva som menes med «Single Sign On bør støttes».
 
 Forslag til relasjoner:
 
