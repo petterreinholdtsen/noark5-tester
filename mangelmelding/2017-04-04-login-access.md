@@ -148,7 +148,7 @@ Basic brukes.
 Definer relasjon for å annonsere OpenID Connect-støtte, samt krev at
 _links på toppnivå i API-et skal være tilgjengelig også for brukere
 som ikke er logget inn, for å la API-klienter kunne oppdage hvilke
-innloggingsmekanismer som er tilgjengelig.  Alternativt, definert kun
+innloggingsmekanismer som er tilgjengelig.  Alternativt, definer kun
 en innloggingsmekanisme og krev at alle implementasjoner bruker kun
 denne.
 
