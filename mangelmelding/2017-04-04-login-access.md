@@ -7,7 +7,7 @@ Klargjør entydige krav til innlogging og tilgangskontroll
         Alvorlighet  protest
        Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  4.1 Autentisering
+        Dokumentdel  4.1 (Autentisering)
          Sidenummer  9
         Linjenummer  n/a
     Innsendingsdato  ikke sendt inn
@@ -19,39 +19,6 @@ tilgjengelig fra
 
 Beskrivelse
 -----------
-
-I punkt 4.1 (Autentisering) på side 9 står det at «Single Sign On bør
-støttes».  Hva konkret betyr dette?  Er det Kerberos-autentisering ala
-det Microsoft Active Directory tilbyr, eller noe annet?
-
-Det står også at «Noark5 kjerne må ha metoder for å autentisere
-brukere og gi de riktige tilganger til kjernen».  Hva betyr dette?
-Hva er «de riktige tilganger»?  Hva slags granularitet kreves,
-dvs. hvor finkornet tilgangsstyring skal tjenestegrensesnittet ha?  Er
-det nok med tilgang / ikke tilgang til API-et, eller for å ta et annet
-ytterpunkt, må tilgangen kunne styres pr. entitet eller attributt?
-Det virker ut fra Tilgangskategori-kodelisten i figur 32 på side 253
-at tilgang skal kunne gis pr. arkivdel, klasse, mappe, registrering og
-dokumentbeskrivelse, men har ikke funnet noe klart krav i
-spesifikasjonen på hva som kreves.
-
-Et relatert spørsmål er om en må logge inn før en kan bruke API-et,
-eller er det noen deler som er tilgjengelig uten innlogging?
-
-Et vels å viktig spørsmål er hvordan klienten finner hvor/hvordan
-innlogging skal gjøres?  Vi foreslår en eller flere relasjon på
-toppnivå som peker til href som skal brukes til innlogging.
-
-Bør spesifikasjonen kreve at en må kunne gi tilganger ved hjelp av
-rettighetsgrupper, for å slippe manuelt vedlikehold av hvem som får
-lov til hva?
-
-FIXME Se UML-diagramet på side 253 om brukere og tilgang og del 7.2.4
-(Admin), kanskje noe å forstå ut fra den?
-
-===============
-
-Nyere utkast:
 
 Innlogging er et kritisk punkt i ethvert REST-API, og uten
 standardisering av innloggingsmekanisme må enhver klient tilpasses
@@ -74,12 +41,18 @@ Her er det som står i spesifikasjonen om innlogging/autentisering i dag:
 > støtte SAML 2.0 og OpenID Connect.
 
 Det mangler en forklaring på hva som menes med "Single Sign On bør
-støttes", og referanser til standardene som definerer
+støttes".  Hva konkret betyr dette?  Er det Kerberos-autentisering ala
+det Microsoft Active Directory tilbyr, eller noe annet?
+
+Det mangler også referanser til standardene som definerer
 Basic-autentisering, SAML 2.0 og OpenID Connect.  Det mangler videre
 en presis beskrivelse av hvordan de ulike innloggingsmetodene skal
 tilbys.  Det vil være en stor fordel om det finnes en mekanisme for
 API-klienter å oppdage hvilke autentiseringsmekanismer som er
 tilgjengelig.
+
+Et relatert spørsmål er om en må logge inn før en kan bruke API-et,
+eller er det noen deler som er tilgjengelig uten innlogging?
 
 Det viser seg at det er mange måter å gjøre Basic-autentisering, og
 API-et bør beskrive en bestemt måte å gjøre dette.  Det bør f.eks stå
@@ -111,7 +84,7 @@ API-klienter en mulighet til å hente ut informasjon om tjeneren og
 hvordan den skal brukes og kan dermed tilpasse seg ulike
 innloggingsmetoder.
 
-I Nikita gjøres dette ved å legge inn en egen relasjon i _links pa
+I Nikita gjøres dette ved å legge inn en egen relasjon i _links på
 toppnivå:
 
 ```
@@ -142,19 +115,26 @@ par eksempler finnes på
 `https://oidc.difi.no/idporten-oidc-provider/.well-known/openid-configuration`_.
 
 Se også `http://rel.kxml.no/noark5/autentisering-med-openid-connect/`_.
-===============
+
+Under overskriften Autentisering står også at «Noark5 kjerne må ha
+metoder for å autentisere brukere og gi de riktige tilganger til
+kjernen».  Hva betyr dette?  Hva er «de riktige tilganger»?  Hva slags
+granularitet kreves, dvs. hvor finkornet tilgangsstyring skal
+tjenestegrensesnittet ha?  Er det nok med tilgang / ikke tilgang til
+API-et, eller for å ta et annet ytterpunkt, må tilgangen kunne styres
+pr. entitet eller attributt?  Det virker ut fra
+Tilgangskategori-kodelisten i figur 32 på side 253 at tilgang skal
+kunne gis pr. arkivdel, klasse, mappe, registrering og
+dokumentbeskrivelse, men har ikke funnet noe klart krav i
+spesifikasjonen på hva som kreves.  Er det meningen av pakken Admin
+beskrevet i del 7.2.4 skal danne grunnlaget for slik tilgangskontroll?
+
+Bør spesifikasjonen kreve at en må kunne gi tilganger ved hjelp av
+rettighetsgrupper, for å slippe manuelt vedlikehold av hvem som får
+lov til hva?
+
 Ønsket endring
 --------------
-
-FIXME Hva kan foreslås her?
-
-Endre punkt 4.1 side 9 til å ta med referanse til del 7.2.4 på side 253.
-
-FIXME ta med relasjon for innlogging?
-
-===============
-
-Nyere utkast:
 
 Definer innloggingsmetode så entydig at enhver API-klient vet hvordan
 det skal koble seg til et hvilket som helt tjenestegrenisesnitt-API så
@@ -166,7 +146,11 @@ nødvendig for at en nettleser skal spørre om brukernavn og passord når
 Basic brukes.
 
 Definer relasjon for å annonsere OpenID Connect-støtte, samt krev at
-_links på toppnivå i API-et skal være tilgjengelig
+_links på toppnivå i API-et skal være tilgjengelig også for brukere
+som ikke er logget inn, for å la API-klienter kunne oppdage hvilke
+innloggingsmekanismer som er tilgjengelig.  Alternativt, definert kun
+en innloggingsmekanisme og krev at alle implementasjoner bruker kun
+denne.
 
 Forklar klarere hva som menes med "Single Sign On bør støttes".
 
@@ -174,3 +158,7 @@ Forslag til relasjoner:
 
  * https://rel.arkivverket.no/noark5/v4/api/login/rfc6749/ - Oauth2
  * https://rel.arkivverket.no/noark5/v4/api/login/rfc7617/ - Basic
+
+Legg inn referanse til del 7.2.4 (Admin) på side 253 under punkt 4.1
+(Autentisering) på side 9, og forklare at det er instanser av Bruker
+og AdministrativEnhet som skal brukes til tilgangskontroll.
