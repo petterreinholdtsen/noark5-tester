@@ -107,14 +107,14 @@ også for de som ikke skal ha tilgang til API-tjenesten å se at den
 eksisterer.
 
 Spesifikasjonen for openid-configuration er tilgjengelig fra
-`https://openid.net/specs/openid-connect-discovery-1_0.html`_ og en
-beskrivelse av brukes finnes på
-`https://auth0.com/docs/protocols/oidc/openid-connect-discovery`_.  Et
+`https://openid.net/specs/openid-connect-discovery-1_0.html` og en
+beskrivelse av bruken finnes på
+`https://auth0.com/docs/protocols/oidc/openid-connect-discovery`.  Et
 par eksempler finnes på
-`https://id.signicat.com/oidc/.well-known/openid-configuration`_
-`https://oidc.difi.no/idporten-oidc-provider/.well-known/openid-configuration`_.
+`https://id.signicat.com/oidc/.well-known/openid-configuration`
+`https://oidc.difi.no/idporten-oidc-provider/.well-known/openid-configuration`.
 
-Se også `http://rel.kxml.no/noark5/autentisering-med-openid-connect/`_.
+Se også `http://rel.kxml.no/noark5/autentisering-med-openid-connect/`.
 
 Under overskriften Autentisering står også at «Noark5 kjerne må ha
 metoder for å autentisere brukere og gi de riktige tilganger til
@@ -126,7 +126,7 @@ pr. entitet eller attributt?  Det virker ut fra
 Tilgangskategori-kodelisten i figur 32 på side 253 at tilgang skal
 kunne gis pr. arkivdel, klasse, mappe, registrering og
 dokumentbeskrivelse, men har ikke funnet noe klart krav i
-spesifikasjonen på hva som kreves.  Er det meningen av pakken Admin
+spesifikasjonen på hva som kreves.  Er det meningen at pakken Admin
 beskrevet i del 7.2.4 skal danne grunnlaget for slik tilgangskontroll?
 
 Bør spesifikasjonen kreve at en må kunne gi tilganger ved hjelp av
