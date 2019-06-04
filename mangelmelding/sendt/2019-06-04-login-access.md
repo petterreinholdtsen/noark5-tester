@@ -10,7 +10,7 @@ Klargjør entydige krav til innlogging og tilgangskontroll
         Dokumentdel  4.1 (Autentisering)
          Sidenummer  9
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-06-04
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -87,7 +87,7 @@ innloggingsmetoder.
 I Nikita gjøres dette ved å legge inn en egen relasjon i _links på
 toppnivå:
 
-```
+```Python
 {
   "_links": [
     {
@@ -107,14 +107,14 @@ også for de som ikke skal ha tilgang til API-tjenesten å se at den
 eksisterer.
 
 Spesifikasjonen for openid-configuration er tilgjengelig fra
-`https://openid.net/specs/openid-connect-discovery-1_0.html` og en
+https://openid.net/specs/openid-connect-discovery-1_0.html og en
 beskrivelse av bruken finnes på
-`https://auth0.com/docs/protocols/oidc/openid-connect-discovery`.  Et
+https://auth0.com/docs/protocols/oidc/openid-connect-discovery.  Et
 par eksempler finnes på
-`https://id.signicat.com/oidc/.well-known/openid-configuration`
-`https://oidc.difi.no/idporten-oidc-provider/.well-known/openid-configuration`.
+https://id.signicat.com/oidc/.well-known/openid-configuration
+https://oidc.difi.no/idporten-oidc-provider/.well-known/openid-configuration.
 
-Se også `http://rel.kxml.no/noark5/autentisering-med-openid-connect/`.
+Se også http://rel.kxml.no/noark5/autentisering-med-openid-connect/.
 
 Under overskriften Autentisering står også at «Noark5 kjerne må ha
 metoder for å autentisere brukere og gi de riktige tilganger til
@@ -162,3 +162,11 @@ Forslag til relasjoner:
 Legg inn referanse til del 7.2.4 (Admin) på side 253 under punkt 4.1
 (Autentisering) på side 9, og forklare at det er instanser av Bruker
 og AdministrativEnhet som skal brukes til tilgangskontroll.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/203 .
