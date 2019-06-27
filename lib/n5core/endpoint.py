@@ -106,13 +106,13 @@ Recursively look for relation in API.
                     if type(baseref) is list:
                         pass # Ignore lists
                     elif '_links' in baseref:
-                        for l in baseref['_links']:
-                            if 'href' in l:
-                                href = l['href']
+                        for rel in baseref['_links'].keys():
+                            if 'href' in baseref['_links'][ref]:
+                                href = baseref['_links']['href']
                                 if href not in urlseen:
                                     urlsleft.append(href)
-                                if 'rel' in l and l['rel'] != 'self' and \
-                                   l['rel'] == relation:
+                                if rel != 'self' and \
+                                   rel == relation:
                                    return href
                     else:
                         pass # ignore URLs without _links
