@@ -508,14 +508,6 @@ Test basis requirements for NOARK 5 Core.
 
         self.verifyAuthentication()
 
-        # Verify ability to produce XML output
-        try:
-            (content, res) = self.xml_get(".")
-            self.verifyXML('level 0 XML', res, content)
-        except urllib2.HTTPError, e:
-            self.failure("level 0 XML - unable to GET content for base.")
-            print("FAIL: %s" % e.read())
-
         # Verify ability to produce JSON output
         try:
             (content, res) = self.json_get(".")
@@ -640,6 +632,50 @@ Test basis requirements for NOARK 5 Core.
                 # failure.
                 self.xfailure("unable to DELETE %s" % entityurl)
 
+
+    def testAllAttributes(self):
+        someuser = "Bill Watterson"
+        timestamp = "1958-07-05T12:00:00"
+        someid = "BillWattersonId"
+        testdata = {
+            "arkiv" : {
+                "selfrel" : None,
+                "rel" : noarkrelbase + 'arkivstruktur/ny-arkiv/',
+                "required" : {
+                    "tittel"               : "arkiv-tittel",
+                },
+                "readonly" : {
+                    "systemID"             : None,
+                    "oppdatertDato"        : timestamp,
+                    "oppdatertAv"          : someuser,
+                    "opprettetDato"        : timestamp,
+                    "opprettetAv"          : someuser,
+                },
+                "optional" : {
+                    "beskrivelse"          : "arkiv",
+                    #"oppbevaringssted"     : [ "location" ],
+                    "arkivstatus"          : "arkivstatus",
+                    "dokumentmedium"       : "Elektronisk arkiv",
+                    "avsluttetDato"        : timestamp,
+                    "avsluttetAv"          : someuser,
+                    #"referanseOppdatertAv" : someid,
+                    #"referanseOpprettetAv" : someid,
+                    #"referanseAvsluttetAv" : someid,
+                }
+            }
+        }
+        for type in testdata.keys():
+            rel = testdata[type]["rel"]
+            fondinfo = self.createEntity(type, rel, self.rels, data)
+            linkrefs = self.parselinks(fondinfo['_links'])
+            if 'self' in linkrefs:
+                selfurl = self.parselinks(fondinfo['_links'])['self']
+                self.delete(selfurl)
+                
+            if fondinfo is None:
+                return
+            return fondinfo
+
     def modifyAllCreated(self):
         for url in self.created:
             try:
@@ -692,9 +728,12 @@ Also, should 'date' fields accept values with time of day in them,
 or should it be rejected?
 
 """
-        createfondsrel = noarkrelbase + 'arkivstruktur/ny-arkiv/'
+        rel = noarkrelbase + 'arkivstruktur/ny-registrering/'
+        name = 'record'
+        field = "arkivertDato"
 
         # FIXME Need to pick a object with 'date' and try to create it with variations
+        # Perhaps journalpost with mottattDato?
         datemust = []
         datecould = []
         datetimemust = [
@@ -717,17 +756,16 @@ or should it be rejected?
         for timevalues, level in [(datetimemust, self.failure), (datetimecould, self.xfailure)]:
             for timevalue in timevalues:
                 try:
-                    fondsdata = {
-                        "avsluttetDato"        : timevalue,
+                    data = {
+                        field : timevalue,
                     }
-                    fondinfo = self.createEntity('fonds', createfondsrel,
-                                             self.rels, fondsdata)
-                    if fondinfo:
-                        self.success("able to create arkiv with opprettetDato='%s'" % timevalue)
+                    info = self.createEntity(name, rel, self.rels, data, failureexpected=True)
+                    if info:
+                        self.success("able to create record with %s='%s'" % (field, timevalue))
                     else:
-                        level("unable to create arkiv with opprettetDato='%s'" % timevalue)
+                        level("unable to create record with %s='%s'" % (field, timevalue))
                 except urllib2.HTTPError as e:
-                    level("unable to create arkiv with opprettetDato='%s'" % timevalue)
+                    level("unable to create record with %s='%s'" % (field, timevalue))
 
     def testNewDocument(self):
         now = datetime.datetime.now().isoformat()
@@ -942,6 +980,7 @@ or should it be rejected?
             # formats should be supported.
             #self.testDateFormats()
 
+            #self.testAllAttributes()
             self.testNewDocument()
             self.recursiveHateoas()
             self.testNewDocument()
