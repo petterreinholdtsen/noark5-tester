@@ -420,7 +420,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                     if '_links' in element and len(element['_links']) > 0:
                                         self.verifyuniquerels(element['_links'], url)
                                         for ref in element['_links'].keys():
-                                            href = element['_links']['href']
+                                            href = element['_links'][ref]['href']
                                             if href not in urlseen:
                                                 #self.failure("Found new link %s" % href)
                                                 urlsleft.append(href)
