@@ -32,8 +32,8 @@ class Endpoint:
         self.baseurl = baseurl
         self._browser = mechanize.Browser()
         self.verbose = False
-        self.relbaseurl = 'https://rel.arkivverket.no/noark5/v4/api/'
-        self.nikitarelbaseurl = "https://nikita.arkivlab.no/noark5/v4/"
+        self.relbaseurl = 'https://rel.arkivverket.no/noark5/v5/api/'
+        self.nikitarelbaseurl = "https://nikita.arkivlab.no/noark5/v5/"
 
     def expandurl(self, path):
 #        print(self.baseurl, path)
@@ -100,15 +100,16 @@ Recursively look for relation in API.
             try:
                 (content, res) = self.json_get(url)
                 ctype = res.info().getheader('Content-Type')
-                if 0 == ctype.find('application/vnd.noark5-v4+json'):
+                if 0 == ctype.find('application/vnd.noark5+json'):
+                    print(content)
                     baseref = json.loads(content)
                     #print "J:", baseref
                     if type(baseref) is list:
                         pass # Ignore lists
                     elif '_links' in baseref:
                         for rel in baseref['_links'].keys():
-                            if 'href' in baseref['_links'][ref]:
-                                href = baseref['_links']['href']
+                            if 'href' in baseref['_links'][rel]:
+                                href = baseref['_links'][rel]['href']
                                 if href not in urlseen:
                                     urlsleft.append(href)
                                 if rel != 'self' and \
@@ -125,7 +126,7 @@ Recursively look for relation in API.
         if length is None:
             length = len(data)
         headers = {
-            'Accept' : 'application/vnd.noark5-v4+json',
+            'Accept' : 'application/vnd.noark5+json',
             'Content-Type': mimetype,
             'Content-Length' : length,
         }
@@ -142,14 +143,14 @@ Recursively look for relation in API.
 
     def json_post(self, path, data):
         jsondata = json.dumps(data)
-        return self.post(path, jsondata, 'application/vnd.noark5-v4+json')
+        return self.post(path, jsondata, 'application/vnd.noark5+json')
 
     def put(self, path, data, mimetype, length=None, etag=None):
         url = self.expandurl(path)
         if length is None:
             length = len(data)
         headers = {
-            'Accept' : 'application/vnd.noark5-v4+json',
+            'Accept' : 'application/vnd.noark5+json',
             'Content-Type': mimetype,
             'Content-Length' : length,
         }
@@ -187,14 +188,8 @@ Recursively look for relation in API.
     def json_get(self, path):
         headers = {
             'X_REQUESTED_WITH' :'XMLHttpRequest',
-            'Accept' : 'application/json, application/vnd.noark5-v4+json, text/javascript, */*; q=0.01',
+            'Accept' : 'application/json, application/vnd.noark5+json, text/javascript, */*; q=0.01',
             }
-        return self._get(path, headers)
-
-    def xml_get(self, path):
-        headers = {
-            'Accept' : 'application/vnd.noark5-v4+xml',
-        }
         return self._get(path, headers)
 
     def options(self, path):
