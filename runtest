@@ -41,8 +41,8 @@ import urlparse
 import xml.etree.ElementTree
 import n5core.endpoint
 
-noarkrelbase = 'https://rel.arkivverket.no/noark5/v4/api/'
-nikitarelbase = 'http://nikita.arkivlab.no/noark5/v4/'
+noarkrelbase = 'https://rel.arkivverket.no/noark5/v5/api/'
+nikitarelbase = 'http://nikita.arkivlab.no/noark5/v5/'
 
 class Noark5Tester (n5core.endpoint.Endpoint):
     knownrels = [
@@ -275,7 +275,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
     ]
     verbose = False
     def __init__(self):
-        baseurl = 'http://localhost:8092/noark5v4/'
+        baseurl = 'http://localhost:8092/noark5v5/'
         refurl = 'http://n5test.kxml.no/api/'
         parser = argparse.ArgumentParser()
         parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
@@ -361,8 +361,8 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                 self.success("GET %s worked with code %d"  % (url, res.code))
                 self.verify(allow is not None, "GET header should include Allow for %s" % url)
                 ctype = res.info().getheader('Content-Type')
-                if self.verify(ctype and 0 == ctype.find('application/vnd.noark5-v4+json'),
-                               "MIME type %s should be application/vnd.noark5-v4+json for url %s" % (ctype, url)):
+                if self.verify(ctype and 0 == ctype.find('application/vnd.noark5+json'),
+                               "MIME type %s should be application/vnd.noark5+json for url %s" % (ctype, url)):
                     #print "C:", content
                     try:
                         baseref = json.loads(content)
@@ -474,7 +474,7 @@ code 401 before logging in.
         #print content
         #print xmlreq
         contenttype = xmlreq.info().getheader('Content-Type')
-        if 0 != contenttype.find('application/vnd.noark5-v4+xml'):
+        if 0 != contenttype.find('application/vnd.noark5+xml'):
             self.failure('level 0 XML - incorrect Content-Type for base: %s' % contenttype)
         else:
             self.success(prefix + ' - correct Content-Type for base')
@@ -521,7 +521,7 @@ Test basis requirements for NOARK 5 Core.
             (content, res) = self.json_get(".")
             self.success("level 0 JSON - found base")
             contenttype = res.info().getheader('Content-Type')
-            if 0 != contenttype.find('application/vnd.noark5-v4+json'):
+            if 0 != contenttype.find('application/vnd.noark5+json'):
                 self.failure('level 0 JSON - incorrect content-type for base: %s' % contenttype)
             else:
                 self.success('level 0 JSON - correct content-type for base')
@@ -672,7 +672,7 @@ Test basis requirements for NOARK 5 Core.
                     print info
                 infostr = json.dumps(info)
                 putinfo = self.put(url, infostr,
-                                   'application/vnd.noark5-v4+json',
+                                   'application/vnd.noark5+json',
                                    etag=etag)
                 print putinfo
                 self.success("able to modify %s" % url)
