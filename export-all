@@ -14,6 +14,46 @@ import pytz
 import urllib2
 import n5core.endpoint
 
+class XMLTag(object):
+    def __init__(self, level, fh, tagname, attr=None):
+        self.fh = fh
+        self.tagname = tagname
+        self.attr = attr
+        self.level = level
+
+
+    def __enter__(self):
+        if self.attr:
+            self.fh.write("%s<%s %s>\n" % ("  " * self.level[0], self.tagname, self.attr))
+        else:
+            self.fh.write("%s<%s>\n" % ("  " * self.level[0], self.tagname))
+        self.level[0] +=1
+
+
+    def __exit__(self, tpe, value, traceback):
+        self.level[0] -=1
+        self.fh.write("%s</%s>\n" % ("  " * self.level[0], self.tagname))
+
+
+class XMLFile(object):
+    def __init__(self, fh):
+        self.level = [0]
+        self.fh = fh
+        fh.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+
+
+    def tag(self, name, attr=None):
+        return XMLTag(self.level, self.fh, name, attr=attr)
+
+
+    def write(self, s):
+        return self.fh.write(s)
+
+
+    def writetag(self, tagname, s):
+        self.fh.write("%s<%s>%s</%s>\n" % ("  " * self.level[0], tagname, s, tagname))
+
+
 class ContentDumper(n5core.endpoint.Endpoint):
     def __init__(self):
         self.baseurl = 'http://localhost:8092/noark5v4/'
@@ -42,218 +82,231 @@ class ContentDumper(n5core.endpoint.Endpoint):
             os.mkdir(path)
 
 
+
     def recurse_xml_konvertering(self, output, content):
-        output.write("<konvertering>\n")
-        # FIXME
-        output.write("</konvertering>\n")
+        with output.tag('konvertering'):
+            # FIXME
+            pass
 
 
     def recurse_xml_dokumentobjekt(self, output, content):
-        output.write("<dokumentobjekt>\n")
-        if self.verbose:
-            print(content)
-        for k, v in content.items():
-            if '_links' != k:
-                output.write("<%s>%s</%s>\n" % (k, v, k))
-        konvrel = '%sarkivstruktur/konvertering/' % self.relbaseurl
-        filrel = '%sarkivstruktur/fil/' % self.relbaseurl
-        subs = {
+        with output.tag('dokumentobjekt'):
+            if self.verbose:
+                print(content)
+            for k, v in content.items():
+                if '_links' != k:
+                    output.writetag(k, v)
+            konvrel = '%sarkivstruktur/konvertering/' % self.relbaseurl
+            filrel = '%sarkivstruktur/fil/' % self.relbaseurl
+            subs = {
 # FIXME ikke implementert i Nikita
-#            konvrel: self.recurse_xml_konvertering,
-        }
-        for rel in subs.keys():
-            if rel in content['_links']:
-                (c, res) = self.json_get(content['_links'][rel]['href'])
-                info = json.loads(c)
-#                print(info)
-                if 'count' not in info or 0 < info['count']:
-                    for sub in info['results']:
-                        subs[rel](output, sub)
-        if filrel in content['_links']:
-            self._mkdir_recursive("%s/DOKUMENT" % self.savepath)
-            filename = "%s-%s" % (content['sjekksumAlgoritme'], content['sjekksum'])
-            with open('%s/DOKUMENT/%s' % (self.savepath, filename), 'w') as fh:
-                (data, r) = self._get(content['_links'][filrel]['href'])
-                fh.write(data)
-            output.write("<referanseFil>DOKUMENT/%s</referanseFil>\n" % filename)
-        output.write("</dokumentobjekt>\n")
+#                konvrel: self.recurse_xml_konvertering,
+            }
+            for rel in subs.keys():
+                if rel in content['_links']:
+                    (c, res) = self.json_get(content['_links'][rel]['href'])
+                    info = json.loads(c)
+                    if self.verbose:
+                        print(info)
+                    if 'count' not in info or 0 < info['count']:
+                        for sub in info['results']:
+                            subs[rel](output, sub)
+            if filrel in content['_links']:
+                self._mkdir_recursive("%s/DOKUMENT" % self.savepath)
+                filename = "%s-%s" % (content['sjekksumAlgoritme'], content['sjekksum'])
+                with open('%s/DOKUMENT/%s' % (self.savepath, filename), 'w') as fh:
+                    (data, r) = self._get(content['_links'][filrel]['href'])
+                    fh.write(data)
+                output.writetag("referanseFil", "DOKUMENT/%s" % filename)
 
 
     def recurse_xml_dokumentbeskrivelse(self, output, content):
-        output.write("<dokumentbeskrivelse>\n")
-        if self.verbose:
-            print(content)
-        for k, v in content.items():
-            if '_links' != k:
-                output.write("<%s>%s</%s>\n" % (k, v, k))
-        dokobjrel = '%sarkivstruktur/dokumentobjekt/' % self.relbaseurl
-        subs = {
-            dokobjrel: self.recurse_xml_dokumentobjekt,
-        }
-        for rel in subs.keys():
-            if rel in content['_links']:
-                (c, res) = self.json_get(content['_links'][rel]['href'])
-                info = json.loads(c)
-#                print(info)
-                if 'count' not in info or 0 < info['count']:
-                    for sub in info['results']:
-                        subs[rel](output, sub)
-        output.write("</dokumentbeskrivelse>\n")
+        with output.tag('dokumentbeskrivelse'):
+            if self.verbose:
+                print(content)
+            for k, v in content.items():
+                if '_links' != k:
+                    output.writetag(k, v)
+            dokobjrel = '%sarkivstruktur/dokumentobjekt/' % self.relbaseurl
+            subs = {
+                dokobjrel: self.recurse_xml_dokumentobjekt,
+            }
+            for rel in subs.keys():
+                if rel in content['_links']:
+                    (c, res) = self.json_get(content['_links'][rel]['href'])
+                    info = json.loads(c)
+    #                print(info)
+                    if 'count' not in info or 0 < info['count']:
+                        for sub in info['results']:
+                            subs[rel](output, sub)
+
+
+    def recurse_xml_korrespondansepart(self, output, content):
+        with output.tag('korrespondansepart'):
+            pass
+
+
+    def recurse_xml_part(self, output, content):
+        with output.tag('part'):
+            pass
 
 
     def recurse_xml_registrering(self, output, content):
-        output.write("<registrering>\n")
-        if self.verbose:
-            print(content)
-        for k, v in content.items():
-            if '_links' != k:
-                output.write("<%s>%s</%s>\n" % (k, v, k))
-        dokbeskrrel = '%sarkivstruktur/dokumentbeskrivelse/' % self.relbaseurl
-        subs = {
-            dokbeskrrel: self.recurse_xml_dokumentbeskrivelse,
-        }
-        for rel in subs.keys():
-            if rel in content['_links']:
-                (c, res) = self.json_get(content['_links'][rel]['href'])
-                info = json.loads(c)
-#                print(info)
-                if 'count' not in info or 0 < info['count']:
-                    for sub in info['results']:
-                        subs[rel](output, sub)
-        output.write("</registrering>\n")
+        with output.tag('registrering'):
+            if self.verbose:
+                print(content)
+            for k, v in content.items():
+                if '_links' != k:
+                    output.writetag(k, v)
+            dokbeskrrel = '%sarkivstruktur/dokumentbeskrivelse/' % self.relbaseurl
+            partrel = '%sarkivstruktur/part/' % self.relbaseurl
+            korrpartrel = '%ssakarkiv/korrespondansepart/' % self.relbaseurl
+            subs = {
+                dokbeskrrel: self.recurse_xml_dokumentbeskrivelse,
+# FIXME not working in Nikita
+#                partrel:     self.recurse_xml_part,
+                korrpartrel: self.recurse_xml_korrespondansepart,
+            }
+            for rel in subs.keys():
+                if rel in content['_links']:
+                    (c, res) = self.json_get(content['_links'][rel]['href'])
+                    info = json.loads(c)
+                    if self.verbose:
+                        print(info)
+                    if 'count' not in info or 0 < info['count']:
+                        for sub in info['results']:
+                            subs[rel](output, sub)
 
 
     def recurse_xml_mappe(self, output, content):
-        output.write("<mappe>\n")
-        if self.verbose:
-            print(content)
-        for k, v in content.items():
-            if '_links' != k:
-                output.write("<%s>%s</%s>\n" % (k, v, k))
-        undermapperel = '%sarkivstruktur/undermappe/' % self.relbaseurl
-        registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
-        subs = {
-            undermapperel:            self.recurse_xml_mappe,
-            registreringrel:          self.recurse_xml_registrering,
-        }
-        for rel in subs.keys():
-            if rel in content['_links']:
-                (c, res) = self.json_get(content['_links'][rel]['href'])
-                info = json.loads(c)
-#                print(info)
-                if 'count' not in info or 0 < info['count']:
-                    for sub in info['results']:
-                        subs[rel](output, sub)
-        output.write("</mappe>\n")
+        with output.tag('mappe'):
+            if self.verbose:
+                print(content)
+            for k, v in content.items():
+                if '_links' != k:
+                    output.writetag(k, v)
+            undermapperel = '%sarkivstruktur/undermappe/' % self.relbaseurl
+            registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
+            partrel = '%sarkivstruktur/part/' % self.relbaseurl
+            subs = {
+                undermapperel:            self.recurse_xml_mappe,
+                registreringrel:          self.recurse_xml_registrering,
+# FIXME not working in Nikita
+#                partrel:                  self.recurse_xml_part,
+            }
+            for rel in subs.keys():
+                if rel in content['_links']:
+                    (c, res) = self.json_get(content['_links'][rel]['href'])
+                    info = json.loads(c)
+                    if self.verbose:
+                        print(info)
+                    if 'count' not in info or 0 < info['count']:
+                        for sub in info['results']:
+                            subs[rel](output, sub)
 
 
     def recurse_xml_klasse(self, output, content):
-        output.write("<klasse>\n")
-        for k, v in content.items():
-            if '_links' != k:
-                output.write("<%s>%s</%s>\n" % (k, v, k))
-        underklasserel = '%sarkivstruktur/underklasse/' % self.relbaseurl
-        mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
-        registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
-        subs = {
-            underklasserel:  self.recurse_xml_klase,
-            mapperel:        self.recurse_xml_mappe,
-            registreringrel: self.recurse_xml_registrering,
-        }
-        for rel in subs.keys():
-            if rel in content['_links']:
-                (c, res) = self.json_get(content['_links'][rel]['href'])
-                info = json.loads(c)
-#                print(info)
-                if 'count' not in info or 0 < info['count']:
-                    for sub in info['results']:
-                        subs[rel](output, sub)
-        outptu.write("</klasse>\n")
+        with output.tag('klasse'):
+            for k, v in content.items():
+                if '_links' != k:
+                    output.writetag(k, v)
+            underklasserel = '%sarkivstruktur/underklasse/' % self.relbaseurl
+            mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
+            registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
+            subs = {
+                underklasserel:  self.recurse_xml_klase,
+                mapperel:        self.recurse_xml_mappe,
+                registreringrel: self.recurse_xml_registrering,
+            }
+            for rel in subs.keys():
+                if rel in content['_links']:
+                    (c, res) = self.json_get(content['_links'][rel]['href'])
+                    info = json.loads(c)
+                    if self.verbose:
+                        print(info)
+                    if 'count' not in info or 0 < info['count']:
+                        for sub in info['results']:
+                            subs[rel](output, sub)
 
 
     def recurse_xml_klassifikasjonssystem(self, output, content):
-        output.write("<klassifikasjonssystem>\n")
-        for k, v in content.items():
-            if '_links' != k:
-                output.write("<%s>%s</%s>\n" % (k, v, k))
-        klasserel = '%sarkivstruktur/klasse/' % self.relbaseurl
-        subs = {
-            klasserel: self.recurse_xml_klase,
-        }
-        for rel in subs.keys():
-            if rel in content['_links']:
-                (c, res) = self.json_get(content['_links'][rel]['href'])
-                info = json.loads(c)
-#                output.write(info)
-                if 'count' not in info or 0 < info['count']:
-                    for sub in info['results']:
-                        subs[rel](output, sub)
-        output.write("</klassifikasjonssystem>\n")
+        with output.tag('klassifikasjonssystem'):
+            for k, v in content.items():
+                if '_links' != k:
+                    output.writetag(k, v)
+            klasserel = '%sarkivstruktur/klasse/' % self.relbaseurl
+            subs = {
+                klasserel: self.recurse_xml_klase,
+            }
+            for rel in subs.keys():
+                if rel in content['_links']:
+                    (c, res) = self.json_get(content['_links'][rel]['href'])
+                    info = json.loads(c)
+                    if self.verbose:
+                        output.write(info)
+                    if 'count' not in info or 0 < info['count']:
+                        for sub in info['results']:
+                            subs[rel](output, sub)
 
 
     def recurse_xml_arkivskaper(self, output, content):
-        output.write("<arkivskaper>\n")
-        for k, v in content.items():
-            if '_links' != k:
-                output.write("<%s>%s</%s>\n" % (k, v, k))
-        output.write("</arkivskaper>\n")
+        with output.tag('arkivskaper'):
+            for k, v in content.items():
+                if '_links' != k:
+                    output.writetag(k, v)
 
 
     def recurse_xml_arkivdel(self, output, content):
-        output.write("<arkivdel>\n")
-        if self.verbose:
-            print(content)
-        for k, v in content.items():
-            if '_links' != k:
-                output.write("<%s>%s</%s>\n" % (k, v, k))
-        klassifikasjonssystemrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
-        mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
-        saksmapperel = '%sarkivstruktur/saksmappe/' % self.relbaseurl
-        registreringrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
-        subs = {
-            klassifikasjonssystemrel: self.recurse_xml_klassifikasjonssystem,
-            mapperel:                 self.recurse_xml_mappe,
-            saksmapperel:             self.recurse_xml_mappe,
-            registreringrel:          self.recurse_xml_registrering,
-        }
-        for rel in subs.keys():
-            if rel in content['_links']:
-                (c, res) = self.json_get(content['_links'][rel]['href'])
-                info = json.loads(c)
-#                output.write(info)
-                if 'count' not in info or 0 < info['count']:
-                    for sub in info['results']:
-                        subs[rel](output, sub)
-        output.write("</arkivdel>\n")
+        with output.tag('arkivdel'):
+            if self.verbose:
+                print(content)
+            for k, v in content.items():
+                if '_links' != k:
+                    output.writetag(k, v)
+            klassifikasjonssystemrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
+            mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
+            saksmapperel = '%sarkivstruktur/saksmappe/' % self.relbaseurl
+            registreringrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
+            subs = {
+                klassifikasjonssystemrel: self.recurse_xml_klassifikasjonssystem,
+                mapperel:                 self.recurse_xml_mappe,
+                saksmapperel:             self.recurse_xml_mappe,
+                registreringrel:          self.recurse_xml_registrering,
+            }
+            for rel in subs.keys():
+                if rel in content['_links']:
+                    (c, res) = self.json_get(content['_links'][rel]['href'])
+                    info = json.loads(c)
+                    if 'count' not in info or 0 < info['count']:
+                        for sub in info['results']:
+                            subs[rel](output, sub)
 
 
     def recurse_xml_arkiv(self, output, content, first=False):
+        attr = None
         if first:
-            output.write('<arkiv xmlns="http://www.arkivverket.no/standarder/noark5/arkivstruktur" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">\n')
-        else:
-            output.write('<arkiv>\n')
-
-#        print(content)
-        for k, v in content.items():
-            if '_links' != k:
-                output.write("<%s>%s</%s>\n" % (k, v, k))
-        underarkivrel = '%sarkivstruktur/underarkiv/' % self.relbaseurl
-        arkivdelrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
-        arkivskaperrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
-        subs = {
-            underarkivrel: self.recurse_xml_arkiv,
-            arkivdelrel:   self.recurse_xml_arkivdel,
-            arkivskaperrel:self.recurse_xml_arkivskaper,
-        }
-        for rel in subs.keys():
-            if rel in content['_links']:
-                (c, res) = self.json_get(content['_links'][rel]['href'])
-                info = json.loads(c)
-#                print(info)
-                if 'count' not in info or 0 < info['count']:
-                    for sub in info['results']:
-                        subs[rel](output, sub)
-        output.write("</arkiv>\n")
+            attr = 'xmlns="http://www.arkivverket.no/standarder/noark5/arkivstruktur" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
+        with output.tag('arkiv', attr=attr):
+            for k, v in content.items():
+                if '_links' != k:
+                    output.writetag(k, v)
+            underarkivrel = '%sarkivstruktur/underarkiv/' % self.relbaseurl
+            arkivdelrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
+            arkivskaperrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
+            subs = {
+                underarkivrel: self.recurse_xml_arkiv,
+                arkivdelrel:   self.recurse_xml_arkivdel,
+                arkivskaperrel:self.recurse_xml_arkivskaper,
+            }
+            for rel in subs.keys():
+                if rel in content['_links']:
+                    (c, res) = self.json_get(content['_links'][rel]['href'])
+                    info = json.loads(c)
+                    if self.verbose:
+                        print(info)
+                    if 'count' not in info or 0 < info['count']:
+                        for sub in info['results']:
+                            subs[rel](output, sub)
 
 
     def recurse_xml(self):
@@ -272,8 +325,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc)
                 self.savepath = "uttrekk-arkiv-%s-%s" % (arkiv['systemID'], utcnow.isoformat())
                 self._mkdir_recursive(self.savepath)
-                with open('%s/arkivstruktur.xml' % self.savepath, 'w') as output:
-                    output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+                with open('%s/arkivstruktur.xml' % self.savepath, 'w') as fh:
+                    output = XMLFile(fh)
                     self.recurse_xml_arkiv(output, arkiv, first=True)
 
 
