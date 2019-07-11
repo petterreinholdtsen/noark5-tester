@@ -37,7 +37,7 @@ class XMLTag(object):
 
 class XMLFile(object):
     def __init__(self, fh):
-        self.level = [0]
+        self.level = [0] # Using ref to allow XMLTag to update the value 
         self.fh = fh
         fh.write('<?xml version="1.0" encoding="UTF-8"?>\n')
 
