@@ -143,12 +143,16 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
     def recurse_xml_korrespondansepart(self, output, content):
         with output.tag('korrespondansepart'):
-            pass
+            for k, v in content.items():
+                if '_links' != k:
+                    output.writetag(k, v)
 
 
     def recurse_xml_part(self, output, content):
         with output.tag('part'):
-            pass
+            for k, v in content.items():
+                if '_links' != k:
+                    output.writetag(k, v)
 
 
     def recurse_xml_registrering(self, output, content):
