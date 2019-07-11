@@ -40,22 +40,88 @@ class ContentDumper(n5core.endpoint.Endpoint):
             os.mkdir(path)
 
 
-    def recurse_xml_registrering(self, output, content):
-        output.write("<registrering>\n")
+    def recurse_xml_konvertering(self, output, content):
+        output.write("<konvertering>\n")
+        # FIXME
+        output.write("</konvertering>\n")
+
+
+    def recurse_xml_dokumentobjekt(self, output, content):
+        output.write("<dokumentobjekt>\n")
+        if self.verbose:
+            print(content)
         for k, v in content.items():
             if '_links' != k:
                 output.write("<%s>%s</%s>\n" % (k, v, k))
-        # FIXME underentiteter
+        konvrel = '%sarkivstruktur/konvertering/' % self.relbaseurl
+        subs = {
+# FIXME ikke implementert i Nikita
+#            konvrel: self.recurse_xml_konvertering,
+        }
+        for rel in subs.keys():
+            if rel in content['_links']:
+                (c, res) = self.json_get(content['_links'][rel]['href'])
+                info = json.loads(c)
+#                print(info)
+                if 'count' not in info or 0 < info['count']:
+                    for sub in info['results']:
+                        subs[rel](output, sub)
+        output.write("</dokumentobjekt>\n")
+
+
+    def recurse_xml_dokumentbeskrivelse(self, output, content):
+        output.write("<dokumentbeskrivelse>\n")
+        if self.verbose:
+            print(content)
+        for k, v in content.items():
+            if '_links' != k:
+                output.write("<%s>%s</%s>\n" % (k, v, k))
+        dokobjrel = '%sarkivstruktur/dokumentobjekt/' % self.relbaseurl
+        subs = {
+            dokobjrel: self.recurse_xml_dokumentobjekt,
+        }
+        for rel in subs.keys():
+            if rel in content['_links']:
+                (c, res) = self.json_get(content['_links'][rel]['href'])
+                info = json.loads(c)
+#                print(info)
+                if 'count' not in info or 0 < info['count']:
+                    for sub in info['results']:
+                        subs[rel](output, sub)
+        output.write("</dokumentbeskrivelse>\n")
+
+
+    def recurse_xml_registrering(self, output, content):
+        output.write("<registrering>\n")
+        if self.verbose:
+            print(content)
+        for k, v in content.items():
+            if '_links' != k:
+                output.write("<%s>%s</%s>\n" % (k, v, k))
+        dokbeskrrel = '%sarkivstruktur/dokumentbeskrivelse/' % self.relbaseurl
+        subs = {
+            dokbeskrrel: self.recurse_xml_dokumentbeskrivelse,
+        }
+        for rel in subs.keys():
+            if rel in content['_links']:
+                (c, res) = self.json_get(content['_links'][rel]['href'])
+                info = json.loads(c)
+#                print(info)
+                if 'count' not in info or 0 < info['count']:
+                    for sub in info['results']:
+                        subs[rel](output, sub)
         output.write("</registrering>\n")
 
 
     def recurse_xml_mappe(self, output, content):
         output.write("<mappe>\n")
+        if self.verbose:
+            print(content)
         for k, v in content.items():
             if '_links' != k:
                 output.write("<%s>%s</%s>\n" % (k, v, k))
         undermapperel = '%sarkivstruktur/undermappe/' % self.relbaseurl
-        registreringrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
+        registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
         subs = {
             undermapperel:            self.recurse_xml_mappe,
             registreringrel:          self.recurse_xml_registrering,
@@ -78,7 +144,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 output.write("<%s>%s</%s>\n" % (k, v, k))
         underklasserel = '%sarkivstruktur/underklasse/' % self.relbaseurl
         mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
-        registreringrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
+        registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
         subs = {
             underklasserel:  self.recurse_xml_klase,
             mapperel:        self.recurse_xml_mappe,
@@ -126,7 +192,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
     def recurse_xml_arkivdel(self, output, content):
         output.write("<arkivdel>\n")
         if self.verbose:
-            output.write(content)
+            print(content)
         for k, v in content.items():
             if '_links' != k:
                 output.write("<%s>%s</%s>\n" % (k, v, k))
