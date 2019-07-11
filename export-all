@@ -56,6 +56,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             if '_links' != k:
                 output.write("<%s>%s</%s>\n" % (k, v, k))
         konvrel = '%sarkivstruktur/konvertering/' % self.relbaseurl
+        filrel = '%sarkivstruktur/fil/' % self.relbaseurl
         subs = {
 # FIXME ikke implementert i Nikita
 #            konvrel: self.recurse_xml_konvertering,
@@ -68,6 +69,13 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 if 'count' not in info or 0 < info['count']:
                     for sub in info['results']:
                         subs[rel](output, sub)
+        if filrel in content['_links']:
+            self._mkdir_recursive("%s/DOKUMENT" % self.savepath)
+            filename = "%s-%s" % (content['sjekksumAlgoritme'], content['sjekksum'])
+            with open('%s/DOKUMENT/%s' % (self.savepath, filename), 'w') as fh:
+                (data, r) = self._get(content['_links'][filrel]['href'])
+                fh.write(data)
+            output.write("<referanseFil>DOKUMENT/%s</referanseFil>\n" % filename)
         output.write("</dokumentobjekt>\n")
 
 
@@ -262,9 +270,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
         if 'count' not in arkivinfo or 0 < arkivinfo['count']:
             for arkiv in arkivinfo['results']:
                 utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc)
-                path = "uttrekk-arkiv-%s-%s" % (arkiv['systemID'], utcnow.isoformat())
-                self._mkdir_recursive(path)
-                with open('%s/arkivstruktur.xml' % path, 'w') as output:
+                self.savepath = "uttrekk-arkiv-%s-%s" % (arkiv['systemID'], utcnow.isoformat())
+                self._mkdir_recursive(self.savepath)
+                with open('%s/arkivstruktur.xml' % self.savepath, 'w') as output:
                     output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
                     self.recurse_xml_arkiv(output, arkiv, first=True)
 
