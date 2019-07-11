@@ -7,8 +7,10 @@ import sys
 sys.path.append('lib')
 
 import argparse
+import datetime
 import json
 import os
+import pytz
 import urllib2
 import n5core.endpoint
 
@@ -259,7 +261,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
         if 'count' not in arkivinfo or 0 < arkivinfo['count']:
             for arkiv in arkivinfo['results']:
-                with open('%s-arkivstruktur.xml' % arkiv['systemID'], 'w') as output:
+                utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc)
+                path = "uttrekk-arkiv-%s-%s" % (arkiv['systemID'], utcnow.isoformat())
+                self._mkdir_recursive(path)
+                with open('%s/arkivstruktur.xml' % path, 'w') as output:
                     output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
                     self.recurse_xml_arkiv(output, arkiv, first=True)
 
