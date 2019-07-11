@@ -159,7 +159,14 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
 
     def recurse_xml_registrering(self, output, content):
-        with output.tag('registrering'):
+        entityrel = self.entity_rel(content)
+        typemap = {
+            '%ssakarkiv/journalpost/' % self.relbaseurl: "journalpost",
+        }
+        attr = None
+        if entityrel in typemap:
+            attr = 'xsi:type="%s"' % typemap[entityrel]
+        with output.tag('registrering', attr=attr):
             if self.verbose:
                 print(content)
             for k, v in content.items():
@@ -186,7 +193,14 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
 
     def recurse_xml_mappe(self, output, content):
-        with output.tag('mappe'):
+        entityrel = self.entity_rel(content)
+        typemap = {
+            '%ssakarkiv/saksmappe/' % self.relbaseurl: "saksmappe",
+        }
+        attr = None
+        if entityrel in typemap:
+            attr = 'xsi:type="%s"' % typemap[entityrel]
+        with output.tag('mappe', attr=attr):
             if self.verbose:
                 print(content)
             for k, v in content.items():

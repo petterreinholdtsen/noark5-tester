@@ -213,3 +213,15 @@ Recursively look for relation in API.
         response = opener.open(request)
         content = response.read()
         return (content, response)
+
+
+    def entity_rel(self, content):
+        """Return the relation key representing the entity in question, by
+looking for self, and then finding the non-self relation with the same
+href.
+"""
+        href = content['_links']['self']
+        for rel, v in content['_links'].items():
+            if 'self' != rel and v['href'] == href:
+                return rel
+        return None
