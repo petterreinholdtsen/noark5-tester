@@ -113,6 +113,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
                             subs[rel](output, sub)
             if filrel in content['_links']:
                 self._mkdir_recursive("%s/DOKUMENT" % self.savepath)
+                # Deriving filename from checksum provide automatic
+                # deduplication, assuming there is no hash collition
+                # in the dataset.
                 filename = "%s-%s" % (content['sjekksumAlgoritme'], content['sjekksum'])
                 with open('%s/DOKUMENT/%s' % (self.savepath, filename), 'w') as fh:
                     (data, r) = self._get(content['_links'][filrel]['href'])
