@@ -332,14 +332,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                 return True
         return False
 
-    def verifyuniquerels(self, links, url):
-        currels = {}
-        for rel in links.keys():
-            if rel in currels:
-                self.failure("duplicate rel %s in _links for %s" % (rel, url))
-            else:
-                currels[rel] = url
-
     def recursiveHateoas(self):
         if self.verbose:
             print "recursively discovering standard URLs from the top"
@@ -375,7 +367,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                     elif type(baseref) is list:
                         self.failure("found json list in %s" % url)
                     elif '_links' in baseref:
-                        self.verifyuniquerels(baseref['_links'], url)
                         for rel in baseref['_links'].keys():
                             l = baseref['_links'][rel]
                             # Detect hrefs with double slashes
@@ -418,7 +409,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                 for element in baseref[basekey]:
                                     #print(element)
                                     if '_links' in element and len(element['_links']) > 0:
-                                        self.verifyuniquerels(element['_links'], url)
                                         for ref in element['_links'].keys():
                                             href = element['_links'][ref]['href']
                                             if href not in urlseen:
@@ -555,7 +545,6 @@ Test basis requirements for NOARK 5 Core.
         id = info['systemID']
         verify(id is not None, "created %s" % name)
         verify(201 == res.code, "%s creation returned HTTP code 201" % name)
-        self.verifyuniquerels(info['_links'], url)
         linkrefs = self.parselinks(info['_links'])
         verify('self' in linkrefs, "_links in response from %s creation should include 'self' reference" % name)
         if 'self' in linkrefs:
