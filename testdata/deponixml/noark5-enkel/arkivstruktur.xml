@@ -24,8 +24,8 @@
   <opprettetAv>Arkivdels Oppretter</opprettetAv>
   <avsluttetDato>2018-12-31T12:00:00Z</avsluttetDato>
   <avsluttetAv>Arkivdels Avslutter</avsluttetAv>
-  <arkivperiodeStartDato>2018-01-01</arkivperiodeStartDato>
-  <arkivperiodeSluttDato>2018-12-31</arkivperiodeSluttDato>
+  <arkivperiodeStartDato>2018-01-01Z</arkivperiodeStartDato>
+  <arkivperiodeSluttDato>2018-12-31Z</arkivperiodeSluttDato>
 
   <mappe xsi:type="saksmappe">
     <systemID>f017c06c-44d7-11e9-b28c-cf0ada64bffd</systemID>
@@ -53,7 +53,7 @@
       <kassasjonsvedtak>Kasseres</kassasjonsvedtak>
       <kassasjonshjemmel>enHjemmel</kassasjonshjemmel>
       <bevaringstid>45</bevaringstid>
-      <kassasjonsdato>1942-07-25</kassasjonsdato>
+      <kassasjonsdato>1942-07-25Z</kassasjonsdato>
     </kassasjon>
     <registrering xsi:type="basisregistrering">
       <systemID>41846752-44d8-11e9-be51-0fe5fe2cd1f8</systemID>
@@ -67,7 +67,7 @@
         <skjermingMetadata>Skjermet</skjermingMetadata>
         <skjermingDokument>Skjerming av hele dokumentet</skjermingDokument>
         <skjermingsvarighet>60</skjermingsvarighet>
-        <skjermingOpphoererDato>1942-07-25</skjermingOpphoererDato>
+        <skjermingOpphoererDato>1942-07-25Z</skjermingOpphoererDato>
       </skjerming>
       <gradering>
         <gradering>Strengt hemmelig (sikkerhetsgrad)</gradering>
@@ -97,7 +97,7 @@
           <skjermingMetadata>Skjermet</skjermingMetadata>
           <skjermingDokument>Skjerming av hele dokumentet</skjermingDokument>
           <skjermingsvarighet>40</skjermingsvarighet>
-          <skjermingOpphoererDato>1941-01-10</skjermingOpphoererDato>
+          <skjermingOpphoererDato>1941-01-10Z</skjermingOpphoererDato>
         </skjerming>
         <dokumentobjekt>
           <versjonsnummer>1</versjonsnummer>
@@ -133,7 +133,7 @@
         <saksbehandler>Korrespondansepart Saksbehandler</saksbehandler>
       </korrespondansepart>
       <avskrivning>
-        <avskrivningsdato>2018-12-31</avskrivningsdato>
+        <avskrivningsdato>2018-12-31Z</avskrivningsdato>
         <avskrevetAv>Avskrivning AvskrevetAv</avskrevetAv>
         <avskrivningsmaate>Besvart med e-post</avskrivningsmaate>
       </avskrivning>
@@ -141,7 +141,7 @@
     
     <saksaar>2018</saksaar>
     <sakssekvensnummer>1</sakssekvensnummer>
-    <saksdato>2018-01-01</saksdato>
+    <saksdato>2018-01-01Z</saksdato>
     <administrativEnhet>DT</administrativEnhet>
     <saksansvarlig>Mappe Saksansvarlig</saksansvarlig>
     <journalenhet>journalseksjonen</journalenhet>
