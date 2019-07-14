@@ -87,11 +87,14 @@ class ContentDumper(n5core.endpoint.Endpoint):
         with output.tag(entity, attr=attr):
             if self.verbose:
                 print(content)
+            left = content.keys()
+            left.remove('_links')
             for k in sequence:
                 keytype = type(k)
                 if str == keytype:
                     if k in content:
                         output.writetag(k, content[k])
+                        left.remove(k)
                 if tuple == keytype:
                     rel = k[0]
                     if rel in content['_links']:
@@ -100,6 +103,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         if 'count' not in info or 0 < info['count']:
                             for sub in info['results']:
                                 k[1](output, sub)
+            if 0 < len(left):
+                print("warning: %s XML attribute not exported: %s" % (entity, " ".join(left)))
 
 
     def recurse_xml_konvertering(self, output, content):
