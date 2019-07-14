@@ -78,14 +78,13 @@ def format2mime(format):
 # Copied from import-email
 def parselinks(links):
     rels = {}
-    for l in links:
-        if 'href' in l and 'rel' in l:
-            rels[l['rel']] = l['href']
+    for rel in links.keys():
+        if 'href' in links[rel]:
+            rels[rel] = links[rel]['href']
     return rels
 
 class Importer(n5core.endpoint.Endpoint):
-    relbase = 'http://rel.arkivverket.no/noark5/v4/api'
-    
+    relbase = 'https://rel.arkivverket.no/noark5/v5/api'
     def __init__(self, baseurl):
         self.nesting = 0
         self.dryrun = False
@@ -151,9 +150,8 @@ the json structure.
     """
         if info is None or '_links' not in info:
             return None
-        for l in info['_links']:
-            if l['rel'] == relation:
-                return l['href']
+        if  relation in info['_links']:
+            return info[relation]['href']
         return None
 
     def import_entity(self, name, rel, parentinfo, element, subs):
@@ -332,8 +330,8 @@ the json structure.
     #    print(etree.tostring(tree))
 
 def main():
-    relbase = 'http://rel.arkivverket.no/noark5/v4/api/arkivstruktur'
-    baseurl = "http://localhost:8092/noark5v4/"
+    relbase = 'https://rel.arkivverket.no/noark5/v5/api/arkivstruktur'
+    baseurl = "https://localhost:8092/noark5v5/"
     
     parser = argparse.ArgumentParser()
     parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
