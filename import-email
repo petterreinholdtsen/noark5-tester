@@ -108,19 +108,6 @@ class MboxImporter(n5core.endpoint.Endpoint):
         n5core.endpoint.Endpoint.__init__(self, baseurl)
         self.verbose = args.verbose
 
-    def objectOperation(self, info, relation):
-        """
-Return the URL/href for a given relation on the object represented by
-the json structure.
-
-    """
-        if info is None or '_links' not in info:
-            return None
-        for l in info['_links']:
-            if l['rel'] == relation:
-                return l['href']
-        return None
-
     def pickUnlessOne(self, info, type):
         """
 Check the array in the json structure, if there is only one
@@ -217,8 +204,13 @@ Store the info about the entity in self.seriesinfo
         if info is None:
             return None
 
-        serieshref = self.objectOperation(info,
-                                          '%sarkivstruktur/arkivdel/' % self.relbaseurl)
+        seriesrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
+        if seriesrel not in info['_links'] \
+           or 'href' not in info['_links'][seriesrel]:
+            print(info)
+            raise Exception("missing from created dokumentobjekt: %s" % seriesrel)
+        serieshref = info['_links'][seriesrel]['href']
+
         (c, res) = self.json_get(serieshref)
         seriesinfo = json.loads(c)
         #print()
@@ -336,8 +328,14 @@ are in.
         created.append(parselinks(docobjinfo['_links'])['self'])
         self.recordMapping(docdescinfo, docobjinfo, 'dokumentobjekt')
 
-        newfilehref = self.objectOperation(docobjinfo,
-                                           '%sarkivstruktur/fil/' % self.relbaseurl)
+        uploadrel = '%sarkivstruktur/fil/' % self.relbaseurl
+        if uploadrel not in docobjinfo['_links'] \
+           or 'href' not in docobjinfo['_links'][uploadrel]:
+            print(docobjinfo)
+            raise Exception("missing from created dokumentobjekt: %s" % uploadrel)
+
+        newfilehref = docobjinfo['_links'][uploadrel]['href']
+
         # Make sure all parts going into the POST are type str by
         # converting newfilehref to str.  This avoid a
         # UnicodeDecodeError when the content is not UTF-8.
@@ -397,7 +395,7 @@ are in.
             self.recordMapping(fileinfo, recordinfo, 'journalpost')
             # FIXME consider journalpost and korrespondansepart (from
             # to/from/cc)
-            corrpartrel = 'http://rel.arkivverket.no/noark5/v4/api/sakarkiv/ny-korrespondansepartenhet/'
+            corrpartrel = '%ssakarkiv/ny-korrespondansepartenhet/' % self.relbaseurl
             parts = {
                 'from' : 'EA',
                 'to'   : 'EM',
