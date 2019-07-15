@@ -40,6 +40,7 @@ tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
 excludes = { 'klasse': ('noekkelord',),
              
              'saksmappe' : (
+                 'referanseArkivdel',
                  # FIXME these need to be created before using
                  'administrativEnhet', 'saksansvarlig',
              ),
@@ -99,6 +100,7 @@ class Importer(n5core.endpoint.Endpoint):
     # Copied from import-email
     def create_entity(self, name, rel, parent, data):
         if rel not in parent['_links'] or 'href' not in parent['_links'][rel]:
+            print(parent)
             raise Exception("unable to find %s in provided relations" % rel)
         url = parent['_links'][rel]['href']
         try:
@@ -132,19 +134,6 @@ class Importer(n5core.endpoint.Endpoint):
                     elif data[f] != info[f]:
                         print("error: field %s=%s do not match object value %s" %  (f, data[f], info[f]))
         return info
-
-    # Copied from import-email
-    def object_operation(self, info, relation):
-        """
-Return the URL/href for a given relation on the object represented by
-the json structure.
-
-    """
-        if info is None or '_links' not in info:
-            return None
-        if  relation in info['_links']:
-            return info[relation]['href']
-        return None
 
     def import_entity(self, name, rel, parentinfo, element, subs):
         self.nesting += 1
@@ -249,13 +238,13 @@ the json structure.
             etype = element.get(attrtype)
             if 'journalpost' == etype:
                 name = 'journalpost'
-                rel = self.relbase + '/arkivstruktur/ny-journalpost/'
+                rel = self.relbase + '/sakarkiv/ny-journalpost/'
             elif 'moeteregistrering' == etype:
                 name = 'moeteregistrering'
                 rel = self.relbase + '/arkivstruktur/ny-moeteregistrering/'
-            elif 'basisregistrering' == etype:
-                name = 'basisregistrering'
-                rel = self.relbase + '/arkivstruktur/ny-basisregistrering/'
+            elif 'arkivnotat' == etype:
+                name = 'arkivnotat'
+                rel = self.relbase + '/sakarkiv/ny-arkivnotat/'
             else:
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
@@ -287,7 +276,10 @@ the json structure.
                     print("Uploading %s size %d mime type %s" % (filepath,
                                                                  size, mimetype))
                 uploadrel = self.relbase + '/arkivstruktur/fil/'
-                newfilehref = self.object_operation(info, uploadrel)
+                if uploadrel not in info['_links'] or 'href' not in info['_links'][uploadrel]:
+                    print(info)
+                    raise Exception("missing from created dokumentobjekt: %s" % uploadrel)
+                newfilehref = info['_links'][uploadrel]['href']
                 if not self.dryrun:
                     try:
                         (c, res) = self.post(str(newfilehref), content,
