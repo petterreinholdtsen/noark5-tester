@@ -55,12 +55,12 @@
       <bevaringstid>45</bevaringstid>
       <kassasjonsdato>1942-07-25Z</kassasjonsdato>
     </kassasjon>
-    <registrering xsi:type="basisregistrering">
+    <registrering xsi:type="arkivnotat">
       <systemID>41846752-44d8-11e9-be51-0fe5fe2cd1f8</systemID>
       <opprettetDato>1863-10-18T00:00:00Z</opprettetDato>
-      <opprettetAv>Basisregistrering OpprettetAv</opprettetAv>
+      <opprettetAv>Arkivnotat OpprettetAv</opprettetAv>
       <arkivertDato>1863-10-10T00:00:00Z</arkivertDato>
-      <arkivertAv>Basisregistrering Arkivertav</arkivertAv>
+      <arkivertAv>Arkivnotat Arkivertav</arkivertAv>
       <skjerming>
         <tilgangsrestriksjon>Personalsaker</tilgangsrestriksjon>
         <skjermingshjemmel>Unntatt etter Offentleglova</skjermingshjemmel>
@@ -89,7 +89,7 @@
         <referanseArkivdel>arkivdel57d6608566c0b9.14601960</referanseArkivdel>
         <tilknyttetRegistreringSom>Hoveddokument</tilknyttetRegistreringSom>
         <dokumentnummer>1</dokumentnummer>
-        <tilknyttetDato>1864-05-04T00:00:00Z</tilknyttetDato>
+        <tilknyttetDato>1864-05-04Z</tilknyttetDato>
         <tilknyttetAv>Dokumentbeskrivelse TilknyttetAv</tilknyttetAv>
         <skjerming>
           <tilgangsrestriksjon>skjeming dokumentbeskrivelse</tilgangsrestriksjon>
@@ -116,8 +116,6 @@
       <tittel>Eating the cake1 - Application to eat cake1</tittel>
       <offentligTittel>Eating the cake1 - Application to eat cake1</offentligTittel>
       <beskrivelse>Eating the cake1 - Application to eat cake1</beskrivelse>
-      <noekkelord>nøkkelordJrnpst1</noekkelord>
-      <forfatter>Basisregistrering Forfatter</forfatter>
       <dokumentmedium>Elektronisk arkiv</dokumentmedium>
       <korrespondansepart>
         <korrespondanseparttype>Kopimottaker</korrespondanseparttype>
