@@ -679,10 +679,7 @@ Test basis requirements for NOARK 5 Core.
         """
 Check if the API can handle all valid date and datetime formats.
 The spec state that the API should handle all formats listed in
-http://www.w3.org/TR/NOTE-datetime .  But this do not quite make
-sense, as several of the valid values according to NODE-datetime are
-not allowed by the Noark 5 standard XML metadata list, which refer
-to date and datetime types in http://www.w3.org/2001/XMLSchema.
+https://www.w3.org/TR/xmlschema11-2/, with timezone required.
 
 Also, should 'date' fields accept values with time of day in them,
 or should it be rejected?
@@ -696,21 +693,25 @@ or should it be rejected?
         # Perhaps journalpost with mottattDato?
         datemust = []
         datecould = []
+
         datetimemust = [
             '1997-07-16T19:20+01:00', # From NOTE-datetime
             '1997-07-16T19:20:30+01:00', # From NOTE-datetime
             '1997-07-16T19:20:30.45+01:00', # From NOTE-datetime
 
-            '2012-10-10T15:00:00', # From example extraction data sets
+            '2012-10-10T15:00:00Z', # From example extraction data sets
             '2014-11-22T15:15:02.956+01:00', # From example extraction data sets
         ]
 
         datetimecould = [
+            '1997-07-16Z', # From NOTE-datetime accepted by XMLSChema date not datetime
+
+            '1865-02-13T00:00:00Z', # From example extraction data sets
+        ]
+        datetimereject = [
             '1997', # From NOTE-datetime, not accepted by XMLSChema date nor datetime
             '1997-07', # From NOTE-datetime, not accepted by XMLSChema date nor datetime
             '1997-07-16', # From NOTE-datetime accepted by XMLSChema date not datetime
-
-            '1865-02-13T00:00:00Z', # From example extraction data sets
         ]
 
         for timevalues, level in [(datetimemust, self.failure), (datetimecould, self.xfailure)]:
