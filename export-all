@@ -146,8 +146,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "sjekksumAlgoritme",
             "filstoerrelse",
             "elektroniskSignatur",
-# FIXME ikke implementert i Nikita
-#            (konvrel, self.recurse_xml_konvertering),
+
+#            (konvrel, self.recurse_xml_konvertering), # FIXME for dokumentobjekt
         )
         with output.tag('dokumentobjekt'):
             if self.verbose:
@@ -194,14 +194,13 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "opprettetAv",
             "dokumentmedium",
             "oppbevaringssted",
-#            ("referanseArkivdel"), # FIXME
+#            ("referanseArkivdel"), # FIXME for dokumentbeskrivelse
             "tilknyttetRegistreringSom",
             "dokumentnummer",
             "tilknyttetDato",
             "tilknyttetAv",
-# FIXME not working in Nikita
-#            (partrel, self.recurse_xml_part),
-#            (merknadrel, self.recurse_xml_merknad),
+#            (partrel, self.recurse_xml_part), # FIXME for dokumentbeskrivelse
+#            (merknadrel, self.recurse_xml_merknad), # FIXME for dokumentbeskrivelse
             "kassasjon",
             "utfoertKassasjon",
             "sletting",
@@ -217,12 +216,12 @@ class ContentDumper(n5core.endpoint.Endpoint):
         sequence = (
             "korrespondanseparttype",
             "korrespondansepartNavn",
-#            ("postadresse"), # FIXME
+#            ("postadresse"), # FIXME for korrespondansepart
             "postnummer",
             "poststed",
             "land",
             "epostadresse",
-#            ("telefonnummer"), # FIXME
+#            ("telefonnummer"), # FIXME for korrespondansepart
             "kontaktperson",
             "administrativEnhet",
             "saksbehandler",
@@ -262,8 +261,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "arkivertAv",
             "referanseArkivdel",
 
-# FIXME not working in Nikita
-#            (partrel,     self.recurse_xml_part0,
+#            (partrel,     self.recurse_xml_part), # FIXME for registrering
 
             "kassasjon",
             "skjerming",
@@ -278,11 +276,11 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "noekkelord",
             "forfatter",
             "dokumentmedium",
-#            ("oppbevaringssted"), # FIXME
+#            ("oppbevaringssted"), # FIXME for registrering
             "virksomhetsspesifikkeMetadata",
 
-#            (merknadrel, self.recurse_xml_merknad), # FIXME
-#            ("kryssreferanse"), # FIXME
+#            (merknadrel, self.recurse_xml_merknad), # FIXME for registrering
+#            ("kryssreferanse"), # FIXME for registrering
             (korrpartrel, self.recurse_xml_korrespondansepart),
         )
 # From journalpost
@@ -304,9 +302,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 "utlaantTil",
                 "journalenhet",
 
-#                ("avskrivning"), # FIXME
-#                ("dokumentflyt"), # FIXME
-#                ("presedens"), # FIXME
+#                ("avskrivning"), # FIXME for journalpost
+#                ("dokumentflyt"), # FIXME for journalpost
+#                ("presedens"), # FIXME for journalpost
                 "elektroniskSignatur",
             )
         if 'xsi:type="arkivnotat"' == attr:
@@ -319,7 +317,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 "antallVedlegg",
                 "utlaantDato",
                 "utlaantTil",
-#                ("dokumentflyt"), # FIXME
+#                ("dokumentflyt"), # FIXME for arkivnotat
             )
         if 'xsi:type="moeteregistrering"' == attr:
             sequence = sequence + (
@@ -328,8 +326,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 "moeteregistreringsstatus",
                 "administrativEnhet",
                 "saksbehandler",
-#                ("referanseTilMoeteregistrering"), # FIXME
-#                ("referanseFraMoeteregistrering"), # FIXME
+#                ("referanseTilMoeteregistrering"), # FIXME for moeteregistrering
+#                ("referanseFraMoeteregistrering"), # FIXME for moeteregistrering
             )
         self.recurse_xml_out_ordered(output, 'registrering', content, sequence, attr=attr)
  
@@ -352,21 +350,24 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "tittel",
             "offentligTittel",
             "beskrivelse",
-#            ("noekkelord"), # FIXME
+#            ("noekkelord"), # FIXME for mappe
             "dokumentmedium",
-#            ("oppbevaringssted"), # FIXME
+#            ("oppbevaringssted"), # FIXME for mappe
             "opprettetDato",
             "opprettetAv",
             "avsluttetDato",
             "avsluttetAv",
-#            ("referanseArkivdel"), # FIXME
+# mappe.referanseArkivdel er ikke omtalt i tjenestegrensesnittet, kun
+# i arkivstruktur.xsd med 0..*.  Derimot finnes det en relasjon til
+# arkivdel med 0..1.
+#            ("referanseArkivdel"), # FIXME for mappe
             "virksomhetsspesifikkeMetadata",
 
 # FIXME not working in Nikita
 #            (partrel,                  self.recurse_xml_part),
-#            ("kryssreferanse"), # FIXME
+#            ("kryssreferanse"), # FIXME for mappe
 # FIXME not working in Nikita
-#            (merknadrel, self.recurse_xml_merknad), # FIXME
+#            (merknadrel, self.recurse_xml_merknad), # FIXME for mappe
             "kassasjon",
             "skjerming",
             "gradering",
@@ -385,8 +386,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 "saksstatus",
                 "utlaantDato",
                 "utlaantTil",
-#                ("referanseSekundaerKlassifikasjon"), # FIXME
-#                ("presedens"), # FIXME
+#                ("referanseSekundaerKlassifikasjon"), # FIXME for saksmappe
+#                ("presedens"), # FIXME for saksmappe
             )
         if 'xsi:type="moetemappe"' == attr:
             sequence = sequence + (
@@ -410,13 +411,13 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "klasseID",
             "tittel",
             "beskrivelse",
-#            ("noekkelord"), # FIXME
+#            ("noekkelord"), # FIXME for klasse
             "opprettetDato",
             "opprettetAv",
             "avsluttetDato",
             "avsluttetAv",
 
-#            ("kryssreferanse"), # FIXME
+#            ("kryssreferanse"), # FIXME for klasse
             "kassasjon",
             "skjerming",
             "gradering",
@@ -465,7 +466,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'arkivdelstatus',
             'dokumentmedium',
 # FIXME check implementation
-#            ('oppbevaringssted', self.recurse_xml_oppbevaringssted),
+#            ('oppbevaringssted', self.recurse_xml_oppbevaringssted), # FIXME for arkivdel
             'opprettetDato',
             'opprettetAv',
             'avsluttetDato',
