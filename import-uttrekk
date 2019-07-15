@@ -75,14 +75,6 @@ def format2mime(format):
     else:
         return 'application/octet-stream'
 
-# Copied from import-email
-def parselinks(links):
-    rels = {}
-    for rel in links.keys():
-        if 'href' in links[rel]:
-            rels[rel] = links[rel]['href']
-    return rels
-
 class Importer(n5core.endpoint.Endpoint):
     relbase = 'https://rel.arkivverket.no/noark5/v5/api'
     def __init__(self, baseurl):
@@ -105,10 +97,10 @@ class Importer(n5core.endpoint.Endpoint):
             print("%-25s %d" % (format, self.formats[format]))
 
     # Copied from import-email
-    def create_entity(self, name, rel, rels, data):
-        if rel not in rels:
+    def create_entity(self, name, rel, parent, data):
+        if rel not in parent['_links'] or 'href' not in parent['_links'][rel]:
             raise Exception("unable to find %s in provided relations" % rel)
-        url = rels[rel]
+        url = parent['_links'][rel]['href']
         try:
             if self.verbose:
                 print("GET %s" % url)
@@ -177,9 +169,7 @@ the json structure.
                 print()
                 print("Creating %s: %s" % (name, data))
                 print()
-            info = self.create_entity(name, rel,
-                                         parselinks(parentinfo['_links']),
-                                         data)
+            info = self.create_entity(name, rel, parentinfo, data)
         for tag in subs.keys():
             for sub in subs[tag][0]:
                 subs[tag][1](info, sub)
