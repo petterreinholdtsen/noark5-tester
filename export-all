@@ -262,7 +262,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "arkivertAv",
             "referanseArkivdel",
 
-#            (partrel,     self.recurse_xml_part), # FIXME for registrering
+            (partrel,     self.recurse_xml_part),
 
             "kassasjon",
             "skjerming",
