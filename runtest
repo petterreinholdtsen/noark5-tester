@@ -919,9 +919,8 @@ or should it be rejected?
         docobjinfo2 = json.loads(infostr)
         if (self.verify(reffilerel in self.parselinks(docobjinfo2['_links']),
                         "_links in response from %s rel should include '%s' rel" % (createdocobjrel, reffilerel))):
-            self.verify(self.parselinks(docobjinfo2['_links'])[reffilerel] == docobjinfo2['referanseDokumentfil'],
-                        "referanseDokumentfil and _links->%s should have the same value (%s != %s)" %
-                        (reffilerel, docobjinfo2['referanseDokumentfil'], self.parselinks(docobjinfo2['_links'])[reffilerel]))
+            self.verify('referanseDokumentfil' not in docobjinfo2,
+                        "referanseDokumentfil should not exist")
 
         try:
             headers = { 'Accept' : 'application/xml' }
