@@ -228,17 +228,53 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "saksbehandler",
         )
         self.recurse_xml_out_ordered(output, 'korrespondansepart', content, sequence)
-        with output.tag('korrespondansepart'):
-            for k, v in content.items():
-                if '_links' != k:
-                    output.writetag(k, v)
 
 
     def recurse_xml_part(self, output, content):
-        with output.tag('part'):
-            for k, v in content.items():
-                if '_links' != k:
-                    output.writetag(k, v)
+        sequence = (
+            "partID",
+            "partNavn",
+            "partRolle",
+            ("postadresse"), # FIXME for part
+            "postnummer",
+            "poststed",
+            "land",
+            "epostadresse",
+            ("telefonnummer"), # FIXME for part
+            "kontaktperson",
+            "virksomhetsspesifikkeMetadata",
+        )
+        self.recurse_xml_out_ordered(output, 'part', content, sequence)
+
+
+    def recurse_xml_dokumentflyt(self, output, content):
+        sequence = (
+            "flytTil",
+            "flytFra",
+            "flytMottattDato",
+            "flytSendtDato",
+            "flytStatus",
+            "flytMerknad",
+        )
+        self.recurse_xml_out_ordered(output, 'dokumentflyt', content, sequence)
+
+
+    def recurse_xml_avskrivning(self, output, content):
+        sequence = (
+            "avskrivningsdato",
+            "avskrevetAv",
+            "avskrivningsmaate",
+            "referanseAvskrivesAvJournalpost",
+        )
+        self.recurse_xml_out_ordered(output, 'avskrivning', content, sequence)
+
+
+    def recurse_xml_oppbevaringssted(self, output, content):
+        print("error: 'oppbevaringssted' not yet implemented")
+
+
+    def recurse_xml_kryssreferanse(self, output, content):
+        print("error: 'kryssreferanse' not yet implemented")
 
 
     def recurse_xml_registrering(self, output, content):
@@ -254,6 +290,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
         dokbeskrrel = '%sarkivstruktur/dokumentbeskrivelse/' % self.relbaseurl
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
         korrpartrel = '%ssakarkiv/korrespondansepart/' % self.relbaseurl
+        dokflytrel = '%ssakarkiv/dokumentflyt/' % self.relbaseurl
+        avskrel = '%ssakarkiv/avskrivning/' % self.relbaseurl
+        oppbevrel = '%sny-oppbevaringssted/' % self.nikitarelbaseurl
+        kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         sequence = (
             "systemID",
             "opprettetDato",
@@ -277,14 +317,13 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "noekkelord",
             "forfatter",
             "dokumentmedium",
-#            ("oppbevaringssted"), # FIXME for registrering
+#            (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for registrering
             "virksomhetsspesifikkeMetadata",
 
 #            (merknadrel, self.recurse_xml_merknad), # FIXME for registrering
-#            ("kryssreferanse"), # FIXME for registrering
+            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for registrering
             (korrpartrel, self.recurse_xml_korrespondansepart),
         )
-# From journalpost
         if 'xsi:type="journalpost"' == attr:
             sequence = sequence + (
                 "journalaar",
@@ -303,8 +342,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 "utlaantTil",
                 "journalenhet",
 
-#                ("avskrivning"), # FIXME for journalpost
-#                ("dokumentflyt"), # FIXME for journalpost
+                (avskrel, self.recurse_xml_avskrivning), # FIXME for journalpost
+                (dokflytrel, self.recurse_xml_dokumentflyt), # FIXME for journalpost
 #                ("presedens"), # FIXME for journalpost
                 "elektroniskSignatur",
             )
@@ -318,7 +357,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 "antallVedlegg",
                 "utlaantDato",
                 "utlaantTil",
-#                ("dokumentflyt"), # FIXME for arkivnotat
+                (dokflytrel, self.recurse_xml_dokumentflyt), # FIXME for arkivnotat
             )
         if 'xsi:type="moeteregistrering"' == attr:
             sequence = sequence + (
@@ -345,6 +384,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
         undermapperel = '%sarkivstruktur/undermappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
+        oppbevrel = '%sny-oppbevaringssted/' % self.nikitarelbaseurl
+        kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         sequence = (
             "systemID",
             "mappeID",
@@ -353,7 +394,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "beskrivelse",
 #            ("noekkelord"), # FIXME for mappe
             "dokumentmedium",
-#            ("oppbevaringssted"), # FIXME for mappe
+            (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for mappe
             "opprettetDato",
             "opprettetAv",
             "avsluttetDato",
@@ -366,7 +407,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
 # FIXME not working in Nikita
 #            (partrel,                  self.recurse_xml_part),
-#            ("kryssreferanse"), # FIXME for mappe
+#            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for mappe
 # FIXME not working in Nikita
 #            (merknadrel, self.recurse_xml_merknad), # FIXME for mappe
             "kassasjon",
@@ -460,14 +501,14 @@ class ContentDumper(n5core.endpoint.Endpoint):
         mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
         saksmapperel = '%sarkivstruktur/saksmappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
+        oppbevrel = '%sny-oppbevaringssted/' % self.nikitarelbaseurl
         sequence = (
             'systemID',
             'tittel',
             'beskrivelse',
             'arkivdelstatus',
             'dokumentmedium',
-# FIXME check implementation
-#            ('oppbevaringssted', self.recurse_xml_oppbevaringssted), # FIXME for arkivdel
+#            (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for arkivdel
             'opprettetDato',
             'opprettetAv',
             'avsluttetDato',
@@ -493,6 +534,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         underarkivrel = '%sarkivstruktur/underarkiv/' % self.relbaseurl
         arkivdelrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
         arkivskaperrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
+        oppbevrel = '%sny-oppbevaringssted/' % self.nikitarelbaseurl
         
         # From n5v5 arkivstruktur.xsd:
         sequence = (
@@ -501,7 +543,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'beskrivelse',
             'arkivstatus',
             'dokumentmedium',
-            'oppbevaringssted',
+            (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for arkiv
             'opprettetDato',
             'opprettetAv',
             'avsluttetDato',
