@@ -77,7 +77,6 @@ def format2mime(format):
         return 'application/octet-stream'
 
 class Importer(n5core.endpoint.Endpoint):
-    relbase = 'https://rel.arkivverket.no/noark5/v5/api'
     def __init__(self, baseurl):
         self.nesting = 0
         self.dryrun = False
@@ -174,7 +173,7 @@ class Importer(n5core.endpoint.Endpoint):
             substr = "under"
         else:
             substr = ""
-        rel = self.relbase + '/arkivstruktur/ny-%sarkiv/' % substr
+        rel = self.relbaseurl + 'arkivstruktur/ny-%sarkiv/' % substr
         self.import_entity('arkiv', rel, parentinfo, element, subs)
 
     def import_arkivdel(self, parentinfo, element):
@@ -183,14 +182,14 @@ class Importer(n5core.endpoint.Endpoint):
             tagklassifikasjonssystem: ([], self.import_klassifikasjonssystem),
             tagregistrering: ([], self.import_registrering),
         }
-        rel = self.relbase + '/arkivstruktur/ny-arkivdel/'
+        rel = self.relbaseurl + 'arkivstruktur/ny-arkivdel/'
         self.import_entity('arkivdel', rel, parentinfo, element, subs)
 
     def import_klassifikasjonssystem(self, parentinfo, element):
         subs = {
             tagklasse: ([], self.import_klasse),
         }
-        rel = self.relbase + '/arkivstruktur/ny-klassifikasjonssystem/'
+        rel = self.relbaseurl + 'arkivstruktur/ny-klassifikasjonssystem/'
         self.import_entity('klassifikasjonssystem', rel, parentinfo, element, subs)
 
     def import_klasse(self, parentinfo, element, sub=False):
@@ -202,7 +201,7 @@ class Importer(n5core.endpoint.Endpoint):
             substr = "under"
         else:
             substr = ""
-        rel = self.relbase + '/arkivstruktur/ny-%sklasse/' % substr
+        rel = self.relbaseurl + 'arkivstruktur/ny-%sklasse/' % substr
 
         self.import_entity('klasse', rel, parentinfo, element, subs)
 
@@ -213,15 +212,15 @@ class Importer(n5core.endpoint.Endpoint):
             substr = "under"
         else:
             substr = ""
-        rel = self.relbase + '/arkivstruktur/ny-%smappe/' % substr
+        rel = self.relbaseurl + 'arkivstruktur/ny-%smappe/' % substr
         if attrtype in element.keys():
             etype = element.get(attrtype)
             if 'moetemappe' == etype:
                 name = 'moetemappe'
-                rel = self.relbase + '/arkivstruktur/ny-%smoetemappe/' % substr
+                rel = self.relbaseurl + 'arkivstruktur/ny-%smoetemappe/' % substr
             elif 'saksmappe' == etype:
                 name = 'saksmappe'
-                rel = self.relbase + '/sakarkiv/ny-%ssaksmappe/' % substr
+                rel = self.relbaseurl + 'sakarkiv/ny-%ssaksmappe/' % substr
             else:
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
@@ -232,19 +231,19 @@ class Importer(n5core.endpoint.Endpoint):
 
     def import_registrering(self, parentinfo, element):
         name = 'registrering'
-        rel = self.relbase + '/arkivstruktur/ny-registrering/'
+        rel = self.relbaseurl + 'arkivstruktur/ny-registrering/'
         attrtype = '{http://www.w3.org/2001/XMLSchema-instance}type'
         if attrtype in element.keys():
             etype = element.get(attrtype)
             if 'journalpost' == etype:
                 name = 'journalpost'
-                rel = self.relbase + '/sakarkiv/ny-journalpost/'
+                rel = self.relbaseurl + 'sakarkiv/ny-journalpost/'
             elif 'moeteregistrering' == etype:
                 name = 'moeteregistrering'
-                rel = self.relbase + '/arkivstruktur/ny-moeteregistrering/'
+                rel = self.relbaseurl + 'arkivstruktur/ny-moeteregistrering/'
             elif 'arkivnotat' == etype:
                 name = 'arkivnotat'
-                rel = self.relbase + '/sakarkiv/ny-arkivnotat/'
+                rel = self.relbaseurl + 'sakarkiv/ny-arkivnotat/'
             else:
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
@@ -256,11 +255,11 @@ class Importer(n5core.endpoint.Endpoint):
         subs = {
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
         }
-        rel = self.relbase + '/arkivstruktur/ny-dokumentbeskrivelse/'
+        rel = self.relbaseurl + 'arkivstruktur/ny-dokumentbeskrivelse/'
         self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, subs)
 
     def import_dokumentobjekt(self, parentinfo, element):
-        rel = self.relbase + '/arkivstruktur/ny-dokumentobjekt/'
+        rel = self.relbaseurl + 'arkivstruktur/ny-dokumentobjekt/'
 
         info = self.import_entity('dokumentobjekt', rel, parentinfo, element, {})
         
@@ -275,7 +274,7 @@ class Importer(n5core.endpoint.Endpoint):
                 if self.verbose:
                     print("Uploading %s size %d mime type %s" % (filepath,
                                                                  size, mimetype))
-                uploadrel = self.relbase + '/arkivstruktur/fil/'
+                uploadrel = self.relbaseurl + 'arkivstruktur/fil/'
                 if uploadrel not in info['_links'] or 'href' not in info['_links'][uploadrel]:
                     print(info)
                     raise Exception("missing from created dokumentobjekt: %s" % uploadrel)
@@ -306,13 +305,12 @@ class Importer(n5core.endpoint.Endpoint):
         fh.close()
         element = tree.getroot()
         if element.tag == tagarkiv:
-            (c, res) = self.json_get(self.findRelation(self.relbase + '/arkivstruktur/'))
+            (c, res) = self.json_get(self.findRelation(self.relbaseurl + 'arkivstruktur/'))
             parentinfo = json.loads(c)
             self.import_arkiv(parentinfo, element)
     #    print(etree.tostring(tree))
 
 def main():
-    relbase = 'https://rel.arkivverket.no/noark5/v5/api/arkivstruktur'
     baseurl = "https://localhost:8092/noark5v5/"
     
     parser = argparse.ArgumentParser()
