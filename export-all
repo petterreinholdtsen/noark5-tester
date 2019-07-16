@@ -277,6 +277,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
         print("error: 'kryssreferanse' not yet implemented")
 
 
+    def recurse_xml_presedens(self, output, content):
+        print("error: 'presedens' not yet implemented")
+
+        
     def recurse_xml_registrering(self, output, content):
         entityrel = self.entity_rel(content)
         typemap = {
@@ -294,6 +298,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         avskrel = '%ssakarkiv/avskrivning/' % self.relbaseurl
         oppbevrel = '%sny-oppbevaringssted/' % self.nikitarelbaseurl
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
+        presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         sequence = (
             "systemID",
             "opprettetDato",
@@ -344,7 +349,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
                 (avskrel, self.recurse_xml_avskrivning), # FIXME for journalpost
                 (dokflytrel, self.recurse_xml_dokumentflyt), # FIXME for journalpost
-#                ("presedens"), # FIXME for journalpost
+                (presedensrel, self.recurse_xml_presedens), # FIXME for journalpost
                 "elektroniskSignatur",
             )
         if 'xsi:type="arkivnotat"' == attr:
@@ -386,6 +391,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
         oppbevrel = '%sny-oppbevaringssted/' % self.nikitarelbaseurl
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
+        presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         sequence = (
             "systemID",
             "mappeID",
@@ -429,7 +435,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 "utlaantDato",
                 "utlaantTil",
 #                ("referanseSekundaerKlassifikasjon"), # FIXME for saksmappe
-#                ("presedens"), # FIXME for saksmappe
+                (presedensrel, self.recurse_xml_presedens), # FIXME for saksmappe
             )
         if 'xsi:type="moetemappe"' == attr:
             sequence = sequence + (
@@ -448,6 +454,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         underklasserel = '%sarkivstruktur/underklasse/' % self.relbaseurl
         mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
+        kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         sequence = (
             "systemID",
             "klasseID",
@@ -459,7 +466,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "avsluttetDato",
             "avsluttetAv",
 
-#            ("kryssreferanse"), # FIXME for klasse
+            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for klasse
             "kassasjon",
             "skjerming",
             "gradering",
