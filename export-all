@@ -579,7 +579,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 ctype = res.info().getheader('Content-Type')
                 if ctype is None:
                     print("error: No Content-Type from %s" % url)
-                if ctype is None or 0 != ctype.find('application/vnd.noark5-v4+json'):
+                if ctype is None or 0 != ctype.find('application/vnd.noark5+json'):
                     print("info: ignoring %s" % url)
                 else:
                     try:
@@ -592,10 +592,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
                     elif type(baseref) is list:
                         print("error: found json list in %s" % url)
                     elif '_links' in baseref:
-                        for l in baseref['_links']:
-                            if 'href' in l:
-                                href = l['href']
-                                if 'templated' in l and l['templated']:
+                        for rel in baseref['_links'].keys():
+                            if 'href' in baseref['_links'][rel]:
+                                href = baseref['_links'][rel]['href']
+                                if 'templated' in baseref['_links'][rel] and baseref['_links'][rel]['templated']:
                                     href = href.split('{')[0]
                                 if href not in urlseen:
                                     urlsleft.append(href)
@@ -606,9 +606,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         for basekey in baseref.keys():
                             if basekey != '_links' and type(baseref[basekey]) is list:
                                 for element in baseref[basekey]:
-                                    if '_links' in element and len(element['_links']) > 0:
-                                        for l in element['_links']:
-                                            href = l['href']
+                                    if '_links' in element and len(element['_links'].keys()) > 0:
+                                        for rel in element['_links'].keys():
+                                            href = element['_links'][rel]['href']
                                             if href not in urlseen:
                                                 urlsleft.append(href)
                                                 if href not in urlsrc:
