@@ -23,19 +23,6 @@ from time import strftime, gmtime, mktime, time
 
 import n5core.endpoint
 
-def objectOperation(json, relation):
-    """
-Return the URL/href for a given relation on the object represented by
-the json structure.
-
-"""
-    if json is None or '_links' not in json:
-        return None
-    for l in json['_links']:
-        if l['rel'] == relation:
-            return l['href']
-    return None
-
 def pickUnlessOne(json, type):
     """
 Check the array in the json structure, if there is only one elemet, return it.
@@ -78,7 +65,6 @@ If there are more than one elemet, ask the user to pick one.
                 pass
 
 def main():
-    relbase = 'http://rel.arkivverket.no/noark5/v4/api/arkivstruktur'
     baseurl = "http://localhost:8092/noark5v4/"
     
     parser = argparse.ArgumentParser()
@@ -108,49 +94,50 @@ def main():
     
     # Extract all emails from file, fake non-email as email with the
     # reported content type, and format emails as mbox file.
-    fondsrel = relbase + '/arkiv/'
+    fondsrel = api.relbaseurl + 'arkivstruktur/arkiv/'
     fondshref = api.findRelation(fondsrel)
     (c, res) = api.json_get(fondshref)
     fondsinfo = json.loads(c)
     info = pickUnlessOne(fondsinfo, 'arkiv')
-    serieshref = objectOperation(info, relbase + '/arkivdel/')
+    serieshref = info['_links'][api.relbaseurl + 'arkivstruktur/arkivdel/']['href']
     
     #print("Arkivdel %s" % serieshref)
     (c, res) = api.json_get(serieshref)
     seriesinfo = json.loads(c)
     info = pickUnlessOne(seriesinfo, 'arkivdel')
 
-    fileshref = objectOperation(info, relbase + '/mappe/')
+    fileshref = info['_links'][api.relbaseurl + 'arkivstruktur/mappe/']['href']
     #print("Mappe %s" % fileshref)
     (c, res) = api.json_get(fileshref)
     filesinfo = json.loads(c)
     fileinfo = pickUnlessOne(filesinfo, 'mappe')
 
-    fileshref = objectOperation(fileinfo, relbase + '/registrering/')
+    fileshref = fileinfo['_links'][api.relbaseurl + 'arkivstruktur/registrering/']['href']
     #print("Registrering %s" % fileshref)
     (c, res) = api.json_get(fileshref)
     reginfos = json.loads(c)
     
     if 'results' in reginfos:
         for reginfo in reginfos['results']:
-            docdeschref = objectOperation(reginfo, relbase + '/dokumentbeskrivelse/')
+            docdeschref = reginfo['_links'][api.relbaseurl + 'arkivstruktur/dokumentbeskrivelse/']['href']
             #print("Dokumentbeskrivelse %s" % docdeschref)
             (c, res) = api.json_get(docdeschref)
             docdescinfos = json.loads(c)
             if 'results' in docdescinfos:
                 for docdescinfo in docdescinfos['results']:
-                    #print docdescinfo
-                    fileshref = objectOperation(docdescinfo,
-                                                relbase + '/dokumentobjekt/')
+                    print("Docdescinfo:", docdescinfo)
+                    fileshref = docdescinfo['_links'][api.relbaseurl
+                                                      + 'arkivstruktur/dokumentobjekt/']['href']
                     #print("Dokumentobjekt %s" % fileshref)
                     (c, res) = api.json_get(fileshref)
                     docobjinfos = json.loads(c)
                     if 'results' in docobjinfos:
                         for docobjinfo in docobjinfos['results']:
+                            print("Docobjinfo:", docobjinfo)
                             #print(docobjinfo['format'], docobjinfo['mimeType'])
                             contenthref = \
-                                objectOperation(docobjinfo,
-                                                relbase + '/fil/')
+                                          docobjinfo['_links'][api.relbaseurl
+                                                               + 'arkivstruktur/fil/']['href']
                             (c, res) = api._get(contenthref, {'Accept' : '*/*'})
                             # FIXME use timestamp from database?
                             fromdate = strftime("%a %b %d %H:%M:%S %Y",
@@ -166,14 +153,16 @@ def main():
                                     d = "/" + docobjinfo['formatDetaljer']
                                 else:
                                     d = ""
-                                
+                                if 'filnavn' in docobjinfo:
+                                    filnavn = docobjinfo['filnavn']
+                                else:
+                                    filnavn = docobjinfo['systemID']
                                 subject = "%s: %s%s - %s" % \
                                           (docobjinfo['variantformat'],
-                                           docobjinfo['format'], d,
-                                           docobjinfo['filnavn'])
+                                           docobjinfo['format'], d, filnavn)
                                 # FIXME figure out if there is a better date field to use
                                 date = dateutil.parser.parse(docobjinfo['opprettetDato'])
-                                print("Received non-email from API (Content-Type %s, filename %s)" % (ct, subject))
+                                print("Received non-email from API (Content-Type %s, filename %s, created %s)" % (ct, subject, date))
                                 mailfile.write("Subject: %s\n" % subject)
                                 mailfile.write("Date: %s\n" % \
                                                email.utils.formatdate(mktime(date.timetuple())))
@@ -183,12 +172,14 @@ def main():
                             first=False
 
     mailfile.close()
-
-    # Start mailer with MAIL environment set to the mbox file 
-    child_env = os.environ.copy()
-    child_env['MAIL'] = mailpath
-    p = subprocess.Popen([mailer], env=child_env)
-    p.wait()
+    if first:
+        print("error: failed to find any documents in this file, not starting mailer")
+    else:
+        # Start mailer with MAIL environment set to the mbox file 
+        child_env = os.environ.copy()
+        child_env['MAIL'] = mailpath
+        p = subprocess.Popen([mailer], env=child_env)
+        p.wait()
     
     # remove the mbox file
     if not args.keep:
