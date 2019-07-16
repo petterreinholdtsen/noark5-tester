@@ -652,10 +652,6 @@ Test basis requirements for NOARK 5 Core.
                 (infostr, res) = self.json_get(url)
                 info = json.loads(infostr)
                 etag = res.info().getheader('ETag')
-                # FIXME remove strip() workaround for
-                # https://github.com/HiOA-ABI/nikita-noark5-core/issues/77
-                # when it is fixed.
-                #etag = etag.strip('"')
                 for key in info.keys():
                     keytype = type(info[key])
                     if list == keytype:
