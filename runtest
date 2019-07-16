@@ -780,7 +780,7 @@ or should it be rejected?
         # Test file with UTF-8 character longer than 3 bytes (problem
         # with some MySQL backend engines.
         u8filedata = {
-            "tittel"             : u"Fly high, try the 🛫 created %s" % now,
+            "tittel"             : u"Fly high, try the created %s" % now,
         }
         createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
         url = serieinfo['_links'][createfilerel]['href']
