@@ -220,7 +220,7 @@ Recursively look for relation in API.
 looking for self, and then finding the non-self relation with the same
 href.
 """
-        href = content['_links']['self']
+        href = content['_links']['self']['href']
         for rel, v in content['_links'].items():
             if 'self' != rel and v['href'] == href:
                 return rel
