@@ -101,7 +101,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
                     if rel in content['_links']:
                         (c, res) = self.json_get(content['_links'][rel]['href'])
                         info = json.loads(c)
-                        if 'count' not in info or 0 < info['count']:
+                        # Process list if relation gave non-empty result
+                        if ('count' in info and 0 < info['count']) \
+                           or 'results' in info:
                             for sub in info['results']:
                                 k[1](output, sub)
             if 0 < len(left):
