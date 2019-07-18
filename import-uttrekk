@@ -65,9 +65,9 @@ excludes = { 'klasse': ('noekkelord',),
 
 # FIXME figure out a better way to handle formats?
 formatmap = {
-    'pdf':   ('PDF', 'application/pdf'),
-    'pdf/a': ('RA-PDF', 'application/pdf'),
-    'text':  ('RA-TEXT', 'text/plain'),
+    'pdf':   ('fmt/14', 'application/pdf'), # actually PDF 1.0
+    'pdf/a': ('fmt/95', 'application/pdf'), # actually PDF/A 1a
+    'text':  ('x-fmt/111', 'text/plain'), # Plain text
 }
 
 def format2mime(format):
