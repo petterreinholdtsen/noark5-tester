@@ -16,6 +16,7 @@ import urllib
 import urllib2
 
 import n5core.endpoint
+from n5core.pick import pickUnlessOne
 
 def decodeheader(s):
     if s is None:
@@ -108,47 +109,6 @@ class MboxImporter(n5core.endpoint.Endpoint):
         n5core.endpoint.Endpoint.__init__(self, baseurl)
         self.verbose = args.verbose
 
-    def pickUnlessOne(self, info, type):
-        """
-Check the array in the json structure, if there is only one
-elemet, return it.  If there are more than one elemet, ask the
-user to pick one.
-        """
-        #print("Found %d %s entries" % (len(info), type))
-        if 'results' in info:
-            count = len(info['results'])
-        else:
-            count = 0
-        if 0 == count:
-            return None
-        if 1 == count:
-            if 'tittel' in info['results'][0]:
-                print("using %s: %s" % (type, info['results'][0]['tittel']))
-            else:
-                print("using %s: %s" % (type, info['results'][0]['systemID']))
-            return info['results'][0]
-        else:
-            print("")
-            n = -1
-            while -1 == n:
-                i = 0
-                for entry in info['results']:
-                    if 'tittel' in entry:
-                        print(" %d - %s" % (i, entry['tittel']))
-                    else:
-                        print(" %d - %s systemID %s" % (i, type, entry['systemID']))
-                    i = i + 1
-                answer = raw_input("Select which %s you want (or search term): " % type)
-                try:
-                    n = int(answer)
-                    if n < 0 or n >= count:
-                        print("error: Invalid selection %d" % n)
-                        n = -1
-                    else:
-                        return info['results'][int(n)]
-                except Exception as e:
-                    # FIXME search instead
-                    pass
 
     def createEntity(self, name, rel, rels, data):
         if rel not in rels:
@@ -200,7 +160,7 @@ Store the info about the entity in self.seriesinfo
         fondshref = self.findRelation('%sarkivstruktur/arkiv/' % self.relbaseurl)
         (c, res) = self.json_get(fondshref)
         fondsinfo = json.loads(c)
-        info = self.pickUnlessOne(fondsinfo, 'arkiv')
+        info = pickUnlessOne(fondsinfo, 'arkiv')
         if info is None:
             return None
 
@@ -214,7 +174,7 @@ Store the info about the entity in self.seriesinfo
         (c, res) = self.json_get(serieshref)
         seriesinfo = json.loads(c)
         #print()
-        self.seriesinfo = self.pickUnlessOne(seriesinfo, 'arkivdel')
+        self.seriesinfo = pickUnlessOne(seriesinfo, 'arkivdel')
         if self.seriesinfo and self.verbose:
             print("serieurl: %s" % parselinks(self.seriesinfo['_links'])['self'])
         return self.seriesinfo

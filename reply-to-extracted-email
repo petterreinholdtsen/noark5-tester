@@ -22,47 +22,7 @@ import tempfile
 from time import strftime, gmtime, mktime, time
 
 import n5core.endpoint
-
-def pickUnlessOne(json, type):
-    """
-Check the array in the json structure, if there is only one elemet, return it.
-If there are more than one elemet, ask the user to pick one.
-"""
-    #print("Found %d %s entries" % (len(json), type))
-    if 'results' in json:
-        count = len(json['results'])
-    else:
-        count = 0
-    if 0 == count:
-        return None
-    if 1 == count:
-        if 'tittel' in json['results'][0]:
-            print("using %s: %s" % (type, json['results'][0]['tittel']))
-        else:
-            print("using %s: %s" % (type, json['results'][0]['systemID']))
-        return json['results'][0]
-    else:
-        print("")
-        n = -1
-        while -1 == n:
-            i = 0
-            for entry in json['results']:
-                if 'tittel' in entry:
-                    print(" %d - %s" % (i, entry['tittel']))
-                else:
-                    print(" %d - %s systemID %s" % (i, type, entry['systemID']))
-                i = i + 1
-            answer = raw_input("Select which %s you want (or search term): " % type)
-            try:
-                n = int(answer)
-                if n < 0 or n >= count:
-                    print("error: Invalid selection %d" % n)
-                    n = -1
-                else:
-                    return json['results'][int(n)]
-            except Exception as e:
-                # FIXME search instead
-                pass
+from n5core.pick import pickUnlessOne
 
 def main():
     baseurl = "http://localhost:8092/noark5v4/"
