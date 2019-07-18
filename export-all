@@ -348,7 +348,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 "journalenhet",
 
                 (avskrel, self.recurse_xml_avskrivning), # FIXME for journalpost
-                (dokflytrel, self.recurse_xml_dokumentflyt), # FIXME for journalpost
+#                (dokflytrel, self.recurse_xml_dokumentflyt), # FIXME for journalpost
                 (presedensrel, self.recurse_xml_presedens), # FIXME for journalpost
                 "elektroniskSignatur",
             )
@@ -362,7 +362,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 "antallVedlegg",
                 "utlaantDato",
                 "utlaantTil",
-                (dokflytrel, self.recurse_xml_dokumentflyt), # FIXME for arkivnotat
+#                (dokflytrel, self.recurse_xml_dokumentflyt), # FIXME for arkivnotat
             )
         if 'xsi:type="moeteregistrering"' == attr:
             sequence = sequence + (
