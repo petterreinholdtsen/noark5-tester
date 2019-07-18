@@ -504,7 +504,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
 
     def recurse_xml_arkivdel(self, output, content):
-        klassifikasjonssystemrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
+        klassifikasjonssystemrel = '%sarkivstruktur/klassifikasjonssystem/' % self.relbaseurl
         mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
         saksmapperel = '%sarkivstruktur/saksmappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
