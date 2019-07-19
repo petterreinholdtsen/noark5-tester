@@ -621,22 +621,27 @@ class ContentDumper(n5core.endpoint.Endpoint):
                     sys.stdout.flush()
                 (content, res) = self.json_get(url)
 
+                ctype = res.info().getheader('Content-Type')
+
                 if self.verbose:
                     print("info: Creating %s for %s" % (path, url))
                 dir = os.path.dirname(path)
                 self._mkdir_recursive(dir)
                 f = open(path, 'w')
-                f.write(content)
+                if 0 == ctype.find('application/vnd.noark5+json'):
+                    j = json.loads(content)
+                    f.write(json.dumps(j, indent=2))
+                else:
+                    f.write(content)
                 f.close()
                 
-                ctype = res.info().getheader('Content-Type')
                 if ctype is None:
                     print("error: No Content-Type from %s" % url)
                 if ctype is None or 0 != ctype.find('application/vnd.noark5+json'):
                     print("info: ignoring %s" % url)
                 else:
                     try:
-                        baseref = json.loads(content)
+                        baseref = j
                     except ValueError as e:
                         print('error: non-JSON content returned for %s' % url)
                         baseref = None
