@@ -29,6 +29,7 @@ strukturns = 'http://www.arkivverket.no/standarder/noark5/arkivstruktur'
 
 tagarkiv                 = '{%s}arkiv' % strukturns
 tagarkivdel              = '{%s}arkivdel' % strukturns
+tagarkivskaper           = '{%s}arkivskaper' % strukturns
 tagklassifikasjonssystem = '{%s}klassifikasjonssystem' % strukturns
 tagklasse                = '{%s}klasse' % strukturns
 tagmappe                 = '{%s}mappe' % strukturns
@@ -167,6 +168,7 @@ class Importer(n5core.endpoint.Endpoint):
     def import_arkiv(self, parentinfo, element, sub=False):
         subs = {
             tagarkiv: ([], partial(self.import_arkiv, sub=True)),
+            tagarkivskaper: ([], self.import_arkivskaper),
             tagarkivdel: ([], self.import_arkivdel),
         }
         if sub:
@@ -175,6 +177,11 @@ class Importer(n5core.endpoint.Endpoint):
             substr = ""
         rel = self.relbaseurl + 'arkivstruktur/ny-%sarkiv/' % substr
         self.import_entity('arkiv', rel, parentinfo, element, subs)
+
+    def import_arkivskaper(self, parentinfo, element):
+        subs = {}
+        rel = self.relbaseurl + 'arkivstruktur/ny-arkivskaper/'
+        self.import_entity('arkivdel', rel, parentinfo, element, subs)
 
     def import_arkivdel(self, parentinfo, element):
         subs = {
