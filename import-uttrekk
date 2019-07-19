@@ -181,7 +181,7 @@ class Importer(n5core.endpoint.Endpoint):
     def import_arkivskaper(self, parentinfo, element):
         subs = {}
         rel = self.relbaseurl + 'arkivstruktur/ny-arkivskaper/'
-        self.import_entity('arkivdel', rel, parentinfo, element, subs)
+        self.import_entity('arkivskaper', rel, parentinfo, element, subs)
 
     def import_arkivdel(self, parentinfo, element):
         subs = {
