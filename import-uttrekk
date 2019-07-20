@@ -65,6 +65,46 @@ excludes = { 'klasse': ('noekkelord',),
              'dokumentobjekt': ('referanseDokumentfil', 'filstoerrelse'),
 }
 
+metadata = {
+    'arkiv': (
+#        'arkivstatus',
+#        'dokumentmedium',
+    ),
+    'arkivdel': (
+#        'arkivdelstatus',
+#        'dokumentmedium',
+    ),
+    'klassifikasjonssystem': (
+#        'klassifikasjonstype',
+    ),
+    'klasse': (
+    ),
+    'mappe': (
+#        'mappetype',
+#        'dokumentmedium',
+    ),
+    'saksmappe': (
+        'saksstatus',
+    ),
+    'registrering': (
+#        'dokumentmedium',
+    ),
+    'journalpost': (
+#        'journalposttype',
+#        'journalstatus',
+    ),
+    'dokumentbeskrivelse': (
+#        'dokumenttype',
+#        'dokumentstatus',
+#        'dokumentmedium',
+#        'tilknyttetRegistreringSom',
+    ),
+    'dokumentobjekt': (
+#        'variantformat',
+#        'format',
+    ),
+}
+
 # FIXME figure out a better way to handle formats?
 formatmap = {
     'pdf':   ('fmt/14', 'application/pdf'), # actually PDF 1.0
@@ -85,6 +125,7 @@ class Importer(n5core.endpoint.Endpoint):
         n5core.endpoint.Endpoint.__init__(self, baseurl)
         self.stats = {}
         self.formats = {}
+        self.metadatacache = {}
 
     def output(self, msg):
         print("%s %s" % ('=' * self.nesting, msg))
@@ -97,6 +138,38 @@ class Importer(n5core.endpoint.Endpoint):
         print("Imported formats and their count")
         for format in sorted(self.formats.keys()):
             print("%-25s %d" % (format, self.formats[format]))
+
+    def metadatalookup(self, default, entity, field, kodenavn=None):
+        if field in self.metadatacache:
+            for v in self.metadatacache[field]:
+                if kodenavn == v['kodenavn']:
+                    kode = v['kode']
+                    return {
+                        'kode': kode,
+                        'kodenavn': kodenavn,
+                    }
+        relkey = self.relbaseurl + 'metadata/%s/' % field
+
+        # Prefer _links entries from ny-*, but fall back to searching
+        # the entire API for the relevant metadata list.
+        if 'links' in default and relkey in default['_links']:
+            url = default['_links'][relkey]['href']
+        else:
+            print("error: unable to find %s in ny-%s, searching for it" % (relkey, entity))
+            url = self.findRelation(relkey)
+        if url:
+            (c, r) = self.json_get(url)
+            j = json.loads(c)
+            self.metadatacache[field] = j['results']
+            for v in j['results']:
+                if kodenavn == v['kodenavn']:
+                    kode = v['kode']
+        else:
+            kode = 'FIXME'
+        return {
+            'kode': kode,
+            'kodenavn': kodenavn,
+        }
 
     # Copied from import-email
     def create_entity(self, name, rel, parent, data):
@@ -112,6 +185,10 @@ class Importer(n5core.endpoint.Endpoint):
             for k in default.keys():
                 if not k == '_links' and k not in data:
                     data[k] = default[k]
+            for field in data.keys():
+                if name in metadata and field in metadata[name]:
+                    value = self.metadatalookup(default, name, field, kodenavn=data[field])
+                    data[field] = value
         except urllib2.HTTPError as e:
             pass
         try:
