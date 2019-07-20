@@ -33,6 +33,7 @@ tagarkivskaper           = '{%s}arkivskaper' % strukturns
 tagklassifikasjonssystem = '{%s}klassifikasjonssystem' % strukturns
 tagklasse                = '{%s}klasse' % strukturns
 tagmappe                 = '{%s}mappe' % strukturns
+tagmerknad               = '{%s}merknad' % strukturns
 tagregistrering          = '{%s}registrering' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
@@ -233,6 +234,7 @@ class Importer(n5core.endpoint.Endpoint):
         subs = {
             tagmappe: ([], partial(self.import_mappe, sub=True) ),
             tagregistrering: ([], self.import_registrering),
+#            tagmerknad: ([], self.import_merknad), # FIXME in mappe
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -255,8 +257,14 @@ class Importer(n5core.endpoint.Endpoint):
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
             tagdokumentbeskrivelse: ([], self.import_dokumentbeskrivelse),
+#            tagmerknad: ([], self.import_merknad), # FIXME in registrering
         }
         self.import_entity(name, rel, parentinfo, element, subs)
+
+    def import_merknad(self, parentinfo, element):
+        subs = {}
+        rel = self.relbaseurl + 'arkivstruktur/ny-merknad/'
+        self.import_entity('merknad', rel, parentinfo, element, subs)
 
     def import_dokumentbeskrivelse(self, parentinfo, element):
         subs = {
