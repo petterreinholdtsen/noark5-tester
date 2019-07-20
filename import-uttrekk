@@ -354,7 +354,10 @@ class Importer(n5core.endpoint.Endpoint):
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentobjekt/'
 
         info = self.import_entity('dokumentobjekt', rel, parentinfo, element, {})
-        
+
+        if self.dryrun:
+            return
+
         paths = list(element.iterchildren('{%s}referanseDokumentfil' % strukturns))
         if 1 < len(paths):
             raise ValueError('more than one referanseDokumentfil field is not allowed')
@@ -409,6 +412,8 @@ def main():
     parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
     parser.add_argument("--verbose", help="print more debug information",
                         action="store_true")
+    parser.add_argument("--dryrun", help="print what would be imported, do not import",
+                        action="store_true")
     parser.add_argument("basedir", nargs='+', help="directory with extract")
     args = parser.parse_args()
 
@@ -417,6 +422,7 @@ def main():
 
     i = Importer(baseurl)
     i.verbose = args.verbose
+    i.dryrun = args.dryrun
     i.login()
 
     retval = 0
