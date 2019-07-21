@@ -385,12 +385,12 @@ FIXME flag inaccurate guesses somehow
     def import_korrespondansepart(self, parentinfo, element):
         fieldmap = {
             'korrespondansepartNavn': 'navn',
-            'postadresse':            'postadresse.addresselinje1',
+            'postadresse':            'postadresse.addresselinje1|addresselinje2|addresselinje3',
             'postnummer':             'postadresse.postnr',
             'poststed':               'postadresse.poststed',
             'land':                   'postadresse.landkode',
             'epostadresse':           'kontaktinformasjon.epostadrese',
-            'telefonnummer':          'kontaktinformasjon.telefon',
+            'telefonnummer':          'kontaktinformasjon.mobiltelefon|telefon',
         }
         data = {}
         for sub in element.iterchildren():
@@ -401,7 +401,14 @@ FIXME flag inaccurate guesses somehow
                     d, t = fieldmap[field].split('.')
                     if d not in data:
                         data[d] = {}
-                    data[d][t] = value
+                    if -1 != t.find('|'):
+                        for f in t.split('|'):
+                            print("F:", f)
+                            if f not in data[d]:
+                                data[d][f] = value
+                                break
+                    else:
+                        data[d][t] = value
                 else:
                     data[fieldmap[field]] = value
             else:
