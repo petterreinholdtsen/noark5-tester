@@ -90,7 +90,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
             if self.verbose:
                 print(content)
             left = content.keys()
-            left.remove('_links')
+            if '_links' in left:
+                left.remove('_links')
             for k in sequence:
                 keytype = type(k)
                 if str == keytype:
@@ -296,7 +297,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         merknadrel = '%sarkivstruktur/merknad/' % self.relbaseurl
         dokbeskrrel = '%sarkivstruktur/dokumentbeskrivelse/' % self.relbaseurl
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
-        korrpartrel = '%ssakarkiv/korrespondansepart/' % self.relbaseurl
+        korrpartrel = '%sarkivstruktur/korrespondansepartenhet/' % self.relbaseurl
         dokflytrel = '%ssakarkiv/dokumentflyt/' % self.relbaseurl
         avskrel = '%ssakarkiv/avskrivning/' % self.relbaseurl
         oppbevrel = '%sny-oppbevaringssted/' % self.nikitarelbaseurl
