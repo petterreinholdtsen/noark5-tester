@@ -13,6 +13,7 @@ import os
 import pytz
 import urllib2
 import n5core.endpoint
+import codecs
 
 class XMLTag(object):
     def __init__(self, level, fh, tagname, attr=None):
@@ -585,7 +586,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                                                             arkiv['tittel'],
                                                             utcnow.isoformat())
                 self._mkdir_recursive(self.savepath)
-                with open('%s/arkivstruktur.xml' % self.savepath, 'w') as fh:
+                with codecs.open('%s/arkivstruktur.xml' % self.savepath, 'w',
+                                 encoding='UTF-8') as fh:
                     output = XMLFile(fh)
                     self.recurse_xml_arkiv(output, arkiv, first=True)
 
