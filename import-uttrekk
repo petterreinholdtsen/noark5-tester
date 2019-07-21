@@ -35,6 +35,7 @@ tagklasse                = '{%s}klasse' % strukturns
 tagmappe                 = '{%s}mappe' % strukturns
 tagmerknad               = '{%s}merknad' % strukturns
 tagregistrering          = '{%s}registrering' % strukturns
+tagkorrespondansepart    = '{%s}korrespondansepart' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
 
@@ -102,6 +103,20 @@ metadata = {
     'dokumentobjekt': (
 #        'variantformat',
 #        'format',
+    ),
+    'korrespondansepartenhet': (
+        'korrespondanseparttype',
+    ),
+    'korrespondansepartperson': (
+        'korrespondanseparttype',
+    ),
+    'korrespondansepartintern': (
+        'korrespondanseparttype',
+    ),
+    'postadresse': (
+#        'land',
+#        'postnr',
+#        'poststed',
     ),
 }
 
@@ -334,6 +349,7 @@ class Importer(n5core.endpoint.Endpoint):
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
             tagdokumentbeskrivelse: ([], self.import_dokumentbeskrivelse),
+            tagkorrespondansepart: ([], self.import_korrespondansepart),
 #            tagmerknad: ([], self.import_merknad), # FIXME in registrering
         }
         self.import_entity(name, rel, parentinfo, element, subs)
@@ -342,6 +358,64 @@ class Importer(n5core.endpoint.Endpoint):
         subs = {}
         rel = self.relbaseurl + 'arkivstruktur/ny-merknad/'
         self.import_entity('merknad', rel, parentinfo, element, subs)
+
+    def guess_korrespondansepart_type(self, data):
+        """
+Guess the korrespondansepart type to use.  Fall back to person if unsure.
+
+administrativEnhet and saksbehandler indicates korrespondansepartintern
+kontaktperson indikcates korrespondansepartenhet
+
+use navn guessing to recognize entities (' AS', ' ASA') and people?
+
+FIXME flag inaccurate guesses somehow
+"""
+        print(data)
+        if 'kontaktperson' not in data and 'administrativEnhet' in data:
+            name = 'korrespondansepartintern'
+        elif 'kontaktperson' in data \
+           or -1 != data['navn'].find(' AS'):
+            name = 'korrespondansepartenhet'
+        else:
+            name = 'korrespondansepartperson'
+        print(name)
+        return name
+
+
+    def import_korrespondansepart(self, parentinfo, element):
+        fieldmap = {
+            'korrespondansepartNavn': 'navn',
+            'postadresse':            'postadresse.addresselinje1',
+            'postnummer':             'postadresse.postnr',
+            'poststed':               'postadresse.poststed',
+            'land':                   'postadresse.landkode',
+            'epostadresse':           'kontaktinformasjon.epostadrese',
+            'telefonnummer':          'kontaktinformasjon.telefon',
+        }
+        data = {}
+        for sub in element.iterchildren():
+            field = sub.tag.replace('{%s}' % strukturns, '')
+            value = sub.text
+            if field in fieldmap:
+                if -1 != fieldmap[field].find('.'):
+                    d, t = fieldmap[field].split('.')
+                    if d not in data:
+                        data[d] = {}
+                    data[d][t] = value
+                else:
+                    data[fieldmap[field]] = value
+            else:
+                data[field] = value
+
+        name = self.guess_korrespondansepart_type(data)
+        rel = self.relbaseurl + 'arkivstruktur/ny-%s/' % name
+
+        if self.verbose:
+            print()
+            print("Creating %s: %s" % (name, data))
+            print()
+        if not self.dryrun:
+            info = self.create_entity(name, rel, parentinfo, data)
 
     def import_dokumentbeskrivelse(self, parentinfo, element):
         subs = {
