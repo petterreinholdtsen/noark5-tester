@@ -34,12 +34,6 @@ def decodeheader(s):
             retval += " " + ret
     return retval
 
-def parselinks(links):
-    rels = {}
-    for l in links:
-        if 'href' in l and 'rel' in l:
-            rels[l['rel']] = l['href']
-    return rels
 
 def mime2format(mimestr):
     # Observed incorrectly spelled MIME types
@@ -90,7 +84,7 @@ class MboxImporter(n5core.endpoint.Endpoint):
         parser.add_argument("--mbox", help="(default is %s)" % self.mbox)
         parser.add_argument("--storageurl", help="specify under which URL (arkivdel/mappe) to store email files in")
         parser.add_argument("--saksmappe",
-                            help="Store as saksmappe/journalpost instead of basisregistrering/mappe",
+                            help="Store as saksmappe/journalpost instead of registrering/mappe",
                             action="store_true")
         parser.add_argument("--verbose", help="enable debug output",
                             action="store_true")
@@ -113,7 +107,7 @@ class MboxImporter(n5core.endpoint.Endpoint):
     def createEntity(self, name, rel, rels, data):
         if rel not in rels:
             raise Exception("unable to find %s in provided relations" % rel)
-        url = rels[rel]
+        url = rels[rel]['href']
         try:
             if self.verbose:
                 print("GET %s" % url)
@@ -176,7 +170,7 @@ Store the info about the entity in self.seriesinfo
         #print()
         self.seriesinfo = pickUnlessOne(seriesinfo, 'arkivdel')
         if self.seriesinfo and self.verbose:
-            print("serieurl: %s" % parselinks(self.seriesinfo['_links'])['self'])
+            print("serieurl: %s" % self.seriesinfo['_links']['self']['href'])
         return self.seriesinfo
 
     def alreadySaved(self, message):
@@ -194,12 +188,13 @@ if a match is found.
 
         (s, res) = self.json_get(searchurl)
         docobjsinfo = json.loads(s)
-        for d in docobjsinfo['results']:
-            if 'filnavn' in d:
-                print("ID: %s" % d['filnavn'])
-                if  d['filnavn'] == messageid:
-                      print("found message-id %s" % messageid)
-                      return d
+        if 'results' in docobjsinfo:
+            for d in docobjsinfo['results']:
+                if 'filnavn' in d:
+                    print("ID: %s" % d['filnavn'])
+                    if  d['filnavn'] == messageid:
+                          print("found message-id %s" % messageid)
+                          return d
         return None
 
     def findThreadFile(self, message):
@@ -228,11 +223,12 @@ are in.
         
             (s, res) = self.json_get(searchurl)
             docobjsinfo = json.loads(s)
-            for d in docobjsinfo['results']:
-                if 'filnavn' in d:
-                    if  d['filnavn'] == messageid:
-                        print("found message-id %s" % messageid)
-                        matches.append(d['systemID'])
+            if 'results' in docobjsinfo:
+                for d in docobjsinfo['results']:
+                    if 'filnavn' in d:
+                        if  d['filnavn'] == messageid:
+                            print("found message-id %s" % messageid)
+                            matches.append(d['systemID'])
 
         # FIXME Look up mappe/saksmappe containing docobj entries
         fileids = {}
@@ -264,28 +260,28 @@ are in.
         if self.usesaksmappe:
             casefilerel = '%ssakarkiv/ny-saksmappe/' % self.relbaseurl
             fileinfo = self.createEntity('saksmappe', casefilerel,
-                                         parselinks(self.seriesinfo['_links']),
+                                         self.seriesinfo['_links'],
                                          filedata)
         else:
             filerel = '%sarkivstruktur/ny-mappe/' % self.relbaseurl
             fileinfo = self.createEntity('mappe', filerel,
-                                         parselinks(self.seriesinfo['_links']),
+                                         self.seriesinfo['_links'],
                                          filedata)
         return fileinfo
     
     def recordMapping(self, parentinfo, childinfo, type):
         childid = childinfo['systemID']
         parentid = parentinfo['systemID']
-        parenthref = parselinks(parentinfo['_links'])['self']
+        parenthref = parentinfo['_links']['self']['href']
         self.parentmap[childid] = (parentid, type, parenthref)
 
 
     def createDocumentObject(self, docdescinfo, docobjdata, content, created):
         docobjrel = '%sarkivstruktur/ny-dokumentobjekt/' % self.relbaseurl
         docobjinfo = self.createEntity('dokumentobjekt', docobjrel,
-                                       parselinks(docdescinfo['_links']),
+                                       docdescinfo['_links'],
                                        docobjdata)
-        created.append(parselinks(docobjinfo['_links'])['self'])
+        created.append(docobjinfo['_links']['self']['href'])
         self.recordMapping(docdescinfo, docobjinfo, 'dokumentobjekt')
 
         uploadrel = '%sarkivstruktur/fil/' % self.relbaseurl
@@ -309,8 +305,8 @@ are in.
             for e in created[::-1]:
                 self.delete(e)
             return False
-        if 200 != res.code:
-            print("error: upload failed (status == %d), removing object"
+        if 201 != res.code:
+            print("error: upload failed (status == %d), removing objects"
                   % res.code)
             for e in created[::-1]:
                 self.delete(e)
@@ -318,7 +314,7 @@ are in.
         return True
 
     def addMessageToFile(self, fileinfo, message):
-        recordrel = '%sarkivstruktur/ny-basisregistrering/' % self.relbaseurl
+        recordrel = '%sarkivstruktur/ny-registrering/' % self.relbaseurl
         recordentryrel = '%ssakarkiv/ny-journalpost/' % self.relbaseurl
         docdescrel = '%sarkivstruktur/ny-dokumentbeskrivelse/' % self.relbaseurl
 
@@ -349,9 +345,9 @@ are in.
                 'beskrivelse' : None,
             }
             recordinfo = self.createEntity('journalpost', recordentryrel,
-                                           parselinks(fileinfo['_links']),
+                                           fileinfo['_links'],
                                            recorddata)
-            created.append(parselinks(recordinfo['_links'])['self'])
+            created.append(recordinfo['_links']['self']['href'])
             self.recordMapping(fileinfo, recordinfo, 'journalpost')
             # FIXME consider journalpost and korrespondansepart (from
             # to/from/cc)
@@ -382,7 +378,7 @@ are in.
                         corrinfo = \
                             self.createEntity('correspondance part',
                                               corrpartrel,
-                                              parselinks(recordinfo['_links']),
+                                              recordinfo['_links'],
                                               corrdata)
 
         else:
@@ -390,20 +386,20 @@ are in.
                 'tittel' : decodeheader(message['subject']),
                 'beskrivelse' : None,
             }
-            recordinfo = self.createEntity('basisregistrering', recordrel,
-                                           parselinks(fileinfo['_links']),
+            recordinfo = self.createEntity('registrering', recordrel,
+                                           fileinfo['_links'],
                                            recorddata)
-            created.append(parselinks(recordinfo['_links'])['self'])
-            self.recordMapping(fileinfo, recordinfo, 'basisregistrering')
+            created.append(recordinfo['_links']['self']['href'])
+            self.recordMapping(fileinfo, recordinfo, 'registrering')
         
         docdescdata = {
             'tittel' : decodeheader(message['subject']),
             'oppbevaringssted' : threadstarterid ,
         }
         docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
-                                       parselinks(recordinfo['_links']),
+                                        recordinfo['_links'],
                                         docdescdata)
-        created.append(parselinks(docdescinfo['_links'])['self'])
+        created.append(docdescinfo['_links']['self']['href'])
         self.recordMapping(recordinfo, docdescinfo, 'dokumentbeskrivelse')
         
         docobjdata = {
