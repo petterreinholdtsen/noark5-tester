@@ -325,7 +325,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         korrpartrel = '%sarkivstruktur/korrespondansepartenhet/' % self.relbaseurl
         dokflytrel = '%ssakarkiv/dokumentflyt/' % self.relbaseurl
         avskrel = '%ssakarkiv/avskrivning/' % self.relbaseurl
-        oppbevrel = '%sny-oppbevaringssted/' % self.nikitarelbaseurl
+        oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         sequence = (
@@ -351,7 +351,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "noekkelord",
             "forfatter",
             "dokumentmedium",
-#            (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for registrering
+            (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for registrering
             "virksomhetsspesifikkeMetadata",
 
 #            (merknadrel, self.recurse_xml_merknad), # FIXME for registrering
@@ -418,7 +418,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
         undermapperel = '%sarkivstruktur/undermappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
-        oppbevrel = '%sny-oppbevaringssted/' % self.nikitarelbaseurl
+        oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         sequence = (
@@ -538,7 +538,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
         saksmapperel = '%sarkivstruktur/saksmappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
-        oppbevrel = '%sny-oppbevaringssted/' % self.nikitarelbaseurl
+        oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
         sequence = (
             'systemID',
             'tittel',
@@ -571,7 +571,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         underarkivrel = '%sarkivstruktur/underarkiv/' % self.relbaseurl
         arkivdelrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
         arkivskaperrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
-        oppbevrel = '%sny-oppbevaringssted/' % self.nikitarelbaseurl
+        oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
         
         # From n5v5 arkivstruktur.xsd:
         sequence = (
