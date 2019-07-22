@@ -80,7 +80,7 @@
         <beskrivelse>Eating the cake2 - Application to eat cake2</beskrivelse>
         <dokumentmedium>Elektronisk arkiv</dokumentmedium>
         <korrespondansepart>
-          <korrespondanseparttype>Kopimottaker</korrespondanseparttype>
+          <korrespondanseparttype>Medavsender</korrespondanseparttype>
           <korrespondansepartNavn>Riksarkivet</korrespondansepartNavn>
           <postadresse>Sognsvann 12</postadresse>
           <postnummer>0666</postnummer>
@@ -168,14 +168,16 @@
         <beskrivelse>Eating the cake1 - Application to eat cake1</beskrivelse>
         <dokumentmedium>Elektronisk arkiv</dokumentmedium>
         <korrespondansepart>
-          <korrespondanseparttype>Mottaker</korrespondanseparttype>
+          <korrespondanseparttype>Avsender</korrespondanseparttype>
           <korrespondansepartNavn>Olav V</korrespondansepartNavn>
-          <postadresse>Sognsvann 12</postadresse>
+          <postadresse>c/o Haakon VII</postadresse>
+          <postadresse>Drammensveien 1</postadresse>
           <postnummer>0666</postnummer>
           <poststed>Oslo</poststed>
           <land>Norge</land>
           <epostadresse>123@epost.no</epostadresse>
           <telefonnummer>22221111</telefonnummer>
+          <telefonnummer>90101001</telefonnummer>
         </korrespondansepart>
         <korrespondansepart>
           <korrespondanseparttype>Mottaker</korrespondanseparttype>
