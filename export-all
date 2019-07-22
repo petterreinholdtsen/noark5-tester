@@ -460,7 +460,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 "administrativEnhet",
                 "saksansvarlig",
                 "journalenhet",
-                "saksstatus",
+                "saksstatus.kodenavn>saksstatus",
+                "saksstatus.kode>[null]",
                 "utlaantDato",
                 "utlaantTil",
 #                ("referanseSekundaerKlassifikasjon"), # FIXME for saksmappe
