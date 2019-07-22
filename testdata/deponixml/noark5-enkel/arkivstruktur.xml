@@ -97,7 +97,7 @@
         <journalpostnummer>2</journalpostnummer>
         <journalposttype>Inngående dokument</journalposttype>
         <journalstatus>Journalført</journalstatus>
-        <journaldato>2017-04-02</journaldato>
+        <journaldato>2017-04-02Z</journaldato>
         <avskrivning>
           <avskrivningsdato>2018-12-31Z</avskrivningsdato>
           <avskrevetAv>Avskrivning AvskrevetAv</avskrevetAv>

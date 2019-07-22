@@ -415,6 +415,20 @@ FIXME flag inaccurate guesses somehow
             else:
                 data[field] = value
 
+        # Norwegian mobile phone numbers are 4XX XX XXX or 9XX XX XXX
+        # according to national number plan from NKom (E.164).
+        if 'kontaktinformasjon' in data \
+           and 'mobiltelefon' in data['kontaktinformasjon'] \
+           and data['kontaktinformasjon']['mobiltelefon'][0] not in ('4', '9'):
+            t = None
+            if 'telefon' in data['kontaktinformasjon']:
+                t = data['kontaktinformasjon']['telefon']
+            data['kontaktinformasjon']['telefon'] = data['kontaktinformasjon']['mobiltelefon']
+            if t:
+                data['kontaktinformasjon']['mobiltelefon'] = t
+            else:
+                del data['kontaktinformasjon']['mobiltelefon']
+
         name = self.guess_korrespondansepart_type(data)
         rel = self.relbaseurl + 'arkivstruktur/ny-%s/' % name
 
