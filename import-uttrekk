@@ -35,6 +35,7 @@ tagklasse                = '{%s}klasse' % strukturns
 tagmappe                 = '{%s}mappe' % strukturns
 tagmerknad               = '{%s}merknad' % strukturns
 tagregistrering          = '{%s}registrering' % strukturns
+tagpart                  = '{%s}part' % strukturns
 tagkorrespondansepart    = '{%s}korrespondansepart' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
@@ -112,6 +113,15 @@ metadata = {
     ),
     'korrespondansepartintern': (
         'korrespondanseparttype',
+    ),
+    'partenhet': (
+        'partrolle',
+    ),
+    'partperson': (
+        'partrolle',
+    ),
+    'partintern': (
+        'partrolle',
     ),
     'postadresse': (
 #        'land',
@@ -328,6 +338,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagmappe: ([], partial(self.import_mappe, sub=True) ),
             tagregistrering: ([], self.import_registrering),
 #            tagmerknad: ([], self.import_merknad), # FIXME in mappe
+#            tagpart: ([], self.import_part), # FIXME in mappe
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -352,6 +363,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagdokumentbeskrivelse: ([], self.import_dokumentbeskrivelse),
             tagkorrespondansepart: ([], self.import_korrespondansepart),
 #            tagmerknad: ([], self.import_merknad), # FIXME in registrering
+#            tagpart: ([], self.import_part), # FIXME in registrering
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -360,9 +372,9 @@ class Importer(n5core.endpoint.Endpoint):
         rel = self.relbaseurl + 'arkivstruktur/ny-merknad/'
         self.import_entity('merknad', rel, parentinfo, element, subs)
 
-    def guess_korrespondansepart_type(self, data):
+    def guess_part_type(self, data):
         """
-Guess the korrespondansepart type to use.  Fall back to person if unsure.
+Guess the part or korrespondansepart type to use.  Fall back to person if unsure.
 
 administrativEnhet and saksbehandler indicates korrespondansepartintern
 kontaktperson indikcates korrespondansepartenhet
@@ -373,25 +385,35 @@ FIXME flag inaccurate guesses somehow
 """
         print(data)
         if 'kontaktperson' not in data and 'administrativEnhet' in data:
-            name = 'korrespondansepartintern'
+            typename = 'intern'
         elif 'kontaktperson' in data \
            or -1 != data['navn'].find(' AS'):
-            name = 'korrespondansepartenhet'
+            typename = 'enhet'
         else:
-            name = 'korrespondansepartperson'
-        print(name)
-        return name
+            typename = 'person'
+        print(typename)
+        return typename
+
+
+    def import_part(self, parentinfo, element):
+        return self.import_generic_part('part', parentinfo, element)
 
 
     def import_korrespondansepart(self, parentinfo, element):
+        return self.import_generic_part('korrespondansepart', parentinfo, element)
+
+
+    def import_generic_part(self, basetype, parentinfo, element):
         fieldmap = {
-            'korrespondansepartNavn': 'navn',
+            '%sNavn' % basetype: 'navn',
             'postadresse':            'postadresse.addresselinje1|addresselinje2|addresselinje3',
             'postnummer':             'postadresse.postnr',
             'poststed':               'postadresse.poststed',
             'land':                   'postadresse.landkode',
-            'epostadresse':           'kontaktinformasjon.epostadrese',
+            'epostadresse':           'kontaktinformasjon.epostadresse',
             'telefonnummer':          'kontaktinformasjon.mobiltelefon|telefon',
+            'partID':                 'systemID', # FIXME verify this mapping
+            'partRolle':              'partrolle', # FIXME Workaround for bug in Nikita
         }
         data = {}
         for sub in element.iterchildren():
@@ -429,8 +451,14 @@ FIXME flag inaccurate guesses somehow
             else:
                 del data['kontaktinformasjon']['mobiltelefon']
 
-        name = self.guess_korrespondansepart_type(data)
+        typename = self.guess_part_type(data)
+        name = "%s%s" % (basetype, typename)
         rel = self.relbaseurl + 'arkivstruktur/ny-%s/' % name
+
+        # FIXME no place to put korrespondansepart.korrespondansepartNavn for 'intern'
+        # FIXME perhaps create AdministrativEnhet for it?
+        if 'intern' == typename:
+            del data['navn']
 
         if self.verbose:
             print()
@@ -442,6 +470,7 @@ FIXME flag inaccurate guesses somehow
     def import_dokumentbeskrivelse(self, parentinfo, element):
         subs = {
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
+#            tagpart: ([], self.import_part), # FIXME in dokumentbeskrivelse
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentbeskrivelse/'
         self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, subs)
