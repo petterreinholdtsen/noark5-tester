@@ -4,6 +4,7 @@
 from __future__ import print_function
 
 import sys
+import time
 sys.path.append('lib')
 
 import argparse
@@ -458,10 +459,16 @@ are in.
     def loadMbox(self):
         retval = True
         mbox = mailbox.mbox(self.mbox)
+        last = time.time()
+        count = 0
         for message in mbox:
+            count = count + 1
             if not self.uploadEmail(message):
                 print("error: failed to load email")
                 retval = False
+            now = time.time()
+            print("%.2f s per insert/email (%d so far)" % (now - last, count))
+            last = now
         return retval
 
     def loadEmail(self):
