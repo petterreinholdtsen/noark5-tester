@@ -89,15 +89,27 @@ class ContentDumper(n5core.endpoint.Endpoint):
         with output.tag(entity, attr=attr):
             if self.verbose:
                 print(content)
-            left = content.keys()
-            if '_links' in left:
-                left.remove('_links')
             for k in sequence:
                 keytype = type(k)
                 if str == keytype:
-                    if k in content:
-                        output.writetag(k, content[k])
-                        left.remove(k)
+                    if -1 != k.find('>'):
+                        f, t = k.split('>')
+                        if -1 != f.find('.'):
+                            a, b = f.split('.')
+                            if a in content and b in content[a]:
+                                if '[null]' != t:
+                                    output.writetag(t, content[a][b])
+                                del content[a][b]
+                                if not content[a].keys():
+                                    del content[a]
+                        else:
+                            if f in content:
+                                output.writetag(t, content[f])
+                                del content[f]
+                    else:
+                        if k in content:
+                            output.writetag(k, content[k])
+                            del content[k]
                 if tuple == keytype:
                     rel = k[0]
                     if rel in content['_links']:
@@ -108,8 +120,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
                            or 'results' in info:
                             for sub in info['results']:
                                 k[1](output, sub)
-            if 0 < len(left):
-                print("warning: %s XML attribute not exported: %s" % (entity, " ".join(left)))
+            if '_links' in content:
+                del content['_links']
+            if content.keys():
+                print("warning: %s XML attribute not exported: %s" % (entity, content))
 
 
     def recurse_xml_konvertering(self, output, content):
@@ -219,33 +233,44 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
     def recurse_xml_korrespondansepart(self, output, content):
         sequence = (
-            "korrespondanseparttype",
-            "korrespondansepartNavn",
-#            ("postadresse"), # FIXME for korrespondansepart
-            "postnummer",
-            "poststed",
-            "land",
-            "epostadresse",
-#            ("telefonnummer"), # FIXME for korrespondansepart
+            "korrespondanseparttype.kodenavn>korrespondanseparttype",
+            "korrespondanseparttype.kode>[null]",
+            "navn>korrespondansepartNavn",
+            'postadresse.addresselinje1>postadresse',
+            'postadresse.addresselinje2>postadresse',
+            'postadresse.addresselinje3>postadresse',
+            "postadresse.postnr>postnummer",
+            "postadresse.poststed>poststed",
+            "postadresse.landkode>land",
+            "kontaktinformasjon.epostadresse>epostadresse",
+            'kontaktinformasjon.mobiltelefon>telefonnummer',
+            'kontaktinformasjon.telefon>telefonnummer',
             "kontaktperson",
             "administrativEnhet",
             "saksbehandler",
+            "virksomhetsspesifikkeMetadata",
         )
         self.recurse_xml_out_ordered(output, 'korrespondansepart', content, sequence)
 
 
     def recurse_xml_part(self, output, content):
         sequence = (
-            "partID",
-            "partNavn",
-            "partRolle",
-            ("postadresse"), # FIXME for part
-            "postnummer",
-            "poststed",
-            "land",
-            "epostadresse",
-            ("telefonnummer"), # FIXME for part
+            "systemID>partID",
+            "partRolle.kodenavn>parttype",
+            "partRolle.kode>[null]",
+            "navn>partNavn",
+            'postadresse.addresselinje1>postadresse',
+            'postadresse.addresselinje2>postadresse',
+            'postadresse.addresselinje3>postadresse',
+            "postadresse.postnr>postnummer",
+            "postadresse.poststed>poststed",
+            "postadresse.landkode>land",
+            "kontaktinformasjon.epostadresse>epostadresse",
+            'kontaktinformasjon.mobiltelefon>telefonnummer',
+            'kontaktinformasjon.telefon>telefonnummer',
             "kontaktperson",
+            "administrativEnhet",
+            "saksbehandler",
             "virksomhetsspesifikkeMetadata",
         )
         self.recurse_xml_out_ordered(output, 'part', content, sequence)
@@ -416,7 +441,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "virksomhetsspesifikkeMetadata",
 
 # FIXME not working in Nikita
-#            (partrel,                  self.recurse_xml_part),
+#            (partrel,                  self.recurse_xml_part), # FIXME for mappe
 #            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for mappe
 # FIXME not working in Nikita
 #            (merknadrel, self.recurse_xml_merknad), # FIXME for mappe
