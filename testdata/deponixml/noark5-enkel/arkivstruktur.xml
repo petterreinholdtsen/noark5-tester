@@ -89,8 +89,6 @@
           <epostadresse>123@epost.no</epostadresse>
           <telefonnummer>22221111</telefonnummer>
           <kontaktperson>EnKontaktPerson</kontaktperson>
-          <administrativEnhet>DT</administrativEnhet>
-          <saksbehandler>Korrespondansepart Saksbehandler</saksbehandler>
         </korrespondansepart>
         <journalaar>2017</journalaar>
         <journalsekvensnummer>1</journalsekvensnummer>
