@@ -44,7 +44,7 @@
       <part>
         <partID>Sakspart1</partID>
         <partNavn>Queen of Hearts</partNavn>
-        <partRolle>Queen</partRolle>
+        <partRolle>Formynder</partRolle>
         <postadresse>Rabbithole 12</postadresse>
         <postnummer>0666</postnummer>
         <poststed>Oslo</poststed>
@@ -74,6 +74,18 @@
         <opprettetAv>Arkivnotat OpprettetAv</opprettetAv>
         <arkivertDato>1863-10-10T00:00:00Z</arkivertDato>
         <arkivertAv>Arkivnotat Arkivertav</arkivertAv>
+	<part>
+          <partID>Sakspart2</partID>
+          <partNavn>Ace of Spades</partNavn>
+          <partRolle>Advokat</partRolle>
+          <postadresse>Rabbithole 12</postadresse>
+          <postnummer>0666</postnummer>
+          <poststed>Oslo</poststed>
+          <land>Norge</land>
+          <epostadresse>ace@spades.com</epostadresse>
+          <telefonnummer>22221122</telefonnummer>
+          <kontaktperson>Alice</kontaktperson>
+	</part>
         <registreringsID>mappe1/jrnpst-2</registreringsID>
         <tittel>Eating the cake2 - Application to eat cake1</tittel>
         <offentligTittel>Eating the cake2 - Application to eat cake2</offentligTittel>
@@ -191,12 +203,6 @@
         <korrespondansepart>
           <korrespondanseparttype>Kopimottaker</korrespondanseparttype>
           <korrespondansepartNavn>Riksarkivet</korrespondansepartNavn>
-          <postadresse>Sognsvann 12</postadresse>
-          <postnummer>0666</postnummer>
-          <poststed>Oslo</poststed>
-          <land>Norge</land>
-          <epostadresse>123@epost.no</epostadresse>
-          <telefonnummer>22221111</telefonnummer>
           <administrativEnhet>DT</administrativEnhet>
           <saksbehandler>Korrespondansepart Saksbehandler</saksbehandler>
         </korrespondansepart>
