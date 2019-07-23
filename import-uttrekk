@@ -41,30 +41,61 @@ tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
 
 # List of fields to ignore during import until Nikita handle them correctly
-excludes = { 'klasse': ('noekkelord',),
-             
-             'saksmappe' : (
-                 'referanseArkivdel',
-                 # FIXME these need to be created before using
-                 'administrativEnhet', 'saksansvarlig',
-             ),
-             
-             'registrering': ('noekkelord',),
-             'basisregistrering': ('noekkelord',),
-             'journalpost': ('noekkelord',),
-             'moeteregistrering': ('noekkelord',),
-             
-             'dokumentbeskrivelse' : ('forfatter','referanseArkivdel'),
-             
-             # Exclude values related to the files that are handled
-             # during upload and not during dokumentobjekt creation.
-             # Dropping filestoerrelse might seem like a bad idea, but
-             # it is most often a free text field that is hard to
-             # parse and incorrect file size would also give a
-             # checksum mismatch and get rejected anyway.  Thus
-             # incorrect file size would be detected during upload
-             # that way.
-             'dokumentobjekt': ('referanseDokumentfil', 'filstoerrelse'),
+excludes = {
+    'arkiv': (
+        'systemID',
+    ),
+    'arkivdel': (
+        'systemID',
+    ),
+    'klassifikasjonssystem': (
+        'systemID',
+    ),
+    'klasse': (
+        'systemID',
+        'noekkelord',
+    ),
+    'saksmappe' : (
+        'systemID',
+        'referanseArkivdel',
+        'merknad',
+        'kassasjon',
+
+        # FIXME these need to be created before using
+        'administrativEnhet', 'saksansvarlig',
+    ),
+    'registrering': (
+        'systemID',
+        'noekkelord',
+    ),
+    'journalpost': (
+        'systemID',
+        'noekkelord',
+        'skjerming',
+        'gradering',
+        'avskrivning',
+    ),
+    'moeteregistrering': (
+        'systemID',
+        'noekkelord',
+    ),
+    'dokumentbeskrivelse' : (
+        'systemID',
+        'forfatter',
+        'referanseArkivdel',
+    ),
+    'dokumentobjekt': (
+        'systemID',
+        # Exclude values related to the files that are handled during
+        # upload and not during dokumentobjekt creation.  Dropping
+        # filestoerrelse might seem like a bad idea, but it is most
+        # often a free text field that is hard to parse and incorrect
+        # file size would also give a checksum mismatch and get
+        # rejected anyway.  Thus incorrect file size would be detected
+        # during upload that way.
+        'referanseDokumentfil',
+        'filstoerrelse',
+    ),
 }
 
 metadata = {
