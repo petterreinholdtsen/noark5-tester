@@ -601,10 +601,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         except n5core.endpoint.LoginFailure:
             pass
         arkivhref = self.findRelation('%sarkivstruktur/arkiv/' % self.relbaseurl)
-        print(arkivhref)
         (c, res) = self.json_get(arkivhref)
         arkivinfo = json.loads(c)
-        print(arkivinfo)
 
         if 'count' not in arkivinfo or 0 < arkivinfo['count']:
             for arkiv in arkivinfo['results']:
