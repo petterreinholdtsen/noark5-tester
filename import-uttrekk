@@ -523,6 +523,8 @@ FIXME flag inaccurate guesses somehow
         # FIXME perhaps create AdministrativEnhet for it?
         if 'intern' == typename:
             del data['navn']
+            print("warning: dropping %s, not yet implemented in Nikita" % name)
+            return
 
         if self.verbose:
             print()
