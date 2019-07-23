@@ -130,6 +130,33 @@ metadata = {
     ),
 }
 
+default_timezone = "+01:00"
+
+datefields = (
+    'arkivertDato',
+    'arkivperiodeSluttDato',
+    'arkivperiodeStartDato',
+    'avskrivningsdato',
+    'avsluttetDato',
+    'dokumentetsDato',
+    'flytMottattDato',
+    'flytSendtDato',
+    'graderingsdato',
+    'journaldato',
+    'kassasjonsdato',
+    'konvertertDato',
+    'merknadsdato',
+    'mottattDato',
+    'nedgraderingsdato',
+    'opprettetDato',
+    'presedensDato',
+    'presedensGodkjentDato',
+    'saksdato',
+    'skjermingOpphoererDato',
+    'tilknyttetDato',
+    'verifisertDato',
+)
+
 # FIXME figure out a better way to handle formats?
 formatmap = {
     'pdf':   ('fmt/14', 'application/pdf'), # actually PDF 1.0
@@ -215,6 +242,15 @@ class Importer(n5core.endpoint.Endpoint):
                 if name in metadata and field in metadata[name]:
                     value = self.metadatalookup(default, name, field, kodenavn=data[field])
                     data[field] = value
+                if field in datefields:
+                    # FIXME workaround for Nikita failing to handle Z as +00:00
+                    if 'Z' == data[field][-1]:
+                        data[field] = data[field].replace('Z', '+00:00')
+                    # Make sure the required time zone is in place
+                    if -1 == data[field].find('+'):
+                        print("warning: adding hardcoded timezone %s to %s.%s" %
+                              (default_timezone, name, field))
+                        data[field] = data[field] + default_timezone
         except urllib2.HTTPError as e:
             pass
         try:
