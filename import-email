@@ -363,7 +363,7 @@ are in.
             self.recordMapping(fileinfo, recordinfo, 'journalpost')
             # FIXME consider journalpost and korrespondansepart (from
             # to/from/cc)
-            corrpartrel = '%ssakarkiv/ny-korrespondansepartenhet/' % self.relbaseurl
+            corrpartrel = '%ssakarkiv/ny-korrespondansepartperson/' % self.relbaseurl
             parts = {
                 'from' : 'EA',
                 'to'   : 'EM',
