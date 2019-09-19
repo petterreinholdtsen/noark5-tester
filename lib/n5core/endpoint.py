@@ -44,6 +44,7 @@ class Endpoint:
     def login(self, username = None, password = None):
         url7519 = self.findRelation("%slogin/rfc7519/" % self.nikitarelbaseurl)
         url6749 = self.findRelation("%slogin/rfc6749/" % self.nikitarelbaseurl)
+        urloidc = self.findRelation("%slogin/oidc/" % self.relbaseurl)
         if url7519 is not None:
             url = url7519
             try:
@@ -63,6 +64,28 @@ class Endpoint:
             self.token = j['token']
         elif url6749 is not None:
             url = url6749
+            try:
+                if username is None:
+                    username = 'admin@example.com'
+                if password is None:
+                    password = 'password'
+                data = {
+                    'grant_type': 'password',
+                    'username': username,
+                    'password': password,
+                }
+                datastr = urllib.urlencode(data)
+                a = '%s:%s' % ('nikita-client', 'secret')
+                self.token = 'Basic %s' % base64.encodestring(a).strip()
+                (c,r) = self.post(url, datastr, 'application/x-www-form-urlencoded')
+            except urllib2.HTTPError as e:
+                raise LoginFailure("Posting to login relation %s failed: %s (%s)" % (url, str(e), e.read()))
+            j = json.loads(c)
+            self.token = "%s %s" % (j['token_type'], j['access_token'])
+        elif urloidc is not None:
+            (content, res) = self.json_get(urloidc)
+            j = json.loads(content)
+            url = j['authorization_endpoint']
             try:
                 if username is None:
                     username = 'admin@example.com'

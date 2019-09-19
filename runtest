@@ -120,6 +120,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         noarkrelbase + 'arkivstruktur/underarkiv/',
         noarkrelbase + 'arkivstruktur/underklasse/',
         noarkrelbase + 'arkivstruktur/undermappe/',
+        noarkrelbase + 'login/oidc/',
         noarkrelbase + 'loggingogsporing/',
         noarkrelbase + 'loggingogsporing/endringslogg/',
         noarkrelbase + 'loggingogsporing/ny-endringslogg/',
