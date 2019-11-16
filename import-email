@@ -345,7 +345,10 @@ are in.
         else:
             threadstarterid = message['message-id']
 
-        fromdate = dateutil.parser.parse(message['date']).isoformat()
+        # FIXME workaround for nikita failing to parse dates with
+        # timezones.
+        fromdate = dateutil.parser.parse(message['date']). \
+            replace(tzinfo=None).isoformat() + 'Z'
 
         if self.usesaksmappe:
             recorddata = {
