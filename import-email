@@ -224,7 +224,7 @@ are in.
                 if msgid != "":
                     thread.append(msgid)
         if 0 == len(thread):
-            return  None
+            return None
         #print(thread)
         
         matches = []
