@@ -194,7 +194,7 @@ if a match is found.
         messageid = message['message-id']
         print("Looking for msgid: %s" % messageid)
 
-        searchurl = self.docobjurl + '?filter=' +\
+        searchurl = self.docobjurl + '?$filter=' +\
             urllib.quote_plus("filnavn eq '%s'" % messageid)
         print(searchurl)
 
@@ -229,7 +229,7 @@ are in.
         
         matches = []
         for messageid in thread:
-            searchurl = self.docobjurl + '?filter=' +\
+            searchurl = self.docobjurl + '?$filter=' +\
                 urllib.quote_plus("filnavn eq '%s'" % messageid)
             #print(searchurl)
         
