@@ -44,9 +44,9 @@ Endre setning i kapittel 6 fra følgende
 > Når en forespurt listeressurs fra databasen er tom returneres medlem
 > «count» satt til 0, intet medlem «results», samt relevante
 > relasjonsnøkler i «_links» inkludert en «self»-relasjon tilbake til
-> forespørselen som produserte den tomme listen.  Hvis en søker etter
+> forespørselen som produserte den tomme listen.
 
-Til dette, der "statuskode 200, " er lagt til:
+til dette, der "statuskode 200, " er lagt til:
 
 > Når en forespurt listeressurs fra databasen er tom returneres
 > statuskode 200, medlem «count» satt til 0, intet medlem «results»,
