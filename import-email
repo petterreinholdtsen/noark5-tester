@@ -201,13 +201,53 @@ if a match is found.
         (s, res) = self.json_get(searchurl)
         docobjsinfo = json.loads(s)
         if 'results' in docobjsinfo:
-            for d in docobjsinfo['results']:
-                if 'filnavn' in d:
-                    print("ID: %s" % d['filnavn'])
-                    if  d['filnavn'] == messageid:
-                          print("found message-id %s" % messageid)
-                          return d
+            if self.verbose:
+                print("found message-id %s" % messageid)
+            return docobjsinfo['results'][0]
         return None
+
+    def docobj2files(self, docobjinfo):
+        """
+Given a document object instance, look up the files containing the
+document object instance.  This is the structure:
+
+  dokumentobjekt->dokumentbeskrivelse+>registrering->mappe
+                                     +>registrering->mappe
+                                     +>registrering->mappe
+
+One document might be associated with several records, belonging to
+several files.  This function return a list of all the files associated
+with a given document object entry.
+        """
+        print()
+        print("Locating mappe for docobj: %s" % docobjinfo)
+        docdescrel = '%sarkivstruktur/dokumentbeskrivelse/' % self.relbaseurl
+        recordrel = '%sarkivstruktur/registrering/' % self.relbaseurl
+        filerel = '%sarkivstruktur/mappe/' % self.relbaseurl
+
+        docdeschref = docobjinfo['_links'][docdescrel]['href']
+        files = {}
+        if docdeschref:
+            print("Found dokumentbeskrivelse %s" % docdeschref)
+            (s, res) = self.json_get(docdeschref)
+            docdescinfo = json.loads(s)
+            recordhref = docdescinfo['_links'][recordrel]['href']
+            # Note: one 'dokumentbeskrivelse' can be connected to several 'registrering'
+            if recordhref:
+                print("Found record list %s" % recordhref)
+                (s, res) = self.json_get(recordhref)
+                records = json.loads(s)
+                print(records)
+                for recordinfo in records['results']:
+                    if filerel in recordinfo['_links']:
+                        filehref = recordinfo['_links'][filerel]['href']
+                        print("Found mappe %s" % filehref)
+                        (s, res) = self.json_get(filehref)
+                        fileinfo = json.loads(s)
+                        fileid = fileinfo['systemID']
+                        canonicalfilehref = fileinfo['_links']['self']['href']
+                        files[fileid] = canonicalfilehref
+        return files
 
     def findThreadFile(self, message):
         """
@@ -226,6 +266,8 @@ are in.
         if 0 == len(thread):
             return None
         #print(thread)
+
+        fileids = {}
         
         matches = []
         for messageid in thread:
@@ -235,15 +277,25 @@ are in.
         
             (s, res) = self.json_get(searchurl)
             docobjsinfo = json.loads(s)
+            print()
+#            print(docobjsinfo)
+            print("checking search result looking for message %s" % messageid)
             if 'results' in docobjsinfo:
                 for d in docobjsinfo['results']:
-                    if 'filnavn' in d:
-                        if  d['filnavn'] == messageid:
-                            print("found message-id %s" % messageid)
-                            matches.append(d['systemID'])
+                    if 'filnavn' in d and d['filnavn'] == messageid:
+                        matches.append(d['systemID'])
+                        if self.verbose:
+                            print("info: found message-id %s, locating file" % messageid)
+                        files = self.docobj2files(d)
+                        if files:
+                            if self.verbose:
+                                print("info: found file(s) for %s" % messageid)
+                            for (fileid, filehref) in files.items():
+                                fileids[fileid] = filehref
+                        else:
+                            print("error: failed to find file for %s" % messageid)
 
         # FIXME Look up mappe/saksmappe containing docobj entries
-        fileids = {}
         for docobjid in matches:
             if docobjid in self.parentmap:
                 (docdescid, childtype, docdeschref) = self.parentmap[docobjid]
@@ -483,7 +535,7 @@ are in.
         for message in mbox:
             count = count + 1
             if not self.uploadEmail(message):
-                print("error: failed to load email")
+                print("error: not loading email %s" % message['message-id'])
                 retval = False
             now = time.time()
             print("%.2f s per insert/email (%d so far)" % (now - last, count))
@@ -494,7 +546,7 @@ are in.
         """ Load a single email from stdin like /usr/sbin/sendmail does. """
         message = email.message_from_file(sys.stdin)
         if not self.uploadEmail(message):
-            print("error: failed to load email")
+            print("error: not loading email %s" % message['message-id'])
             return False
         return True
 
