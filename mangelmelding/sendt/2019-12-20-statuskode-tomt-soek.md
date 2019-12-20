@@ -3,14 +3,14 @@ Skal statuskode 200 eller 404 returneres for søk uten resultat?
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegrensesnitt
-           Kategori  Versjon 1.0
+           Kategori  Noark 5.5.0 TG versjon 1.0
         Alvorlighet  protest
        Meldingstype  utelatt
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  6 (Filter og tilgangsstyring)
+        Dokumentdel  6.1.1.2 (Finne objekter (Read))
          Sidenummer  n/a
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2019-12-20
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -52,3 +52,11 @@ til dette, der "statuskode 200, " er lagt til:
 > statuskode 200, medlem «count» satt til 0, intet medlem «results»,
 > samt relevante relasjonsnøkler i «_links» inkludert en «self»-relasjon
 > tilbake til forespørselen som produserte den tomme listen.
+
+Respons
+-------
+
+Ingen respons fra arkivverket så langt.
+
+Også registrert som
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/238 .
