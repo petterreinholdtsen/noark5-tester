@@ -13,6 +13,7 @@ import email
 from email.utils import parseaddr
 import json
 import mailbox
+import re
 import urllib
 import urllib2
 
@@ -188,6 +189,11 @@ Store the info about the entity in self.seriesinfo
             print("serieurl: %s" % self.seriesinfo['_links']['self']['href'])
         return self.seriesinfo
 
+    def parseInReplyTo(self, entry):
+        """Split on first semicolon or space and return first part of entry."""
+        entry.split(';', 1)
+        return re.split(';| ', entry)[0]
+
     def alreadySaved(self, message):
         """
 Look up email Message-Id in dokumentobjekt.filename, and return true
@@ -261,7 +267,7 @@ are in.
         self.getDocObjUrl()
         thread = []
         if 'in-reply-to' in message:
-            thread.append(message['in-reply-to'])
+            thread.append(self.parseInReplyTo(message['in-reply-to']))
         if 'references' in message:
             for msgid in message['references'].replace("\n", " ").split(" "):
                 if msgid != "":
@@ -396,7 +402,7 @@ are in.
         if 'references' in message:
             threadstarterid = message['references'].strip().split()[0]
         elif 'in-reply-to' in message:
-            threadstarterid = message['in-reply-to']
+            threadstarterid = self.parseInReplyTo(message['in-reply-to'])
         else:
             threadstarterid = message['message-id']
 
