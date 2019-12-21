@@ -95,6 +95,8 @@ class MboxImporter(n5core.endpoint.Endpoint):
                             action="store_true")
         parser.add_argument("--mbox", help="(default is %s)" % self.mbox)
         parser.add_argument("--storageurl", help="specify under which URL (arkivdel/mappe) to store email files in")
+        parser.add_argument("--maxinserts", type=int, default=1,
+                            help="stop after number of inserts (default is 1)")
         parser.add_argument("--saksmappe",
                             help="Store as saksmappe/journalpost instead of registrering/mappe",
                             action="store_true")
@@ -103,6 +105,7 @@ class MboxImporter(n5core.endpoint.Endpoint):
         args = parser.parse_args()
         self.usesaksmappe = args.saksmappe
         self.storageurl = args.storageurl
+        self.maxinserts = args.maxinserts
         if args.baseurl:
             baseurl = args.baseurl
         if args.mda and args.mbox:
@@ -196,7 +199,7 @@ if a match is found.
 
         searchurl = self.docobjurl + '?$filter=' +\
             urllib.quote_plus("filnavn eq '%s'" % messageid)
-        print(searchurl)
+        #print(searchurl)
 
         (s, res) = self.json_get(searchurl)
         docobjsinfo = json.loads(s)
@@ -532,14 +535,21 @@ are in.
         mbox = mailbox.mbox(self.mbox)
         last = time.time()
         count = 0
+        inserted = 0
         for message in mbox:
-            count = count + 1
+            count += 1
             if not self.uploadEmail(message):
                 print("error: not loading email %s" % message['message-id'])
                 retval = False
+            else:
+                inserted += 1
             now = time.time()
-            print("%.2f s per insert/email (%d so far)" % (now - last, count))
+            print("%.2f s per insert/email (%d inserted, %d seen)" % (
+                now - last, inserted, count
+            ))
             last = now
+            if inserted >= self.maxinserts:
+                break
         return retval
 
     def loadEmail(self):
