@@ -49,11 +49,13 @@ def mime2format(mimestr):
     mimetypemap = {
         'application/pdf':           'fmt/95',  # Registered MIME type
         'image/jpeg':                'fmt/41', # Registered MIME type
+        'image/gif':                 'fmt/4', # Registered MIME type
         'application/xml':           'fmt/101',  # Registered MIME type
         'text/xml':                  'fmt/101',  # Registered MIME type
 
         # These should have official codes, but do not
         'application/vnd.oasis.opendocument.presentation' : "fmt/138",
+        'application/x-sql':         'fmt/206',  # Not registered MIME type
         'audio/x-wav':               'fmt/703',     # Not registered MIME type
         'image/png':                 'fmt/13',     # Registered MIME type
         'message/rfc822':            'fmt/278',  # Registered MIME type
