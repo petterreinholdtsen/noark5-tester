@@ -824,6 +824,12 @@ or should it be rejected?
                                          casefiledata)
         casefileurl = self.parselinks(casefileinfo['_links'])['self']
 
+        archivenotedata = {
+        }
+        archivenoterel = noarkrelbase + 'sakarkiv/ny-arkivnotat/'
+        archivenoteinfo = self.createEntity('archivenote', archivenoterel,
+                                            self.parselinks(casefileinfo['_links']),
+                                            archivenotedata)
         journalentrydata = {
             'tittel' : 'test',
         }
