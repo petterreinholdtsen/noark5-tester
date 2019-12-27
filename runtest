@@ -211,11 +211,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/sletting/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/utfoertKassasjon/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/registrering/?',
-        'hateoas-api/arkivstruktur/basisregistrering/[-0-9a-z]+/ny-forfatter/?',
-        'hateoas-api/arkivstruktur/basisregistrering/[-0-9a-z]+/ny-kryssreferanse/?',
-        'hateoas-api/arkivstruktur/basisregistrering/[-0-9a-z]+/ny-merknad/?',
-        'hateoas-api/arkivstruktur/basisregistrering/[-0-9a-z]+/ny-noekkelord/?',
-        'hateoas-api/arkivstruktur/basisregistrering/[-0-9a-z]+/ny-oppbevaringssted/?',
         'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/forfatter/?',
         'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/merknad/?',
         'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-forfatter/?',
@@ -237,7 +232,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/registrering/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/arkivdel/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/avslutt-mappe/?',
-        'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/basisregistrering/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/kryssreferanse/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/merknad/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-klassereferanse/?',
@@ -811,15 +805,6 @@ or should it be rejected?
         recordinfo = self.createEntity('record', createrecordrel,
                                        self.parselinks(fileinfo['_links']),
                                        recorddata)
-        basicrecorddata = {
-            "tittel"             : "Title of basic record created %s" % now,
-#            "forfatter"          : [ "testforfatter"],
-        }
-        createbasicrecordrel = noarkrelbase + 'arkivstruktur/ny-basisregistrering/'
-        basicrecordinfo = self.createEntity('basicrecord',
-                                            createbasicrecordrel,
-                                            self.parselinks(fileinfo['_links']),
-                                            basicrecorddata)
         casefiledata = {
 #            "mappeID"            : "2017/1",
 #            "offentligTittel"    : "Public title of the test case file created %s" % now,
