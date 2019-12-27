@@ -750,7 +750,7 @@ or should it be rejected?
             
         createfondsrel = noarkrelbase + 'arkivstruktur/ny-arkiv/'
         fondsdata = {
-            "tittel"          : "Title of the test fonds created %s" % now,
+            "tittel"          : u"Title of the test fonds created %s" % now,
 #            "beskrivelse"     : "Description of the test fonds",
 #            "oppbevaringssted" : [ "location 1", "location2", "location3" ],
 #            "dokumentmedium"  : "Elektronisk arkiv",
@@ -762,11 +762,11 @@ or should it be rejected?
             return
             
         seriesdata = {
-            "tittel"          : "Title of the test series created %s" % now,
+            "tittel"          : u"Title of the test series created %s" % now,
 #            "beskrivelse"     : "Description of the test series",
 #            "oppbevaringssted" : [ "location 1", "location2", "location3" ],
 #            "dokumentmedium"  : "Elektronisk arkiv",
-            "arkivdelstatus" : "O",
+            "arkivdelstatus" : u"O",
         }
         createseriesrel = noarkrelbase + 'arkivstruktur/ny-arkivdel/'
         serieinfo = self.createEntity('serie', createseriesrel,
