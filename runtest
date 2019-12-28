@@ -262,7 +262,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/utfoertKassasjon/?',
         'hateoas-api/metadata/dokumentstatus/?',
         'hateoas-api/metadata/dokumenttype/?',
-        'hateoas-api/metadata/format/?',
         'hateoas-api/metadata/variantformat/?',
         'hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/ny-avskrivning/',
         'hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/avskrivning/?',
