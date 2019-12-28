@@ -900,7 +900,7 @@ or should it be rejected?
             (c, res) = self.post(url, xmldata, 'application/xml')
             # The spec is not clear on what is returned from file upload
             #self.verify(c == '', "POST %s return nothing" % url)
-            self.verify(200 == res.code, "verify file upload HTTP code %s is 200" % (res.code)
+            self.verify(200 == res.code, "verify file upload HTTP code %s is 200" % (res.code))
         except urllib2.HTTPError, e:
             print("POST %s failed: %s (%s)" % (url, str(e), e.read()))
 
