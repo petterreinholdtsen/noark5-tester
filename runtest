@@ -550,7 +550,7 @@ Test basis requirements for NOARK 5 Core.
         info = json.loads(c)
         id = info['systemID']
         verify(id is not None, "created %s" % name)
-        verify(201 == res.code, "%s creation returned HTTP code 201" % name)
+        verify(201 == res.code, "verify %s creation return HTTP code %s is 201" % (name, res.code))
         linkrefs = self.parselinks(info['_links'])
         verify('self' in linkrefs, "_links in response from %s creation should include 'self' reference" % name)
         if 'self' in linkrefs:
@@ -788,7 +788,7 @@ or should it be rejected?
         filedata = {
 #            "mappeID"            : "2017/01",
 #            "offentligTittel"    : "Public title of the test file created %s" % now,
-            "tittel"             : "Title of the test file created %s" % now,
+            "tittel"             : u"Title of the test file created %s" % now,
 #            "beskrivelse"        : "Description of the test file",
 #            "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
 #            "oppbevaringssted"    : [ "location 1", "location2", "location3" ],
@@ -808,7 +808,7 @@ or should it be rejected?
         casefiledata = {
 #            "mappeID"            : "2017/1",
 #            "offentligTittel"    : "Public title of the test case file created %s" % now,
-            "tittel"             : "Title of the test case file created %s" % now,
+            "tittel"             : u"Title of the test case file created %s" % now,
 #            "beskrivelse"        : "Description of the test file",
 #            "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
 #            "oppbevaringssted"    : [ "location 1", "location2", "location3" ],
@@ -857,7 +857,7 @@ or should it be rejected?
         docdescdata = {
 #            "dokumenttype"    : "type dokument",
 #            "dokumentstatus"  : "status of document",
-            "tittel"          : "Title of the test document description created %s" % now,
+            "tittel"          : u"Title of the test document description created %s" % now,
 #            "tilknyttetRegistreringSom" : "Associated with record as"
             "dokumentnummer" : 1,
         }
@@ -899,7 +899,7 @@ or should it be rejected?
             (c, res) = self.post(url, xmldata, 'application/xml')
             # The spec is not clear on what is returned from file upload
             #self.verify(c == '', "POST %s return nothing" % url)
-            self.verify(200 == res.code, "file upload returned HTTP code 200")
+            self.verify(200 == res.code, "verify file upload HTTP code %s is 200" % (res.code)
         except urllib2.HTTPError, e:
             print("POST %s failed: %s (%s)" % (url, str(e), e.read()))
 
