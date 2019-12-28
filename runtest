@@ -359,6 +359,14 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                 self.success("GET %s worked with code %d"  % (url, res.code))
                 self.verify(allow is not None, "GET header should include Allow for %s" % url)
                 ctype = res.info().getheader('Content-Type')
+
+                if -1 != ctype.find('application/json') and \
+                   -1 != url.find('.well-known/openid-configuration'):
+                    # FIXME add check for openid connect setup
+                    if self.verbose:
+                        print("no checking for %s" % url)
+                    continue
+
                 if self.verify(ctype and 0 == ctype.find('application/vnd.noark5+json'),
                                "MIME type %s should be application/vnd.noark5+json for url %s" % (ctype, url)):
                     #print "C:", content
