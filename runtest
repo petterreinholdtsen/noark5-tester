@@ -780,11 +780,14 @@ or should it be rejected?
             "tittel"             : u"Fly high, try the 🛫 created %s" % now,
         }
         createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
-        url = serieinfo['_links'][createfilerel]['href']
         try:
-            u8fileinfo = self.createEntity('file', createfilerel, url, u8filedata)
+            u8fileinfo = self.createEntity('file', createfilerel,
+                                           self.parselinks(serieinfo['_links']),
+                                           u8filedata)
         except urllib2.HTTPError as e:
-            self.failure("creating long UTF-8 title in %s failed: %s (%s)" % (url, str(e), e.read()))
+            self.failure("creating long UTF-8 title in %s failed: %s (%s)" %
+                         (url, str(e), e.read())
+            )
 
         filedata = {
 #            "mappeID"            : "2017/01",
