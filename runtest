@@ -279,6 +279,11 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-saksstatus/?',
         'hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-sekundaerklassifikasjon/?',
     ]
+    knownwithoutlinksregex = [
+        'hateoas-api/admin/ny-administrativenhet/?',
+        'hateoas-api/admin/ny-bruker/?',
+        'hateoas-api/admin/system/?',
+    ]
     verbose = False
     def __init__(self):
         baseurl = 'http://localhost:8092/noark5v5/'
@@ -338,6 +343,13 @@ class Noark5Tester (n5core.endpoint.Endpoint):
 
     def isknownmissing(self, url):
         for pattern in self.knownmissingregex:
+            fullpattern = self.baseurl + pattern
+            if re.match(fullpattern, url) is not None:
+                return True
+        return False
+
+    def isknownwithoutlinks(self, url):
+        for pattern in self.knownwithoutlinksregex:
             fullpattern = self.baseurl + pattern
             if re.match(fullpattern, url) is not None:
                 return True
@@ -422,7 +434,10 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                     else:
                                         self.rels[rel] = href
                     else:
-                        self.failure("GET %s missing _links" % url)
+                        if self.isknownwithoutlinks(url):
+                            self.xfailure("GET %s missing _links" % url)
+                        else:
+                            self.failure("GET %s missing _links" % url)
                     if baseref is not None and type(baseref) is not list:
                         for basekey in baseref.keys():
                             if basekey != '_links' and type(baseref[basekey]) is list:
