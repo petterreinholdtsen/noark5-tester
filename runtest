@@ -187,6 +187,8 @@ class Noark5Tester (n5core.endpoint.Endpoint):
     knownmissingregex = [
         'hateoas-api/admin/ny-rettighet/?',
         'hateoas-api/admin/rettighet/?',
+        'hateoas-api/admin/bruker/[-0-9a-z]+/administrativenhet/?',
+        'hateoas-api/admin/bruker/[-0-9a-z]+/ny-administrativenhet/?',
         'hateoas-api/arkivstruktur/arkiv/[-0-9a-z]+/arkiv/?',
         'hateoas-api/arkivstruktur/arkiv/[-0-9a-z]+/arkivskaper/?',
         'hateoas-api/arkivstruktur/arkiv/[-0-9a-z]+/ny-underarkiv/?',
