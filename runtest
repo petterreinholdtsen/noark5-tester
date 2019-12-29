@@ -320,6 +320,11 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             return self.success(msg)
         else:
             return self.failure(msg)
+    def xsuccess(self, msg):
+        if msg not in self.successes:
+            self.successes[msg] = 1
+            print("xsuccess: " + msg)
+        return True
     def xfailure(self, msg):
         if msg not in self.xfailures:
             self.xfailures[msg] = 1
@@ -327,7 +332,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         return False
     def xverify(self, check, msg):
         if (check):
-            return self.success(msg)
+            return self.xsuccess(msg)
         else:
             return self.xfailure(msg)
 
