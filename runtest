@@ -461,7 +461,7 @@ code 401 before logging in.
             url = "arkivstruktur/arkiv/"
             (content, res) = self.json_get(url)
             self.failure("level 0 accessing %s before login do not ask for basic authentication" % url)
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             self.xverify(401 == e.code and 'www-authenticate' in e.hdrs,
                         "level 0 API should support support Basic access authentication")
         
@@ -475,7 +475,7 @@ Test basis requirements for NOARK 5 Core.
         try:
             (ocontent, ores) = self.options('.')
             self.success("level 0 CORS - HTTP OPTTIONS request worked")
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             self.failure("level 0 CORS - HTTP OPTTIONS request not working")
         except urllib2.URLError:
             self.failure("level 0 CORS - unable to connect via HTTP")
@@ -498,7 +498,7 @@ Test basis requirements for NOARK 5 Core.
                     return baseref
                 else:
                     self.failure('level 0 JSON - did not find _links in json response')
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             self.failure('level 0 JSON - unable to GET JSON content for base.')
 
         # FIXME Verify authentication, not sure how
