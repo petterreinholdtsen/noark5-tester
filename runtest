@@ -913,9 +913,9 @@ or should it be rejected?
 #            "variantformat"   : "Arkivformat",
 #            "format"          : "PDF",
 #            "formatDetaljer"  : "PDF/A PDFv1.4",
-            "sjekksum"          : hash,
+            "sjekksum"          : unicode(hash),
             "sjekksumAlgoritme" : unicode(hashalg),
-            "filstoerrelse"   : unicode(len(xmldata)),
+            "filstoerrelse"     : unicode(len(xmldata)),
 #            "mimeType"       : "application/xml", 
         }
         createdocobjrel = noarkrelbase + 'arkivstruktur/ny-dokumentobjekt/'
