@@ -444,7 +444,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                     # Only check non-objects for unique relations
                                     if 'systemID' not in baseref \
                                        and 'kode' not in baseref \
-                                       and '/ny-' not in rel \
+                                       and '/ny-' not in url \
                                        and rel in self.rels \
                                        and href != self.rels[rel]:
                                         self.failure("unique duplicate rel %s in _links for %s" % (rel, url))
