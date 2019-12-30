@@ -230,6 +230,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/registrering/?',
         'hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/dokumentbeskrivelse/?',
         'hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/elektronisksignatur/?',
+        'hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/konverterFil/?',
         'hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/konvertering/?',
         'hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/ny-elektronisksignatur/?',
         'hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/ny-konvertering/?',
