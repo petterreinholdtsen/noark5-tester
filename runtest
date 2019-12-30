@@ -859,6 +859,7 @@ or should it be rejected?
         casefileurl = self.parselinks(casefileinfo['_links'])['self']
 
         archivenotedata = {
+            'tittel': 'test av arkivnotat',
         }
         archivenoterel = noarkrelbase + 'sakarkiv/ny-arkivnotat/'
         archivenoteinfo = self.createEntity('archivenote', archivenoterel,
