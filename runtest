@@ -268,6 +268,8 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/skjerming/?',
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/sletting/?',
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/utfoertKassasjon/?',
+        'hateoas-api/sakarkiv/arkivnotat/[-0-9a-z]+/dokumentflyt/?',
+        'hateoas-api/sakarkiv/arkivnotat/[-0-9a-z]+/ny-dokumentflyt/?',
         'hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/ny-avskrivning/',
         'hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/avskrivning/?',
         'hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/dokumentflyt/?',
