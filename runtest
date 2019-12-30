@@ -583,14 +583,14 @@ Test basis requirements for NOARK 5 Core.
                     verify(-1 != allow.index('GET'), 'OPTIONS header Allow should include GET for %s' % url)
                 else:
                     self.failure("OPTIONS for URL %s missing Allow header" % url)
-            except urllib2.HTTPError, e:
+            except urllib2.HTTPError as e:
                 self.failure('unable to OPTIONS %s' % url)
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             self.failure('unable to GET %s' % url)
         print("POST %s: %s" % (url, data))
         try:
             (c, res) = self.json_post(url, data)
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             failure("POST %s failed: %s" % (url, e.read().decode('UTF-8')))
             raise
         info = json.loads(c)
