@@ -859,22 +859,22 @@ or should it be rejected?
         casefileurl = self.parselinks(casefileinfo['_links'])['self']
 
         archivenotedata = {
-            'tittel': 'test av arkivnotat',
+            'tittel': u'test av arkivnotat',
         }
         archivenoterel = noarkrelbase + 'sakarkiv/ny-arkivnotat/'
         archivenoteinfo = self.createEntity('archivenote', archivenoterel,
                                             self.parselinks(casefileinfo['_links']),
                                             archivenotedata)
         journalentrydata = {
-            'tittel' : 'test',
+            'tittel' : u'test',
         }
         createjournalentryrel = noarkrelbase + 'sakarkiv/ny-journalpost/'
         journalentryinfo = self.createEntity('journalentry',
                                              createjournalentryrel,
                                              self.parselinks(casefileinfo['_links']),
                                              journalentrydata)
-        for (c, f) in [('enhet', 'navn'),
-                       ('person', 'navn'),
+        for (c, f) in [('enhet', u'navn'),
+                       ('person', u'navn'),
                        # ('intern', 'administrativenhet') # FIXME not working yet
         ]:
             corrpartrel = noarkrelbase + 'arkivstruktur/ny-korrespondansepart%s/' % c
@@ -883,7 +883,7 @@ or should it be rejected?
                     'korrespondanseparttype' : {
                         'kode' : code
                     },
-                    f : 'Eksempel %s' % code,
+                    f : u'Eksempel %s' % code,
                 }
                 corrinfo = self.createEntity('correspondance part %s' % c,
                                              corrpartrel,
@@ -903,7 +903,7 @@ or should it be rejected?
                                         docdescdata)
 
         xmldata = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml></xml>\n"
-        hashalg = 'SHA-256'
+        hashalg = u'SHA-256'
         hasher = sha256()
         hasher.update(xmldata)
         hash = hasher.hexdigest()
@@ -914,8 +914,8 @@ or should it be rejected?
 #            "format"          : "PDF",
 #            "formatDetaljer"  : "PDF/A PDFv1.4",
             "sjekksum"          : hash,
-            "sjekksumAlgoritme" : hashalg,
-            "filstoerrelse"   : str(len(xmldata)),
+            "sjekksumAlgoritme" : unicode(hashalg),
+            "filstoerrelse"   : unicode(len(xmldata)),
 #            "mimeType"       : "application/xml", 
         }
         createdocobjrel = noarkrelbase + 'arkivstruktur/ny-dokumentobjekt/'
