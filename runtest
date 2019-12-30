@@ -595,7 +595,7 @@ Test basis requirements for NOARK 5 Core.
             if verify(k in info,
                            "POST %s respons should have key %s" % (url, k)):
                 if verify(type(data[k]) == type(info[k]),
-                          'type of attribute %s matches  for sent (%s) and received (%s) JSON' % (
+                          'type of attribute %s matches for sent (%s) and received (%s) JSON' % (
                               k, type(data[k]), type(info[k]),
                           )):
                     if list is type(data[k]):
