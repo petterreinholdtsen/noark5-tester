@@ -449,7 +449,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "skjerming",
             "gradering",
 
-            (undermapperel,            self.recurse_xml_mappe),
+# FIXME not working in Nikita
+#            (undermapperel,            self.recurse_xml_mappe), # FIXME for mappe
             (registreringrel,          self.recurse_xml_registrering),
         )
         if 'xsi:type="saksmappe"' == attr:
@@ -586,7 +587,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'avsluttetDato',
             'avsluttetAv',
             (arkivskaperrel, self.recurse_xml_arkivskaper),
-            (underarkivrel,  self.recurse_xml_arkiv),
+# FIXME not working in Nikita
+#            (underarkivrel,  self.recurse_xml_arkiv), # FIXME for arkiv
             (arkivdelrel,    self.recurse_xml_arkivdel),
         )
         attr = None
