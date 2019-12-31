@@ -632,7 +632,7 @@ Test basis requirements for NOARK 5 Core.
                                         (url, k, v, data[k][v]))
                     else:
                         verify(info[k] == data[k],
-                                    "POST %s response for '%s' should match '%s'" % (url, k, data[k]))
+                                    "POST %s response for '%s' ('%s') should match '%s'" % (url, k, info[k], data[k]))
         return info
 
     def deleteCreated(self):
