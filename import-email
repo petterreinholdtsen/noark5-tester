@@ -380,18 +380,22 @@ are in.
             for e in created[::-1]:
                 self.delete(e)
             return False
-        if 201 != res.code:
+        if 201 != res.status_code:
             print("error: upload failed (status == %d), removing objects"
-                  % res.code)
+                  % res.status_code)
             for e in created[::-1]:
+                print("info: deleting %s" % e)
                 self.delete(e)
             return False
         return True
 
 
     def rfc822date2xsdate(self, s):
+        """Convert a RFC 822 date string to a XML xs:date string,
+not loosing the timezone information.
+
+"""
         d = dateutil.parser.parse(s)
-        print(type(d.tzinfo.utcoffset(d)))
         if d.tzinfo:
             return d.date().isoformat() \
                 + str.format('{0:+06.2f}',
