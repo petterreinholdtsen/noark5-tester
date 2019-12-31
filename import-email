@@ -388,6 +388,19 @@ are in.
             return False
         return True
 
+
+    def rfc822date2xsdate(self, s):
+        d = dateutil.parser.parse(s)
+        print(type(d.tzinfo.utcoffset(d)))
+        if d.tzinfo:
+            return d.date().isoformat() \
+                + str.format('{0:+06.2f}',
+                             float(d.tzinfo.utcoffset(d).total_seconds()) / 3600)\
+                     .replace('.', ':')
+        else:
+            return d.date().isoformat() + 'Z'
+
+
     def addMessageToFile(self, fileinfo, message):
         recordrel = '%sarkivstruktur/ny-registrering/' % self.relbaseurl
         recordentryrel = '%ssakarkiv/ny-journalpost/' % self.relbaseurl
@@ -408,10 +421,7 @@ are in.
         else:
             threadstarterid = message['message-id']
 
-        # FIXME workaround for nikita failing to parse dates with
-        # timezones.
-        fromdate = dateutil.parser.parse(message['date']). \
-            replace(tzinfo=None).isoformat() + 'Z'
+        fromdate = self.rfc822date2xsdate(message['date'])
 
         if self.usesaksmappe:
             recorddata = {
