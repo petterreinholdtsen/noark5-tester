@@ -205,7 +205,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-klassifikasjonssystem/',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-oppbevaringssted/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-oppbevaringssteder/?',
-        'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-registrering/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-skjerming/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-sletting/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-utfoertKassasjon/?',
