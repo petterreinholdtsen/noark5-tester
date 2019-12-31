@@ -294,6 +294,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/arkiv/[-0-9a-z]+/ny-arkivdel/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/klassifikasjonssystem/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-klassifikasjonssystem/?',
+        'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-registrering/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-mappe/?',
         'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-dokumentobjekt/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-mappe/?',
