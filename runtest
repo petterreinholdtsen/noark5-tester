@@ -833,8 +833,7 @@ or should it be rejected?
         createclassrel = \
             noarkrelbase + 'arkivstruktur/ny-klasse/'
         classinfo = \
-            self.createEntity('class',
-                              createseriesrel,
+            self.createEntity('class', createclassrel,
                               self.parselinks(classificationsysteminfo['_links']),
                               classdata)
 
