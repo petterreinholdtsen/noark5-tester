@@ -816,9 +816,7 @@ or should it be rejected?
 
         classificationsystemdata = {
             'tittel': u'Title of the test classification system created %s' % now,
-            'klassifikasjonstype' : {
-                'kode' : 'FH',
-            },
+#            'klassifikasjonstype' : { 'kode' : 'FH', },
         }
         createclassificationsystemrel = \
             noarkrelbase + 'arkivstruktur/ny-klassifikasjonssystem/'
