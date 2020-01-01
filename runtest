@@ -813,7 +813,42 @@ or should it be rejected?
         serieinfo = self.createEntity('serie', createseriesrel,
                                       self.parselinks(fondinfo['_links']),
                                       seriesdata)
-        
+
+        classificationsystemdata = {
+            'tittel': u'Title of the test classification system created %s' % now,
+            'klassifikasjonstype' : {
+                'kode' : 'FH',
+            },
+        }
+        createclassificationsystemrel = \
+            noarkrelbase + 'arkivstruktur/ny-klassifikasjonssystem/'
+        classificationsysteminfo = \
+            self.createEntity('classificationsystem',
+                              createclassificationsystemrel,
+                              self.parselinks(serieinfo['_links']),
+                              classificationsystemdata)
+
+        classdata = {
+            'klasseID' : u'Test class created %s' % now,
+            'tittel': u'Title of the test class created %s' % now,
+        }
+        createclassrel = \
+            noarkrelbase + 'arkivstruktur/ny-klasse/'
+        classinfo = \
+            self.createEntity('class',
+                              createseriesrel,
+                              self.parselinks(classificationsysteminfo['_links']),
+                              classdata)
+
+        subclassfiledata = {
+            'tittel' : u"Title of the sub-class test file created %s" % now,
+        }
+        createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
+        subclassfileinfo = \
+            self.createEntity('file', createfilerel,
+                              self.parselinks(classinfo['_links']),
+                              subclassfiledata)
+
         # Test file with UTF-8 character longer than 3 bytes (problem
         # with some MySQL backend engines.
         # FIXME enable when figuring out how to get success() to handle unicode
