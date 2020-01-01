@@ -288,18 +288,13 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-sekundaerklassifikasjon/?',
     ]
     knownwithoutlinksregex = [
-        'hateoas-api/admin/ny-administrativenhet/?',
         'hateoas-api/admin/ny-bruker/?',
         'hateoas-api/admin/system/?',
-        'hateoas-api/arkivstruktur/arkiv/[-0-9a-z]+/ny-arkivdel/?',
+        'hateoas-api/arkivstruktur/arkiv/[-0-9a-z]+/ny-arkivskaper/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/klassifikasjonssystem/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-klassifikasjonssystem/?',
-        'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-registrering/?',
-        'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-dokumentobjekt/?',
-        'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-registrering/?',
         'hateoas-api/arkivstruktur/ny-arkivskaper/?',
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/korrespondansepart/?',
-        'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-dokumentbeskrivelse/?',
     ]
     verbose = False
     def __init__(self):
