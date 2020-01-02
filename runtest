@@ -845,13 +845,22 @@ or should it be rejected?
                               self.parselinks(classificationsysteminfo['_links']),
                               classdata)
 
+        subclassdata = {
+            'klasseID' : u'Test subclass created %s' % now,
+            'tittel': u'Title of the test subclass created %s' % now,
+        }
+        subclassinfo = \
+            self.createEntity('subclass', createclassrel,
+                              self.parselinks(classinfo['_links']),
+                              subclassdata)
+
         subclassfiledata = {
             'tittel' : u"Title of the sub-class test file created %s" % now,
         }
         createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
         subclassfileinfo = \
             self.createEntity('file', createfilerel,
-                              self.parselinks(classinfo['_links']),
+                              self.parselinks(subclassinfo['_links']),
                               subclassfiledata)
 
         # Test file with UTF-8 character longer than 3 bytes (problem
