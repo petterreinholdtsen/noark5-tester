@@ -250,7 +250,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/avslutt-mappe/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/kryssreferanse/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/merknad/?',
-        'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-klassereferanse/?',
+        'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-klasse/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-klassifikasjonssystem/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-kryssreferanse/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-merknad/?',
