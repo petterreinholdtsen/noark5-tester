@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 
 Import a Noark 5 extract into the API.
@@ -50,6 +51,7 @@ excludes = {
     ),
     'klassifikasjonssystem': (
         'systemID',
+        'klassifikasjonstype', # FIXME Seem to be missing from Nikita?
     ),
     'klasse': (
         'systemID',
@@ -74,6 +76,9 @@ excludes = {
         'skjerming',
         'gradering',
         'avskrivning',
+        'journalenhet',
+        'referanseArkivdel',
+        'forfatter',
     ),
     'moeteregistrering': (
         'systemID',
@@ -553,6 +558,8 @@ FIXME flag inaccurate guesses somehow
         if 1 < len(paths):
             raise ValueError('more than one referanseDokumentfil field is not allowed')
         filepath = os.path.join(self.basedir, paths[0].text)
+        if '\\' in filepath:
+            filepath = filepath.replace('\\', '/')
         try:
             with open(filepath) as content:
                 size = os.path.getsize(filepath)
