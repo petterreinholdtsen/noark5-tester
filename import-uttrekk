@@ -346,7 +346,7 @@ class Importer(n5core.endpoint.Endpoint):
             substr = "under"
         else:
             substr = ""
-        rel = self.relbaseurl + 'arkivstruktur/ny-%sarkiv/' % substr
+        rel = self.relbaseurl + 'arkivstruktur/ny-arkiv/'
         self.import_entity('arkiv', rel, parentinfo, element, subs)
 
     def import_arkivskaper(self, parentinfo, element):
@@ -379,7 +379,7 @@ class Importer(n5core.endpoint.Endpoint):
             substr = "under"
         else:
             substr = ""
-        rel = self.relbaseurl + 'arkivstruktur/ny-%sklasse/' % substr
+        rel = self.relbaseurl + 'arkivstruktur/ny-klasse/'
 
         self.import_entity('klasse', rel, parentinfo, element, subs)
 
@@ -390,15 +390,15 @@ class Importer(n5core.endpoint.Endpoint):
             substr = "under"
         else:
             substr = ""
-        rel = self.relbaseurl + 'arkivstruktur/ny-%smappe/' % substr
+        rel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
         if attrtype in element.keys():
             etype = element.get(attrtype)
             if 'moetemappe' == etype:
                 name = 'moetemappe'
-                rel = self.relbaseurl + 'arkivstruktur/ny-%smoetemappe/' % substr
+                rel = self.relbaseurl + 'arkivstruktur/ny-moetemappe/'
             elif 'saksmappe' == etype:
                 name = 'saksmappe'
-                rel = self.relbaseurl + 'sakarkiv/ny-%ssaksmappe/' % substr
+                rel = self.relbaseurl + 'sakarkiv/ny-saksmappe/'
             else:
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
