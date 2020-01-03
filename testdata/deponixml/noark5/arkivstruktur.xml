@@ -150,9 +150,9 @@
           <opprettetDato>1864-10-09T00:00:00+00:00</opprettetDato>
           <opprettetAv>Steve Jackson</opprettetAv>
           <referanseDokumentfil>dokumenter\5000000.pdf</referanseDokumentfil>
-          <sjekksum>3b29dfcc4286e50b180af8f21904c86f8aa42a23c4055c3a71d0512f9ae3886f</sjekksum>
+          <sjekksum>b78fa9dcdaf7f59f085de6824ab3a238d6dada74fa7178e7823a4347055a06c3</sjekksum>
           <sjekksumAlgoritme>SHA-256</sjekksumAlgoritme>
-          <filstoerrelse>20637</filstoerrelse>
+          <filstoerrelse>24553</filstoerrelse>
          </dokumentobjekt>
         </dokumentbeskrivelse>
         <registreringsID>mappe1/jrnpst-1</registreringsID>
@@ -237,9 +237,9 @@
           <opprettetDato>1864-02-10T00:00:00+00:00</opprettetDato>
           <opprettetAv>Joachim Fugleberg</opprettetAv>
           <referanseDokumentfil>dokumenter\5000001.pdf</referanseDokumentfil>
-          <sjekksum>2ea3a86de226d791a07abb5279b0e2813b037730730ba630de4f14dea7c32208</sjekksum>
+          <sjekksum>b78fa9dcdaf7f59f085de6824ab3a238d6dada74fa7178e7823a4347055a06c3</sjekksum>
           <sjekksumAlgoritme>SHA-256</sjekksumAlgoritme>
-          <filstoerrelse>18432</filstoerrelse>
+          <filstoerrelse>24553</filstoerrelse>
           <konvertering>
            <konvertertDato>1864-05-02T00:00:00+00:00</konvertertDato>
            <konvertertAv>sakSystem</konvertertAv>
