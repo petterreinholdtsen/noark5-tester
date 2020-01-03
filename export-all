@@ -14,6 +14,7 @@ import pytz
 import urllib2
 import n5core.endpoint
 import codecs
+from xml.sax.saxutils import escape
 
 class XMLTag(object):
     def __init__(self, level, fh, tagname, attr=None):
@@ -52,6 +53,8 @@ class XMLFile(object):
 
 
     def writetag(self, tagname, s):
+        if str == type(s) or unicode == type(s):
+            s = escape(s)
         self.fh.write("%s<%s>%s</%s>\n" % ("  " * self.level[0], tagname, s, tagname))
 
 
