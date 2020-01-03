@@ -436,7 +436,7 @@ class Importer(n5core.endpoint.Endpoint):
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
             tagdokumentbeskrivelse: ([], self.import_dokumentbeskrivelse),
-            tagkorrespondansepart: ([], self.import_korrespondansepart),
+#            tagkorrespondansepart: ([], self.import_korrespondansepart),
 #            tagmerknad: ([], self.import_merknad), # FIXME in registrering
 #            tagpart: ([], self.import_part), # FIXME in registrering
         }
