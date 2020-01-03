@@ -80,6 +80,9 @@ excludes = {
         'referanseArkivdel',
         'forfatter',
     ),
+    'arkivnotat': (
+        'systemID',
+    ),
     'moeteregistrering': (
         'systemID',
         'noekkelord',
