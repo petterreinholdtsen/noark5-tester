@@ -116,13 +116,17 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 if tuple == keytype:
                     rel = k[0]
                     if rel in content['_links']:
-                        (c, res) = self.json_get(content['_links'][rel]['href'])
+                        url = content['_links'][rel]['href']
+                        (c, res) = self.json_get(url)
                         info = json.loads(c)
                         # Process list if relation gave non-empty result
                         if ('count' in info and 0 < info['count']) \
                            or 'results' in info:
                             for sub in info['results']:
                                 k[1](output, sub)
+                        elif not 'count' in info:
+                            print("warning: GET %s did not return list" % (url))
+                            k[1](output, info)
             if '_links' in content:
                 del content['_links']
             if content.keys():
@@ -522,7 +526,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "opprettetAv",
             "avsluttetDato",
             "avsluttetAv",
-            (klasserel, self.recurse_xml_klase),
+            (klasserel, self.recurse_xml_klasse),
             )
         self.recurse_xml_out_ordered(output, 'klassifikasjonssystem', content, sequence)
 
