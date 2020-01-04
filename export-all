@@ -362,7 +362,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "virksomhetsspesifikkeMetadata",
 
 #            (merknadrel, self.recurse_xml_merknad), # FIXME for registrering
-            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for registrering
+#            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for registrering
             (korrpartrel, self.recurse_xml_korrespondansepart),
         )
         if 'xsi:type="journalpost"' == attr:
@@ -503,7 +503,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             "avsluttetDato",
             "avsluttetAv",
 
-            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for klasse
+#            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for klasse
             "kassasjon",
             "skjerming",
             "gradering",
