@@ -205,9 +205,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/skjerming/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/sletting/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/utfoertKassasjon/?',
-        'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/forfatter/?',
         'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/merknad/?',
-        'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-forfatter/?',
         'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-gradering/?',
         'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-kassasjon/?',
         'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-merknad/?',
@@ -260,7 +258,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/utvid-til-saksmappe/?',
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/gradering/?',
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/kassasjon/?',
-        'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-forfatter/?',
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-gradering/?',
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-kassasjon/?',
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-kryssreferanse/?',
@@ -293,7 +290,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
     knownwithoutlinksregex = [
         'hateoas-api/admin/ny-bruker/?',
         'hateoas-api/admin/system/?',
-        'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/korrespondansepart/?',
     ]
     verbose = False
     def __init__(self):
