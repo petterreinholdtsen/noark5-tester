@@ -804,6 +804,16 @@ or should it be rejected?
 #            "oppbevaringssted" : [ "location 1", "location2", "location3" ],
 #            "dokumentmedium"  : "Elektronisk arkiv",
             "arkivdelstatus" : u"O",
+            "gradering": {
+                "graderingskode": {
+                    "kode":"SH",
+                    "kodenavn":"Strengt hemmelig (sikkerhetsgrad)"
+                },
+                "graderingsdato": "1865-02-13T00:00:00+00:00",
+                "gradertAv": "PST",
+                "nedgraderingsdato": "2070-02-13T00:00:00+00:00",
+                "nedgradertAv": "PST"
+            },
         }
         createseriesrel = noarkrelbase + 'arkivstruktur/ny-arkivdel/'
         serieinfo = self.createEntity('serie', createseriesrel,
