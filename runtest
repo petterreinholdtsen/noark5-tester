@@ -809,9 +809,9 @@ or should it be rejected?
                     "kode":"SH",
                     "kodenavn":"Strengt hemmelig (sikkerhetsgrad)"
                 },
-                "graderingsdato": "1865-02-13T00:00:00+00:00",
+                "graderingsdato": "1865-02-13T00:00:00+01:00",
                 "gradertAv": "PST",
-                "nedgraderingsdato": "2070-02-13T00:00:00+00:00",
+                "nedgraderingsdato": "2070-02-13T00:00:00-01:00",
                 "nedgradertAv": "PST"
             },
         }
