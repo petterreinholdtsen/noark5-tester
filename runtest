@@ -617,8 +617,8 @@ Test basis requirements for NOARK 5 Core.
                         for v in data[k].keys():
                             print("checking %s key %s" % (k, v))
                             verify(data[k][v] == info[k][v],
-                                        "POST %s respons dict %s key %s should match %s" %
-                                        (url, k, v, data[k][v]))
+                                        "POST %s respons dict %s key %s respons %s should match %s" %
+                                        (url, k, v, info[k][v], data[k][v]))
                     else:
                         verify(info[k] == data[k],
                                     "POST %s response for '%s' ('%s') should match '%s'" % (url, k, info[k], data[k]))
