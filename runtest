@@ -290,6 +290,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
     knownwithoutlinksregex = [
         'hateoas-api/admin/ny-bruker/?',
         'hateoas-api/admin/system/?',
+        'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-forfatter/?',
     ]
     verbose = False
     def __init__(self):
