@@ -113,7 +113,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         if k in content:
                             output.writetag(k, content[k])
                             del content[k]
-                if tuple == keytype:
+                elif tuple == keytype:
                     rel = k[0]
                     if rel in content['_links']:
                         url = content['_links'][rel]['href']
@@ -127,6 +127,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         elif not 'count' in info:
                             print('warning: GET %s did not return list' % (url))
                             k[1](output, info)
+                    elif rel in content:
+                        k[1](output, content[rel])
+                        del content[rel]
             if '_links' in content:
                 del content['_links']
             if content.keys():
@@ -142,7 +145,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'konverteringsverktoey',
             'konverteringskommentar'
         )
-        self.recurse_xml_out_ordered(output, 'arkivskaper', content, sequence)
+        self.recurse_xml_out_ordered(output, 'konvertering', content, sequence)
 
 
     def recurse_xml_merknad(self, output, content):
@@ -153,6 +156,74 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'merknadRegistrertAv'
         )
         self.recurse_xml_out_ordered(output, 'arkivskaper', content, sequence)
+
+
+    def recurse_xml_kassasjon(self, output, content):
+        sequence = (
+            'kassasjonsvedtak.kodenavn>kassasjonsvedtak',
+            'kassasjonsvedtak.kode>[null]',
+            'kassasjonshjemmel',
+            'bevaringstid',
+            'kassasjonsdato',
+        )
+        self.recurse_xml_out_ordered(output, 'kassasjon', content, sequence)
+
+
+    def recurse_xml_utfoertKassasjon(self, output, content):
+        sequence = (
+            'kassertDato',
+            'kassertAv',
+        )
+        self.recurse_xml_out_ordered(output, 'utfoertKassasjon', content, sequence)
+
+
+    def recurse_xml_sletting(self, output, content):
+        sequence = (
+            'slettingstype.kodenavn>slettingstype',
+            'slettingstype.kode>[null]',
+            'slettetDato',
+            'slettetAv',
+        )
+        self.recurse_xml_out_ordered(output, 'sletting', content, sequence)
+
+
+    def recurse_xml_skjerming(self, output, content):
+        sequence = (
+            'tilgangsrestriksjon.kodenavn>tilgangsrestriksjon',
+            'tilgangsrestriksjon.kode>[null]',
+            'skjermingshjemmel',
+            'skjermingMetadata.kodenavn>skjermingMetadata',
+            'skjermingMetadata.kode>[null]',
+            'skjermingDokument.kodenavn>skjermingDokument',
+            'skjermingDokument.kode>[null]',
+            'skjermingsvarighet',
+            'skjermingOpphoererDato',
+        )
+        self.recurse_xml_out_ordered(output, 'skjerming', content, sequence)
+
+
+    def recurse_xml_gradering(self, output, content):
+        sequence = (
+            'graderingskode.kodenavn>grad',
+            'graderingskode.kode>[null]',
+            'graderingsdato',
+            'gradertAv',
+            'nedgraderingsdato',
+            'nedgradertAv',
+        )
+        self.recurse_xml_out_ordered(output, 'gradering', content, sequence)
+
+
+    def recurse_xml_elektroniskSignatur(self, output, content):
+        sequence = (
+            'elektroniskSignaturSikkerhetsnivaa.kodenavn>elektroniskSignaturSikkerhetsnivaa',
+            'elektroniskSignaturSikkerhetsnivaa.kode>[null]',
+            'elektroniskSignaturVerifisert.kodenavn>elektroniskSignaturVerifisert',
+            'elektroniskSignaturVerifisert.kode>[null]',
+            'verifisertDato',
+            'verifisertAv',
+        )
+        self.recurse_xml_out_ordered(output, 'elektroniskSignatur', content, sequence)
 
 
     def recurse_xml_dokumentobjekt(self, output, content):
@@ -171,7 +242,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'sjekksum',
             'sjekksumAlgoritme',
             'filstoerrelse',
-            'elektroniskSignatur',
+            ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
 
 #            (konvrel, self.recurse_xml_konvertering), # FIXME for dokumentobjekt
         )
@@ -227,12 +298,12 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'tilknyttetAv',
 #            (partrel, self.recurse_xml_part), # FIXME for dokumentbeskrivelse
 #            (merknadrel, self.recurse_xml_merknad), # FIXME for dokumentbeskrivelse
-            'kassasjon',
-            'utfoertKassasjon',
-            'sletting',
-            'skjerming',
-            'gradering',
-            'elektroniskSignatur',
+            ('kassasjon', self.recurse_xml_kassasjon),
+            ('utfoertKassasjon', self.recurse_xml_utfoertKassasjon),
+            ('sletting', self.recurse_xml_sletting),
+            ('skjerming', self.recurse_xml_skjerming),
+            ('gradering', self.recurse_xml_gradering),
+            ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
             (dokobjrel, self.recurse_xml_dokumentobjekt),
         )
         self.recurse_xml_out_ordered(output, 'dokumentbeskrivelse', content, sequence)
@@ -345,9 +416,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
             (partrel,     self.recurse_xml_part),
 
-            'kassasjon',
-            'skjerming',
-            'gradering',
+            ('kassasjon', self.recurse_xml_kassasjon),
+            ('skjerming', self.recurse_xml_skjerming),
+            ('gradering', self.recurse_xml_gradering),
 
             (dokbeskrrel, self.recurse_xml_dokumentbeskrivelse),
 
@@ -386,7 +457,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 (avskrel, self.recurse_xml_avskrivning), # FIXME for journalpost
 #                (dokflytrel, self.recurse_xml_dokumentflyt), # FIXME for journalpost
                 (presedensrel, self.recurse_xml_presedens), # FIXME for journalpost
-                'elektroniskSignatur',
+                ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
             )
         if 'xsi:type="arkivnotat"' == attr:
             sequence = sequence + (
@@ -452,9 +523,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
 #            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for mappe
 # FIXME not working in Nikita
 #            (merknadrel, self.recurse_xml_merknad), # FIXME for mappe
-            'kassasjon',
-            'skjerming',
-            'gradering',
+            ('kassasjon', self.recurse_xml_kassasjon),
+            ('skjerming', self.recurse_xml_skjerming),
+            ('gradering', self.recurse_xml_gradering),
 
             (undermapperel,            self.recurse_xml_mappe),
             (registreringrel,          self.recurse_xml_registrering),
@@ -504,9 +575,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'avsluttetAv',
 
 #            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for klasse
-            'kassasjon',
-            'skjerming',
-            'gradering',
+            ('kassasjon', self.recurse_xml_kassasjon),
+            ('skjerming', self.recurse_xml_skjerming),
+            ('gradering', self.recurse_xml_gradering),
 
             (underklasserel,  self.recurse_xml_klasse),
             (mapperel,        self.recurse_xml_mappe),
@@ -561,11 +632,12 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'arkivperiodeSluttDato',
             'referanseForloeper',
             'referanseArvtaker',
-            'kassasjon',
-            'utfoertKassasjon',
-            'sletting',
-            'skjerming',
-            'gradering',
+            ('kassasjon', self.recurse_xml_kassasjon),
+            ('utfoertKassasjon', self.recurse_xml_utfoertKassasjon),
+            ('sletting', self.recurse_xml_sletting),
+            ('skjerming', self.recurse_xml_skjerming),
+            ('gradering', self.recurse_xml_gradering),
+
             (klassifikasjonssystemrel, self.recurse_xml_klassifikasjonssystem),
             (mapperel, self.recurse_xml_mappe),
             (saksmapperel, self.recurse_xml_mappe),
