@@ -435,8 +435,8 @@ not loosing the timezone information.
             }
             if 'date' in message:
                 fromdate = self.rfc822date2xsdate(message['date'])
-                recorddate['dokumentetsDato'] = fromdate
-                recorddate['sendtDato'] = fromdate # what if date is faked?
+                recorddata['dokumentetsDato'] = fromdate
+                recorddata['sendtDato'] = fromdate # what if date is faked?
 
             recordinfo = self.createEntity('journalpost', recordentryrel,
                                            fileinfo['_links'],
