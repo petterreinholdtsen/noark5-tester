@@ -772,7 +772,7 @@ or should it be rejected?
 #            "beskrivelse"     : "Description of the test series",
 #            "oppbevaringssted" : [ "location 1", "location2", "location3" ],
 #            "dokumentmedium"  : "Elektronisk arkiv",
-            "arkivdelstatus" : u"O",
+#            "arkivdelstatus" : { "kode": u"O" },
             "gradering": {
                 "graderingskode": {
                     "kode":"SH",
