@@ -70,14 +70,17 @@ def mime2format(mimestr):
         'application/pgp-signature':   'ignore',  # Registered MIME type
         'application/pkcs7-signature': 'ignore',  # Registered MIME type
         'application/pgp-keys':        'ignore',  # Registered MIME type
-        'text/plain':                None,      # Registered MIME type
-        'text/html':                 None,      # Registered MIME type
         'multipart/mixed':             'ignore',  # Registered MIME type
         'multipart/signed':            'ignore',  # Registered MIME type
         'multipart/alternative':       'ignore',  # Registered MIME type
         'multipart/related':           'ignore',  # Registered MIME type
 
-        # Not quite sure what to do with these
+        # Do not save as separate uploads if disposition is inline,
+        # and otherwise let server guess the format.
+        'text/plain':                  None,      # Registered MIME type
+        'text/html':                   None,      # Registered MIME type
+        
+        # Not quite sure what to do with these, let server guess format.
         'application/x-xz':          None,      # Not registered MIME type
         'application/octet-stream':  None,      # Registered MIME type
         'application/gzip':          None,      # Not registered MIME type
@@ -513,13 +516,23 @@ not loosing the timezone information.
             for part in message.walk():
                 mimetype = part.get_content_type()
                 format = mime2format(mimetype)
+                disposition = part.get_content_disposition()
                 if self.verbose:
                     print("info: mapping %s to %s" % (mimetype, format))
+
                 # Do not store ignored attachments as separate
                 # documents.  Everything else we upload and let the
                 # kernel figure out what to do with them. :)
                 if format is not None and 'ignore' == format:
                     continue
+
+                # If it is unknown what to do with the format and the
+                # disposition is inline, do not create separate
+                # document as we assume it is enough to keep it as
+                # part of the original RFC822 message.
+                if format is None and 'inline' == disposition:
+                    continue
+
                 content = part.get_payload(decode=True)
                 if content is None:
                     continue
