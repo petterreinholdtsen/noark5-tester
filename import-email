@@ -4,8 +4,8 @@
 from __future__ import print_function
 
 import sys
-import time
-sys.path.append('lib')
+import os
+sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
 import dateutil.parser
@@ -14,6 +14,7 @@ from email.utils import parseaddr
 import json
 import mailbox
 import re
+import time
 import urllib
 import urllib2
 

@@ -4,12 +4,12 @@
 from __future__ import print_function
 
 import sys
-sys.path.append('lib')
+import os
+sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
 import datetime
 import json
-import os
 import pytz
 import urllib2
 import n5core.endpoint

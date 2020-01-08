@@ -15,11 +15,11 @@ __license__ = 'GNU General Public License v2 or later at users choice'
 __author__ = 'Petter Reinholdtsen'
 
 import sys
-sys.path.append('lib')
+import os
+sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
 import json
-import os
 import urllib2
 from functools import partial
 from lxml import etree

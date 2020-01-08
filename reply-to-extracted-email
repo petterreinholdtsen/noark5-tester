@@ -10,13 +10,13 @@ __license__ = 'GNU General Public License v2 or later at users choice'
 __author__ = 'Petter Reinholdtsen'
 
 import sys
-sys.path.append('lib')
+import os
+sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
 import dateutil.parser
 import email.utils
 import json
-import os
 import subprocess
 import tempfile
 from time import strftime, gmtime, mktime, time
