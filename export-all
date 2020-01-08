@@ -26,15 +26,15 @@ class XMLTag(object):
 
     def __enter__(self):
         if self.attr:
-            self.fh.write("%s<%s %s>\n" % ("  " * self.level[0], self.tagname, self.attr))
+            self.fh.write('%s<%s %s>\n' % ('  ' * self.level[0], self.tagname, self.attr))
         else:
-            self.fh.write("%s<%s>\n" % ("  " * self.level[0], self.tagname))
+            self.fh.write('%s<%s>\n' % ('  ' * self.level[0], self.tagname))
         self.level[0] +=1
 
 
     def __exit__(self, tpe, value, traceback):
         self.level[0] -=1
-        self.fh.write("%s</%s>\n" % ("  " * self.level[0], self.tagname))
+        self.fh.write('%s</%s>\n' % ('  ' * self.level[0], self.tagname))
 
 
 class XMLFile(object):
@@ -55,21 +55,21 @@ class XMLFile(object):
     def writetag(self, tagname, s):
         if str == type(s) or unicode == type(s):
             s = escape(s)
-        self.fh.write("%s<%s>%s</%s>\n" % ("  " * self.level[0], tagname, s, tagname))
+        self.fh.write('%s<%s>%s</%s>\n' % ('  ' * self.level[0], tagname, s, tagname))
 
 
 class ContentDumper(n5core.endpoint.Endpoint):
     def __init__(self):
         self.baseurl = 'http://localhost:8092/noark5v4/'
         utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc)
-        self.savedir = "json-dump-%s" % utcnow.isoformat()
+        self.savedir = 'json-dump-%s' % utcnow.isoformat()
         parser = argparse.ArgumentParser()
-        parser.add_argument("--baseurl", help="(default is %s)" % self.baseurl)
-        parser.add_argument("--xml", help="(default is false)",
-                            default=False, action="store_true")
-        parser.add_argument("--savedir", help="(default is %s)" % self.savedir)
-        parser.add_argument("--verbose", help="enable debug output",
-                            action="store_true")
+        parser.add_argument('--baseurl', help='(default is %s)' % self.baseurl)
+        parser.add_argument('--xml', help='(default is false)',
+                            default=False, action='store_true')
+        parser.add_argument('--savedir', help='(default is %s)' % self.savedir)
+        parser.add_argument('--verbose', help='enable debug output',
+                            action='store_true')
         args = parser.parse_args()
         if args.baseurl:
             self.baseurl = args.baseurl
@@ -81,7 +81,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         
     def _mkdir_recursive(self, path):
         sub_path = os.path.dirname(path)
-        if "" != sub_path and not os.path.exists(sub_path):
+        if '' != sub_path and not os.path.exists(sub_path):
             self._mkdir_recursive(sub_path)
         if not os.path.exists(path):
             os.mkdir(path)
@@ -125,12 +125,12 @@ class ContentDumper(n5core.endpoint.Endpoint):
                             for sub in info['results']:
                                 k[1](output, sub)
                         elif not 'count' in info:
-                            print("warning: GET %s did not return list" % (url))
+                            print('warning: GET %s did not return list' % (url))
                             k[1](output, info)
             if '_links' in content:
                 del content['_links']
             if content.keys():
-                print("warning: %s XML attribute not exported: %s" % (entity, content))
+                print('warning: %s XML attribute not exported: %s' % (entity, content))
 
 
     def recurse_xml_konvertering(self, output, content):
@@ -160,18 +160,18 @@ class ContentDumper(n5core.endpoint.Endpoint):
         filrel = '%sarkivstruktur/fil/' % self.relbaseurl
         konvrel = '%sarkivstruktur/konvertering/' % self.relbaseurl
         sequence = (
-            "systemID",
-            "versjonsnummer",
-            "variantformat",
-            "format",
-            "formatDetaljer",
-            "opprettetDato",
-            "opprettetAv",
-            "referanseDokumentfil",
-            "sjekksum",
-            "sjekksumAlgoritme",
-            "filstoerrelse",
-            "elektroniskSignatur",
+            'systemID',
+            'versjonsnummer',
+            'variantformat',
+            'format',
+            'formatDetaljer',
+            'opprettetDato',
+            'opprettetAv',
+            'referanseDokumentfil',
+            'sjekksum',
+            'sjekksumAlgoritme',
+            'filstoerrelse',
+            'elektroniskSignatur',
 
 #            (konvrel, self.recurse_xml_konvertering), # FIXME for dokumentobjekt
         )
@@ -179,17 +179,17 @@ class ContentDumper(n5core.endpoint.Endpoint):
             if self.verbose:
                 print(content)
             for k in sequence:
-                if "referanseDokumentfil" == k:
+                if 'referanseDokumentfil' == k:
                     if filrel in content['_links']:
-                        self._mkdir_recursive("%s/DOKUMENT" % self.savepath)
+                        self._mkdir_recursive('%s/DOKUMENT' % self.savepath)
                         # Deriving filename from checksum provide
                         # automatic deduplication, assuming there is
                         # no hash collition in the dataset.
-                        filename = "%s-%s" % (content['sjekksumAlgoritme'], content['sjekksum'])
+                        filename = '%s-%s' % (content['sjekksumAlgoritme'], content['sjekksum'])
                         with open('%s/DOKUMENT/%s' % (self.savepath, filename), 'w') as fh:
                             (data, r) = self._get(content['_links'][filrel]['href'])
                             fh.write(data)
-                        output.writetag("referanseDokumentfil", "DOKUMENT/%s" % filename)
+                        output.writetag('referanseDokumentfil', 'DOKUMENT/%s' % filename)
                     continue
                 keytype = type(k)
                 if str == keytype:
@@ -210,29 +210,29 @@ class ContentDumper(n5core.endpoint.Endpoint):
         merknadrel = '%sarkivstruktur/merknad/' % self.relbaseurl
         dokobjrel = '%sarkivstruktur/dokumentobjekt/' % self.relbaseurl
         sequence = (
-            "systemID",
-            "dokumenttype",
-            "dokumentstatus",
-            "tittel",
-            "beskrivelse",
-            "forfatter",
-            "opprettetDato",
-            "opprettetAv",
-            "dokumentmedium",
-            "oppbevaringssted",
-#            ("referanseArkivdel"), # FIXME for dokumentbeskrivelse
-            "tilknyttetRegistreringSom",
-            "dokumentnummer",
-            "tilknyttetDato",
-            "tilknyttetAv",
+            'systemID',
+            'dokumenttype',
+            'dokumentstatus',
+            'tittel',
+            'beskrivelse',
+            'forfatter',
+            'opprettetDato',
+            'opprettetAv',
+            'dokumentmedium',
+            'oppbevaringssted',
+#            ('referanseArkivdel'), # FIXME for dokumentbeskrivelse
+            'tilknyttetRegistreringSom',
+            'dokumentnummer',
+            'tilknyttetDato',
+            'tilknyttetAv',
 #            (partrel, self.recurse_xml_part), # FIXME for dokumentbeskrivelse
 #            (merknadrel, self.recurse_xml_merknad), # FIXME for dokumentbeskrivelse
-            "kassasjon",
-            "utfoertKassasjon",
-            "sletting",
-            "skjerming",
-            "gradering",
-            "elektroniskSignatur",
+            'kassasjon',
+            'utfoertKassasjon',
+            'sletting',
+            'skjerming',
+            'gradering',
+            'elektroniskSignatur',
             (dokobjrel, self.recurse_xml_dokumentobjekt),
         )
         self.recurse_xml_out_ordered(output, 'dokumentbeskrivelse', content, sequence)
@@ -240,88 +240,88 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
     def recurse_xml_korrespondansepart(self, output, content):
         sequence = (
-            "korrespondanseparttype.kodenavn>korrespondanseparttype",
-            "korrespondanseparttype.kode>[null]",
-            "navn>korrespondansepartNavn",
+            'korrespondanseparttype.kodenavn>korrespondanseparttype',
+            'korrespondanseparttype.kode>[null]',
+            'navn>korrespondansepartNavn',
             'postadresse.addresselinje1>postadresse',
             'postadresse.addresselinje2>postadresse',
             'postadresse.addresselinje3>postadresse',
-            "postadresse.postnr>postnummer",
-            "postadresse.poststed>poststed",
-            "postadresse.landkode>land",
-            "kontaktinformasjon.epostadresse>epostadresse",
+            'postadresse.postnr>postnummer',
+            'postadresse.poststed>poststed',
+            'postadresse.landkode>land',
+            'kontaktinformasjon.epostadresse>epostadresse',
             'kontaktinformasjon.mobiltelefon>telefonnummer',
             'kontaktinformasjon.telefon>telefonnummer',
-            "kontaktperson",
-            "administrativEnhet",
-            "saksbehandler",
-            "virksomhetsspesifikkeMetadata",
+            'kontaktperson',
+            'administrativEnhet',
+            'saksbehandler',
+            'virksomhetsspesifikkeMetadata',
         )
         self.recurse_xml_out_ordered(output, 'korrespondansepart', content, sequence)
 
 
     def recurse_xml_part(self, output, content):
         sequence = (
-            "systemID>partID",
-            "partRolle.kodenavn>parttype",
-            "partRolle.kode>[null]",
-            "navn>partNavn",
+            'systemID>partID',
+            'partRolle.kodenavn>parttype',
+            'partRolle.kode>[null]',
+            'navn>partNavn',
             'postadresse.addresselinje1>postadresse',
             'postadresse.addresselinje2>postadresse',
             'postadresse.addresselinje3>postadresse',
-            "postadresse.postnr>postnummer",
-            "postadresse.poststed>poststed",
-            "postadresse.landkode>land",
-            "kontaktinformasjon.epostadresse>epostadresse",
+            'postadresse.postnr>postnummer',
+            'postadresse.poststed>poststed',
+            'postadresse.landkode>land',
+            'kontaktinformasjon.epostadresse>epostadresse',
             'kontaktinformasjon.mobiltelefon>telefonnummer',
             'kontaktinformasjon.telefon>telefonnummer',
-            "kontaktperson",
-            "administrativEnhet",
-            "saksbehandler",
-            "virksomhetsspesifikkeMetadata",
+            'kontaktperson',
+            'administrativEnhet',
+            'saksbehandler',
+            'virksomhetsspesifikkeMetadata',
         )
         self.recurse_xml_out_ordered(output, 'part', content, sequence)
 
 
     def recurse_xml_dokumentflyt(self, output, content):
         sequence = (
-            "flytTil",
-            "flytFra",
-            "flytMottattDato",
-            "flytSendtDato",
-            "flytStatus",
-            "flytMerknad",
+            'flytTil',
+            'flytFra',
+            'flytMottattDato',
+            'flytSendtDato',
+            'flytStatus',
+            'flytMerknad',
         )
         self.recurse_xml_out_ordered(output, 'dokumentflyt', content, sequence)
 
 
     def recurse_xml_avskrivning(self, output, content):
         sequence = (
-            "avskrivningsdato",
-            "avskrevetAv",
-            "avskrivningsmaate",
-            "referanseAvskrivesAvJournalpost",
+            'avskrivningsdato',
+            'avskrevetAv',
+            'avskrivningsmaate',
+            'referanseAvskrivesAvJournalpost',
         )
         self.recurse_xml_out_ordered(output, 'avskrivning', content, sequence)
 
 
     def recurse_xml_oppbevaringssted(self, output, content):
-        print("error: 'oppbevaringssted' not yet implemented")
+        print('error: "oppbevaringssted" not yet implemented')
 
 
     def recurse_xml_kryssreferanse(self, output, content):
-        print("error: 'kryssreferanse' not yet implemented")
+        print('error: "kryssreferanse" not yet implemented')
 
 
     def recurse_xml_presedens(self, output, content):
-        print("error: 'presedens' not yet implemented")
+        print('error: "presedens" not yet implemented')
 
         
     def recurse_xml_registrering(self, output, content):
         entityrel = self.entity_rel(content)
         typemap = {
-            '%ssakarkiv/journalpost/' % self.relbaseurl: "journalpost",
-            '%ssakarkiv/arkivnotat/' % self.relbaseurl: "arkivnotat",
+            '%ssakarkiv/journalpost/' % self.relbaseurl: 'journalpost',
+            '%ssakarkiv/arkivnotat/' % self.relbaseurl: 'arkivnotat',
         }
         attr = None
         if entityrel in typemap:
@@ -336,30 +336,30 @@ class ContentDumper(n5core.endpoint.Endpoint):
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         sequence = (
-            "systemID",
-            "opprettetDato",
-            "opprettetAv",
-            "arkivertDato",
-            "arkivertAv",
-            "referanseArkivdel",
+            'systemID',
+            'opprettetDato',
+            'opprettetAv',
+            'arkivertDato',
+            'arkivertAv',
+            'referanseArkivdel',
 
             (partrel,     self.recurse_xml_part),
 
-            "kassasjon",
-            "skjerming",
-            "gradering",
+            'kassasjon',
+            'skjerming',
+            'gradering',
 
             (dokbeskrrel, self.recurse_xml_dokumentbeskrivelse),
 
-            "registreringsID",
-            "tittel",
-            "offentligTittel",
-            "beskrivelse",
-            "noekkelord",
-            "forfatter",
-            "dokumentmedium",
+            'registreringsID',
+            'tittel',
+            'offentligTittel',
+            'beskrivelse',
+            'noekkelord',
+            'forfatter',
+            'dokumentmedium',
             (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for registrering
-            "virksomhetsspesifikkeMetadata",
+            'virksomhetsspesifikkeMetadata',
 
 #            (merknadrel, self.recurse_xml_merknad), # FIXME for registrering
 #            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for registrering
@@ -367,48 +367,48 @@ class ContentDumper(n5core.endpoint.Endpoint):
         )
         if 'xsi:type="journalpost"' == attr:
             sequence = sequence + (
-                "journalaar",
-                "journalsekvensnummer",
-                "journalpostnummer",
-                "journalposttype",
-                "journalstatus",
-                "journaldato",
-                "dokumentetsDato",
-                "mottattDato",
-                "sendtDato",
-                "forfallsdato",
-                "offentlighetsvurdertDato",
-                "antallVedlegg",
-                "utlaantDato",
-                "utlaantTil",
-                "journalenhet",
+                'journalaar',
+                'journalsekvensnummer',
+                'journalpostnummer',
+                'journalposttype',
+                'journalstatus',
+                'journaldato',
+                'dokumentetsDato',
+                'mottattDato',
+                'sendtDato',
+                'forfallsdato',
+                'offentlighetsvurdertDato',
+                'antallVedlegg',
+                'utlaantDato',
+                'utlaantTil',
+                'journalenhet',
 
                 (avskrel, self.recurse_xml_avskrivning), # FIXME for journalpost
 #                (dokflytrel, self.recurse_xml_dokumentflyt), # FIXME for journalpost
                 (presedensrel, self.recurse_xml_presedens), # FIXME for journalpost
-                "elektroniskSignatur",
+                'elektroniskSignatur',
             )
         if 'xsi:type="arkivnotat"' == attr:
             sequence = sequence + (
-                "dokumentetsDato",
-                "mottattDato",
-                "sendtDato",
-                "forfallsdato",
-                "offentlighetsvurdertDato",
-                "antallVedlegg",
-                "utlaantDato",
-                "utlaantTil",
+                'dokumentetsDato',
+                'mottattDato',
+                'sendtDato',
+                'forfallsdato',
+                'offentlighetsvurdertDato',
+                'antallVedlegg',
+                'utlaantDato',
+                'utlaantTil',
 #                (dokflytrel, self.recurse_xml_dokumentflyt), # FIXME for arkivnotat
             )
         if 'xsi:type="moeteregistrering"' == attr:
             sequence = sequence + (
-                "moeteregistreringstype",
-                "moetesakstype",
-                "moeteregistreringsstatus",
-                "administrativEnhet",
-                "saksbehandler",
-#                ("referanseTilMoeteregistrering"), # FIXME for moeteregistrering
-#                ("referanseFraMoeteregistrering"), # FIXME for moeteregistrering
+                'moeteregistreringstype',
+                'moetesakstype',
+                'moeteregistreringsstatus',
+                'administrativEnhet',
+                'saksbehandler',
+#                ('referanseTilMoeteregistrering'), # FIXME for moeteregistrering
+#                ('referanseFraMoeteregistrering'), # FIXME for moeteregistrering
             )
         self.recurse_xml_out_ordered(output, 'registrering', content, sequence, attr=attr)
  
@@ -416,7 +416,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
     def recurse_xml_mappe(self, output, content):
         entityrel = self.entity_rel(content)
         typemap = {
-            '%ssakarkiv/saksmappe/' % self.relbaseurl: "saksmappe",
+            '%ssakarkiv/saksmappe/' % self.relbaseurl: 'saksmappe',
         }
         attr = None
         if entityrel in typemap:
@@ -429,60 +429,60 @@ class ContentDumper(n5core.endpoint.Endpoint):
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         sequence = (
-            "systemID",
-            "mappeID",
-            "tittel",
-            "offentligTittel",
-            "beskrivelse",
-#            ("noekkelord"), # FIXME for mappe
-            "dokumentmedium",
+            'systemID',
+            'mappeID',
+            'tittel',
+            'offentligTittel',
+            'beskrivelse',
+#            ('noekkelord'), # FIXME for mappe
+            'dokumentmedium',
             (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for mappe
-            "opprettetDato",
-            "opprettetAv",
-            "avsluttetDato",
-            "avsluttetAv",
+            'opprettetDato',
+            'opprettetAv',
+            'avsluttetDato',
+            'avsluttetAv',
 # mappe.referanseArkivdel er ikke omtalt i tjenestegrensesnittet, kun
 # i arkivstruktur.xsd med 0..*.  Derimot finnes det en relasjon til
 # arkivdel med 0..1.
-#            ("referanseArkivdel"), # FIXME for mappe
-            "virksomhetsspesifikkeMetadata",
+#            ('referanseArkivdel'), # FIXME for mappe
+            'virksomhetsspesifikkeMetadata',
 
 # FIXME not working in Nikita
 #            (partrel,                  self.recurse_xml_part), # FIXME for mappe
 #            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for mappe
 # FIXME not working in Nikita
 #            (merknadrel, self.recurse_xml_merknad), # FIXME for mappe
-            "kassasjon",
-            "skjerming",
-            "gradering",
+            'kassasjon',
+            'skjerming',
+            'gradering',
 
             (undermapperel,            self.recurse_xml_mappe),
             (registreringrel,          self.recurse_xml_registrering),
         )
         if 'xsi:type="saksmappe"' == attr:
             sequence = sequence + (
-                "saksaar",
-                "sakssekvensnummer",
-                "saksdato",
-                "administrativEnhet",
-                "saksansvarlig",
-                "journalenhet",
-                "saksstatus.kodenavn>saksstatus",
-                "saksstatus.kode>[null]",
-                "utlaantDato",
-                "utlaantTil",
-#                ("referanseSekundaerKlassifikasjon"), # FIXME for saksmappe
+                'saksaar',
+                'sakssekvensnummer',
+                'saksdato',
+                'administrativEnhet',
+                'saksansvarlig',
+                'journalenhet',
+                'saksstatus.kodenavn>saksstatus',
+                'saksstatus.kode>[null]',
+                'utlaantDato',
+                'utlaantTil',
+#                ('referanseSekundaerKlassifikasjon'), # FIXME for saksmappe
                 (presedensrel, self.recurse_xml_presedens), # FIXME for saksmappe
             )
         if 'xsi:type="moetemappe"' == attr:
             sequence = sequence + (
-                "moetenummer",
-                "utvalg",
-                "moetedato",
-                "moetested",
-                "referanseForrigeMoete",
-                "referanseNesteMoete",
-                "moetedeltaker",
+                'moetenummer',
+                'utvalg',
+                'moetedato',
+                'moetested',
+                'referanseForrigeMoete',
+                'referanseNesteMoete',
+                'moetedeltaker',
             )
         self.recurse_xml_out_ordered(output, 'mappe', content, sequence, attr=attr)
 
@@ -493,20 +493,20 @@ class ContentDumper(n5core.endpoint.Endpoint):
         registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         sequence = (
-            "systemID",
-            "klasseID",
-            "tittel",
-            "beskrivelse",
-#            ("noekkelord"), # FIXME for klasse
-            "opprettetDato",
-            "opprettetAv",
-            "avsluttetDato",
-            "avsluttetAv",
+            'systemID',
+            'klasseID',
+            'tittel',
+            'beskrivelse',
+#            ('noekkelord'), # FIXME for klasse
+            'opprettetDato',
+            'opprettetAv',
+            'avsluttetDato',
+            'avsluttetAv',
 
 #            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for klasse
-            "kassasjon",
-            "skjerming",
-            "gradering",
+            'kassasjon',
+            'skjerming',
+            'gradering',
 
             (underklasserel,  self.recurse_xml_klasse),
             (mapperel,        self.recurse_xml_mappe),
@@ -518,14 +518,14 @@ class ContentDumper(n5core.endpoint.Endpoint):
     def recurse_xml_klassifikasjonssystem(self, output, content):
         klasserel = '%sarkivstruktur/klasse/' % self.relbaseurl
         sequence = (
-            "systemID",
-            "klassifikasjonstype",
-            "tittel",
-            "beskrivelse",
-            "opprettetDato",
-            "opprettetAv",
-            "avsluttetDato",
-            "avsluttetAv",
+            'systemID',
+            'klassifikasjonstype',
+            'tittel',
+            'beskrivelse',
+            'opprettetDato',
+            'opprettetAv',
+            'avsluttetDato',
+            'avsluttetAv',
             (klasserel, self.recurse_xml_klasse),
             )
         self.recurse_xml_out_ordered(output, 'klassifikasjonssystem', content, sequence)
@@ -614,7 +614,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         if 'count' not in arkivinfo or 0 < arkivinfo['count']:
             for arkiv in arkivinfo['results']:
                 utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc)
-                self.savepath = "uttrekk-arkiv-%s-%s-%s" % (arkiv['systemID'],
+                self.savepath = 'uttrekk-arkiv-%s-%s-%s' % (arkiv['systemID'],
                                                             arkiv['tittel'],
                                                             utcnow.isoformat())
                 self._mkdir_recursive(self.savepath)
@@ -629,7 +629,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             self.login()
         except n5core.endpoint.LoginFailure:
             pass
-        print("Saving to %s" % self.savedir)
+        print('Saving to %s' % self.savedir)
         urlsleft = ['.']
         urlseen = {}
         urlsrc = {'.': 'root'}
@@ -639,17 +639,17 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 continue
             urlseen[url] = 1
             
-            path = url.replace(self.baseurl, "")
+            path = url.replace(self.baseurl, '')
             path = path.rstrip('/').replace('/.', '/index')
-            path = path + ".json"
+            path = path + '.json'
             path = os.path.join(self.savedir, path)
             if -1 != path.find('//') or '/' == path[0]:
-                print("error: bogus url %s seen in %s (path %s)" % ( url, urlsrc[url], path))
+                print('error: bogus url %s seen in %s (path %s)' % ( url, urlsrc[url], path))
                 continue
             
             try:
                 if self.verbose:
-                    print("info: Fetching %s" % url)
+                    print('info: Fetching %s' % url)
                 else:
                     sys.stdout.write('.')
                     sys.stdout.flush()
@@ -658,7 +658,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 ctype = res.info().getheader('Content-Type')
 
                 if self.verbose:
-                    print("info: Creating %s for %s" % (path, url))
+                    print('info: Creating %s for %s' % (path, url))
                 dir = os.path.dirname(path)
                 self._mkdir_recursive(dir)
                 f = open(path, 'w')
@@ -670,9 +670,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 f.close()
                 
                 if ctype is None:
-                    print("error: No Content-Type from %s" % url)
+                    print('error: No Content-Type from %s' % url)
                 if ctype is None or 0 != ctype.find('application/vnd.noark5+json'):
-                    print("info: ignoring %s" % url)
+                    print('info: ignoring %s' % url)
                 else:
                     try:
                         baseref = j
@@ -680,9 +680,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         print('error: non-JSON content returned for %s' % url)
                         baseref = None
                     if baseref is None:
-                        print("error: JSON MIME type but no JSON in %s" % url)
+                        print('error: JSON MIME type but no JSON in %s' % url)
                     elif type(baseref) is list:
-                        print("error: found json list in %s" % url)
+                        print('error: found json list in %s' % url)
                     elif '_links' in baseref:
                         for rel in baseref['_links'].keys():
                             if 'href' in baseref['_links'][rel]:
@@ -709,7 +709,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             except urllib2.HTTPError as e:
                 pass
         if not self.verbose:
-            print("")
+            print('')
 
 def main():
     t = ContentDumper()
