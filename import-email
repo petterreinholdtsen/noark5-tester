@@ -183,7 +183,8 @@ Store the info about the entity in self.seriesinfo
         seriesrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
         if seriesrel not in info['_links'] \
            or 'href' not in info['_links'][seriesrel]:
-            print(info)
+            if self.verbose:
+                print(info)
             raise Exception("missing from created dokumentobjekt: %s" % seriesrel)
         serieshref = info['_links'][seriesrel]['href']
 
@@ -234,8 +235,9 @@ One document might be associated with several records, belonging to
 several files.  This function return a list of all the files associated
 with a given document object entry.
         """
-        print()
-        print("Locating mappe for docobj: %s" % docobjinfo)
+        if self.verbose:
+            print()
+            print("Locating mappe for docobj: %s" % docobjinfo)
         docdescrel = '%sarkivstruktur/dokumentbeskrivelse/' % self.relbaseurl
         recordrel = '%sarkivstruktur/registrering/' % self.relbaseurl
         filerel = '%sarkivstruktur/mappe/' % self.relbaseurl
@@ -252,7 +254,8 @@ with a given document object entry.
                 print("Found record list %s" % recordhref)
                 (s, res) = self.json_get(recordhref)
                 records = json.loads(s)
-                print(records)
+                if self.verbose:
+                    print(records)
                 for recordinfo in records['results']:
                     if filerel in recordinfo['_links']:
                         filehref = recordinfo['_links'][filerel]['href']
@@ -292,9 +295,10 @@ are in.
         
             (s, res) = self.json_get(searchurl)
             docobjsinfo = json.loads(s)
-            print()
-#            print(docobjsinfo)
-            print("checking search result looking for message %s" % messageid)
+            if self.verbose:
+                print()
+#                print(docobjsinfo)
+                print("checking search result looking for message %s" % messageid)
             if 'results' in docobjsinfo:
                 for d in docobjsinfo['results']:
                     if 'filnavn' in d and d['filnavn'] == messageid:
@@ -366,7 +370,8 @@ are in.
         uploadrel = '%sarkivstruktur/fil/' % self.relbaseurl
         if uploadrel not in docobjinfo['_links'] \
            or 'href' not in docobjinfo['_links'][uploadrel]:
-            print(docobjinfo)
+            if self.verbose:
+                print(docobjinfo)
             raise Exception("missing from created dokumentobjekt: %s" % uploadrel)
 
         newfilehref = docobjinfo['_links'][uploadrel]['href']
