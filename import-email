@@ -518,7 +518,7 @@ not loosing the timezone information.
                 # Do not store ignored attachments as separate
                 # documents.  Everything else we upload and let the
                 # kernel figure out what to do with them. :)
-                if format is not None and 'ignore' != format:
+                if format is not None and 'ignore' == format:
                     continue
                 content = part.get_payload(decode=True)
                 if content is None:
