@@ -426,17 +426,18 @@ not loosing the timezone information.
         else:
             threadstarterid = message['message-id']
 
-        fromdate = self.rfc822date2xsdate(message['date'])
-
         if self.usesaksmappe:
             recorddata = {
                 'tittel' : decodeheader(message['subject']),
-                "dokumentetsDato"      : fromdate,
-                'sendtDato'            : fromdate, # what if date is faked?
                 "journalposttype"      : 'I',
                 # Workaround for bogus ny-* values
                 'beskrivelse' : None,
             }
+            if 'date' in message:
+                fromdate = self.rfc822date2xsdate(message['date'])
+                recorddate['dokumentetsDato'] = fromdate
+                recorddate['sendtDato'] = fromdate # what if date is faked?
+
             recordinfo = self.createEntity('journalpost', recordentryrel,
                                            fileinfo['_links'],
                                            recorddata)
