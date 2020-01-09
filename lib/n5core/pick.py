@@ -20,7 +20,7 @@
 def pickUnlessOne(json, type):
     """
 Check the array in the json structure, if there is only one elemet, return it.
-If there are more than one elemet, ask the user to pick one.
+If there are more than one element, ask the user to pick one.
 """
     #print("Found %d %s entries" % (len(json), type))
     if 'results' in json:
