@@ -30,8 +30,8 @@ import os
 sys.path.append(os.path.join(sys.path[0],'lib'))
 
 # Enforce UTF-8 on stdout, also on redirect and pipes
-import codecs
-sys.stdout = codecs.getwriter('utf8')(sys.stdout)
+#import codecs
+#sys.stdout = codecs.getwriter('utf8')(sys.stdout)
 
 import argparse
 import datetime
@@ -899,6 +899,7 @@ or should it be rejected?
                                             archivenotedata)
         journalentrydata = {
             'tittel' : u'test',
+            u'journalstatus', {u'kode': u'J', u'kodenavn': u'Tullestatus'}
         }
         createjournalentryrel = noarkrelbase + 'sakarkiv/ny-journalpost/'
         journalentryinfo = self.createEntity('journalentry',
