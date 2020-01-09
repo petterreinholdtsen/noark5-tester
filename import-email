@@ -145,6 +145,8 @@ class MboxImporter(n5core.endpoint.Endpoint):
                 print("POST: %s" % data)
             (c, res) = self.json_post(url, data)
         except urllib2.HTTPError as e:
+            if self.verbose:
+                print("POST %s failed: %s (%s)" % (url, str(e), e.read()))
             raise
         info = json.loads(c)
         if self.verbose:
