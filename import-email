@@ -439,7 +439,10 @@ not loosing the timezone information.
         if self.usesaksmappe:
             recorddata = {
                 'tittel' : decodeheader(message['subject']),
-                "journalposttype"      : 'I',
+                # FIXME figure out way to detect more sensible type
+                # for incoming and internal email.
+                'journalposttype'      : {'kode': 'I',
+                                          'kodenavn': 'Inngående dokument'},
                 # Workaround for bogus ny-* values
                 'beskrivelse' : None,
             }
@@ -498,7 +501,7 @@ not loosing the timezone information.
         
         docdescdata = {
             'tittel' : decodeheader(message['subject']),
-            'oppbevaringssted' : threadstarterid ,
+            #'oppbevaringssted' : threadstarterid , # FIXME
         }
         docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
                                         recordinfo['_links'],
@@ -508,13 +511,14 @@ not loosing the timezone information.
         
         docobjdata = {
             "versjonsnummer"  : str(0),
-            "variantformat"   : "Produksjonsformat",
+            'variantformat'   : {'kode': 'P',
+                                 'kodenavn': 'Produksjonsformat'},
             "filstoerrelse"   : str(messagelen),
             "filnavn"         : message['message-id'],       
             "mimeType"        : mimetype,
         }
         if format:
-            docobjdata["format"] = format
+            docobjdata["format"] = { 'kode': format, }
         if not self.createDocumentObject(docdescinfo, docobjdata,
                                          content, created):
             print("error: failed to create document object")
