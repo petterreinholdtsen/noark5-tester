@@ -124,7 +124,8 @@ Recursively look for relation in API.
                 (content, res) = self.json_get(url)
                 ctype = res.info().getheader('Content-Type')
                 if 0 == ctype.find('application/vnd.noark5+json'):
-                    print(content)
+                    if self.verbose:
+                        print(content)
                     baseref = json.loads(content)
                     #print "J:", baseref
                     if type(baseref) is list:
