@@ -1,0 +1,72 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+"""
+
+Connect to the REST API of a Noark 5 service and run OData search.
+
+"""
+# Copyright (C) 2019 Petter Reinholdtsen <pere@hungry.com>
+#
+# Licensed under the GNU General Public License Version 2
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+import sys
+import os
+sys.path.append(os.path.join(sys.path[0],'lib'))
+
+import argparse
+import json
+import urllib
+import urllib2
+import n5core.endpoint
+from n5core.pick import pickUnlessOne
+
+class SimpleSearch (n5core.endpoint.Endpoint):
+    def __init__(self):
+        baseurl = 'http://localhost:8092/noark5v4/'
+        defaultentity = 'arkivstruktur/arkiv/'
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--baseurl", help="(default is %s)" % baseurl,
+                            default=baseurl)
+        parser.add_argument("--verbose", help="enable debug output",
+                            action="store_true")
+        parser.add_argument("--entity",
+                            help="where to search (default %s)" % defaultentity,
+                            default = defaultentity)
+        parser.add_argument("--filter", help="specify filter")
+        self.args = parser.parse_args()
+        n5core.endpoint.Endpoint.__init__(self,self.args.baseurl)
+
+    def main(self):
+        self.login()
+        print(self.args)
+        relkey = self.relbaseurl + self.args.entity
+        print("Locating relation %s" % relkey)
+        url = self.findRelation(relkey)
+        url += "?$filter=" + urllib.quote_plus(self.args.filter)
+        print(url)
+        try:
+            (content, response) = self.json_get(url)
+            print(content, response)
+        except urllib2.HTTPError as e:
+            print("GET %s failed: %s (%s)" % (url, str(e), e.read()))
+            raise
+        return 0
+
+if __name__ == '__main__':
+    t = SimpleSearch()
+    exit(t.main())
