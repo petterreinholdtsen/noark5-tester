@@ -899,7 +899,10 @@ or should it be rejected?
                                             archivenotedata)
         journalentrydata = {
             'tittel' : u'test',
-            u'journalstatus': {u'kode': u'J', u'kodenavn': u'Tullestatus'}
+            # Override non-utf-8 values from nikita to keep runtest
+            # working on gitlab.
+            u'journalposttype': {u'kode': u'I', u'kodenavn': u'FIXME'}
+            u'journalstatus': {u'kode': u'J', u'kodenavn': u'FIXME'}
         }
         createjournalentryrel = noarkrelbase + 'sakarkiv/ny-journalpost/'
         journalentryinfo = self.createEntity('journalentry',
