@@ -233,8 +233,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
         sequence = (
             'systemID',
             'versjonsnummer',
-            'variantformat',
-            'format',
+            'variantformat.kodenavn>variantformat',
+            'variantformat.kode>[null]',
+            'format.kodenavn>format',
+            'format.kode>[null]',
             'formatDetaljer',
             'opprettetDato',
             'opprettetAv',
@@ -282,17 +284,21 @@ class ContentDumper(n5core.endpoint.Endpoint):
         dokobjrel = '%sarkivstruktur/dokumentobjekt/' % self.relbaseurl
         sequence = (
             'systemID',
-            'dokumenttype',
-            'dokumentstatus',
+            'dokumenttype.kodenavn>dokumenttype',
+            'dokumenttype.kode>[null]',
+            'dokumentstatus.kodenavn>dokumentstatus',
+            'dokumentstatus.kode>[null]',
             'tittel',
             'beskrivelse',
             'forfatter',
             'opprettetDato',
             'opprettetAv',
-            'dokumentmedium',
+            'dokumentmedium.kodenavn>dokumentmedium',
+            'dokumentmedium.kode>[null]',
             'oppbevaringssted',
 #            ('referanseArkivdel'), # FIXME for dokumentbeskrivelse
-            'tilknyttetRegistreringSom',
+            'tilknyttetRegistreringSom.kodenavn>tilknyttetRegistreringSom',
+            'tilknyttetRegistreringSom.kode>[null]',
             'dokumentnummer',
             'tilknyttetDato',
             'tilknyttetAv',
@@ -360,7 +366,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'flytFra',
             'flytMottattDato',
             'flytSendtDato',
-            'flytStatus',
+            'flytStatus.kodenavn>flytStatus',
+            'flytStatus.kode>[null]',
             'flytMerknad',
         )
         self.recurse_xml_out_ordered(output, 'dokumentflyt', content, sequence)
@@ -370,7 +377,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         sequence = (
             'avskrivningsdato',
             'avskrevetAv',
-            'avskrivningsmaate',
+            'avskrivningsmaate.kodenavn>avskrivningsmaate',
+            'avskrivningsmaate.kode>[null]',
             'referanseAvskrivesAvJournalpost',
         )
         self.recurse_xml_out_ordered(output, 'avskrivning', content, sequence)
@@ -428,7 +436,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'beskrivelse',
             'noekkelord',
             'forfatter',
-            'dokumentmedium',
+            'dokumentmedium.kodenavn>dokumentmedium',
+            'dokumentmedium.kode>[null]',
             (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for registrering
             'virksomhetsspesifikkeMetadata',
 
@@ -441,8 +450,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 'journalaar',
                 'journalsekvensnummer',
                 'journalpostnummer',
-                'journalposttype',
-                'journalstatus',
+                'journalposttype.kodenavn>journalposttype',
+                'journalposttype.kode>[null]',
+                'journalstatus.kodenavn>journalstatus',
+                'journalstatus.kode>[null]',
                 'journaldato',
                 'dokumentetsDato',
                 'mottattDato',
@@ -473,9 +484,12 @@ class ContentDumper(n5core.endpoint.Endpoint):
             )
         if 'xsi:type="moeteregistrering"' == attr:
             sequence = sequence + (
-                'moeteregistreringstype',
-                'moetesakstype',
-                'moeteregistreringsstatus',
+                'moeteregistreringstype.kodenavn>moeteregistreringstype',
+                'moeteregistreringstype.kode>[null]',
+                'moetesakstype.kodenavn>moetesakstype',
+                'moetesakstype.kode>[null]',
+                'moeteregistreringsstatus.kodenavn>moeteregistreringsstatus',
+                'moeteregistreringsstatus.kode>[null]',
                 'administrativEnhet',
                 'saksbehandler',
 #                ('referanseTilMoeteregistrering'), # FIXME for moeteregistrering
@@ -506,7 +520,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'offentligTittel',
             'beskrivelse',
 #            ('noekkelord'), # FIXME for mappe
-            'dokumentmedium',
+            'dokumentmedium.kodenavn>dokumentmedium',
+            'dokumentmedium.kode>[null]',
             (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for mappe
             'opprettetDato',
             'opprettetAv',
@@ -590,7 +605,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         klasserel = '%sarkivstruktur/klasse/' % self.relbaseurl
         sequence = (
             'systemID',
-            'klassifikasjonstype',
+            'klassifikasjonstype.kodenavn>klassifikasjonstype',
+            'klassifikasjonstype.kode>[null]',
             'tittel',
             'beskrivelse',
             'opprettetDato',
@@ -621,8 +637,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'systemID',
             'tittel',
             'beskrivelse',
-            'arkivdelstatus',
-            'dokumentmedium',
+            'arkivdelstatus.kodenavn>arkivdelstatus',
+            'arkivdelstatus.kode>[null]',
+            'dokumentmedium.kodenavn>dokumentmedium',
+            'dokumentmedium.kode>[null]',
 #            (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for arkivdel
             'opprettetDato',
             'opprettetAv',
@@ -657,8 +675,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'systemID',
             'tittel',
             'beskrivelse',
-            'arkivstatus',
-            'dokumentmedium',
+            'arkivstatus.kodenavn>arkivstatus',
+            'arkivstatus.kode>[null]',
+            'dokumentmedium.kodenavn>dokumentmedium',
+            'dokumentmedium.kode>[null]',
             (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for arkiv
             'opprettetDato',
             'opprettetAv',
