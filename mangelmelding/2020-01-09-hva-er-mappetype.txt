@@ -3,7 +3,7 @@ Er Mappe.mappetype overflødig eller kan det beskrives hva den skal brukes til?
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegrensesnitt
-           Kategori  Versjon 1.0 beta
+           Kategori  Noark 5.5.0 TG versjon 1.0
         Alvorlighet  protest
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
