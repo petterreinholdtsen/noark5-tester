@@ -284,6 +284,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         dokobjrel = '%sarkivstruktur/dokumentobjekt/' % self.relbaseurl
         sequence = (
             'systemID',
+            'oppdatertAv>[null]',
+            'oppdatertDato>[null]',
             'dokumenttype.kodenavn>dokumenttype',
             'dokumenttype.kode>[null]',
             'dokumentstatus.kodenavn>dokumentstatus',
@@ -317,6 +319,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
     def recurse_xml_korrespondansepart(self, output, content):
         sequence = (
+            'systemID>[null]',
             'korrespondanseparttype.kodenavn>korrespondanseparttype',
             'korrespondanseparttype.kode>[null]',
             'navn>korrespondansepartNavn',
@@ -416,6 +419,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         sequence = (
             'systemID',
+            'oppdatertAv>[null]',
+            'oppdatertDato>[null]',
             'opprettetDato',
             'opprettetAv',
             'arkivertDato',
@@ -515,6 +520,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         sequence = (
             'systemID',
+            'oppdatertAv>[null]',
+            'oppdatertDato>[null]',
             'mappeID',
             'tittel',
             'offentligTittel',
@@ -620,6 +627,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
     def recurse_xml_arkivskaper(self, output, content):
         sequence = (
+            'systemID>[null]',
             'arkivskaperID',
             'arkivskaperNavn',
             'beskrivelse'
@@ -635,6 +643,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
         sequence = (
             'systemID',
+            'oppdatertAv>[null]',
+            'oppdatertDato>[null]',
             'tittel',
             'beskrivelse',
             'arkivdelstatus.kodenavn>arkivdelstatus',
@@ -673,6 +683,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         # From n5v5 arkivstruktur.xsd:
         sequence = (
             'systemID',
+            'oppdatertAv>[null]',
+            'oppdatertDato>[null]',
             'tittel',
             'beskrivelse',
             'arkivstatus.kodenavn>arkivstatus',
