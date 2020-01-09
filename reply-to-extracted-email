@@ -85,7 +85,8 @@ def main():
             docdescinfos = json.loads(c)
             if 'results' in docdescinfos:
                 for docdescinfo in docdescinfos['results']:
-                    print("Docdescinfo:", docdescinfo)
+                    if api.verbose:
+                        print("Docdescinfo:", docdescinfo)
                     fileshref = docdescinfo['_links'][api.relbaseurl
                                                       + 'arkivstruktur/dokumentobjekt/']['href']
                     #print("Dokumentobjekt %s" % fileshref)
@@ -93,7 +94,8 @@ def main():
                     docobjinfos = json.loads(c)
                     if 'results' in docobjinfos:
                         for docobjinfo in docobjinfos['results']:
-                            print("Docobjinfo:", docobjinfo)
+                            if api.verbose:
+                                print("Docobjinfo:", docobjinfo)
                             #print(docobjinfo['format'], docobjinfo['mimeType'])
                             contenthref = \
                                           docobjinfo['_links'][api.relbaseurl
@@ -117,11 +119,13 @@ def main():
                                     filnavn = docobjinfo['filnavn']
                                 else:
                                     filnavn = docobjinfo['systemID']
+                                if api.verbose:
+                                    print("Docobjinfo:", docobjinfo)
                                 subject = "%s: %s%s - %s" % \
                                           (docobjinfo['variantformat'],
-                                           docobjinfo['format'], d, filnavn)
+                                           docobjinfo.get('format'), d, filnavn)
                                 # FIXME figure out if there is a better date field to use
-                                date = dateutil.parser.parse(docobjinfo['opprettetDato'])
+                                date = dateutil.parser.parse(docdescinfo['tilknyttetDato'])
                                 print("Received non-email from API (Content-Type %s, filename %s, created %s)" % (ct, subject, date))
                                 mailfile.write("Subject: %s\n" % subject)
                                 mailfile.write("Date: %s\n" % \
