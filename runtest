@@ -29,6 +29,10 @@ import sys
 import os
 sys.path.append(os.path.join(sys.path[0],'lib'))
 
+# Enforce UTF-8 on stdout, also on redirect and pipes
+import codecs
+sys.stdout = codecs.getwriter('utf8')(sys.stdout)
+
 import argparse
 import datetime
 from hashlib import sha256
