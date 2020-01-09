@@ -51,7 +51,6 @@ excludes = {
     ),
     'klassifikasjonssystem': (
         'systemID',
-        'klassifikasjonstype', # FIXME Seem to be missing from Nikita?
     ),
     'klasse': (
         'systemID',
@@ -61,7 +60,6 @@ excludes = {
         'systemID',
         'referanseArkivdel',
         'merknad',
-        'kassasjon',
 
         # FIXME these need to be created before using
         'administrativEnhet', 'saksansvarlig',
@@ -73,10 +71,7 @@ excludes = {
     'journalpost': (
         'systemID',
         'noekkelord',
-        'skjerming',
-        'gradering',
         'avskrivning',
-        'journalenhet',
         'referanseArkivdel',
         'forfatter',
     ),
@@ -108,41 +103,43 @@ excludes = {
 
 metadata = {
     'arkiv': (
-#        'arkivstatus',
-#        'dokumentmedium',
+        'arkivstatus',
+        'dokumentmedium',
     ),
     'arkivdel': (
-#        'arkivdelstatus',
-#        'dokumentmedium',
+        'arkivdelstatus',
+        'dokumentmedium',
     ),
     'klassifikasjonssystem': (
-#        'klassifikasjonstype',
+        'klassifikasjonstype',
     ),
     'klasse': (
     ),
     'mappe': (
-#        'mappetype',
-#        'dokumentmedium',
+        'dokumentmedium',
+#        'mappetype', # Denne mangler i arkivstruktur.xsd, kun i TG
     ),
     'saksmappe': (
+        'dokumentmedium',
         'saksstatus',
     ),
     'registrering': (
-#        'dokumentmedium',
+        'dokumentmedium',
     ),
     'journalpost': (
-#        'journalposttype',
-#        'journalstatus',
+        'dokumentmedium',
+        'journalposttype',
+        'journalstatus',
     ),
     'dokumentbeskrivelse': (
-#        'dokumenttype',
-#        'dokumentstatus',
-#        'dokumentmedium',
-#        'tilknyttetRegistreringSom',
+        'dokumenttype',
+        'dokumentstatus',
+        'dokumentmedium',
+        'tilknyttetRegistreringSom',
     ),
     'dokumentobjekt': (
-#        'variantformat',
-#        'format',
+        'variantformat',
+        'format',
     ),
     'korrespondansepartenhet': (
         'korrespondanseparttype',
@@ -486,7 +483,6 @@ FIXME flag inaccurate guesses somehow
             'epostadresse':           'kontaktinformasjon.epostadresse',
             'telefonnummer':          'kontaktinformasjon.mobiltelefon|telefon',
             'partID':                 'systemID', # FIXME verify this mapping
-            'partRolle':              'partrolle', # FIXME Workaround for bug in Nikita
         }
         data = {}
         for sub in element.iterchildren():
@@ -566,7 +562,7 @@ FIXME flag inaccurate guesses somehow
         try:
             with open(filepath) as content:
                 size = os.path.getsize(filepath)
-                mimetype = format2mime( info['format'])
+                mimetype = format2mime( info['format']['kodenavn'] )
                 if self.verbose:
                     print("Uploading %s size %d mime type %s" % (filepath,
                                                                  size, mimetype))
@@ -586,10 +582,10 @@ FIXME flag inaccurate guesses somehow
         except IOError as e:
             self.output('unable to open %s' % filepath)
             raise
-        format = info['format']
-        if format not in self.formats:
-            self.formats[format] = 0
-        self.formats[format] += 1
+        formatcodename = info['format']['kodenavn']
+        if formatcodename not in self.formats:
+            self.formats[formatcodename] = 0
+        self.formats[formatcodename] += 1
 
     def loaddir(self, basedir):
         self.basedir = basedir
