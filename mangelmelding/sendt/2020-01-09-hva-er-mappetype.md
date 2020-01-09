@@ -10,7 +10,7 @@ Er Mappe.mappetype overflødig eller kan det beskrives hva den skal brukes til?
         Dokumentdel  7.2.1.16 (Mappe)
          Sidenummer  135
         Linjenummer  n/a
-    Innsendingsdato  ikke sendt inn
+    Innsendingsdato  2020-01-09
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -35,6 +35,9 @@ egen attributt for dette, da det vil fremgå av innholdet i _links, der
 'self'-lenken kan brukes til å finne en gitt instans entitet/type,
 jamfør beskrivelsen under overskriften "Identifisere enhetstype" i
 kapittel 6.
+
+Attributten er også listet opp i beta 1.0, og sidenummerene oppgitt
+i ønsket endring er fra den PDF-en.
 
 Ønsket endring
 --------------
