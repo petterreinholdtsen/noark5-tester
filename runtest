@@ -899,7 +899,7 @@ or should it be rejected?
                                             archivenotedata)
         journalentrydata = {
             'tittel' : u'test',
-            u'journalstatus', {u'kode': u'J', u'kodenavn': u'Tullestatus'}
+            u'journalstatus': {u'kode': u'J', u'kodenavn': u'Tullestatus'}
         }
         createjournalentryrel = noarkrelbase + 'sakarkiv/ny-journalpost/'
         journalentryinfo = self.createEntity('journalentry',
