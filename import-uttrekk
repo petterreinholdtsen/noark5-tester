@@ -431,7 +431,7 @@ class Importer(n5core.endpoint.Endpoint):
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
             tagdokumentbeskrivelse: ([], self.import_dokumentbeskrivelse),
-#            tagkorrespondansepart: ([], self.import_korrespondansepart),
+            tagkorrespondansepart: ([], self.import_korrespondansepart),
 #            tagmerknad: ([], self.import_merknad), # FIXME in registrering
 #            tagpart: ([], self.import_part), # FIXME in registrering
         }
@@ -453,7 +453,7 @@ use navn guessing to recognize entities (' AS', ' ASA') and people?
 
 FIXME flag inaccurate guesses somehow
 """
-        if 'kontaktperson' not in data and 'administrativEnhet' in data:
+        if 'administrativEnhet' in data or 'saksbehandler' in data:
             typename = 'intern'
         elif 'kontaktperson' in data \
            or -1 != data['navn'].find(' AS'):
@@ -521,10 +521,12 @@ FIXME flag inaccurate guesses somehow
         name = "%s%s" % (basetype, typename)
         rel = self.relbaseurl + 'arkivstruktur/ny-%s/' % name
 
-        # FIXME no place to put korrespondansepart.korrespondansepartNavn for 'intern'
+        # FIXME no place for korrespondansepart.korrespondansepartNavn for 'intern'
         # FIXME perhaps create AdministrativEnhet for it?
+        # FIXME no place for korrespondansepart.kontaktperson for 'intern'
         if 'intern' == typename:
-            del data['navn']
+            #del data['navn']
+            #del data['kontaktperson']
             print("warning: dropping %s, not yet implemented in Nikita" % name)
             return
 
