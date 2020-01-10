@@ -107,7 +107,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                                     del content[a]
                         else:
                             if f in content:
-                                output.writetag(t, content[f])
+                                if '[null]' != t:
+                                    output.writetag(t, content[f])
                                 del content[f]
                     else:
                         if k in content:
