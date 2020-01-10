@@ -22,6 +22,12 @@ import mechanize
 import urllib
 import urllib2
 import urlparse
+try:
+    from urllib2 import HTTPError
+    from urllib2 import URLError
+except ModuleNotFoundError:
+    from urllib.error import HTTPError
+    from urllib.error import URLError
 
 class LoginFailure(RuntimeError):
     """Report a login failure"""
@@ -58,7 +64,7 @@ class Endpoint:
                 }
                 jsondata = json.dumps(data)
                 (c,r) = self.post(url, jsondata, 'application/json')
-            except urllib2.HTTPError as e:
+            except HTTPError as e:
                 raise LoginFailure("Posting to login relation %s failed: %s" % (url, e))
             j = json.loads(c)
             self.token = j['token']
@@ -78,7 +84,7 @@ class Endpoint:
                 a = '%s:%s' % ('nikita-client', 'secret')
                 self.token = 'Basic %s' % base64.encodestring(a).strip()
                 (c,r) = self.post(url, datastr, 'application/x-www-form-urlencoded')
-            except urllib2.HTTPError as e:
+            except HTTPError as e:
                 raise LoginFailure("Posting to login relation %s failed: %s (%s)" % (url, str(e), e.read()))
             j = json.loads(c)
             self.token = "%s %s" % (j['token_type'], j['access_token'])
@@ -100,7 +106,7 @@ class Endpoint:
                 a = '%s:%s' % ('nikita-client', 'secret')
                 self.token = 'Basic %s' % base64.encodestring(a).strip()
                 (c,r) = self.post(url, datastr, 'application/x-www-form-urlencoded')
-            except urllib2.HTTPError as e:
+            except HTTPError as e:
                 raise LoginFailure("Posting to login relation %s failed: %s (%s)" % (url, str(e), e.read()))
             j = json.loads(c)
             self.token = "%s %s" % (j['token_type'], j['access_token'])
@@ -141,7 +147,7 @@ Recursively look for relation in API.
                                    return href
                     else:
                         pass # ignore URLs without _links
-            except urllib2.HTTPError as e:
+            except HTTPError as e:
                 # Ignore errors from GET, we only try to locate links, not detect problems.
                 pass
 

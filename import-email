@@ -16,9 +16,9 @@ import mailbox
 import re
 import time
 import urllib
-import urllib2
 
 import n5core.endpoint
+from n5core.endpoint import HTTPError
 from n5core.pick import pickUnlessOne
 
 def decodeheader(s):
@@ -138,13 +138,13 @@ class MboxImporter(n5core.endpoint.Endpoint):
             for k in default.keys():
                 if not k == '_links' and k not in data:
                     data[k] = default[k]
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             pass
         try:
             if self.verbose:
                 print("POST: %s" % data)
             (c, res) = self.json_post(url, data)
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             if self.verbose:
                 print("POST %s failed: %s (%s)" % (url, str(e), e.read()))
             raise
@@ -212,7 +212,7 @@ if a match is found.
         messageid = message['message-id']
         print("Looking for msgid: %s" % messageid)
 
-        searchurl = self.docobjurl + '?$filter=' +\
+        searchurl = 'x'+self.docobjurl + '?$filter=' +\
             urllib.quote_plus("filnavn eq '%s'" % messageid)
         #print(searchurl)
 
