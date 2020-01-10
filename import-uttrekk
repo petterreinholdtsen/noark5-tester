@@ -254,7 +254,7 @@ class Importer(n5core.endpoint.Endpoint):
                 if kodenavn == v['kodenavn']:
                     kode = v['kode']
         if not kode:
-            kode = 'FIXME'
+            kode = 'FIXME "%s" not found in %s metadata catalog' % (kodenavn, field)
         return {
             'kode': kode,
             'kodenavn': kodenavn,
