@@ -263,7 +263,8 @@ class Importer(n5core.endpoint.Endpoint):
     # Copied from import-email
     def create_entity(self, name, rel, parent, data):
         if rel not in parent['_links'] or 'href' not in parent['_links'][rel]:
-            print(parent)
+            if self.verbose:
+                print(parent)
             raise Exception("unable to find %s in provided relations" % rel)
         url = parent['_links'][rel]['href']
         try:
@@ -568,7 +569,8 @@ FIXME flag inaccurate guesses somehow
                                                                  size, mimetype))
                 uploadrel = self.relbaseurl + 'arkivstruktur/fil/'
                 if uploadrel not in info['_links'] or 'href' not in info['_links'][uploadrel]:
-                    print(info)
+                    if self.verbose:
+                        print(info)
                     raise Exception("missing from created dokumentobjekt: %s" % uploadrel)
                 newfilehref = info['_links'][uploadrel]['href']
                 if not self.dryrun:
