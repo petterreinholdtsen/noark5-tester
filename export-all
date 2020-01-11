@@ -716,12 +716,13 @@ class ContentDumper(n5core.endpoint.Endpoint):
         (c, res) = self.json_get(arkivhref)
         arkivinfo = json.loads(c)
 
+        utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc).isoformat()
         if 'count' not in arkivinfo or 0 < arkivinfo['count']:
             for arkiv in arkivinfo['results']:
-                utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc)
-                self.savepath = 'uttrekk-arkiv-%s-%s-%s' % (arkiv['systemID'],
-                                                            arkiv['tittel'],
-                                                            utcnow.isoformat())
+                self.savepath = 'uttrekk-%s/arkiv-%s-%s' % (
+                    utcnow,
+                    arkiv['systemID'],
+                    arkiv['tittel'].replace('/', '_'))
                 self._mkdir_recursive(self.savepath)
                 with codecs.open('%s/arkivstruktur.xml' % self.savepath, 'w',
                                  encoding='UTF-8') as fh:
