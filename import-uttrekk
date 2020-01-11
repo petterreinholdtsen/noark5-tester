@@ -86,6 +86,7 @@ excludes = {
     'dokumentbeskrivelse' : (
         'systemID',
         'referanseArkivdel',
+        'tilknyttetRegistreringSom', # FIXME missing in nikita?
     ),
     'dokumentobjekt': (
         'systemID',
@@ -135,7 +136,7 @@ metadata = {
         'dokumenttype',
         'dokumentstatus',
         'dokumentmedium',
-        'tilknyttetRegistreringSom',
+#       'tilknyttetRegistreringSom', # FIXME metadata catalog missing in nikita
     ),
     'dokumentobjekt': (
         'variantformat',
