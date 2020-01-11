@@ -48,7 +48,7 @@ from n5core.endpoint import HTTPError
 from n5core.endpoint import URLError
 
 noarkrelbase = 'https://rel.arkivverket.no/noark5/v5/api/'
-nikitarelbase = 'http://nikita.arkivlab.no/noark5/v5/'
+nikitarelbase = 'https://nikita.arkivlab.no/noark5/v5/'
 
 class Noark5Tester (n5core.endpoint.Endpoint):
     knownrels = [
@@ -991,12 +991,62 @@ or should it be rejected?
             (c, res) = self._get(url)
             self.verify(c == xmldata,
                         "downloaded file should match uploaded file")
-            ctype = res.info().getheader('Content-Type')
+            ctype = res.headers.get('Content-Type')
             self.verify(ctype and 0 == ctype.find('application/xml'),
                         "MIME type %s should be application/xml for url %s" %
                         (ctype, url))
         except HTTPError as e:
             self.failure("downloading %s failed: %s (%s)" % (url, str(e), e.read()))
+
+    def testMetadata(self):
+        # First, check if all known metadata relations are listed under metadat.
+        knownmetarels = []
+        for rel in self.knownrels:
+            r = re.match(r'.*/metadata/\w+/?', rel)
+            if r and -1 == rel.find('/ny-'):
+                knownmetarels.append(rel)
+
+        metadatarel = noarkrelbase + 'metadata/'
+        url = self.findRelation(metadatarel)
+        (entry, res) = self.json_get(url)
+        metadatalist = json.loads(entry)
+        for rel in metadatalist['_links'].keys():
+            if rel in knownmetarels:
+                knownmetarels.remove(rel)
+            else:
+                self.xfailure("unofficial metadata relation %s under %s" % (
+                    rel, url
+                ))
+        if knownmetarels:
+            self.xfailure("metadata relation keys [%s] not listed under %s" % (
+                knownmetarels, url))
+        else:
+            self.success("all known metadata relation keys listed under %s" % url)
+
+        # Make sure 'Journalført' is listed as a journalstatus entry.
+        # Looking for this one to detect mojobake with æøå in entries.
+        kodenavn = u'Journalført'
+        journalstatusrel = noarkrelbase + 'metadata/journalstatus/'
+        url = self.findRelation(journalstatusrel)
+        (entry, res) = self.json_get(url)
+        j = json.loads(entry)
+        for s in j['results']:
+            self.xverify(kodenavn == s['kodenavn'],
+                        "looking for metadata journalstatus value '%s'" % kodenavn)
+
+        if not self.gotlogin:
+            self.failure("not logged in, unable to test creation")
+            return
+
+        journalstatusdata = {
+            'kode': 'X',
+            'kodenavn': 'Y',
+        }
+        createjournalstatusrel = nikitarelbase + 'metadata/ny-journalstatus/'
+        recordinfo = self.createEntity('journalstatus', createjournalstatusrel,
+                                       self.parselinks(metadatalist['_links']),
+                                       journalstatusdata)
+
 
     def runtests(self):
         try:
@@ -1019,6 +1069,7 @@ or should it be rejected?
             self.testNewDocument()
             self.recursiveHateoas()
             self.testNewDocument()
+            self.testMetadata()
             self.modifyAllCreated()
             if not self.keeptestdata:
                 self.deleteCreated()
