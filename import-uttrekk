@@ -25,6 +25,7 @@ from functools import partial
 from lxml import etree
 
 import n5core.endpoint
+from n5core.endpoint import HTTPError
 
 strukturns = 'http://www.arkivverket.no/standarder/noark5/arkivstruktur'
 
@@ -285,7 +286,7 @@ class Importer(n5core.endpoint.Endpoint):
                         print("warning: adding hardcoded timezone %s to %s.%s" %
                               (default_timezone, name, field))
                         data[field] = data[field] + default_timezone
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             pass
         try:
             if self.verbose:
@@ -294,7 +295,7 @@ class Importer(n5core.endpoint.Endpoint):
             if name not in self.stats:
                 self.stats[name] = 0
             self.stats[name] += 1
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             msg = e.read()
             print("Error: ", msg)
             raise
@@ -576,7 +577,7 @@ FIXME flag inaccurate guesses somehow
                     try:
                         (c, res) = self.post(str(newfilehref), content,
                                              mimetype, length=size)
-                    except urllib2.HTTPError as e:
+                    except HTTPError as e:
                         msg = e.read()
                         self.output('unable to POST to %s: %s' % (newfilehref, msg))
                         raise

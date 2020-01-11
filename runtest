@@ -44,6 +44,8 @@ import urllib2
 import urlparse
 import xml.etree.ElementTree
 import n5core.endpoint
+from n5core.endpoint import HTTPError
+from n5core.endpoint import URLError
 
 noarkrelbase = 'https://rel.arkivverket.no/noark5/v5/api/'
 nikitarelbase = 'http://nikita.arkivlab.no/noark5/v5/'
@@ -440,9 +442,9 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                         self.verify(-1 != allow.index('GET'), 'OPTIONS header Allow should include GET for %s' % url)
                     else:
                         self.failure("OPTIONS for URL %s missing Allow header" % url)
-                except urllib2.HTTPError as e:
+                except HTTPError as e:
                     self.failure("OPTIONS failed for URL %s: %s (%s)" % (url, str(e), e.read()))
-            except urllib2.HTTPError as e:
+            except HTTPError as e:
                 if self.isknownmissing(url):
                     self.xfailure("unable to GET %s" % url)
                 else:
@@ -463,7 +465,7 @@ code 401 before logging in.
             url = "arkivstruktur/arkiv/"
             (content, res) = self.json_get(url)
             self.failure("level 0 accessing %s before login do not ask for basic authentication" % url)
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             self.xverify(401 == e.code and 'www-authenticate' in e.hdrs,
                         "level 0 API should support support Basic access authentication")
         
@@ -477,9 +479,9 @@ Test basis requirements for NOARK 5 Core.
         try:
             (ocontent, ores) = self.options('.')
             self.success("level 0 CORS - HTTP OPTTIONS request worked")
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             self.failure("level 0 CORS - HTTP OPTTIONS request not working")
-        except urllib2.URLError:
+        except URLError:
             self.failure("level 0 CORS - unable to connect via HTTP")
 
         self.verifyAuthentication()
@@ -500,7 +502,7 @@ Test basis requirements for NOARK 5 Core.
                     return baseref
                 else:
                     self.failure('level 0 JSON - did not find _links in json response')
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             self.failure('level 0 JSON - unable to GET JSON content for base.')
 
         # FIXME Verify authentication, not sure how
@@ -546,14 +548,14 @@ Test basis requirements for NOARK 5 Core.
                     verify(-1 != allow.index('GET'), 'OPTIONS header Allow should include GET for %s' % url)
                 else:
                     self.failure("OPTIONS for URL %s missing Allow header" % url)
-            except urllib2.HTTPError as e:
+            except HTTPError as e:
                 self.failure('unable to OPTIONS %s' % url)
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             self.failure('unable to GET %s' % url)
         print("POST %s: %s" % (url, data))
         try:
             (c, res) = self.json_post(url, data)
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             failure("POST %s failed: %s" % (url, e.read().decode('UTF-8')))
             raise
         info = json.loads(c)
@@ -569,7 +571,7 @@ Test basis requirements for NOARK 5 Core.
             try:
                 extrainfo = self.json_get(selfurl)
                 self.success("able to GET self url %s" % selfurl)
-            except urllib2.HTTPError as e:
+            except HTTPError as e:
                 failure("unable to GET self url %s" % selfurl)
         for k in data.keys():
             if verify(k in info,
@@ -603,7 +605,7 @@ Test basis requirements for NOARK 5 Core.
             try:
                 self.delete(entityurl)
                 self.success("able to DELETE %s" % entityurl)
-            except urllib2.HTTPError as e:
+            except HTTPError as e:
                 # Until we figure out how sletting vs. DELETE should
                 # work, make missing DELETE support an expected
                 # failure.
@@ -685,7 +687,7 @@ Test basis requirements for NOARK 5 Core.
                                    etag=etag)
                 print putinfo
                 self.success("able to modify %s" % url)
-            except urllib2.HTTPError as e:
+            except HTTPError as e:
                 self.failure("unable to modify %s: %s (%s)" % (url, str(e), e.read()))
 
     def testDateFormats(self):
@@ -738,7 +740,7 @@ or should it be rejected?
                         self.success("able to create record with %s='%s'" % (field, timevalue))
                     else:
                         level("unable to create record with %s='%s'" % (field, timevalue))
-                except urllib2.HTTPError as e:
+                except HTTPError as e:
                     level("unable to create record with %s='%s'" % (field, timevalue))
 
     def testNewDocument(self):
@@ -847,7 +849,7 @@ or should it be rejected?
                 u8fileinfo = self.createEntity('file', createfilerel,
                                                self.parselinks(serieinfo['_links']),
                                                u8filedata)
-            except urllib2.HTTPError as e:
+            except HTTPError as e:
                 self.failure("creating long UTF-8 title in %s failed: %s (%s)" %
                              (url, str(e), e.read())
                 )
@@ -972,7 +974,7 @@ or should it be rejected?
             # The spec is not clear on what is returned from file upload
             #self.verify(c == '', "POST %s return nothing" % url)
             self.verify(201 == res.code, "verify file upload HTTP code %s is 201" % (res.code))
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             print("POST %s failed: %s (%s)" % (url, str(e), e.read()))
 
         # Verify the pointer to the file to download
@@ -992,7 +994,7 @@ or should it be rejected?
             self.verify(ctype and 0 == ctype.find('application/xml'),
                         "MIME type %s should be application/xml for url %s" %
                         (ctype, url))
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             self.failure("downloading %s failed: %s (%s)" % (url, str(e), e.read()))
 
     def runtests(self):
