@@ -21,12 +21,8 @@ import mechanize
 import urllib
 import urllib2
 import urlparse
-try:
-    from urllib2 import HTTPError
-    from urllib2 import URLError
-except ModuleNotFoundError:
-    from urllib.error import HTTPError
-    from urllib.error import URLError
+from mechanize import HTTPError
+from mechanize import URLError
 
 class LoginFailure(RuntimeError):
     """Report a login failure"""
