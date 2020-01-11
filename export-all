@@ -248,7 +248,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'filstoerrelse',
             ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
 
-#            (konvrel, self.recurse_xml_konvertering), # FIXME for dokumentobjekt
+            (konvrel, self.recurse_xml_konvertering),
         )
         with output.tag('dokumentobjekt'):
             if self.verbose:
