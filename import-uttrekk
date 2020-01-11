@@ -38,6 +38,7 @@ tagmappe                 = '{%s}mappe' % strukturns
 tagmerknad               = '{%s}merknad' % strukturns
 tagregistrering          = '{%s}registrering' % strukturns
 tagpart                  = '{%s}part' % strukturns
+tagforfatter             = '{%s}forfatter' % strukturns
 tagkorrespondansepart    = '{%s}korrespondansepart' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
@@ -74,7 +75,6 @@ excludes = {
         'noekkelord',
         'avskrivning',
         'referanseArkivdel',
-        'forfatter',
     ),
     'arkivnotat': (
         'systemID',
@@ -85,7 +85,6 @@ excludes = {
     ),
     'dokumentbeskrivelse' : (
         'systemID',
-        'forfatter',
         'referanseArkivdel',
     ),
     'dokumentobjekt': (
@@ -423,6 +422,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagkorrespondansepart: ([], self.import_korrespondansepart),
 #            tagmerknad: ([], self.import_merknad), # FIXME in registrering
 #            tagpart: ([], self.import_part), # FIXME in registrering
+            tagforfatter: ([], self.import_forfatter),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -530,9 +530,14 @@ FIXME flag inaccurate guesses somehow
         subs = {
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
 #            tagpart: ([], self.import_part), # FIXME in dokumentbeskrivelse
+            tagforfatter: ([], self.import_forfatter),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentbeskrivelse/'
         self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, subs)
+
+    def import_forfatter(self, parentinfo, element):
+        rel = self.relbaseurl + 'arkivstruktur/ny-forfatter/'
+        self.import_entity('forfatter', rel, parentinfo, element, None)
 
     def import_dokumentobjekt(self, parentinfo, element):
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentobjekt/'
