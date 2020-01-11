@@ -383,6 +383,10 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                and -1 != l['href'].replace('://', '/').find('//') \
                                and 'self' != rel:
                                 self.failure("_links %s with double slashes in %s" % (l['href'], url))
+                            # Warn when ny- relations have templated set
+                            if '/ny-' in rel and 'templated' in l \
+                               and l['templated']:
+                                self.xfailure('relation %s in %s have templated=true' % (rel, url))
                             # Ignore non-standard relations
                             if 'href' in l \
                                and -1 == rel.find("//rel.arkivverket.no/noark5/") \
