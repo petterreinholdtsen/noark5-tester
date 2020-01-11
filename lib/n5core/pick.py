@@ -46,7 +46,7 @@ If there are more than one element, ask the user to pick one.
                 else:
                     print(" %d - %s systemID %s" % (i, type, entry['systemID']))
                 i = i + 1
-            answer = raw_input("Select which %s you want (or search term): " % type)
+            answer = input("Select which %s you want (or search term): " % type)
             try:
                 n = int(answer)
                 if n < 0 or n >= count:
