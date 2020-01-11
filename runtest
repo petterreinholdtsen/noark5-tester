@@ -244,6 +244,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-oppbevaringssted/?',
         'hateoas-api/metadata/kassasjonsvedtak/?',
         'hateoas-api/metadata/tilgangsrestriksjon/?',
+        'hateoas-api/metadata/tilknyttetregistreringsom/?',
         'hateoas-api/sakarkiv/arkivnotat/[-0-9a-z]+/dokumentflyt/?',
         'hateoas-api/sakarkiv/arkivnotat/[-0-9a-z]+/ny-dokumentflyt/?',
         'hateoas-api/sakarkiv/journalpost/[-0-9a-z]+/avskrivning/?',
