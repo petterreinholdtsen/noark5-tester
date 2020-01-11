@@ -261,10 +261,16 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         # automatic deduplication, assuming there is
                         # no hash collition in the dataset.
                         filename = '%s-%s' % (content['sjekksumAlgoritme'], content['sjekksum'])
-                        with open('%s/DOKUMENT/%s' % (self.savepath, filename), 'w') as fh:
-                            (data, r) = self._get(content['_links'][filrel]['href'])
-                            fh.write(data)
-                        output.writetag('referanseDokumentfil', 'DOKUMENT/%s' % filename)
+                        url = content['_links'][filrel]['href']
+                        try:
+                            with open('%s/DOKUMENT/%s' % (self.savepath, filename), 'w') as fh:
+                                (data, r) = self._get(url)
+                                fh.write(data)
+                            output.writetag('referanseDokumentfil', 'DOKUMENT/%s' % filename)
+                        except HTTPError as e:
+                            print("error: unable to download %s: %s (%s)" % (
+                                url, str(e), e.read()))
+                            raise
                     continue
                 keytype = type(k)
                 if str == keytype:
