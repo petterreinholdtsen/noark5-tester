@@ -346,10 +346,6 @@ class Importer(n5core.endpoint.Endpoint):
             tagarkivskaper: ([], self.import_arkivskaper),
             tagarkivdel: ([], self.import_arkivdel),
         }
-        if sub:
-            substr = "under"
-        else:
-            substr = ""
         rel = self.relbaseurl + 'arkivstruktur/ny-arkiv/'
         self.import_entity('arkiv', rel, parentinfo, element, subs)
 
@@ -379,10 +375,6 @@ class Importer(n5core.endpoint.Endpoint):
             tagklasse: ([], partial(self.import_klasse, sub=True)),
             tagmappe: ([], self.import_mappe),
         }
-        if sub:
-            substr = "under"
-        else:
-            substr = ""
         rel = self.relbaseurl + 'arkivstruktur/ny-klasse/'
 
         self.import_entity('klasse', rel, parentinfo, element, subs)
@@ -390,10 +382,6 @@ class Importer(n5core.endpoint.Endpoint):
     def import_mappe(self, parentinfo, element, sub=False):
         attrtype = '{http://www.w3.org/2001/XMLSchema-instance}type'
         name = 'mappe'
-        if sub:
-            substr = "under"
-        else:
-            substr = ""
         rel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
         if attrtype in element.keys():
             etype = element.get(attrtype)
