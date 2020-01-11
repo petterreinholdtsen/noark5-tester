@@ -263,10 +263,12 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         filename = '%s-%s' % (content['sjekksumAlgoritme'], content['sjekksum'])
                         url = content['_links'][filrel]['href']
                         try:
-                            with open('%s/DOKUMENT/%s' % (self.savepath, filename), 'w') as fh:
-                                (data, r) = self._get(url)
+                            (data, r) = self._get(url)
+                            with open('%s/DOKUMENT/%s' % (
+                                    self.savepath, filename), 'w') as fh:
                                 fh.write(data)
-                            output.writetag('referanseDokumentfil', 'DOKUMENT/%s' % filename)
+                            output.writetag('referanseDokumentfil',
+                                            'DOKUMENT/%s' % filename)
                         except HTTPError as e:
                             print("error: unable to download %s: %s (%s)" % (
                                 url, str(e), e.read()))
