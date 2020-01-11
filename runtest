@@ -972,7 +972,7 @@ or should it be rejected?
             # The spec is not clear on what is returned from file upload
             #self.verify(c == '', "POST %s return nothing" % url)
             self.verify(201 == res.code, "verify file upload HTTP code %s is 201" % (res.code))
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             print("POST %s failed: %s (%s)" % (url, str(e), e.read()))
 
         # Verify the pointer to the file to download
