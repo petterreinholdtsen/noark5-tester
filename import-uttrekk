@@ -194,6 +194,30 @@ datefields = (
     'verifisertDato',
 )
 
+# Bad default values handed out from Nikita, values we remove from ny-* output
+baddefaults = {
+    'arkiv': (
+        'beskrivelse',
+    ),
+    'arkivskaper': (
+        'beskrivelse',
+    ),
+    'mappe': (
+        'beskrivelse',
+        'offentligTittel',
+    ),
+    'saksmappe': (
+        'beskrivelse',
+        'offentligTittel',
+    ),
+    'registrering': (
+        'beskrivelse',
+    ),
+    'journalpost': (
+        'beskrivelse',
+    ),
+}
+
 # FIXME figure out a better way to handle formats?
 formatmap = {
     'pdf':   ('fmt/14', 'application/pdf'), # actually PDF 1.0
@@ -273,13 +297,21 @@ class Importer(n5core.endpoint.Endpoint):
                 print("GET %s" % url)
             (gc, gres) = self.json_get(url)
             default = json.loads(gc)
+            # Transfer from ny-* JSON to POST data
             for k in default.keys():
                 if not k == '_links' and k not in data:
+                    # Skip bad default values
+                    if name in baddefaults and k in baddefaults[name]:
+                        continue
                     data[k] = default[k]
+            # Map values if needed
             for field in data.keys():
+                # Map metadata
                 if name in metadata and field in metadata[name]:
-                    value = self.metadatalookup(default, name, field, kodenavn=data[field])
+                    value = self.metadatalookup(default, name,
+                                                field, kodenavn=data[field])
                     data[field] = value
+                # Map datestamps
                 if field in datefields:
                     # Make sure the required time zone is in place
                     if -1 == data[field].find('+') and 'Z' != data[field][-1]:
