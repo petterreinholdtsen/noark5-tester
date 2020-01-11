@@ -590,6 +590,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         sequence = (
             'systemID',
             'klasseID',
+            'oppdatertAv>[null]',
+            'oppdatertDato>[null]',
             'tittel',
             'beskrivelse',
 #            ('noekkelord'), # FIXME for klasse
@@ -614,6 +616,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         klasserel = '%sarkivstruktur/klasse/' % self.relbaseurl
         sequence = (
             'systemID',
+            'oppdatertAv>[null]',
+            'oppdatertDato>[null]',
             'klassifikasjonstype.kodenavn>klassifikasjonstype',
             'klassifikasjonstype.kode>[null]',
             'tittel',
