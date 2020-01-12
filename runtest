@@ -991,7 +991,7 @@ or should it be rejected?
             (c, res) = self._get(url)
             self.verify(c == xmldata,
                         "downloaded file should match uploaded file")
-            ctype = res.headers.get('Content-Type')
+            ctype = res.info().getheader('Content-Type')
             self.verify(ctype and 0 == ctype.find('application/xml'),
                         "MIME type %s should be application/xml for url %s" %
                         (ctype, url))
