@@ -1014,9 +1014,7 @@ or should it be rejected?
             if rel in knownmetarels:
                 knownmetarels.remove(rel)
             else:
-                self.xfailure("unofficial metadata relation %s under %s" % (
-                    rel, url
-                ))
+                self.xfailure("unofficial relation %s from %s" % (rel, url))
         if knownmetarels:
             self.xfailure("metadata relation keys [%s] not listed under %s" % (
                 knownmetarels, url))
