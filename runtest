@@ -1030,7 +1030,7 @@ or should it be rejected?
         j = json.loads(entry)
         for s in j['results']:
             self.xverify(kodenavn == s['kodenavn'],
-                        "looking for metadata journalstatus value '%s'" % kodenavn)
+                        "looking for UTF-8 metadata journalstatus value")
 
         if not self.gotlogin:
             self.failure("not logged in, unable to test creation")
