@@ -511,8 +511,10 @@ not loosing the timezone information.
         
         docobjdata = {
             "versjonsnummer"  : str(0),
-            'variantformat'   : {'kode': 'P',
-                                 'kodenavn': 'Produksjonsformat'},
+            'variantformat'   : {
+                'kode': 'P',
+                'kodenavn': 'Produksjonsformat'
+            },
             "filstoerrelse"   : str(messagelen),
             "filnavn"         : message['message-id'],       
             "mimeType"        : mimetype,
@@ -550,7 +552,10 @@ not loosing the timezone information.
                 contentlen = len(content)
                 docobjdata = {
                     "versjonsnummer"  : str(0),
-                    "variantformat"   : "Produksjonsformat",
+                    'variantformat'   : {
+                        'kode': 'P',
+                        'kodenavn': 'Produksjonsformat'
+                    },
                     "filstoerrelse"   : contentlen,
                     "filnavn"         : part.get_filename(),
                     "mimeType"        : mimetype,
