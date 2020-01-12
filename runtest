@@ -25,7 +25,7 @@ as it should.  See also http://rel.arkivverket.no/noark5/konformitetsniva/
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-#from __future__ import print_function
+from __future__ import print_function
 
 import sys
 import os
@@ -293,12 +293,12 @@ class Noark5Tester (n5core.endpoint.Endpoint):
     def success(self, msg):
         if msg not in self.successes:
             self.successes[msg] = 1
-            print "success: " + msg
+            print("success: " + msg)
         return True
     def failure(self, msg):
         if msg not in self.failures:
             self.failures[msg] = 1
-            print "failure: " + msg
+            print("failure: " + msg)
         return False
     def verify(self, check, msg):
         if (check):
@@ -313,7 +313,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
     def xfailure(self, msg):
         if msg not in self.xfailures:
             self.xfailures[msg] = 1
-            print "xfailure: " + msg
+            print("xfailure: " + msg)
         return False
     def xverify(self, check, msg):
         if (check):
@@ -337,7 +337,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
 
     def recursiveHateoas(self):
         if self.verbose:
-            print "recursively discovering standard URLs from the top"
+            print("recursively discovering standard URLs from the top")
         relok = {}
         for r in self.knownrels:
             relok[r] = True
@@ -366,13 +366,13 @@ class Noark5Tester (n5core.endpoint.Endpoint):
 
                 if self.verify(ctype and 0 == ctype.find('application/vnd.noark5+json'),
                                "MIME type %s should be application/vnd.noark5+json for url %s" % (ctype, url)):
-                    #print "C:", content
+                    #print("C:", content)
                     try:
                         baseref = json.loads(content)
                     except ValueError as e:
                         self.failure('non-JSON content returned for %s' % url)
                         baseref = None
-                    #print "J:", baseref
+                    #print("J:", baseref)
                     if baseref is None:
                         self.failure("JSON MIME type but no JSON in %s" % url)
                     elif type(baseref) is list:
@@ -499,7 +499,7 @@ Test basis requirements for NOARK 5 Core.
             else:
                 self.success('level 0 JSON - correct content-type for base')
                 baseref = json.loads(content)
-#                print d
+#                print(d)
                 if '_links' in baseref:
                     self.success('level 0 JSON - found _links in json response')
                     return baseref
@@ -683,12 +683,12 @@ Test basis requirements for NOARK 5 Core.
                     info[modkey] = info[modkey] + ' modified'
                 else:
                     self.xfailure('unable to find anything to modify among %s' % info.keys())
-                    print info
+                    print(info)
                 infostr = json.dumps(info)
                 putinfo = self.put(url, infostr,
                                    'application/vnd.noark5+json',
                                    etag=etag)
-                print putinfo
+                print(putinfo)
                 self.success("able to modify %s" % url)
             except HTTPError as e:
                 self.failure("unable to modify %s: %s (%s)" % (url, str(e), e.read()))
