@@ -529,7 +529,11 @@ not loosing the timezone information.
             for part in message.walk():
                 mimetype = part.get_content_type()
                 format = mime2format(mimetype)
-                disposition = part.get_content_disposition()
+                try: # Only available with Python 3
+                    disposition = part.get_content_disposition()
+                except AttributeError as e:
+                    # Assume attachment on python 2
+                    disposition = 'attachment'
                 if self.verbose:
                     print("info: mapping %s to %s" % (mimetype, format))
 
