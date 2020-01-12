@@ -160,7 +160,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         noarkrelbase + 'metadata/partrolle/',
         noarkrelbase + 'metadata/postnummer/',
         noarkrelbase + 'metadata/presedensstatus/',
-        noarkrelbase + 'metadata/sakspartrolle/',
         noarkrelbase + 'metadata/saksstatus/',
         noarkrelbase + 'metadata/skjermingdokument/',
         noarkrelbase + 'metadata/skjermingmetadata/',
