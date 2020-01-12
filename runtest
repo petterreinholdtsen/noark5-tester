@@ -588,8 +588,9 @@ Test basis requirements for NOARK 5 Core.
                                         "POST %s respons list member %s should match %s" %
                                         (url, k, v, data[k][v]))
                     elif dict is type(data[k]):
-                        print("data[%s]:", (k, data[k]))
-                        print("info[%s]:", (k, info[k]))
+                        if self.verbose:
+                            print("data[%s]: %s" % (k, data[k]))
+                            print("info[%s]: %s" % (k, info[k]))
                         for v in data[k].keys():
                             print("checking %s key %s" % (k, v))
                             verify(k in data and k in info
