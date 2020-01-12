@@ -25,6 +25,8 @@ as it should.  See also http://rel.arkivverket.no/noark5/konformitetsniva/
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+from __future__ import print_function
+
 import sys
 import os
 sys.path.append(os.path.join(sys.path[0],'lib'))
@@ -1036,6 +1038,10 @@ or should it be rejected?
             self.failure("not logged in, unable to test creation")
             return
 
+        # Disabling create test for now, until we are ready to make it
+        # a fatal check. [pere 2020-01-12]
+        return
+
         journalstatusdata = {
             'kode': 'X',
             'kodenavn': 'Y',
@@ -1067,8 +1073,8 @@ or should it be rejected?
             self.testNewDocument()
             self.recursiveHateoas()
             self.testNewDocument()
-            self.testMetadata()
             self.modifyAllCreated()
+            self.testMetadata()
             if not self.keeptestdata:
                 self.deleteCreated()
         finally:
