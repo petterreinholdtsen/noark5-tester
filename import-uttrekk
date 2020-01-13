@@ -144,6 +144,10 @@ metadata = {
         'variantformat',
         'format',
     ),
+    # Used by import_generic_part()
+    'korrespondansepart': (
+        'korrespondanseparttype',
+    ),
     'korrespondansepartenhet': (
         'korrespondanseparttype',
     ),
@@ -152,6 +156,10 @@ metadata = {
     ),
     'korrespondansepartintern': (
         'korrespondanseparttype',
+    ),
+    # Used by import_generic_part()
+    'part': (
+        'partrolle',
     ),
     'partenhet': (
         'partrolle',
@@ -505,7 +513,7 @@ class Importer(n5core.endpoint.Endpoint):
                 raise ValueError("unknown %s type %s" % (element.tag, etype))
         subs = {
             tagdokumentbeskrivelse: ([], self.import_dokumentbeskrivelse),
-#            tagkorrespondansepart: ([], self.import_korrespondansepart),
+            tagkorrespondansepart: ([], self.import_korrespondansepart),
 #            tagmerknad: ([], self.import_merknad), # FIXME in registrering
 #            tagpart: ([], self.import_part), # FIXME in registrering
             tagforfatter: ([], self.import_forfatter),
@@ -576,8 +584,10 @@ FIXME flag inaccurate guesses somehow
                 else:
                     data[fieldmap[field]] = value
             else:
-                data[field] = value
-
+                if basetype in metadata and field in metadata[basetype]:
+                    data[field] = {'kode': None, 'kodenavn': value}
+                else:
+                    data[field] = value
         # Norwegian mobile phone numbers are 4XX XX XXX or 9XX XX XXX
         # according to national number plan from NKom (E.164).
         if 'kontaktinformasjon' in data \
