@@ -20,6 +20,8 @@ sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
 import json
+import random
+import string
 import urllib2
 from functools import partial
 from lxml import etree
@@ -252,16 +254,37 @@ class Importer(n5core.endpoint.Endpoint):
         for format in sorted(self.formats.keys()):
             print("%-25s %d" % (format, self.formats[format]))
 
-    def metadatalookup(self, default, entity, field, kodenavn=None):
+    def metadata_make_up_unused_code(self, field, kodenavn):
+        kodes = {}
+        for v in self.metadatacache[field]:
+            kodes[self.metadatacache[field][v]['kode']] = v
+        bag = string.ascii_uppercase
+        count = 10
+        while 0 < count:
+            candidate = ''.join(random.sample(bag, 2))
+            if candidate not in kodes:
+                return candidate
+            count -= 1
+        raise Exception("unable to find unused 'kode' value.")
+
+    def metadatalookup(self, default, entity, field, verdi=None):
         kode = None
+        kodenavn = verdi['kodenavn']
         if field in self.metadatacache:
-            for v in self.metadatacache[field]:
-                if kodenavn == v['kodenavn']:
-                    kode = v['kode']
-                    return {
-                        'kode': kode,
-                        'kodenavn': kodenavn,
-                    }
+            print("Cache: ", self.metadatacache[field])
+            if kodenavn in self.metadatacache[field]:
+                kode = self.metadatacache[field][kodenavn]['kode']
+                return {
+                    'kode': kode,
+                    'kodenavn': kodenavn,
+                }
+            else:
+                # Perhaps the value is a code already (like with format)?
+                for v in self.metadatacache[field]:
+                    if kode == self.metadatacache[field][v]['kode']:
+                        return {
+                            'kode': kodenavn,
+                        }
         relkey = self.relbaseurl + 'metadata/%s/' % field
 
         # Prefer _links entries from ny-*, but fall back to searching
@@ -274,12 +297,37 @@ class Importer(n5core.endpoint.Endpoint):
         if url:
             (c, r) = self.json_get(url)
             j = json.loads(c)
-            self.metadatacache[field] = j['results']
+            if field not in self.metadatacache:
+                self.metadatacache[field] = {}
             for v in j['results']:
-                if kodenavn == v['kodenavn']:
-                    kode = v['kode']
+                key = v['kodenavn']
+                # No need for these
+                if '_links' in v: del v['_links']
+                if 'kodenavn' in v: del v['kodenavn']
+                self.metadatacache[field][key] = v
+                if v['kode'] == kodenavn:
+                    kode = kodenavn
+                    kodenavn = None
+            if not kode and kodenavn in self.metadatacache[field]:
+                kode = self.metadatacache[field][kodenavn]['kode']
         if not kode:
-            kode = 'FIXME "%s" not found in %s metadata catalog' % (kodenavn, field)
+            print("info: trying to create new %s metadata catalog entry (%s,%s)" %(
+                field, kode, kodenavn,
+            ))
+            newrelkey = self.nikitarelbaseurl + 'metadata/ny-%s/' % field
+            url = self.findRelation(newrelkey)
+            if url:
+                kode = self.metadata_make_up_unused_code(field, kodenavn)
+                data = {
+                    'kode': kode,
+                    'kodenavn': kodenavn,
+                }
+                print("info: POST %s: %s" % (url, data))
+                (c, r) = self.json_post(url, data)
+                j = json.loads(c)
+                self.metadatacache[field][kodenavn] = kode
+            else:
+                raise Exception("unable to find url to register new %s metadata catalog entry %s" % (field, kodenavn))
         return {
             'kode': kode,
             'kodenavn': kodenavn,
@@ -304,12 +352,17 @@ class Importer(n5core.endpoint.Endpoint):
                     if name in baddefaults and k in baddefaults[name]:
                         continue
                     data[k] = default[k]
+        except HTTPError as e:
+            print("error: HTTP failure for %s: %s (%s)" % (
+                url, str(e), e.response.content))
+            pass
+        try:
             # Map values if needed
             for field in data.keys():
                 # Map metadata
                 if name in metadata and field in metadata[name]:
                     value = self.metadatalookup(default, name,
-                                                field, kodenavn=data[field])
+                                                field, verdi=data[field])
                     data[field] = value
                 # Map datestamps
                 if field in datefields:
@@ -318,9 +371,6 @@ class Importer(n5core.endpoint.Endpoint):
                         print("warning: adding hardcoded timezone %s to %s.%s" %
                               (default_timezone, name, field))
                         data[field] = data[field] + default_timezone
-        except HTTPError as e:
-            pass
-        try:
             if self.verbose:
                 print("POST: %s" % data)
             (c, res) = self.json_post(url, data)
@@ -355,7 +405,10 @@ class Importer(n5core.endpoint.Endpoint):
                 if name in excludes and field in excludes[name]:
                         self.output('ignoring %s field %s [%s]' % (name, field, sub.text))
                 else:
-                    data[field] = sub.text
+                    if name in metadata and field in metadata[name]:
+                        data[field] = {'kode': None, 'kodenavn': sub.text}
+                    else:
+                        data[field] = sub.text
         if self.verbose or self.dryrun:
             self.output("POST: %s" % data)
         if self.dryrun:
