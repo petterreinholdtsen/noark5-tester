@@ -642,7 +642,11 @@ FIXME flag inaccurate guesses somehow
         try:
             with open(filepath) as content:
                 size = os.path.getsize(filepath)
-                mimetype = format2mime( info['format']['kodenavn'] )
+                # FIXME Workaround for bruken runtime and nikita 2020-01-13
+                if 'format' in info:
+                    mimetype = format2mime( info['format']['kodenavn'] )
+                else:
+                    mimetype = 'application/octet-stream'
                 if self.verbose:
                     print("Uploading %s size %d mime type %s" % (filepath,
                                                                  size, mimetype))
@@ -663,7 +667,10 @@ FIXME flag inaccurate guesses somehow
         except IOError as e:
             self.output('unable to open %s' % filepath)
             raise
-        formatcodename = info['format']['kodenavn']
+        if 'format' in info:
+            formatcodename = info['format']['kodenavn']
+        else:
+            formatcodename = 'unknown'
         if formatcodename not in self.formats:
             self.formats[formatcodename] = 0
         self.formats[formatcodename] += 1
