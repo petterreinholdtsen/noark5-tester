@@ -298,7 +298,7 @@ class Importer(n5core.endpoint.Endpoint):
 
         # Prefer _links entries from ny-*, but fall back to searching
         # the entire API for the relevant metadata list.
-        if 'links' in default and relkey in default['_links']:
+        if '_links' in default and unicode(relkey) in default['_links']:
             url = default['_links'][relkey]['href']
         else:
             print("error: unable to find %s in ny-%s, searching for it" % (relkey, entity))
