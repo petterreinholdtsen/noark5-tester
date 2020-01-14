@@ -279,7 +279,8 @@ class Importer(n5core.endpoint.Endpoint):
         kode = None
         kodenavn = verdi['kodenavn']
         if field in self.metadatacache:
-            print("Cache: ", self.metadatacache[field])
+            if self.verbose:
+                print("Cache: ", self.metadatacache[field])
             if kodenavn in self.metadatacache[field]:
                 kode = self.metadatacache[field][kodenavn]['kode']
                 return {
