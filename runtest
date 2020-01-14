@@ -1030,18 +1030,23 @@ or should it be rejected?
         url = self.findRelation(journalstatusrel)
         (entry, res) = self.json_get(url)
         j = json.loads(entry)
+        found = False
         for s in j['results']:
-            self.xverify(kodenavn == s['kodenavn'],
-                        "looking for UTF-8 metadata journalstatus value")
+            if kodenavn == s['kodenavn']:
+                found = True
+                break
+        self.xverify(found, "looking for UTF-8 metadata journalstatus value")
 
         if not self.gotlogin:
             self.failure("not logged in, unable to test creation")
             return
 
-        # Disabling create test for now, until we are ready to make it
-        # a fatal check. [pere 2020-01-12]
+        # FIXME Disabling create test for now, until we are ready to
+        # make it a fatal check. [pere 2020-01-12]
         return
 
+        # FIXME make test able to run again with --keep (normally the
+        # created value will be removed).
         journalstatusdata = {
             'kode': 'X',
             'kodenavn': 'Y',
