@@ -953,7 +953,7 @@ or should it be rejected?
         docobjdata = {
 #            "versjonsnummer"  : 1,
 #            "variantformat"   : "Arkivformat",
-#            "format"          : { 'kode': "fmt/101" },
+            "format"          : { 'kode': "fmt/101" },
 #            "formatDetaljer"  : "home made XML",
             "sjekksum"          : unicode(hash),
             "sjekksumAlgoritme" : unicode(hashalg),
