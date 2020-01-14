@@ -606,7 +606,10 @@ Test basis requirements for NOARK 5 Core.
     def deleteCreated(self):
         for entityurl in self.created[::-1]:
             try:
-                self.delete(entityurl)
+                (infostr, res) = self.json_get(entityurl)
+                info = json.loads(infostr)
+                etag = res.info().getheader('ETag')
+                self.delete(entityurl, etag=etag)
                 self.success("able to DELETE %s" % entityurl)
             except HTTPError as e:
                 # Until we figure out how sletting vs. DELETE should

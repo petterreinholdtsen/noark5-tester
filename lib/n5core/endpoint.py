@@ -226,13 +226,15 @@ Recursively look for relation in API.
         content = response.read()
         return (content, response)
 
-    def delete(self, path, headers = None):
+    def delete(self, path, headers = None, etag = None):
         url = self.expandurl(path)
         opener = urllib2.build_opener(urllib2.HTTPHandler)
         if headers is None:
             headers = {}
         if hasattr(self, 'token'):
             headers['Authorization'] = self.token
+        if etag is not None:
+            headers['ETag'] = etag
         request = urllib2.Request(url, None, headers)
         request.get_method = lambda: 'DELETE'
         response = opener.open(request)
