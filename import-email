@@ -38,60 +38,6 @@ def decodeheader(s):
     return retval
 
 
-def mime2format(mimestr):
-    # Observed incorrectly spelled MIME types
-    mimealias = {
-        'image/jpg': 'image/jpeg',
-        'plain/text': 'text/plain',
-        'application/x-gzip': 'application/gzip',
-    }
-    # IANA register at
-    # https://www.iana.org/assignments/media-types/media-types.xhtml
-    mimetypemap = {
-        'application/pdf':           'fmt/95',  # Registered MIME type
-        'image/jpeg':                'fmt/41', # Registered MIME type
-        'image/gif':                 'fmt/4', # Registered MIME type
-        'application/xml':           'fmt/101',  # Registered MIME type
-        'text/xml':                  'fmt/101',  # Registered MIME type
-
-        # These should have official codes, but do not
-        'application/vnd.oasis.opendocument.presentation' : "fmt/138",
-        'application/x-sql':         'fmt/206',  # Not registered MIME type
-        'audio/x-wav':               'fmt/703',     # Not registered MIME type
-        'image/png':                 'fmt/13',     # Registered MIME type
-        'message/rfc822':            'fmt/278',  # Registered MIME type
-        'text/csv':                  'x-fmt/18',     # Registered MIME type
-        'text/x-diff':               'x-fmt/111',# Not registered MIME type
-        'text/x-patch':              'x-fmt/111',# Not registered MIME type
-
-        # No use splitting these formats out as separate upload, the
-        # original email content is just fine and we are not going to
-        # convert them to archive format anyway.
-        'application/pgp-signature':   'ignore',  # Registered MIME type
-        'application/pkcs7-signature': 'ignore',  # Registered MIME type
-        'application/pgp-keys':        'ignore',  # Registered MIME type
-        'multipart/mixed':             'ignore',  # Registered MIME type
-        'multipart/signed':            'ignore',  # Registered MIME type
-        'multipart/alternative':       'ignore',  # Registered MIME type
-        'multipart/related':           'ignore',  # Registered MIME type
-
-        # Do not save as separate uploads if disposition is inline,
-        # and otherwise let server guess the format.
-        'text/plain':                  None,      # Registered MIME type
-        'text/html':                   None,      # Registered MIME type
-        
-        # Not quite sure what to do with these, let server guess format.
-        'application/x-xz':          None,      # Not registered MIME type
-        'application/octet-stream':  None,      # Registered MIME type
-        'application/gzip':          None,      # Not registered MIME type
-    }
-    mimetype = mimestr.split(';')[0]
-    if mimetype in mimealias:
-        mimetype = mimealias[mimetype]
-    if mimetype in mimetypemap:
-        return mimetypemap[mimetype]
-    return None
-
 class MboxImporter(n5core.endpoint.Endpoint):
     def __init__(self):
         baseurl = 'http://localhost:8092/noark5v4/'
@@ -125,6 +71,79 @@ class MboxImporter(n5core.endpoint.Endpoint):
         n5core.endpoint.Endpoint.__init__(self, baseurl)
         self.verbose = args.verbose
 
+    def mime2format(self, mimestr):
+        # Observed incorrectly spelled MIME types
+        mimealias = {
+            'image/jpg': 'image/jpeg',
+            'plain/text': 'text/plain',
+            'application/x-gzip': 'application/gzip',
+        }
+        # IANA register at
+        # https://www.iana.org/assignments/media-types/media-types.xhtml
+        mimetypemap = {
+            'application/pdf':           'fmt/95',  # Registered MIME type
+            'image/jpeg':                'fmt/41', # Registered MIME type
+            'image/gif':                 'fmt/4', # Registered MIME type
+            'application/xml':           'fmt/101',  # Registered MIME type
+            'text/xml':                  'fmt/101',  # Registered MIME type
+
+            # These should have official codes, but do not
+            'application/vnd.oasis.opendocument.presentation' : "fmt/138",
+            'application/x-sql':         'fmt/206',  # Not registered MIME type
+            'audio/x-wav':               'fmt/703',     # Not registered MIME type
+            'image/png':                 'fmt/13',     # Registered MIME type
+            'message/rfc822':            'fmt/278',  # Registered MIME type
+            'text/csv':                  'x-fmt/18',     # Registered MIME type
+            'text/x-diff':               'x-fmt/111',# Not registered MIME type
+            'text/x-patch':              'x-fmt/111',# Not registered MIME type
+
+            # No use splitting these formats out as separate upload, the
+            # original email content is just fine and we are not going to
+            # convert them to archive format anyway.
+            'application/pgp-signature':   'ignore',  # Registered MIME type
+            'application/pkcs7-signature': 'ignore',  # Registered MIME type
+            'application/pgp-keys':        'ignore',  # Registered MIME type
+            'multipart/mixed':             'ignore',  # Registered MIME type
+            'multipart/signed':            'ignore',  # Registered MIME type
+            'multipart/alternative':       'ignore',  # Registered MIME type
+            'multipart/related':           'ignore',  # Registered MIME type
+
+            # Do not save as separate uploads if disposition is inline,
+            # and otherwise let server guess the format.
+            'text/plain':                  None,      # Registered MIME type
+            'text/html':                   None,      # Registered MIME type
+
+            # Not quite sure what to do with these, let server guess format.
+            'application/x-xz':          None,      # Not registered MIME type
+            'application/octet-stream':  None,      # Registered MIME type
+            'application/gzip':          None,      # Not registered MIME type
+        }
+        mimetype = mimestr.split(';')[0]
+        if mimetype in mimealias:
+            mimetype = mimealias[mimetype]
+        if mimetype in mimetypemap:
+            format = mimetypemap[mimetype]
+            if not self.isKnownFormat(format):
+                print("format %s not known by API, not submitting" % format)
+                format = None
+            return format
+        return None
+
+    def isKnownFormat(self, formatcode):
+        relkey = self.relbaseurl + 'metadata/format/'
+
+        url = self.findRelation(relkey)
+        if url:
+            (c, r) = self.json_get(url)
+            j = json.loads(c)
+            if 'results' not in j:
+                raise ValueError("unexpected metadata JSON format")
+            for v in j['results']:
+                if formatcode == v['kode']:
+                    return True
+            return False
+        else:
+            raise Exception("unable to look up list of valid formats")
 
     def createEntity(self, name, rel, rels, data):
         if rel not in rels:
@@ -426,7 +445,7 @@ not loosing the timezone information.
         
         messagelen = len(content)
         mimetype = "message/rfc822"
-        format = mime2format(mimetype)
+        format = self.mime2format(mimetype)
 
         threadstarterid = None
         if 'references' in message:
@@ -528,7 +547,7 @@ not loosing the timezone information.
         if message.is_multipart():
             for part in message.walk():
                 mimetype = part.get_content_type()
-                format = mime2format(mimetype)
+                format = self.mime2format(mimetype)
                 try: # Only available with Python 3
                     disposition = part.get_content_disposition()
                 except AttributeError as e:
