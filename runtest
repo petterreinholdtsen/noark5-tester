@@ -609,6 +609,8 @@ Test basis requirements for NOARK 5 Core.
                 (infostr, res) = self.json_get(entityurl)
                 info = json.loads(infostr)
                 etag = res.info().getheader('ETag')
+                self.xverify(etag is not None,
+                             "DELETE endpoint return ETag on %s" % entityurl)
                 self.delete(entityurl, etag=etag)
                 self.success("able to DELETE %s" % entityurl)
             except HTTPError as e:
@@ -667,6 +669,8 @@ Test basis requirements for NOARK 5 Core.
                 (infostr, res) = self.json_get(url)
                 info = json.loads(infostr)
                 etag = res.info().getheader('ETag')
+                self.xverify(etag is not None,
+                             "PUT endpoint return ETag on %s" % url)
                 for key in info.keys():
                     keytype = type(info[key])
                     if list == keytype:
@@ -679,7 +683,8 @@ Test basis requirements for NOARK 5 Core.
                                      'navn',
                                      'arkivskaperNavn',
                                      'mimeType',
-                                     'arkivertAv'):
+                                     'arkivertAv',
+                                     'kodenavn'):
                     if keycandidate in info:
                         modkey = keycandidate
                 if modkey:
@@ -1006,10 +1011,12 @@ or should it be rejected?
     def testMetadata(self):
         # First, check if all known metadata relations are listed under metadat.
         knownmetarels = []
+        knownmetadata = []
         for rel in self.knownrels:
-            r = re.match(r'.*/metadata/\w+/?', rel)
+            r = re.match(r'.*/metadata/(\w+)/?', rel)
             if r and -1 == rel.find('/ny-'):
                 knownmetarels.append(rel)
+                knownmetadata.append(r.group(1))
 
         metadatarel = noarkrelbase + 'metadata/'
         url = self.findRelation(metadatarel)
@@ -1044,21 +1051,22 @@ or should it be rejected?
             self.failure("not logged in, unable to test creation")
             return
 
-        # FIXME Disabling create test for now, until we are ready to
-        # make it a fatal check. [pere 2020-01-12]
-        return
-
         # FIXME make test able to run again with --keep (normally the
         # created value will be removed).
-        journalstatusdata = {
+        metadata = {
             'kode': 'X',
             'kodenavn': 'Y',
         }
-        createjournalstatusrel = nikitarelbase + 'metadata/ny-journalstatus/'
-        recordinfo = self.createEntity('journalstatus', createjournalstatusrel,
-                                       self.parselinks(metadatalist['_links']),
-                                       journalstatusdata)
-
+        links = self.parselinks(metadatalist['_links'])
+        for metadata in knownmetadata:
+            rel = nikitarelbase + 'metadata/ny-%s/' % metadata
+            try:
+                info = self.createEntity(metadata, rel, links, metadata)
+            except HTTPError as e:
+                # Message already printed in createEntity()
+                pass
+            except TypeError as e:
+                self.xfailure("unable to create %s" % metadata)
 
     def runtests(self):
         try:
