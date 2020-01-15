@@ -1052,6 +1052,10 @@ or should it be rejected?
             self.failure("not logged in, unable to test creation")
             return
 
+        # FIXME Disabling create test for now, until we are ready to
+        # make it a fatal check. [pere 2020-01-12]
+        return
+
         # FIXME make test able to run again with --keep (normally the
         # created value will be removed).
         metadata = {
