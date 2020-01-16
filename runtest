@@ -368,7 +368,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                         print("no checking for %s" % url)
                     continue
 
-                if (-1 != url.find('/referanseFil/') and
+                if (-1 == url.find('/referanseFil/') and
                     self.verify(ctype and 0 == ctype.find('application/vnd.noark5+json'),
                                 "MIME type %s should be application/vnd.noark5+json for url %s" % (ctype, url))):
                     #print("C:", content)
