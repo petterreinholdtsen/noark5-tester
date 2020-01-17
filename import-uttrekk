@@ -334,7 +334,9 @@ class Importer(n5core.endpoint.Endpoint):
                 print("info: POST %s: %s" % (url, data))
                 (c, r) = self.json_post(url, data)
                 j = json.loads(c)
-                self.metadatacache[field][kodenavn] = kode
+                self.metadatacache[field][kodenavn] = {
+                    'kode': kode,
+                }
             else:
                 raise Exception("unable to find url to register new %s metadata catalog entry %s" % (field, kodenavn))
         return {
