@@ -579,7 +579,7 @@ Test basis requirements for NOARK 5 Core.
         try:
             (c, res) = self.json_post(url, data)
         except HTTPError as e:
-            failure("POST %s failed: %s" % (url, e.read().decode('UTF-8')))
+            failure("POST %s failed: %s" % (url, e.read()))
             raise
         except TypeError as e:
             failure("POST %s unable to parse JSON response: %s" % (url, str(e)))
