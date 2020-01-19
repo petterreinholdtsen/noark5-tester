@@ -906,8 +906,8 @@ or should it be rejected?
         # Test adding nasjonal identifiers to file
         for (idtype, data) in [
                 ('bygning', {
-                    'bygningsnummer', 1,
-                    'endringsloepenummer', 2,
+                    'bygningsnummer': 1,
+                    'endringsloepenummer': 2,
                 }),
                 ('dnummer', {
                     'dNummer': '01010101011',
