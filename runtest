@@ -560,6 +560,8 @@ Test basis requirements for NOARK 5 Core.
                 if not k == '_links' and k not in data:
                     data[k] = default[k]
             self.success("GET %s worked with code %d"  % (url, gres.code))
+            etag = res.info().getheader('ETag')
+            self.xverify(etag is None, "no ETag from GET on %s" % entityurl)
             try:
                 # Verify OPTIONS announce POST support 
                 (ocontent, ores) = self.options(url)
