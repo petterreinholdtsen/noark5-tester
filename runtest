@@ -561,7 +561,7 @@ Test basis requirements for NOARK 5 Core.
                     data[k] = default[k]
             self.success("GET %s worked with code %d"  % (url, gres.code))
             etag = gres.info().getheader('ETag')
-            self.xverify(etag is None, "no ETag from GET on %s" % entityurl)
+            self.xverify(etag is None, "no ETag from GET on %s" % url)
             try:
                 # Verify OPTIONS announce POST support 
                 (ocontent, ores) = self.options(url)
