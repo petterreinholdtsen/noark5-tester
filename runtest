@@ -572,9 +572,9 @@ Test basis requirements for NOARK 5 Core.
                 else:
                     failure("OPTIONS for URL %s missing Allow header" % url)
             except HTTPError as e:
-                failure('unable to OPTIONS %s' % url)
+                failure('unable to OPTIONS %s: %s' % (url, e.read()))
         except HTTPError as e:
-            failure('unable to GET %s' % url)
+            failure('unable to GET %s: %s' % (url, e.read()))
         print("POST %s: %s" % (url, data))
         try:
             (c, res) = self.json_post(url, data)
@@ -641,7 +641,7 @@ Test basis requirements for NOARK 5 Core.
                 # Until we figure out how sletting vs. DELETE should
                 # work, make missing DELETE support an expected
                 # failure.
-                self.xfailure("unable to DELETE %s" % entityurl)
+                self.xfailure("unable to DELETE %s: %s" % (entityurl, e.read()))
 
 
     def testAllAttributes(self):
