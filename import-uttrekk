@@ -692,7 +692,7 @@ FIXME flag inaccurate guesses somehow
         self.basedir = basedir
         path = os.path.join(self.basedir, "arkivstruktur.xml")
         print(path)
-        parser = etree.XMLParser(remove_blank_text=True)
+        parser = etree.XMLParser(remove_blank_text=True, remove_comments=True)
         fh = open(path)
         tree = etree.parse(fh, parser)
         fh.close()
