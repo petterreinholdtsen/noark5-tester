@@ -506,7 +506,7 @@ not loosing the timezone information.
                             'kontaktinformasjon' : { 'epostadresse' : epost},
 #                            'kontaktperson' : None,
 #                            'forretningsadresse' : {},
-                            'postadresse' : {},
+#                            'postadresse' : {},
                         }
                         corrinfo = \
                             self.createEntity('correspondance part',
