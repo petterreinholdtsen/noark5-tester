@@ -21,6 +21,42 @@ import n5core.endpoint
 from n5core.endpoint import HTTPError
 from n5core.pick import pickUnlessOne
 
+# stdnum version 1.10 missing support, it is present in 1.11
+from stdnum.no import orgnr
+
+try:
+    from stdnum.no.fodselsnummer import is_valid as is_valid_fodselsnummer
+except ImportError:
+    # Add workaround
+    class fnrcheck(object):
+        @staticmethod
+        def calc_check_digit1(number):
+            """Calculate the first check digit for the number."""
+            weights = (3, 7, 6, 1, 8, 9, 4, 5, 2)
+            return str((11 - sum(w * int(n) for w, n in zip(weights, number))) % 11)
+
+        @staticmethod
+        def calc_check_digit2(number):
+            """Calculate the second check digit for the number."""
+            weights = (5, 4, 3, 2, 7, 6, 5, 4, 3, 2)
+            return str((11 - sum(w * int(n) for w, n in zip(weights, number))) % 11)
+
+        @staticmethod
+        def is_valid(number):
+            """Check if the number is a valid birth number."""
+            number = number.strip().replace(' ', '')
+            if len(number) != 11:
+                return False
+            if not number.isdigit():
+                return False
+            if number[-2] != fnrcheck.calc_check_digit1(number):
+                return False
+            if number[-1] != fnrcheck.calc_check_digit2(number):
+                return False
+            return True
+    def is_valid_fodselsnummer(number):
+        return fnrcheck.is_valid(number)
+
 def decodeheader(s):
     if s is None:
         return s
@@ -442,6 +478,38 @@ not loosing the timezone information.
             return d.date().isoformat() + 'Z'
 
 
+    def locateIdentifiers(self, content, found = None):
+        """Locate Norwegian person numbers, organisation numbers and other
+identifiers in email content.  Person numbers are 11 digits, the first
+6 are the birth date, the last 5 are sequence numbers, gender
+indicator and control digit.  Organisation numbers are 9 digits, the
+last digit is a control digit.
+
+        """
+
+        if found is None:
+            found = []
+        # Match only 9 and 11 digit numbers
+        matches = re.findall(r"""(?x)
+                                 (?<!\d)
+                                 (\d{9}|\d{11})
+                                 (?!\d)
+                                 """, content)
+        for m in matches:
+            digits = len(m)
+            if 9 == digits and orgnr.is_valid(m):
+                data = {
+                    'enhetsidentifikator': { 'organisasjonsnummer': m }
+                }
+                if data not in found: found.append(data)
+            elif 11 == digits and is_valid_fodselsnummer(m):
+                data = {
+                    'foedselsnummer': { 'foedselsnummer': m }
+                }
+                if data not in found: found.append(data)
+        return found
+
+
     def addMessageToFile(self, fileinfo, message):
         recordrel = '%sarkivstruktur/ny-registrering/' % self.relbaseurl
         recordentryrel = '%ssakarkiv/ny-journalpost/' % self.relbaseurl
@@ -449,7 +517,10 @@ not loosing the timezone information.
 
         created = []
         content = message.as_string()
-        
+        body = content.split("\n\n", 1)[1]
+        subject = message['subject']
+        identifiers = self.locateIdentifiers(body)
+        identifiers = self.locateIdentifiers(subject, found=identifiers)
         messagelen = len(content)
         mimetype = "message/rfc822"
         format = self.mime2format(mimetype)
@@ -464,7 +535,7 @@ not loosing the timezone information.
 
         if self.usesaksmappe:
             recorddata = {
-                'tittel' : decodeheader(message['subject']),
+                'tittel' : decodeheader(subject),
                 # FIXME figure out way to detect more sensible type
                 # for incoming and internal email.
                 'journalposttype'      : {'kode': 'I',
@@ -497,6 +568,8 @@ not loosing the timezone information.
                 if part in message:
                     partstr = decodeheader(message[part])
                     for p in partstr.split(","):
+                        identifiers = \
+                            self.locateIdentifiers(p, found=identifiers)
                         navn, epost = parseaddr("From: %s" % p)
                         corrdata = {
                             'korrespondanseparttype' : {
@@ -579,6 +652,8 @@ not loosing the timezone information.
                 content = part.get_payload(decode=True)
                 if content is None:
                     continue
+                self.locateIdentifiers(content, identifiers)
+
                 contentlen = len(content)
                 docobjdata = {
                     "versjonsnummer"  : str(0),
@@ -598,6 +673,14 @@ not loosing the timezone information.
                     print("error: failed to create document object for attachment %s"
                           % part.get_filename())
 
+        print("Identifiers:", identifiers)
+        for identifier in identifiers:
+            for idtype in identifier.keys():
+                data = identifier[idtype]
+                rel = '%sarkivstruktur/ny-%s/' % (self.relbaseurl, idtype)
+                iddata = self.createEntity(idtype, rel,
+                                           recordinfo['_links'],
+                                           data)
         return True
 
     def uploadEmail(self, message):
