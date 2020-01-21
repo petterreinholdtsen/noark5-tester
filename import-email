@@ -25,7 +25,7 @@ def decodeheader(s):
     if s is None:
         return s
     retval = None
-    for ret, encoding in email.Header.decode_header(s):
+    for ret, encoding in email.header.decode_header(s):
         if encoding!=None:
             try:
                 ret = ret.decode(encoding)
