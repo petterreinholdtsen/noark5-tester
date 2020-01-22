@@ -17,6 +17,11 @@ import re
 import time
 import urllib
 
+try:
+    from urllib import quote_plus
+except ImportError:
+    from urllib.parse import quote_plus
+
 import n5core.endpoint
 from n5core.endpoint import HTTPError
 from n5core.pick import pickUnlessOne
@@ -275,7 +280,7 @@ if a match is found.
         print("Looking for msgid: %s" % messageid)
 
         searchurl = self.docobjurl + '?$filter=' +\
-            urllib.quote_plus("filnavn eq '%s'" % messageid)
+            quote_plus("filnavn eq '%s'" % messageid)
         #print(searchurl)
 
         (s, res) = self.json_get(searchurl)
@@ -354,7 +359,7 @@ are in.
         matches = []
         for messageid in thread:
             searchurl = self.docobjurl + '?$filter=' +\
-                urllib.quote_plus("filnavn eq '%s'" % messageid)
+                quote_plus("filnavn eq '%s'" % messageid)
             #print(searchurl)
         
             (s, res) = self.json_get(searchurl)
