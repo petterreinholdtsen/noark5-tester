@@ -673,7 +673,7 @@ last digit is a control digit.
                         'kode': 'P',
                         'kodenavn': 'Produksjonsformat'
                     },
-                    "filstoerrelse"   : contentlen,
+                    "filstoerrelse"   : str(contentlen),
                     "filnavn"         : part.get_filename(),
                     "mimeType"        : mimetype,
                 }
