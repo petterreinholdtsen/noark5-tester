@@ -494,13 +494,20 @@ last digit is a control digit.
 
         if found is None:
             found = []
-        # Match only 9 and 11 digit numbers
-        matches = re.findall(r"""(?x)
-                                 (?<!\d)
-                                 (\d{9}|\d{11})
-                                 (?!\d)
-                                 """, content)
+        # Match only 9 and 11 digit numbers, possibly with some
+        # spacing allowed.  In other words:
+        # 30093426645
+        # 261249 14484
+        # 998787173
+        # 813 905 582
+        matches =\
+            re.findall(r"""(?x)
+                           (?<!\d)
+                           (\d{9}|\d{6}\s\d{5}|\d{11}|\d{3}\s\d{3}\s\d{3})
+                           (?!\d)
+                           """, content)
         for m in matches:
+            m = m.replace(" ", "")
             digits = len(m)
             if 9 == digits and orgnr.is_valid(m):
                 data = {
