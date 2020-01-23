@@ -503,7 +503,7 @@ last digit is a control digit.
         matches =\
             re.findall(r"""(?x)
                            (?<!\d)
-                           (\d{9}|\d{6}\s\d{5}|\d{11}|\d{3}\s\d{3}\s\d{3})
+                           \b(\d{9}|\d{6}\s\d{5}|\d{11}|\d{3}\s\d{3}\s\d{3})\b
                            (?!\d)
                            """, content)
         for m in matches:
