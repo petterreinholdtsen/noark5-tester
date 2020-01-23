@@ -535,7 +535,10 @@ last digit is a control digit.
         identifiers = self.locateIdentifiers(subject, found=identifiers)
         messagelen = len(content)
         mimetype = "message/rfc822"
-        format = self.mime2format(mimetype)
+        if (message['mime-version'] and message['content-type']):
+            format = "fmt/950"
+        else:
+            format = "fmt/278"
 
         threadstarterid = None
         if 'references' in message:
