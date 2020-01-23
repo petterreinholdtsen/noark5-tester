@@ -11,7 +11,6 @@ import argparse
 import datetime
 import json
 import pytz
-import urllib2
 import n5core.endpoint
 from n5core.endpoint import HTTPError
 import codecs
