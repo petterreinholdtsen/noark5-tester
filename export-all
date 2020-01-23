@@ -71,6 +71,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         parser.add_argument('--savedir', help='(default is %s)' % self.savedir)
         parser.add_argument('--verbose', help='enable debug output',
                             action='store_true')
+        parser.add_argument('--xml-extended', help='enable extended (aka non-official) XML output',
+                            action='store_true')
         args = parser.parse_args()
         if args.baseurl:
             self.baseurl = args.baseurl
@@ -79,6 +81,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
         self.verbose = args.verbose
         self.xml = args.xml
+        self.xml_extended = args.xml_extended
         
     def _mkdir_recursive(self, path):
         sub_path = os.path.dirname(path)
@@ -232,7 +235,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         # Not using recurse_xml_out_ordered to handle referanseDokumentfil
         filrel = '%sarkivstruktur/fil/' % self.relbaseurl
         konvrel = '%sarkivstruktur/konvertering/' % self.relbaseurl
-        sequence = (
+        sequence = [
             'systemID',
             'versjonsnummer',
             'variantformat.kodenavn>variantformat',
@@ -246,10 +249,16 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'sjekksum',
             'sjekksumAlgoritme',
             'filstoerrelse',
+        ]
+        if self.xml_extended:
+            sequence.append((
+                'filnavn',
+                'mimeType',
+            ))
+        sequence.append((
             ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
-
             (konvrel, self.recurse_xml_konvertering),
-        )
+        ))
         with output.tag('dokumentobjekt'):
             if self.verbose:
                 print(content)
@@ -326,6 +335,35 @@ class ContentDumper(n5core.endpoint.Endpoint):
         )
         self.recurse_xml_out_ordered(output, 'dokumentbeskrivelse', content, sequence)
 
+    def recurse_xml_national_identifier(self, output, content):
+        if not self.xml_extended:
+            return
+        sequence = (
+            'systemID>[null]',
+            'organisasjonsnummer>organisasjonsnummer',
+            'foedselsnummer>foedselsnummer',
+            'dNummer>dNummer',
+
+            'koordinatsystem.kode>koordinatsystem',
+            'x>x',
+            'y>y',
+            'z>z',
+
+            'kommunenummer>kommunenummer',
+            'fylkesnummernummer>fylkesnummernummer',
+            'landkode.kode>[null]',
+            'landkode.kodenavn>land',
+            'planidentifikasjon>planidentifikasjon',
+
+            'bygningsnummer>bygningsnummer',
+            'endringsloepenummer>endringsloepenummer',
+
+            'gaardsnummer>gaardsnummer',
+            'bruksnummer>bruksnummer',
+            'festenummer>festenummer',
+            'seksjonsnummer>seksjonsnummer',
+        )
+        self.recurse_xml_out_ordered(output, 'nasjonalidentifikator', content, sequence)
 
     def recurse_xml_korrespondansepart(self, output, content):
         sequence = (
@@ -427,6 +465,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
+        nirel = '%sarkivstruktur/nasjonalidentifikator/' % self.relbaseurl
         sequence = (
             'systemID',
             'oppdatertAv>[null]',
@@ -459,6 +498,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
 #            (merknadrel, self.recurse_xml_merknad), # FIXME for registrering
 #            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for registrering
             (korrpartrel, self.recurse_xml_korrespondansepart),
+            (nirel, self.recurse_xml_national_identifier),
         )
         if 'xsi:type="journalpost"' == attr:
             sequence = sequence + (
@@ -528,6 +568,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
+        nirel = '%sarkivstruktur/nasjonalidentifikator/' % self.relbaseurl
         sequence = (
             'systemID',
             'oppdatertAv>[null]',
@@ -561,6 +602,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
             (undermapperel,            self.recurse_xml_mappe),
             (registreringrel,          self.recurse_xml_registrering),
+            (nirel, self.recurse_xml_national_identifier),
         )
         if 'xsi:type="saksmappe"' == attr:
             sequence = sequence + (
