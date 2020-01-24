@@ -257,6 +257,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/arkivdel/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-bygning/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-dnummer/?',
+        'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-plan/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-enhetsidentifikator/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-foedselsnummer/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-matrikkel/?',
