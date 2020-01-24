@@ -204,6 +204,24 @@ datefields = (
     'verifisertDato',
 )
 
+intfields = (
+    'antallVedlegg',
+    'bevaringstid',
+    'bruksnummer',
+    'bygningsnummer',
+    'dokumentnummer',
+    'endringsloepenummer',
+    'festenummer',
+    'gaardsnummer',
+    'journalaar',
+    'journalpostnummer',
+    'journalsekvensnummer',
+    'saksaar',
+    'sakssekvensnummer',
+    'seksjonsnummer',
+    'versjonsnummer',
+)
+
 # Bad default values handed out from Nikita, values we remove from ny-* output
 baddefaults = {
     'arkiv': (
@@ -382,6 +400,9 @@ class Importer(n5core.endpoint.Endpoint):
                         print("warning: adding hardcoded timezone %s to %s.%s" %
                               (default_timezone, name, field))
                         data[field] = data[field] + default_timezone
+                # Convert number strings to numbers
+                if field in intfields:
+                    data[field] = int(data[field])
             if self.verbose:
                 print("POST: %s" % data)
             (c, res) = self.json_post(url, data)
