@@ -31,9 +31,10 @@ import sys
 import os
 sys.path.append(os.path.join(sys.path[0],'lib'))
 
-# Enforce UTF-8 on stdout, also on redirect and pipes
-#import codecs
-#sys.stdout = codecs.getwriter('utf8')(sys.stdout)
+# Enforce ASCII on stdout, also on redirect and pipes, replace
+# non-ascii characters with '?'.
+import codecs
+sys.stdout = codecs.getwriter('ascii')(sys.stdout, errors='replace')
 
 import argparse
 import datetime
@@ -773,8 +774,8 @@ or should it be rejected?
 
         createrecordcreatorrel = noarkrelbase + 'arkivstruktur/ny-arkivskaper/'
         recordcreatordata = {
-            'arkivskaperID' : '123456789',
-            'arkivskaperNavn': 'Mr. arkivskaper',
+            'arkivskaperID' : u'123456789',
+            'arkivskaperNavn': u'Mr. arkivskaper',
             #'beskrivelse': 'fin fyr',
         }
         recordcreatorinfo = self.createEntity('recordcreator',
