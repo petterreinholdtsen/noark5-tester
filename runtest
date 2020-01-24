@@ -773,8 +773,8 @@ or should it be rejected?
 
         createrecordcreatorrel = noarkrelbase + 'arkivstruktur/ny-arkivskaper/'
         recordcreatordata = {
-            #'arkivskaperID' : '123456789',
-            #'arkivskaperNavn': 'Mr. arkivskaper',
+            'arkivskaperID' : '123456789',
+            'arkivskaperNavn': 'Mr. arkivskaper',
             #'beskrivelse': 'fin fyr',
         }
         recordcreatorinfo = self.createEntity('recordcreator',
