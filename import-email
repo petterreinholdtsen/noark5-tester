@@ -665,9 +665,19 @@ last digit is a control digit.
                     continue
 
                 content = part.get_payload(decode=True)
-                if content is None:
+                if content is None or content == "":
                     continue
                 self.locateIdentifiers(content, identifiers)
+
+                docdescdata = {
+                    'tittel' : decodeheader(message['subject']),
+                    #'oppbevaringssted' : threadstarterid , # FIXME
+                }
+                docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
+                                            recordinfo['_links'],
+                                                docdescdata)
+                created.append(docdescinfo['_links']['self']['href'])
+                self.recordMapping(recordinfo, docdescinfo, 'dokumentbeskrivelse')
 
                 contentlen = len(content)
                 docobjdata = {
