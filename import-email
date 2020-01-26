@@ -10,7 +10,7 @@ sys.path.append(os.path.join(sys.path[0],'lib'))
 import argparse
 import dateutil.parser
 import email
-from email.utils import parseaddr
+from email.utils import parseaddr, parsedate
 import json
 import mailbox
 import re
@@ -727,7 +727,8 @@ last digit is a control digit.
         last = time.time()
         count = 0
         inserted = 0
-        for message in mbox:
+        for message in sorted(mbox,
+                              key=lambda email: parsedate(email.get('Date'))):
             count += 1
             if not self.uploadEmail(message):
                 print("error: not loading email %s" % message['message-id'])
