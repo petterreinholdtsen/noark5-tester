@@ -629,7 +629,7 @@ last digit is a control digit.
                 'kode': 'P',
                 'kodenavn': 'Produksjonsformat'
             },
-            "filstoerrelse"   : str(messagelen),
+            "filstoerrelse"   : messagelen,
             "filnavn"         : message['message-id'],       
             "mimeType"        : mimetype,
         }
@@ -686,7 +686,7 @@ last digit is a control digit.
                         'kode': 'P',
                         'kodenavn': 'Produksjonsformat'
                     },
-                    "filstoerrelse"   : str(contentlen),
+                    "filstoerrelse"   : contentlen,
                     "filnavn"         : part.get_filename(),
                     "mimeType"        : mimetype,
                 }
