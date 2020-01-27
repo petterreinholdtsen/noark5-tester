@@ -212,6 +212,7 @@ intfields = (
     'dokumentnummer',
     'endringsloepenummer',
     'festenummer',
+    'filstoerrelse',
     'gaardsnummer',
     'journalaar',
     'journalpostnummer',

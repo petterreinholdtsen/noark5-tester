@@ -1087,7 +1087,7 @@ or should it be rejected?
 #            "formatDetaljer"  : "home made XML",
             "sjekksum"          : unicode(hash),
             "sjekksumAlgoritme" : unicode(hashalg),
-            "filstoerrelse"     : unicode(len(xmldata)),
+            "filstoerrelse"     : len(xmldata),
 #            "mimeType"       : "application/xml", 
         }
         createdocobjrel = noarkrelbase + 'arkivstruktur/ny-dokumentobjekt/'
