@@ -1099,6 +1099,18 @@ or should it be rejected?
                         (ctype, url))
         except HTTPError as e:
             self.failure("downloading %s failed: %s (%s)" % (url, str(e), e.read()))
+        # Attach conversion to document object
+        convdata = {
+            "konvertertFraFormat": "x-fmt/111",
+            "konvertertTilFormat": "fmt/101", # FIXME why not metadata code value?
+            "konverteringsverktoey": "runtime tester",
+            "konverteringskommentar": "tullekonvertering",
+        }
+        createconvrel = noarkrelbase + 'arkivstruktur/ny-konvertering/'
+        convinfo = self.createEntity('conversion', createconvrel,
+                                     self.parselinks(docobjinfo['_links']),
+                                     convdata)
+
 
     def testMetadata(self):
         # First, check if all known metadata relations are listed under metadat.
