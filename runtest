@@ -899,34 +899,34 @@ or should it be rejected?
                     'endringsloepenummer': 2,
                 }),
                 ('dnummer', {
-                    'dNummer': '01010101011',
+                    'dNummer': u'01010101011',
                 }),
                 ('enhetsidentifikator', {
-                    'organisasjonsnummer': '02020202022',
+                    'organisasjonsnummer': u'02020202022',
                 }),
                 ('foedselsnummer', {
-                    'foedselsnummer': '03030303033'
+                    'foedselsnummer': u'03030303033'
                 }),
                 ('matrikkel', {
-                    'kommunenummer' : "0101",
+                    'kommunenummer' : u'0101',
                     'gaardsnummer' : 0,
                     'bruksnummer' : 0,
                     'festenummer' : 1,
                     'seksjonsnummer' : 1,
                 }),
                 ('plan', {
-                    'kommunenummer': '0101',
-                    'fylkesnummer': '01',
+                    'kommunenummer': u'0101',
+                    'fylkesnummer': u'01',
                     'landkode': {
-                        'kode': 'NO',
-                        'kodenavn': 'Norge',
+                        'kode': u'NO',
+                        'kodenavn': u'Norge',
                     },
-                    'planidentifikasjon': '050505',
+                    'planidentifikasjon': u'050505',
                 }),
                 ('posisjon', {
                     'koordinatsystem': {
-                        'kode': 'EPSG:4326',
-                        'kodenavn': 'WGS84',
+                        'kode': u'EPSG:4326',
+                        'kodenavn': u'WGS84',
                     },
                     'x': 1.01,
                     'y': 2.02,
