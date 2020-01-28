@@ -688,16 +688,27 @@ Test basis requirements for NOARK 5 Core.
                         print("removing key %s" % key)
                         info.pop(key, None)
                 modkey = None
-                for keycandidate in ('tittel',
-                                     'navn',
-                                     'arkivskaperNavn',
-                                     'mimeType',
-                                     'arkivertAv',
-                                     'kodenavn'):
+                for keycandidate in (
+                        'arkivertAv',
+                        'arkivskaperNavn',
+                        'bygningsnummer',
+                        'dNummer',
+                        'foedselsnummer',
+                        'kodenavn',
+                        'kommunenummer',
+                        'mimeType',
+                        'navn',
+                        'organisasjonsnummer',
+                        'tittel',
+                        'x'
+                ):
                     if keycandidate in info:
                         modkey = keycandidate
                 if modkey:
-                    info[modkey] = info[modkey] + ' modified'
+                    if int == type(info[modkey]) or float == type(info[modkey]):
+                        info[modkey] = info[modkey] + 1
+                    else:
+                        info[modkey] = info[modkey] + ' modified'
                 else:
                     self.xfailure('unable to find anything to modify among %s' % info.keys())
                     print(info)
