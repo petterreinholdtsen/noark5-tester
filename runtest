@@ -893,7 +893,7 @@ or should it be rejected?
                                      filedata)
 
         # Test adding nasjonal identifiers to file
-        for (idtype, data) in [
+        nitestdata = [
                 ('bygning', {
                     'bygningsnummer': 1,
                     'endringsloepenummer': 2,
@@ -932,7 +932,8 @@ or should it be rejected?
                     'y': 2.02,
                     'z': 3.03,
                 }),
-          ]:
+        ]
+        for (idtype, data) in nitestdata:
             rel = noarkrelbase + 'arkivstruktur/ny-%s/' % idtype
             try:
                 info = self.createEntity('national identifier %s' % idtype,
@@ -954,46 +955,7 @@ or should it be rejected?
                                        recorddata)
 
         # Test adding nasjonal identifiers to record
-        for (idtype, data) in [
-                ('bygning', {
-                    'bygningsnummer', 1,
-                    'endringsloepenummer', 2,
-                }),
-                ('dnummer', {
-                    'dNummer': '01010101011',
-                }),
-                ('enhetsidentifikator', {
-                    'organisasjonsnummer': '02020202022',
-                }),
-                ('foedselsnummer', {
-                    'foedselsnummer': '03030303033'
-                }),
-                ('matrikkel', {
-                    'kommunenummer' : "0101",
-                    'gaardsnummer' : 0,
-                    'bruksnummer' : 0,
-                    'festenummer' : 1,
-                    'seksjonsnummer' : 1,
-                }),
-                ('plan', {
-                    'kommunenummer': '0101',
-                    'fylkesnummer': '01',
-                    'landkode': {
-                        'kode': 'NO',
-                        'kodenavn': 'Norge',
-                    },
-                    'planidentifikasjon': '050505',
-                }),
-                ('posisjon', {
-                    'koordinatsystem': {
-                        'kode': 'EPSG:4326',
-                        'kodenavn': 'WGS84',
-                    },
-                    'x': 1.01,
-                    'y': 2.02,
-                    'z': 3.03,
-                }),
-          ]:
+        for (idtype, data) in nitestdata:
             rel = noarkrelbase + 'arkivstruktur/ny-%s/' % idtype
             try:
                 info = self.createEntity('national identifier %s' % idtype,
