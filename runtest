@@ -544,7 +544,7 @@ Test basis requirements for NOARK 5 Core.
                     data[k] = default[k]
             self.success("GET %s worked with code %d"  % (url, gres.code))
             etag = gres.info().getheader('ETag')
-            self.xverify(etag is None, "no ETag from GET on %s" % url)
+            self.verify(etag is None, "no ETag from GET on %s" % url)
             try:
                 # Verify OPTIONS announce POST support 
                 (ocontent, ores) = self.options(url)
@@ -618,8 +618,8 @@ Test basis requirements for NOARK 5 Core.
                 (infostr, res) = self.json_get(entityurl)
                 info = json.loads(infostr)
                 etag = res.info().getheader('ETag')
-                self.xverify(etag is not None,
-                             "DELETE endpoint return ETag on %s" % entityurl)
+                self.verify(etag is not None,
+                            "DELETE endpoint return ETag on %s" % entityurl)
                 self.delete(entityurl, etag=etag)
                 self.success("able to DELETE %s" % entityurl)
             except HTTPError as e:
@@ -678,8 +678,8 @@ Test basis requirements for NOARK 5 Core.
                 (infostr, res) = self.json_get(url)
                 info = json.loads(infostr)
                 etag = res.info().getheader('ETag')
-                self.xverify(etag is not None,
-                             "PUT endpoint return ETag on %s" % url)
+                self.verify(etag is not None,
+                            "PUT endpoint return ETag on %s" % url)
                 for key in info.keys():
                     keytype = type(info[key])
                     if list == keytype:
@@ -946,10 +946,10 @@ or should it be rejected?
                 info = self.createEntity('national identifier %s' % idtype,
                                          rel,
                                          self.parselinks(fileinfo['_links']),
-                                         data, failureexpected=True)
+                                         data)
             # We can try the next even if the previous one failed with
             # one of these.  They are already reported by
-            # createEntity, so no need to call xfailed().
+            # createEntity, so no need to call failed().
             except TypeError as e:
                 pass
             except HTTPError as e:
@@ -968,7 +968,7 @@ or should it be rejected?
                 info = self.createEntity('national identifier %s' % idtype,
                                          rel,
                                          self.parselinks(recordinfo['_links']),
-                                         data, failureexpected=True)
+                                         data)
             # We can try the next even if the previous one failed with
             # one of these.  They are already reported by
             # createEntity, so no need to call xfailed().
