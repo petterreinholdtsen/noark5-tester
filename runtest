@@ -1107,9 +1107,12 @@ or should it be rejected?
             "konverteringskommentar": "tullekonvertering",
         }
         createconvrel = noarkrelbase + 'arkivstruktur/ny-konvertering/'
-        convinfo = self.createEntity('conversion', createconvrel,
-                                     self.parselinks(docobjinfo['_links']),
-                                     convdata)
+        try:
+            convinfo = self.createEntity('conversion', createconvrel,
+                                         self.parselinks(docobjinfo['_links']),
+                                         convdata)
+        except HTTPError as e:
+            pass # Problem already reported by createEntity, keep going
 
 
     def testMetadata(self):
