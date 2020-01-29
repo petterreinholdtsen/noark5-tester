@@ -1110,7 +1110,7 @@ or should it be rejected?
         try:
             convinfo = self.createEntity('conversion', createconvrel,
                                          self.parselinks(docobjinfo['_links']),
-                                         convdata)
+                                         convdata, failureexpected=True)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
