@@ -905,7 +905,7 @@ or should it be rejected?
         }
         createcommentrel = noarkrelbase + 'arkivstruktur/ny-merknad/'
         try:
-            fileinfo = self.createEntity('comment', createcommenterel,
+            fileinfo = self.createEntity('comment', createcommentrel,
                                          self.parselinks(fileinfo['_links']),
                                          commentdata)
         except HTTPError as e:
