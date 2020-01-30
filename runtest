@@ -899,6 +899,18 @@ or should it be rejected?
                                      self.parselinks(serieinfo['_links']),
                                      filedata)
 
+        # Test adding comment to file
+        commentdata = {
+            'merknadstekst': u'Title of file comment created %s' % now,
+        }
+        createcommentrel = noarkrelbase + 'arkivstruktur/ny-merknad/'
+        try:
+            fileinfo = self.createEntity('comment', createcommenterel,
+                                         self.parselinks(fileinfo['_links']),
+                                         commentdata)
+        except HTTPError as e:
+            pass
+
         # Test adding nasjonal identifiers to file
         nitestdata = [
                 ('bygning', {
