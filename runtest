@@ -570,8 +570,8 @@ Test basis requirements for NOARK 5 Core.
             failure("POST %s unable to parse JSON response: %s" % (url, str(e)))
             raise
         info = json.loads(c)
-        id = info['systemID']
-        verify(id is not None, "created %s" % name)
+        verify('links' in info and 'self' in info['links'] and info['links']['self'],
+               "created %s" % name)
         verify(201 == res.code, "verify %s creation return HTTP code %s is 201" % (name, res.code))
         linkrefs = self.parselinks(info['_links'])
         verify('self' in linkrefs, "_links in response from %s creation should include 'self' reference" % name)
