@@ -1060,7 +1060,7 @@ or should it be rejected?
         authordata = {
             "author": "Henrik Ibsen",
         }
-        createauthorrel = nikitarelbase + 'arkivstruktur/ny-author/'
+        createauthorrel = nikitarelbase + 'ny-forfatter/'
         try:
             authorinfo = \
                 self.createEntity('author', createauthorrel,
