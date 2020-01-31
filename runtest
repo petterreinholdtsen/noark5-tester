@@ -1056,6 +1056,19 @@ or should it be rejected?
                                         self.parselinks(recordinfo['_links']),
                                         docdescdata)
 
+        # Attach author to document description
+        authordata = {
+            "author": "Henrik Ibsen",
+        }
+        createauthorrel = nikitarelbase + 'arkivstruktur/ny-author/'
+        try:
+            authorinfo = \
+                self.createEntity('author', createauthorrel,
+                                  self.parselinks(docdescinfo['_links']),
+                                  authordata, failureexpected=True)
+        except HTTPError as e:
+            pass # Problem already reported by createEntity, keep going
+
         xmldata = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml></xml>\n"
         hashalg = u'SHA-256'
         hasher = sha256()
