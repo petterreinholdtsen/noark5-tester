@@ -1064,7 +1064,7 @@ or should it be rejected?
 
         # Attach author to document description
         authordata = {
-            "forfatter": "Henrik Ibsen",
+            'forfatter': u'Henrik Ibsen',
         }
         createauthorrel = nikitarelbase + 'ny-forfatter/'
         try:
