@@ -418,7 +418,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                                 and 'self' in baseref['_links']
                                                 and baseref['_links']['self']
                                                 and 'count' not in baseref
-                                                and 'results' not in baseref)
+                                                and 'results' not in baseref) \
                                        and 'kode' not in baseref \
                                        and '/ny-' not in url \
                                        and rel in self.rels \
