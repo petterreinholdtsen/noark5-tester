@@ -414,6 +414,11 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                         self.failure('rel %s in %s should be well known' % (rel, url))
                                     # Only check non-objects for unique relations
                                     if 'systemID' not in baseref \
+                                       and not ('_links' in baseref
+                                                and 'self' in baseref['_links']
+                                                and baseref['_links']['self']
+                                                and 'count' not in baseref
+                                                and 'results' not in baseref)
                                        and 'kode' not in baseref \
                                        and '/ny-' not in url \
                                        and rel in self.rels \
