@@ -699,6 +699,7 @@ Test basis requirements for NOARK 5 Core.
                         'bygningsnummer',
                         'dNummer',
                         'foedselsnummer',
+                        'forfatter',
                         'kodenavn',
                         'kommunenummer',
                         'mimeType',
