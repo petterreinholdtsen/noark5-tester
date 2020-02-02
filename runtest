@@ -702,6 +702,7 @@ Test basis requirements for NOARK 5 Core.
                         'forfatter',
                         'kodenavn',
                         'kommunenummer',
+                        'konverteringskommentar',
                         'merknadstekst',
                         'mimeType',
                         'navn',
@@ -1133,10 +1134,10 @@ or should it be rejected?
             self.failure("downloading %s failed: %s (%s)" % (url, str(e), e.read()))
         # Attach conversion to document object
         convdata = {
-            "konvertertFraFormat": "x-fmt/111",
-            "konvertertTilFormat": "fmt/101", # FIXME why not metadata code value?
-            "konverteringsverktoey": "runtime tester",
-            "konverteringskommentar": "tullekonvertering",
+            "konvertertFraFormat": u"x-fmt/111",
+            "konvertertTilFormat": u"fmt/101", # FIXME why not metadata code value?
+            "konverteringsverktoey": u"runtime tester",
+            "konverteringskommentar": u"tullekonvertering",
         }
         createconvrel = noarkrelbase + 'arkivstruktur/ny-konvertering/'
         try:
