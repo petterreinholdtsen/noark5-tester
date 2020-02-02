@@ -702,6 +702,7 @@ Test basis requirements for NOARK 5 Core.
                         'forfatter',
                         'kodenavn',
                         'kommunenummer',
+                        'merknadstekst',
                         'mimeType',
                         'navn',
                         'organisasjonsnummer',
