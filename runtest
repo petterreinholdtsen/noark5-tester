@@ -207,8 +207,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-forloeper/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-oppbevaringssted/?',
         'hateoas-api/arkivstruktur/arkivdel/[-0-9a-z]+/oppbevaringssted/?',
-        'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/merknad/?',
-        'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-merknad/?',
         'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-oppbevaringssted/?',
         'hateoas-api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/oppbevaringssted/?',
         'hateoas-api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/konverterFil/?',
@@ -219,15 +217,12 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/klassifikasjonssystem/[-0-9a-z]+/sekundaerklassifikasjon/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/avslutt-mappe/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/kryssreferanse/?',
-        'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/merknad/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-klasse/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-klassifikasjonssystem/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-kryssreferanse/?',
-        'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-merknad/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/sekundaerklassifikasjon/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/utvid-til-saksmappe/?',
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-kryssreferanse/?',
-        'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-merknad/?',
         'hateoas-api/arkivstruktur/registrering/[-0-9a-z]+/ny-oppbevaringssted/?',
         'hateoas-api/metadata/hendelsetype/?',
         'hateoas-api/metadata/kassasjonsvedtak/?',
@@ -915,7 +910,7 @@ or should it be rejected?
         try:
             commentinfo = self.createEntity('comment', createcommentrel,
                                             self.parselinks(fileinfo['_links']),
-                                            commentdata, failureexpected=True)
+                                            commentdata)
         except HTTPError as e:
             pass
 
@@ -1073,7 +1068,7 @@ or should it be rejected?
             authorinfo = \
                 self.createEntity('author', createauthorrel,
                                   self.parselinks(docdescinfo['_links']),
-                                  authordata, failureexpected=True)
+                                  authordata)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
@@ -1143,7 +1138,7 @@ or should it be rejected?
         try:
             convinfo = self.createEntity('conversion', createconvrel,
                                          self.parselinks(docobjinfo['_links']),
-                                         convdata, failureexpected=True)
+                                         convdata)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
