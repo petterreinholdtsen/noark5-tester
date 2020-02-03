@@ -724,7 +724,10 @@ Test basis requirements for NOARK 5 Core.
                 print(putinfo)
                 self.success("able to modify %s" % url)
             except HTTPError as e:
-                self.failure("unable to modify %s: %s (%s)" % (url, str(e), e.read()))
+                if self.isknownmissing(url):
+                    self.xfailure("unable to modify %s: %s (%s)" % (url, str(e), e.read()))
+                else:
+                    self.failure("unable to modify %s: %s (%s)" % (url, str(e), e.read()))
 
     def testDateFormats(self):
         """
