@@ -88,7 +88,6 @@ excludes = {
     'dokumentbeskrivelse' : (
         'systemID',
         'referanseArkivdel',
-        'tilknyttetRegistreringSom', # FIXME missing in nikita?
     ),
     'dokumentobjekt': (
         'systemID',
@@ -313,7 +312,7 @@ class Importer(n5core.endpoint.Endpoint):
                         return {
                             'kode': kodenavn,
                         }
-        relkey = self.relbaseurl + 'metadata/%s/' % field
+        relkey = self.relbaseurl + 'metadata/%s/' % field.lower()
 
         # Prefer _links entries from ny-*, but fall back to searching
         # the entire API for the relevant metadata list.
