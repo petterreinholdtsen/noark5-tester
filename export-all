@@ -155,7 +155,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
     def recurse_xml_merknad(self, output, content):
         sequence = (
             'merknadstekst',
-            'merknadstype',
+            'merknadstype.kodenavn>merknadstype',
+            'merknadstype.kode>[null]',
             'merknadsdato',
             'merknadRegistrertAv'
         )
