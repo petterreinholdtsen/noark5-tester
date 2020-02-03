@@ -138,7 +138,7 @@ metadata = {
         'dokumenttype',
         'dokumentstatus',
         'dokumentmedium',
-#       'tilknyttetRegistreringSom', # FIXME metadata catalog missing in nikita
+        'tilknyttetRegistreringSom',
     ),
     'dokumentobjekt': (
         'variantformat',
