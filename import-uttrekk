@@ -514,7 +514,7 @@ class Importer(n5core.endpoint.Endpoint):
         subs = {
             tagmappe: ([], partial(self.import_mappe, sub=True) ),
             tagregistrering: ([], self.import_registrering),
-#            tagmerknad: ([], self.import_merknad), # FIXME in mappe
+            tagmerknad: ([], self.import_merknad), # FIXME in mappe
 #            tagpart: ([], self.import_part), # FIXME in mappe
         }
         self.import_entity(name, rel, parentinfo, element, subs)
@@ -539,7 +539,7 @@ class Importer(n5core.endpoint.Endpoint):
         subs = {
             tagdokumentbeskrivelse: ([], self.import_dokumentbeskrivelse),
             tagkorrespondansepart: ([], self.import_korrespondansepart),
-#            tagmerknad: ([], self.import_merknad), # FIXME in registrering
+            tagmerknad: ([], self.import_merknad), # FIXME in registrering
 #            tagpart: ([], self.import_part), # FIXME in registrering
             tagforfatter: ([], self.import_forfatter),
         }
