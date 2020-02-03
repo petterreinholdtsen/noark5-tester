@@ -902,6 +902,26 @@ or should it be rejected?
                                      self.parselinks(serieinfo['_links']),
                                      filedata)
 
+        for (c, f) in [
+                ('enhet', u'navn'),
+                ('person', u'navn'),
+        ]:
+            corrpartrel = noarkrelbase + 'arkivstruktur/ny-part%s/' % c
+            for code in (u'KLI', u'PÅ', u'FORM', u'ADV'):
+                corrdata = {
+                    'partRolle' : {
+                        'kode' : code
+                    },
+                    f : u'Eksempel %s' % code,
+                }
+                try:
+                    corrinfo = \
+                        self.createEntity('correspondance part %s' % c,
+                                          corrpartrel,
+                                          self.parselinks(journalentryinfo['_links']),
+                                          corrdata, failureexpected=True)
+                except HTTPError as e:
+                    pass
         # Test adding comment to file
         commentdata = {
             'merknadstekst': u'Title of file comment created %s' % now,
