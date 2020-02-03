@@ -323,7 +323,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'dokumentnummer',
             'tilknyttetDato',
             'tilknyttetAv',
-#            (partrel, self.recurse_xml_part), # FIXME for dokumentbeskrivelse
+            (partrel, self.recurse_xml_part),
             (merknadrel, self.recurse_xml_merknad),
             ('kassasjon', self.recurse_xml_kassasjon),
             ('utfoertKassasjon', self.recurse_xml_utfoertKassasjon),
@@ -591,10 +591,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
 #            ('referanseArkivdel'), # FIXME for mappe
             'virksomhetsspesifikkeMetadata',
 
-# FIXME not working in Nikita
-#            (partrel,                  self.recurse_xml_part), # FIXME for mappe
+            (partrel,                  self.recurse_xml_part),
 #            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for mappe
-# FIXME not working in Nikita
             (merknadrel, self.recurse_xml_merknad),
             ('kassasjon', self.recurse_xml_kassasjon),
             ('skjerming', self.recurse_xml_skjerming),
