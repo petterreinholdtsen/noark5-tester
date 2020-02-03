@@ -906,20 +906,20 @@ or should it be rejected?
                 ('enhet', u'navn'),
                 ('person', u'navn'),
         ]:
-            corrpartrel = noarkrelbase + 'arkivstruktur/ny-part%s/' % c
+            partrel = noarkrelbase + 'arkivstruktur/ny-part%s/' % c
             for code in (u'KLI', u'PÅ', u'FORM', u'ADV'):
-                corrdata = {
+                partdata = {
                     'partRolle' : {
                         'kode' : code
                     },
                     f : u'Eksempel %s' % code,
                 }
                 try:
-                    corrinfo = \
-                        self.createEntity('correspondance part %s' % c,
-                                          corrpartrel,
-                                          self.parselinks(journalentryinfo['_links']),
-                                          corrdata, failureexpected=True)
+                    partinfo = \
+                        self.createEntity('part %s' % c,
+                                          partrel,
+                                          self.parselinks(fileinfo['_links']),
+                                          partdata, failureexpected=True)
                 except HTTPError as e:
                     pass
         # Test adding comment to file
