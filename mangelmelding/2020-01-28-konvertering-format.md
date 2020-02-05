@@ -7,9 +7,9 @@ Endre formatfelt i Konvertering  samme type som format i Dokumentobjekt
         Alvorlighet  protest
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  7.2.1.15
+        Dokumentdel  7.2.1.15 (Konvertering)
          Sidenummer  116
-        Linjenummer  n/a
+        Linjenummer  1472
     Innsendingsdato  Ikke sendt inn ennå
  ------------------  ---------------------------------
 
@@ -30,4 +30,5 @@ godt argument for å behandle dem likt i tjenestegrensesnittet.
 
 Endre datatype på Konvertering.konvertertFraFormat og
 Konvertering.konvertertTilFormat fra string til Format.  Endringen
-gjøres i attributtabell i del 7.2.1.15 på side 116.
+gjøres i attributtabell i del 7.2.1.15 (Konvertering) på side 116,
+mellom linje 1472 og 1473 i PDF-en.
