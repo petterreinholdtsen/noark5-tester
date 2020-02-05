@@ -1,5 +1,5 @@
-Bør format i Konvertering bruke samme semantikk som i Dokumentobjekt?
-=====================================================================
+Spesifiser vedlikehold av metadata-entitetene
+=============================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegrensesnitt
@@ -21,6 +21,11 @@ Beskrivelse
 
 metadata entitetene mangler beskrivelse i TG. Dette må på plass
 
+ - relasjonsnøkler for oppretting
+ 
+ - hvordan opprettet og oppdatere?
+
+ - oppslag på systemid eller kodeverdi?
 
 Ønsket endring
 --------------
