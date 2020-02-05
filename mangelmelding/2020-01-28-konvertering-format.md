@@ -1,5 +1,5 @@
-Endre formatfelt i Konvertering  samme type som format i Dokumentobjekt
-=======================================================================
+Endre formatfelt i Konvertering til samme type som format i Dokumentobjekt
+==========================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegrensesnitt
