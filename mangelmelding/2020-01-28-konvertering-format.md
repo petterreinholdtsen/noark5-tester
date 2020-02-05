@@ -1,5 +1,5 @@
-Bør format i Konvertering bruke samme semantikk som i Dokumentobjekt?
-=====================================================================
+Endre formatfelt i Konvertering  samme type som format i Dokumentobjekt
+=======================================================================
 
  ------------------  ---------------------------------
            Prosjekt  Noark 5 Tjenestegrensesnitt
@@ -7,8 +7,8 @@ Bør format i Konvertering bruke samme semantikk som i Dokumentobjekt?
         Alvorlighet  protest
        Meldingstype  trenger klargjøring
     Brukerreferanse  pere@hungry.com
-        Dokumentdel  ?
-         Sidenummer  ?
+        Dokumentdel  7.2.1.15
+         Sidenummer  116
         Linjenummer  n/a
     Innsendingsdato  Ikke sendt inn ennå
  ------------------  ---------------------------------
@@ -22,11 +22,12 @@ Beskrivelse
 Filformat har ulik datatype i Dokumentobjekt og Konvertering.  I
 førstnevnte er det en kodelisteverdi, i sistnevnte er det to strenger.
 I følge https://github.com/arkivverket/schemas/issues/14 har M701,
-M712 og M713, hvilket er et godt argument for å behandle dem likt i
-protokollen.
+M712 og M713 som er de aktuelle feltene samme vokabular, hvilket er et
+godt argument for å behandle dem likt i tjenestegrensesnittet.
 
 Ønsket endring
 --------------
 
 Endre datatype på Konvertering.konvertertFraFormat og
-Konvertering.konvertertTilFormat fra string til Format.
+Konvertering.konvertertTilFormat fra string til Format.  Endringen
+gjøres i attributtabell i del 7.2.1.15 på side 116.
