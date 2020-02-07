@@ -911,7 +911,7 @@ or should it be rejected?
                 ('person', u'navn'),
         ]:
             partrel = noarkrelbase + 'arkivstruktur/ny-part%s/' % c
-            for code in (u'KLI', u'PÅ', u'FORM', u'ADV'):
+            for code in (u'KLI', u'PAA', u'FORM', u'ADV'):
                 partdata = {
                     'partRolle' : {
                         'kode' : code
