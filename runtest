@@ -1054,6 +1054,23 @@ or should it be rejected?
                                              createjournalentryrel,
                                              self.parselinks(casefileinfo['_links']),
                                              journalentrydata)
+
+        # FIXME figure out how to add references to other entities
+        signoffdata = {
+            'avskrivningsmaate' : {
+                'kode' : 'BU',
+            },
+        }
+        createsignoffrel = nikitarelbase + 'arkivstruktur/ny-avskrivning/'
+        try:
+            signoffinfo = \
+                self.createEntity('sign off',
+                                  createsignoffrel,
+                                  self.parselinks(journalentryinfo['_links']),
+                                  signoffdata)
+        except HTTPError as e:
+            pass # Problem already reported by createEntity, keep going
+
         for (c, f) in [('enhet', u'navn'),
                        ('person', u'navn'),
                        # ('intern', 'administrativenhet') # FIXME not working yet
