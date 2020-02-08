@@ -923,7 +923,7 @@ or should it be rejected?
                         self.createEntity('part %s' % c,
                                           partrel,
                                           self.parselinks(fileinfo['_links']),
-                                          partdata, failureexpected=True)
+                                          partdata)
                 except HTTPError as e:
                     pass
         # Test adding comment to file
