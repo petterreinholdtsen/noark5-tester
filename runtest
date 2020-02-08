@@ -1061,7 +1061,7 @@ or should it be rejected?
                 'kode' : 'BU',
             },
         }
-        createsignoffrel = nikitarelbase + 'arkivstruktur/ny-avskrivning/'
+        createsignoffrel = noarkrelbase + 'sakarkiv/ny-avskrivning/'
         try:
             signoffinfo = \
                 self.createEntity('sign off',
