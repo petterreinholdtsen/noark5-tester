@@ -1035,6 +1035,26 @@ or should it be rejected?
                                          casefiledata)
         casefileurl = self.parselinks(casefileinfo['_links'])['self']
 
+        for (c, f) in [
+                ('enhet', u'navn'),
+                ('person', u'navn'),
+        ]:
+            partrel = noarkrelbase + 'arkivstruktur/ny-part%s/' % c
+            for code in (u'KLI', u'PAA', u'FORM', u'ADV'):
+                partdata = {
+                    'partRolle' : {
+                        'kode' : code
+                    },
+                    f : u'Eksempel %s' % code,
+                }
+                try:
+                    partinfo = \
+                        self.createEntity('part %s' % c,
+                                          partrel,
+                                          self.parselinks(casefileinfo['_links']),
+                                          partdata, failureexpected=True)
+                except HTTPError as e:
+                    pass
         archivenotedata = {
             'tittel': u'test av arkivnotat',
         }
