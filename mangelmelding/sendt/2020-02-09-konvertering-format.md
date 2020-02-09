@@ -10,7 +10,7 @@ Endre formatfelt i Konvertering til samme type som format i Dokumentobjekt
         Dokumentdel  7.2.1.15 (Konvertering)
          Sidenummer  116
         Linjenummer  1472
-    Innsendingsdato  Ikke sendt inn ennå
+    Innsendingsdato  2020-02-09
  ------------------  ---------------------------------
 
 Denne teksten er del av en samling innspill til Noark5-standarden
@@ -33,4 +33,6 @@ forbindelse med konverteringer.
 Endre datatype på Konvertering.konvertertFraFormat og
 Konvertering.konvertertTilFormat fra string til Format.  Endringen
 gjøres i attributtabell i del 7.2.1.15 (Konvertering) på side 116,
-mellom linje 1472 og 1473 i PDF-en.
+mellom linje 1472 og 1473 i PDF-en.  Oppdater relaterte UML-diagram.
+
+https://github.com/arkivverket/noark5-tjenestegrensesnitt-standard/issues/248
