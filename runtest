@@ -219,7 +219,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-klasse/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-klassifikasjonssystem/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-kryssreferanse/?',
-        'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/ny-saksmappe/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/sekundaerklassifikasjon/?',
         'hateoas-api/arkivstruktur/mappe/[-0-9a-z]+/utvid-til-saksmappe/?',
         'hateoas-api/arkivstruktur/partenhet/[-0-9a-z]+/?',
@@ -242,6 +241,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/klasse/?',
         'hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-klasse/?',
         'hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-presedens/?',
+        'hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/ny-saksmappe/?',
         'hateoas-api/sakarkiv/saksmappe/[-0-9a-z]+/presedens/?',
     ]
     knownwithoutlinksregex = [
