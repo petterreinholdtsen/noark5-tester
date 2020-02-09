@@ -21,9 +21,11 @@ Beskrivelse
 
 Filformat har ulik datatype i Dokumentobjekt og Konvertering.  I
 førstnevnte er det en kodelisteverdi, i sistnevnte er det to strenger.
-I følge https://github.com/arkivverket/schemas/issues/14 har M701,
-M712 og M713 som er de aktuelle feltene samme vokabular, hvilket er et
-godt argument for å behandle dem likt i tjenestegrensesnittet.
+I følge https://github.com/arkivverket/schemas/issues/14 har de
+aktuelle metadatatypene M701, M712 og M713 samme vokabular, hvilket er
+et godt argument for å behandle dem likt i tjenestegrensesnittet.  Det
+vil gjøre det enklere å sammenligne og kopiere formatverdier i
+forbindelse med konverteringer.
 
 Ønsket endring
 --------------
