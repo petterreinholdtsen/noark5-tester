@@ -251,11 +251,11 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'filstoerrelse',
         ]
         if self.xml_extended:
-            sequence.append((
+            sequence.extend((
                 'filnavn',
                 'mimeType',
             ))
-        sequence.append((
+        sequence.extend((
             ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
             (konvrel, self.recurse_xml_konvertering),
         ))
