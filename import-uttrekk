@@ -44,6 +44,7 @@ tagforfatter             = '{%s}forfatter' % strukturns
 tagkorrespondansepart    = '{%s}korrespondansepart' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
+tagkonvertering          = '{%s}konvertering' % strukturns
 
 # List of fields to ignore during import until Nikita handle them correctly
 excludes = {
@@ -659,10 +660,17 @@ FIXME flag inaccurate guesses somehow
         rel = self.relbaseurl + 'arkivstruktur/ny-forfatter/'
         self.import_entity('forfatter', rel, parentinfo, element, None)
 
+    def import_konvertering(self, parentinfo, element):
+        rel = self.relbaseurl + 'arkivstruktur/ny-konvertering/'
+        self.import_entity('konvertering', rel, parentinfo, element, None)
+
     def import_dokumentobjekt(self, parentinfo, element):
+        subs = {
+            tagkonvertering: ([], self.import_konvertering),
+        }
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentobjekt/'
 
-        info = self.import_entity('dokumentobjekt', rel, parentinfo, element, {})
+        info = self.import_entity('dokumentobjekt', rel, parentinfo, element, subs)
 
         if self.dryrun:
             return
