@@ -540,7 +540,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagkorrespondansepart: ([], self.import_korrespondansepart),
             tagmerknad: ([], self.import_merknad), # FIXME in registrering
 #            tagpart: ([], self.import_part), # FIXME in registrering
-            tagforfatter: ([], self.import_forfatter),
+#            tagforfatter: ([], self.import_forfatter),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -650,7 +650,7 @@ FIXME flag inaccurate guesses somehow
         subs = {
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
 #            tagpart: ([], self.import_part), # FIXME in dokumentbeskrivelse
-            tagforfatter: ([], self.import_forfatter),
+#            tagforfatter: ([], self.import_forfatter),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentbeskrivelse/'
         self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, subs)
