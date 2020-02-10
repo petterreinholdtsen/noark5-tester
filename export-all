@@ -142,6 +142,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
     def recurse_xml_konvertering(self, output, content):
         sequence = (
+            'systemID>[null]',
             'konvertertDato',
             'konvertertAv',
             'konvertertFraFormat',
@@ -154,13 +155,18 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
     def recurse_xml_merknad(self, output, content):
         sequence = (
+            'systemID>[null]',
             'merknadstekst',
             'merknadstype.kodenavn>merknadstype',
             'merknadstype.kode>[null]',
             'merknadsdato',
             'merknadRegistrertAv'
         )
-        self.recurse_xml_out_ordered(output, 'arkivskaper', content, sequence)
+        self.recurse_xml_out_ordered(output, 'merknad', content, sequence)
+
+
+    def recurse_xml_forfatter(self, output, content):
+        output.writetag('forfatter', content['forfatter'])
 
 
     def recurse_xml_kassasjon(self, output, content):
@@ -302,6 +308,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
     def recurse_xml_dokumentbeskrivelse(self, output, content):
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
         merknadrel = '%sarkivstruktur/merknad/' % self.relbaseurl
+        forfatterrel = '%sforfatter/' % self.nikitarelbaseurl
         dokobjrel = '%sarkivstruktur/dokumentobjekt/' % self.relbaseurl
         sequence = (
             'systemID',
@@ -313,7 +320,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'dokumentstatus.kode>[null]',
             'tittel',
             'beskrivelse',
-            'forfatter',
+            (forfatterrel, self.recurse_xml_forfatter),
             'opprettetDato',
             'opprettetAv',
             'dokumentmedium.kodenavn>dokumentmedium',
@@ -409,6 +416,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'administrativEnhet',
             'saksbehandler',
             'virksomhetsspesifikkeMetadata',
+            'oppdatertAv>[null]',
+            'oppdatertDato>[null]',
         )
         self.recurse_xml_out_ordered(output, 'part', content, sequence)
 
@@ -438,7 +447,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
 
     def recurse_xml_oppbevaringssted(self, output, content):
-        print('error: "oppbevaringssted" not yet implemented')
+        output.writetag('oppbevaringssted', content['oppbevaringssted'])
 
 
     def recurse_xml_kryssreferanse(self, output, content):
@@ -459,6 +468,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         if entityrel in typemap:
             attr = 'xsi:type="%s"' % typemap[entityrel]
         merknadrel = '%sarkivstruktur/merknad/' % self.relbaseurl
+        forfatterrel = '%sforfatter/' % self.nikitarelbaseurl
         dokbeskrrel = '%sarkivstruktur/dokumentbeskrivelse/' % self.relbaseurl
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
         korrpartrel = '%sarkivstruktur/korrespondansepart/' % self.relbaseurl
@@ -491,7 +501,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'offentligTittel',
             'beskrivelse',
             'noekkelord',
-            'forfatter',
+            (forfatterrel, self.recurse_xml_forfatter),
             'dokumentmedium.kodenavn>dokumentmedium',
             'dokumentmedium.kode>[null]',
             (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for registrering
