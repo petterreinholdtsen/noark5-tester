@@ -120,7 +120,7 @@ slik ut:
         }
     },
     "_embedded": {
-	"dokumentobjekt": {
+	"https://rel.arkivverket.no/noark5/v5/api/arkivstruktur/dokumentobjekt/": {
 	    "mimeType": "application/xml", 
 	    "oppdatertAv": "admin@example.com", 
 	    "format": {
