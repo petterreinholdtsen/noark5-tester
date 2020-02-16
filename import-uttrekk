@@ -41,6 +41,7 @@ tagmerknad               = '{%s}merknad' % strukturns
 tagregistrering          = '{%s}registrering' % strukturns
 tagpart                  = '{%s}part' % strukturns
 tagforfatter             = '{%s}forfatter' % strukturns
+taggradering             = '{%s}gradering' % strukturns
 tagkorrespondansepart    = '{%s}korrespondansepart' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
@@ -53,6 +54,7 @@ excludes = {
     ),
     'arkivdel': (
         'systemID',
+        'gradering', # missing ny-gradering link
     ),
     'klassifikasjonssystem': (
         'systemID',
@@ -65,9 +67,13 @@ excludes = {
         'systemID',
         'referanseArkivdel',
         'merknad',
+        'part',
 
         # FIXME these need to be created before using
         'administrativEnhet', 'saksansvarlig',
+    ),
+    'mappe': (
+        'part',
     ),
     'registrering': (
         'systemID',
@@ -432,9 +438,10 @@ class Importer(n5core.endpoint.Endpoint):
             if self.verbose:
                 self.output("%s: '%s' - '%s'" % (name, sub.tag, sub.text))
             if sub.tag in subs:
+                self.output("match %s" % sub.tag)
                 subs[sub.tag][0].append(sub)
-            field = sub.tag.replace('{%s}' % strukturns, '')
-            if None != sub.text:
+            else:
+                field = sub.tag.replace('{%s}' % strukturns, '')
                 if name in excludes and field in excludes[name]:
                         self.output('ignoring %s field %s [%s]' % (name, field, sub.text))
                 else:
@@ -472,9 +479,14 @@ class Importer(n5core.endpoint.Endpoint):
         rel = self.relbaseurl + 'arkivstruktur/ny-arkivskaper/'
         self.import_entity('arkivskaper', rel, parentinfo, element, subs)
 
+    def import_gradering(self, parentinfo, element):
+        rel = self.nikitarelbaseurl + "ny-gradering/"
+        self.import_entity('gradering', rel, parentinfo, element, {})
+
     def import_arkivdel(self, parentinfo, element):
         subs = {
             tagmappe: ([], self.import_mappe),
+#            taggradering: ([], self.import_gradering), # FIXME in arkivdel
             tagklassifikasjonssystem: ([], self.import_klassifikasjonssystem),
             tagregistrering: ([], self.import_registrering),
         }
@@ -492,6 +504,7 @@ class Importer(n5core.endpoint.Endpoint):
         subs = {
             tagklasse: ([], partial(self.import_klasse, sub=True)),
             tagmappe: ([], self.import_mappe),
+#            taggradering: ([], self.import_gradering), # FIXME in klasse
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-klasse/'
 
@@ -516,6 +529,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagregistrering: ([], self.import_registrering),
             tagmerknad: ([], self.import_merknad), # FIXME in mappe
 #            tagpart: ([], self.import_part), # FIXME in mappe
+#            taggradering: ([], self.import_gradering), # FIXME in klasse
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -539,9 +553,10 @@ class Importer(n5core.endpoint.Endpoint):
         subs = {
             tagdokumentbeskrivelse: ([], self.import_dokumentbeskrivelse),
             tagkorrespondansepart: ([], self.import_korrespondansepart),
+#            taggradering: ([], self.import_gradering), # FIXME in registrering
             tagmerknad: ([], self.import_merknad), # FIXME in registrering
 #            tagpart: ([], self.import_part), # FIXME in registrering
-#            tagforfatter: ([], self.import_forfatter),
+            tagforfatter: ([], self.import_forfatter),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -649,20 +664,25 @@ FIXME flag inaccurate guesses somehow
 
     def import_dokumentbeskrivelse(self, parentinfo, element):
         subs = {
-            tagdokumentobjekt: ([], self.import_dokumentobjekt),
+            tagforfatter: ([], self.import_forfatter),
 #            tagpart: ([], self.import_part), # FIXME in dokumentbeskrivelse
-#            tagforfatter: ([], self.import_forfatter),
+#            taggradering: ([], self.import_gradering), # FIXME in dokumentbeskrivelse
+            tagdokumentobjekt: ([], self.import_dokumentobjekt),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentbeskrivelse/'
         self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, subs)
 
     def import_forfatter(self, parentinfo, element):
-        rel = self.relbaseurl + 'arkivstruktur/ny-forfatter/'
-        self.import_entity('forfatter', rel, parentinfo, element, None)
+        forfatter = element.text
+        data = {
+            'forfatter': forfatter
+        }
+        rel = self.nikitarelbaseurl + "ny-forfatter/"
+        info = self.create_entity('forfatter', rel, parentinfo, data)
 
     def import_konvertering(self, parentinfo, element):
         rel = self.relbaseurl + 'arkivstruktur/ny-konvertering/'
-        self.import_entity('konvertering', rel, parentinfo, element, None)
+        self.import_entity('konvertering', rel, parentinfo, element, {})
 
     def import_dokumentobjekt(self, parentinfo, element):
         subs = {
