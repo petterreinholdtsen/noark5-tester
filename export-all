@@ -400,7 +400,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
     def recurse_xml_part(self, output, content):
         sequence = (
             'systemID>partID',
-            'partRolle.kodenavn>parttype',
+            'partRolle.kodenavn>partRolle',
             'partRolle.kode>[null]',
             'navn>partNavn',
             'postadresse.addresselinje1>postadresse',
