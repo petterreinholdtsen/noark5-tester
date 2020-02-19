@@ -438,12 +438,11 @@ class Importer(n5core.endpoint.Endpoint):
             if self.verbose:
                 self.output("%s: '%s' - '%s'" % (name, sub.tag, sub.text))
             if sub.tag in subs:
-                self.output("match %s" % sub.tag)
                 subs[sub.tag][0].append(sub)
             else:
                 field = sub.tag.replace('{%s}' % strukturns, '')
                 if name in excludes and field in excludes[name]:
-                        self.output('ignoring %s field %s [%s]' % (name, field, sub.text))
+                        self.output('ignoring %s field %s [%s]' % (name, field, etree.tostring(sub)))
                 else:
                     if name in metadata and field in metadata[name]:
                         data[field] = {'kode': None, 'kodenavn': sub.text}
