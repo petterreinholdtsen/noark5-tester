@@ -165,16 +165,16 @@ metadata = {
     ),
     # Used by import_generic_part()
     'part': (
-        'partrolle',
+        'partRolle',
     ),
     'partenhet': (
-        'partrolle',
+        'partRolle',
     ),
     'partperson': (
-        'partrolle',
+        'partRolle',
     ),
     'partintern': (
-        'partrolle',
+        'partRolle',
     ),
     'postadresse': (
 #        'land',
@@ -526,7 +526,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagmappe: ([], partial(self.import_mappe, sub=True) ),
             tagregistrering: ([], self.import_registrering),
             tagmerknad: ([], self.import_merknad), # FIXME in mappe
-#            tagpart: ([], self.import_part), # FIXME in mappe
+            tagpart: ([], self.import_part),
 #            taggradering: ([], self.import_gradering), # FIXME in klasse
         }
         self.import_entity(name, rel, parentinfo, element, subs)
@@ -553,7 +553,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagkorrespondansepart: ([], self.import_korrespondansepart),
 #            taggradering: ([], self.import_gradering), # FIXME in registrering
             tagmerknad: ([], self.import_merknad), # FIXME in registrering
-#            tagpart: ([], self.import_part), # FIXME in registrering
+            tagpart: ([], self.import_part),
             tagforfatter: ([], self.import_forfatter),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
@@ -663,7 +663,7 @@ FIXME flag inaccurate guesses somehow
     def import_dokumentbeskrivelse(self, parentinfo, element):
         subs = {
             tagforfatter: ([], self.import_forfatter),
-#            tagpart: ([], self.import_part), # FIXME in dokumentbeskrivelse
+            tagpart: ([], self.import_part),
 #            taggradering: ([], self.import_gradering), # FIXME in dokumentbeskrivelse
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
         }
