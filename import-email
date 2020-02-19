@@ -624,7 +624,7 @@ last digit is a control digit.
         self.recordMapping(recordinfo, docdescinfo, 'dokumentbeskrivelse')
         
         docobjdata = {
-            "versjonsnummer"  : str(0),
+            "versjonsnummer"  : 0,
             'variantformat'   : {
                 'kode': 'P',
                 'kodenavn': 'Produksjonsformat'
@@ -681,7 +681,7 @@ last digit is a control digit.
 
                 contentlen = len(content)
                 docobjdata = {
-                    "versjonsnummer"  : str(0),
+                    "versjonsnummer"  : 0,
                     'variantformat'   : {
                         'kode': 'P',
                         'kodenavn': 'Produksjonsformat'
