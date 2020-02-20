@@ -1191,8 +1191,8 @@ or should it be rejected?
             self.failure("downloading %s failed: %s (%s)" % (url, str(e), e.read()))
         # Attach conversion to document object
         convdata = {
-            "konvertertFraFormat": u"x-fmt/111",
-            "konvertertTilFormat": u"fmt/101", # FIXME why not metadata code value?
+            "konvertertFraFormat": { u'kode': u"x-fmt/111" },
+            "konvertertTilFormat": { u'kode': u"fmt/101" },
             "konverteringsverktoey": u"runtime tester",
             "konverteringskommentar": u"tullekonvertering",
         }
