@@ -326,7 +326,7 @@ class Importer(n5core.endpoint.Endpoint):
                         return {
                             'kode': kodenavn,
                         }
-        relkey = self.relbaseurl + 'metadata/%s/' % metadatafield
+        relkey = self.relbaseurl + 'metadata/%s/' % metadatatype
 
         # Prefer _links entries from ny-*, but fall back to searching
         # the entire API for the relevant metadata list.
