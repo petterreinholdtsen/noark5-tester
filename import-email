@@ -586,6 +586,8 @@ last digit is a control digit.
                         identifiers = \
                             self.locateIdentifiers(p, found=identifiers)
                         navn, epost = parseaddr("From: %s" % p)
+                        if not navn:
+                            navn = epost.split('@')[0]
                         corrdata = {
                             'korrespondanseparttype' : {
                                 'kode' : parts[part],
