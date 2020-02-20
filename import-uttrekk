@@ -150,6 +150,10 @@ metadata = {
         'variantformat',
         'format',
     ),
+    'konvertering': (
+        'konvertertFraFormat',
+        'konvertertTilFormat',
+    ),
     # Used by import_generic_part()
     'korrespondansepart': (
         'korrespondanseparttype',
@@ -303,23 +307,26 @@ class Importer(n5core.endpoint.Endpoint):
     def metadatalookup(self, default, entity, field, verdi=None):
         kode = None
         kodenavn = verdi['kodenavn']
-        if field in self.metadatacache:
+        metadatatype = field.lower()
+        if field in ('konvertertFraFormat', 'konvertertTilFormat'):
+            metadatatype = 'format'
+        if metadatatype in self.metadatacache:
             if self.verbose:
-                print("Cache: ", self.metadatacache[field])
-            if kodenavn in self.metadatacache[field]:
-                kode = self.metadatacache[field][kodenavn]['kode']
+                print("Cache: ", self.metadatacache[metadatatype])
+            if kodenavn in self.metadatacache[metadatatype]:
+                kode = self.metadatacache[metadatatype][kodenavn]['kode']
                 return {
                     'kode': kode,
                     'kodenavn': kodenavn,
                 }
             else:
                 # Perhaps the value is a code already (like with format)?
-                for v in self.metadatacache[field]:
-                    if kode == self.metadatacache[field][v]['kode']:
+                for v in self.metadatacache[metadatatype]:
+                    if kode == self.metadatacache[metadatatype][v]['kode']:
                         return {
                             'kode': kodenavn,
                         }
-        relkey = self.relbaseurl + 'metadata/%s/' % field.lower()
+        relkey = self.relbaseurl + 'metadata/%s/' % metadatafield
 
         # Prefer _links entries from ny-*, but fall back to searching
         # the entire API for the relevant metadata list.
@@ -331,27 +338,27 @@ class Importer(n5core.endpoint.Endpoint):
         if url:
             (c, r) = self.json_get(url)
             j = json.loads(c)
-            if field not in self.metadatacache:
-                self.metadatacache[field] = {}
+            if metadatatype not in self.metadatacache:
+                self.metadatacache[metadatatype] = {}
             for v in j['results']:
                 key = v['kodenavn']
                 # No need for these
                 if '_links' in v: del v['_links']
                 if 'kodenavn' in v: del v['kodenavn']
-                self.metadatacache[field][key] = v
+                self.metadatacache[metadatatype][key] = v
                 if v['kode'] == kodenavn:
                     kode = kodenavn
                     kodenavn = None
-            if not kode and kodenavn in self.metadatacache[field]:
-                kode = self.metadatacache[field][kodenavn]['kode']
+            if not kode and kodenavn in self.metadatacache[metadatatype]:
+                kode = self.metadatacache[metadatatype][kodenavn]['kode']
         if not kode:
             print("info: trying to create new %s metadata catalog entry (%s,%s)" %(
-                field, kode, kodenavn,
+                metadatatype, kode, kodenavn,
             ))
-            newrelkey = self.nikitarelbaseurl + 'metadata/ny-%s/' % field
+            newrelkey = self.nikitarelbaseurl + 'metadata/ny-%s/' % metadatatype
             url = self.findRelation(newrelkey)
             if url:
-                kode = self.metadata_make_up_unused_code(field, kodenavn)
+                kode = self.metadata_make_up_unused_code(metadatatype, kodenavn)
                 data = {
                     'kode': kode,
                     'kodenavn': kodenavn,
@@ -359,11 +366,11 @@ class Importer(n5core.endpoint.Endpoint):
                 print("info: POST %s: %s" % (url, data))
                 (c, r) = self.json_post(url, data)
                 j = json.loads(c)
-                self.metadatacache[field][kodenavn] = {
+                self.metadatacache[metadatatype][kodenavn] = {
                     'kode': kode,
                 }
             else:
-                raise Exception("unable to find url to register new %s metadata catalog entry %s" % (field, kodenavn))
+                raise Exception("unable to find url to register new %s metadata catalog entry %s" % (metadatatype, kodenavn))
         return {
             'kode': kode,
             'kodenavn': kodenavn,

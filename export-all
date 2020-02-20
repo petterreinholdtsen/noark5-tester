@@ -145,8 +145,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'systemID>[null]',
             'konvertertDato',
             'konvertertAv',
-            'konvertertFraFormat',
-            'konvertertTilFormat',
+            'konvertertFraFormat.kodenavn>[null]',
+            'konvertertFraFormat.kode>konvertertFraFormat',
+            'konvertertTilFormat.kodenavn>[null]',
+            'konvertertTilFormat.kode>konvertertTilFormat',
             'konverteringsverktoey',
             'konverteringskommentar'
         )
