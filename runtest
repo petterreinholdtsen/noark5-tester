@@ -1098,7 +1098,7 @@ or should it be rejected?
                 self.createEntity('sign off',
                                   createsignoffrel,
                                   self.parselinks(journalentryinfo['_links']),
-                                  signoffdata)
+                                  signoffdata, failureexpected=True)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
