@@ -1076,11 +1076,21 @@ or should it be rejected?
                                              self.parselinks(casefileinfo['_links']),
                                              journalentrydata)
 
-        # FIXME figure out how to add references to other entities
+        journalentrydata = {
+            'tittel' : u'test reply',
+            u'journalposttype': { u'kode': u'U' },
+            u'journalstatus': { u'kode': u'J' },
+        }
+        ujournalentryinfo = self.createEntity('journalentry',
+                                             createjournalentryrel,
+                                             self.parselinks(casefileinfo['_links']),
+                                             journalentrydata)
+
         signoffdata = {
             'avskrivningsmaate' : {
                 'kode' : 'BU',
             },
+            'referanseAvskrivesAvJournalpost': ujournalentryinfo['systemID'],
         }
         createsignoffrel = noarkrelbase + 'sakarkiv/ny-avskrivning/'
         try:
