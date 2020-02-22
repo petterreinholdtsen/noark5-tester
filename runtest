@@ -835,6 +835,25 @@ or should it be rejected?
                                       self.parselinks(fondinfo['_links']),
                                       seriesdata)
 
+        try:
+            seriesdata = {
+                "tittel"          : u"Title of the deleted test series created %s" % now,
+                "sletting": {
+                    "slettingstype": {
+                        "kode": "SP",
+                        "kodenavn": "Sletting av produksjonsformat"
+                    },
+                    "slettetDato": "1880-10-10T00:00:00+00:00",
+                    "slettetAv": "Vaktmester",
+                    #"referanseSlettetAv": someid
+                },
+            }
+            delserieinfo = self.createEntity('serie', createseriesrel,
+                                          self.parselinks(fondinfo['_links']),
+                                          seriesdata, failureexpected=True)
+        except HTTPError as e:
+            pass # Problem already reported by createEntity, keep going
+
         classificationsystemdata = {
             'tittel': u'Title of the test classification system created %s' % now,
 #            'klassifikasjonstype' : { 'kode' : 'FH', },
@@ -1130,6 +1149,27 @@ or should it be rejected?
                                         createdocdescrel,
                                         self.parselinks(recordinfo['_links']),
                                         docdescdata)
+        try:
+            docdescdata = {
+                "tittel"          : u"Title of deleted test document description created %s" % now,
+                "dokumentnummer" : 1,
+                "sletting": {
+                    "slettingstype": {
+                        "kode": "SP",
+                        "kodenavn": "Sletting av produksjonsformat"
+                    },
+                    "slettetDato": "1880-10-10T00:00:00+00:00",
+                    "slettetAv": "Vaktmester",
+                    #"referanseSlettetAv": someid
+                },
+            }
+            createdocdescrel = noarkrelbase + 'arkivstruktur/ny-dokumentbeskrivelse/'
+            deldocdescinfo = self.createEntity('document description',
+                                            createdocdescrel,
+                                            self.parselinks(recordinfo['_links']),
+                                            docdescdata, failureexpected=True)
+        except HTTPError as e:
+            pass # Problem already reported by createEntity, keep going
 
         # Attach author to document description
         authordata = {
