@@ -196,6 +196,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'slettingstype.kode>[null]',
             'slettetDato',
             'slettetAv',
+            #'referanseSlettetAv',
         )
         self.recurse_xml_out_ordered(output, 'sletting', content, sequence)
 
@@ -445,6 +446,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'avskrivningsmaate.kode>[null]',
             'referanseAvskrivesAvJournalpost',
         )
+        if self.xml_extended:
+            sequence.extend((
+                'referanseAvskrivesAvKorrespondansepart',
+            ))
         self.recurse_xml_out_ordered(output, 'avskrivning', content, sequence)
 
 
@@ -534,7 +539,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 'utlaantTil',
                 'journalenhet',
 
-                (avskrel, self.recurse_xml_avskrivning), # FIXME for journalpost
+                (avskrel, self.recurse_xml_avskrivning),
 #                (dokflytrel, self.recurse_xml_dokumentflyt), # FIXME for journalpost
                 (presedensrel, self.recurse_xml_presedens), # FIXME for journalpost
                 ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
