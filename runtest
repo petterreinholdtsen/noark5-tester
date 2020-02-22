@@ -843,7 +843,7 @@ or should it be rejected?
                         "kode": "SP",
                         "kodenavn": "Sletting av produksjonsformat"
                     },
-                    "slettetDato": "1880-10-10T00:00:00+00:00",
+                    "slettetDato": "1880-10-10T00:00:00+01:00",
                     "slettetAv": "Vaktmester",
                     #"referanseSlettetAv": someid
                 },
@@ -1152,13 +1152,13 @@ or should it be rejected?
         try:
             docdescdata = {
                 "tittel"          : u"Title of deleted test document description created %s" % now,
-                "dokumentnummer" : 1,
+                "dokumentnummer" : 2,
                 "sletting": {
                     "slettingstype": {
                         "kode": "SP",
                         "kodenavn": "Sletting av produksjonsformat"
                     },
-                    "slettetDato": "1880-10-10T00:00:00+00:00",
+                    "slettetDato": "1880-10-10T00:00:00+01:00",
                     "slettetAv": "Vaktmester",
                     #"referanseSlettetAv": someid
                 },
