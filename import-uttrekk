@@ -37,6 +37,7 @@ tagarkivskaper           = '{%s}arkivskaper' % strukturns
 tagklassifikasjonssystem = '{%s}klassifikasjonssystem' % strukturns
 tagklasse                = '{%s}klasse' % strukturns
 tagmappe                 = '{%s}mappe' % strukturns
+tagdokumentflyt          = '{%s}dokumentflyt' % strukturns
 tagmerknad               = '{%s}merknad' % strukturns
 tagregistrering          = '{%s}registrering' % strukturns
 tagpart                  = '{%s}part' % strukturns
@@ -538,6 +539,11 @@ class Importer(n5core.endpoint.Endpoint):
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
+    def import_dokumentflyt(self, parentinfo, element):
+        subs = {}
+        rel = self.relbaseurl + 'arkivstruktur/ny-dokumentflyt/'
+        self.import_entity('dokumentflyt', rel, parentinfo, element, subs)
+
     def import_registrering(self, parentinfo, element):
         name = 'registrering'
         rel = self.relbaseurl + 'arkivstruktur/ny-registrering/'
@@ -560,6 +566,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagkorrespondansepart: ([], self.import_korrespondansepart),
 #            taggradering: ([], self.import_gradering), # FIXME in registrering
             tagmerknad: ([], self.import_merknad), # FIXME in registrering
+            tagdokumentflyt: ([], self.import_dokumentflyt),
             tagpart: ([], self.import_part),
             tagforfatter: ([], self.import_forfatter),
         }
