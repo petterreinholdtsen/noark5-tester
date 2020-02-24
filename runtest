@@ -1082,6 +1082,18 @@ or should it be rejected?
         archivenoteinfo = self.createEntity('archivenote', archivenoterel,
                                             self.parselinks(casefileinfo['_links']),
                                             archivenotedata)
+        try:
+            docflowdata = {
+                'flytTil': u'Sjefen',
+            }
+            createdocflowrel = noarkrelbase + 'sakarkiv/ny-dokumentflyt/'
+            docflowinfo = self.createEntity('document flow',
+                                            createdocflowrel,
+                                            self.parselinks(archivenoteinfo['_links']),
+                                            docflowdata, failureexpected=True)
+        except HTTPError as e:
+            pass # Problem already reported by createEntity, keep going
+
         journalentrydata = {
             'tittel' : u'test',
             # Override non-utf-8 values from nikita to keep runtest
