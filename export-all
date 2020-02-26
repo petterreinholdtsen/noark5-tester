@@ -439,6 +439,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
 
     def recurse_xml_avskrivning(self, output, content):
+        """
+Not yet working because of
+https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
+"""
         sequence = (
             'avskrivningsdato',
             'avskrevetAv',
@@ -541,7 +545,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
                 (avskrel, self.recurse_xml_avskrivning),
                 (dokflytrel, self.recurse_xml_dokumentflyt),
-                (presedensrel, self.recurse_xml_presedens), # FIXME for journalpost
+#                (presedensrel, self.recurse_xml_presedens), # FIXME for journalpost
                 ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
             )
         if 'xsi:type="arkivnotat"' == attr:
@@ -634,7 +638,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 'utlaantDato',
                 'utlaantTil',
 #                ('referanseSekundaerKlassifikasjon'), # FIXME for saksmappe
-                (presedensrel, self.recurse_xml_presedens), # FIXME for saksmappe
+#                (presedensrel, self.recurse_xml_presedens), # FIXME for saksmappe
             )
         if 'xsi:type="moetemappe"' == attr:
             sequence = sequence + (
