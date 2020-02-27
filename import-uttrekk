@@ -151,6 +151,9 @@ metadata = {
         'variantformat',
         'format',
     ),
+    'dokumentflyt': (
+        'flytStatus',
+    ),
     'konvertering': (
         'konvertertFraFormat',
         'konvertertTilFormat',
