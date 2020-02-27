@@ -541,7 +541,7 @@ class Importer(n5core.endpoint.Endpoint):
 
     def import_dokumentflyt(self, parentinfo, element):
         subs = {}
-        rel = self.relbaseurl + 'arkivstruktur/ny-dokumentflyt/'
+        rel = self.relbaseurl + 'sakarkiv/ny-dokumentflyt/'
         self.import_entity('dokumentflyt', rel, parentinfo, element, subs)
 
     def import_registrering(self, parentinfo, element):
