@@ -1058,7 +1058,9 @@ or should it be rejected?
 
         try:
             precedencedata = {
+                'presedensDato': datetime.date.now().isoformat(),
                 'tittel': u'Because that is the way it is',
+                'rettskildefaktor': u'The Boss',
             }
             createprecedencerel = noarkrelbase + 'sakarkiv/ny-presedens/'
             precedenceinfo = self.createEntity(
