@@ -1058,7 +1058,7 @@ or should it be rejected?
 
         try:
             precedencedata = {
-                'presedensDato': datetime.date.now().isoformat(),
+                'presedensDato': datetime.date.today().isoformat(),
                 'tittel': u'Because that is the way it is',
                 'rettskildefaktor': u'The Boss',
             }
