@@ -466,8 +466,26 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 
 
     def recurse_xml_presedens(self, output, content):
-        print('error: "presedens" not yet implemented')
-
+        sequence = (
+            'systemID>[null]',
+            'presedensDato',
+            'opprettetDato',
+            'opprettetAv',
+            'referanseOpprettetAv>[null]',
+            'tittel',
+            'beskrivelse',
+            'presedensHjemmel',
+            'rettskildefaktor',
+            'presedensGodkjentDato',
+            'presedensGodkjentAv',
+            'referansePresedensGodkjentAv>[null]',
+            'avsluttetDato',
+            'avsluttetAv',
+            'referanseAvsluttetAv>[null]',
+            'presedensStatus.kode>[null]',
+            'presedensStatus.kodenavn>presedensStatus',
+        )
+        self.recurse_xml_out_ordered(output, 'presedens', content, sequence)
 
     def recurse_xml_registrering(self, output, content):
         entityrel = self.entity_rel(content)
@@ -545,7 +563,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 
                 (avskrel, self.recurse_xml_avskrivning),
                 (dokflytrel, self.recurse_xml_dokumentflyt),
-#                (presedensrel, self.recurse_xml_presedens), # FIXME for journalpost
+                (presedensrel, self.recurse_xml_presedens),
                 ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
             )
         if 'xsi:type="arkivnotat"' == attr:
@@ -638,7 +656,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 'utlaantDato',
                 'utlaantTil',
 #                ('referanseSekundaerKlassifikasjon'), # FIXME for saksmappe
-#                (presedensrel, self.recurse_xml_presedens), # FIXME for saksmappe
+                (presedensrel, self.recurse_xml_presedens),
             )
         if 'xsi:type="moetemappe"' == attr:
             sequence = sequence + (
