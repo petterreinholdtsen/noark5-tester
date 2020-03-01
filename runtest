@@ -1058,6 +1058,7 @@ or should it be rejected?
 
         try:
             precedencedata = {
+                'tittel': u'Because that is the way it is',
             }
             createprecedencerel = noarkrelbase + 'sakarkiv/ny-presedens/'
             precedenceinfo = self.createEntity(
