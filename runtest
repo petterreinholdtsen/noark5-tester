@@ -1199,7 +1199,33 @@ or should it be rejected?
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
-        # Attach author to document description
+        try:
+            scrndocdescdata = {
+                'tittel'          : u'Title of screened test document description created %s' % now,
+                'dokumentnummer' : 3,
+                'skjerming': {
+                    'tilgangsrestriksjon': {
+                        'kode': 'P',
+                        'kodenavn': 'Personalsaker'
+                    },
+                    'skjermingshjemmel': 'Unntatt etter Offentleglova',
+                    'skjermingMetadata': [
+                        { 'kode': 'NA', 'kodenavn': 'Skjerming navn avsender' },
+                        { 'kode': 'TKL', 'kodenavn': 'Skjerming tittel klasse' },
+                    ],
+                    'skjermingDokument': { 'kode': 'H', 'kodenavn': 'Skjerming av hele dokumentet' },
+                    'skjermingsvarighet': 60,
+                    'skjermingOpphoererDato': '1942-07-25Z',
+                }
+            }
+            scrndocdescinfo = self.createEntity('document description',
+                                                createdocdescrel,
+                                                self.parselinks(recordinfo['_links']),
+                                                scrndocdescdata, failureexpected=True)
+        except HTTPError as e:
+            pass # Problem already reported by createEntity, keep going
+
+        # Attach author to first document description
         authordata = {
             'forfatter': u'Henrik Ibsen',
         }
