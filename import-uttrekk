@@ -43,6 +43,8 @@ tagregistrering          = '{%s}registrering' % strukturns
 tagpart                  = '{%s}part' % strukturns
 tagforfatter             = '{%s}forfatter' % strukturns
 taggradering             = '{%s}gradering' % strukturns
+tagskjerming             = '{%s}skjerming' % strukturns
+tagsletting              = '{%s}sletting' % strukturns
 tagkorrespondansepart    = '{%s}korrespondansepart' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
@@ -56,6 +58,7 @@ excludes = {
     'arkivdel': (
         'systemID',
         'gradering', # not yet implemented
+        'skjerming', # not yet implemented
     ),
     'klassifikasjonssystem': (
         'systemID',
@@ -63,31 +66,37 @@ excludes = {
     'klasse': (
         'systemID',
         'noekkelord',
+        'skjerming', # not yet implemented
     ),
     'saksmappe' : (
         'systemID',
         'referanseArkivdel',
         'merknad',
         'part',
+        'skjerming', # not yet implemented
 
         # FIXME these need to be created before using
         'administrativEnhet', 'saksansvarlig',
     ),
     'mappe': (
         'part',
+        'skjerming', # not yet implemented
     ),
     'registrering': (
         'systemID',
         'noekkelord',
+        'skjerming', # not yet implemented
     ),
     'journalpost': (
         'systemID',
         'noekkelord',
         'avskrivning',
         'referanseArkivdel',
+        'skjerming', # not yet implemented
     ),
     'arkivnotat': (
         'systemID',
+        'skjerming', # not yet implemented
     ),
     'moeteregistrering': (
         'systemID',
@@ -96,6 +105,7 @@ excludes = {
     'dokumentbeskrivelse' : (
         'systemID',
         'referanseArkivdel',
+        'skjerming', # not yet implemented
     ),
     'dokumentobjekt': (
         'systemID',
@@ -492,10 +502,18 @@ class Importer(n5core.endpoint.Endpoint):
     def import_gradering(self, parentinfo, element):
         pass # FIXME implement
 
+    def import_skjerming(self, parentinfo, element):
+        pass # FIXME implement
+
+    def import_sletting(self, parentinfo, element):
+        pass # FIXME implement
+
     def import_arkivdel(self, parentinfo, element):
         subs = {
             tagmappe: ([], self.import_mappe),
 #            taggradering: ([], self.import_gradering), # FIXME in arkivdel
+#            tagskjerming: ([], self.import_skjerming), # FIXME in arkivdel
+#            tagsletting: ([], self.import_sletting), # FIXME in arkivdel
             tagklassifikasjonssystem: ([], self.import_klassifikasjonssystem),
             tagregistrering: ([], self.import_registrering),
         }
@@ -514,6 +532,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagklasse: ([], partial(self.import_klasse, sub=True)),
             tagmappe: ([], self.import_mappe),
 #            taggradering: ([], self.import_gradering), # FIXME in klasse
+#            tagskjerming: ([], self.import_skjerming), # FIXME in klasse
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-klasse/'
 
@@ -539,6 +558,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagmerknad: ([], self.import_merknad), # FIXME in mappe
             tagpart: ([], self.import_part),
 #            taggradering: ([], self.import_gradering), # FIXME in klasse
+#            tagskjerming: ([], self.import_skjerming), # FIXME in mappe
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -682,6 +702,8 @@ FIXME flag inaccurate guesses somehow
             tagforfatter: ([], self.import_forfatter),
             tagpart: ([], self.import_part),
 #            taggradering: ([], self.import_gradering), # FIXME in dokumentbeskrivelse
+#            tagsletting: ([], self.import_sletting), # FIXME in dokumentbeskrivelse
+#            tagskjerming: ([], self.import_skjerming), # FIXME in dokumentbeskrivelse
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentbeskrivelse/'
