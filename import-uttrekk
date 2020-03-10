@@ -43,6 +43,7 @@ tagregistrering          = '{%s}registrering' % strukturns
 tagpart                  = '{%s}part' % strukturns
 tagforfatter             = '{%s}forfatter' % strukturns
 taggradering             = '{%s}gradering' % strukturns
+tagpresedens             = '{%s}presedens' % strukturns
 tagskjerming             = '{%s}skjerming' % strukturns
 tagsletting              = '{%s}sletting' % strukturns
 tagkorrespondansepart    = '{%s}korrespondansepart' % strukturns
@@ -502,6 +503,11 @@ class Importer(n5core.endpoint.Endpoint):
     def import_gradering(self, parentinfo, element):
         pass # FIXME implement
 
+    def import_presedens(self, parentinfo, element):
+        subs = {}
+        rel = self.relbaseurl + 'sakarkiv/ny-presedens/'
+        self.import_entity('presedens', rel, parentinfo, element, subs)
+
     def import_skjerming(self, parentinfo, element):
         pass # FIXME implement
 
@@ -558,6 +564,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagmerknad: ([], self.import_merknad), # FIXME in mappe
             tagpart: ([], self.import_part),
 #            taggradering: ([], self.import_gradering), # FIXME in klasse
+            tagpresedens: ([], self.import_presedens), # FIXME in mappe
 #            tagskjerming: ([], self.import_skjerming), # FIXME in mappe
         }
         self.import_entity(name, rel, parentinfo, element, subs)
@@ -592,6 +599,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagdokumentflyt: ([], self.import_dokumentflyt),
             tagpart: ([], self.import_part),
             tagforfatter: ([], self.import_forfatter),
+            tagpresedens: ([], self.import_presedens), # FIXME in registrering
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
