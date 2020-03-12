@@ -248,6 +248,7 @@ intfields = (
     'saksaar',
     'sakssekvensnummer',
     'seksjonsnummer',
+    'skjermingsvarighet',
     'versjonsnummer',
 )
 
