@@ -93,8 +93,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
     def recurse_xml_out_ordered(self, output, entity, content, sequence, attr=None):
         with output.tag(entity, attr=attr):
-            if self.verbose:
-                print(content)
+#            if self.verbose:
+#                print(content)
             for k in sequence:
                 keytype = type(k)
                 if str == keytype:
@@ -269,8 +269,6 @@ class ContentDumper(n5core.endpoint.Endpoint):
             (konvrel, self.recurse_xml_konvertering),
         ))
         with output.tag('dokumentobjekt'):
-            if self.verbose:
-                print(content)
             for k in sequence:
                 if 'referanseDokumentfil' == k:
                     if filrel in content['_links']:
