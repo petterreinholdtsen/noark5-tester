@@ -58,8 +58,7 @@ excludes = {
     ),
     'arkivdel': (
         'systemID',
-        'gradering', # not yet implemented
-        'skjerming', # not yet implemented
+        'sletting',
     ),
     'klassifikasjonssystem': (
         'systemID',
@@ -67,37 +66,31 @@ excludes = {
     'klasse': (
         'systemID',
         'noekkelord',
-        'skjerming', # not yet implemented
     ),
     'saksmappe' : (
         'systemID',
         'referanseArkivdel',
         'merknad',
         'part',
-        'skjerming', # not yet implemented
 
         # FIXME these need to be created before using
         'administrativEnhet', 'saksansvarlig',
     ),
     'mappe': (
         'part',
-        'skjerming', # not yet implemented
     ),
     'registrering': (
         'systemID',
         'noekkelord',
-        'skjerming', # not yet implemented
     ),
     'journalpost': (
         'systemID',
         'noekkelord',
         'avskrivning',
         'referanseArkivdel',
-        'skjerming', # not yet implemented
     ),
     'arkivnotat': (
         'systemID',
-        'skjerming', # not yet implemented
     ),
     'moeteregistrering': (
         'systemID',
@@ -106,7 +99,6 @@ excludes = {
     'dokumentbeskrivelse' : (
         'systemID',
         'referanseArkivdel',
-        'skjerming', # not yet implemented
     ),
     'dokumentobjekt': (
         'systemID',
@@ -199,6 +191,17 @@ metadata = {
 #        'land',
 #        'postnr',
 #        'poststed',
+    ),
+    'gradering': (
+        'graderingskode',
+    ),
+    'sletting': (
+        'slettingstype',
+    ),
+    'skjerming': (
+        'tilgangsrestriksjon',
+        'skjermingDokument',
+        'skjermingMetadata*', # list of metadata values
     ),
 }
 
@@ -391,6 +394,24 @@ class Importer(n5core.endpoint.Endpoint):
             'kodenavn': kodenavn,
         }
 
+    def fix_value(self, default, name, field, value):
+        #print("Checking %s.%s [%s]" % (name, field, value))
+        # Map metadata
+        if name in metadata and field in metadata[name]:
+            value = self.metadatalookup(default, name,
+                                        field, verdi=value)
+        # Map datestamps
+        elif field in datefields:
+            # Make sure the required time zone is in place
+            if -1 == value.find('+') and 'Z' != value[-1]:
+                print("warning: adding hardcoded timezone %s to %s.%s" %
+                      (default_timezone, name, field))
+                value = value + default_timezone
+        # Convert number strings to numbers
+        elif field in intfields:
+            value = int(value)
+        return value
+
     # Copied from import-email
     def create_entity(self, name, rel, parent, data):
         if rel not in parent['_links'] or 'href' not in parent['_links'][rel]:
@@ -417,21 +438,14 @@ class Importer(n5core.endpoint.Endpoint):
         try:
             # Map values if needed
             for field in data.keys():
-                # Map metadata
-                if name in metadata and field in metadata[name]:
-                    value = self.metadatalookup(default, name,
-                                                field, verdi=data[field])
-                    data[field] = value
-                # Map datestamps
-                if field in datefields:
-                    # Make sure the required time zone is in place
-                    if -1 == data[field].find('+') and 'Z' != data[field][-1]:
-                        print("warning: adding hardcoded timezone %s to %s.%s" %
-                              (default_timezone, name, field))
-                        data[field] = data[field] + default_timezone
-                # Convert number strings to numbers
-                if field in intfields:
-                    data[field] = int(data[field])
+                if dict == type(data[field]) and 'kode' not in data[field]:
+                    for subfield in data[field].keys():
+                        data[field][subfield] = \
+                            self.fix_value(default, field, subfield,
+                                           data[field][subfield])
+                else:
+                    data[field] = \
+                        self.fix_value(default, name, field, data[field])
             if self.verbose:
                 print("POST: %s" % data)
             (c, res) = self.json_post(url, data)
@@ -457,12 +471,17 @@ class Importer(n5core.endpoint.Endpoint):
         self.nesting += 1
         data = {}
         for sub in element.iterchildren():
+            field = sub.tag.replace('{%s}' % strukturns, '')
             if self.verbose:
                 self.output("%s: '%s' - '%s'" % (name, sub.tag, sub.text))
             if sub.tag in subs:
-                subs[sub.tag][0].append(sub)
+                if subs[sub.tag][1]:
+                    # use ny-* after creation
+                    subs[sub.tag][0].append(sub)
+                else:
+                    # transform for use inline
+                    data[field] = subs[sub.tag][2](parentinfo, sub)
             else:
-                field = sub.tag.replace('{%s}' % strukturns, '')
                 if name in excludes and field in excludes[name]:
                         self.output('ignoring %s field %s [%s]' % (name, field, etree.tostring(sub)))
                 else:
@@ -500,8 +519,26 @@ class Importer(n5core.endpoint.Endpoint):
         rel = self.relbaseurl + 'arkivstruktur/ny-arkivskaper/'
         self.import_entity('arkivskaper', rel, parentinfo, element, subs)
 
+    def import_inline(self, name, parentinfo, element, fieldmap):
+        data = {}
+        for sub in element.iterchildren():
+            if self.verbose:
+                self.output("%s: '%s' - '%s'" % (name, sub.tag, sub.text))
+            field = sub.tag.replace('{%s}' % strukturns, '')
+            if field in fieldmap:
+                field = fieldmap[field]
+            if name in excludes and field in excludes[name]:
+                    self.output('ignoring %s field %s [%s]' % (name, field, etree.tostring(sub)))
+            else:
+                if name in metadata and field in metadata[name]:
+                    data[field] = {'kode': None, 'kodenavn': sub.text}
+                else:
+                    data[field] = sub.text
+        return data
+
     def import_gradering(self, parentinfo, element):
-        pass # FIXME implement
+        return self.import_inline('gradering', parentinfo, element,
+                                  {'grad': 'graderingskode'})
 
     def import_presedens(self, parentinfo, element):
         subs = {}
@@ -509,17 +546,17 @@ class Importer(n5core.endpoint.Endpoint):
         self.import_entity('presedens', rel, parentinfo, element, subs)
 
     def import_skjerming(self, parentinfo, element):
-        pass # FIXME implement
+        return self.import_inline('skjerming', parentinfo, element, {})
 
     def import_sletting(self, parentinfo, element):
-        pass # FIXME implement
+        return self.import_inline('sletting', parentinfo, element, {})
 
     def import_arkivdel(self, parentinfo, element):
         subs = {
             tagmappe: ([], self.import_mappe),
-#            taggradering: ([], self.import_gradering), # FIXME in arkivdel
-#            tagskjerming: ([], self.import_skjerming), # FIXME in arkivdel
-#            tagsletting: ([], self.import_sletting), # FIXME in arkivdel
+            taggradering: ([], None, self.import_gradering),
+            tagskjerming: ([], None, self.import_skjerming),
+#            tagsletting: ([], None, self.import_sletting), # FIXME in arkivdel
             tagklassifikasjonssystem: ([], self.import_klassifikasjonssystem),
             tagregistrering: ([], self.import_registrering),
         }
@@ -537,8 +574,8 @@ class Importer(n5core.endpoint.Endpoint):
         subs = {
             tagklasse: ([], partial(self.import_klasse, sub=True)),
             tagmappe: ([], self.import_mappe),
-#            taggradering: ([], self.import_gradering), # FIXME in klasse
-#            tagskjerming: ([], self.import_skjerming), # FIXME in klasse
+            taggradering: ([], None, self.import_gradering),
+            tagskjerming: ([], None, self.import_skjerming),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-klasse/'
 
@@ -561,11 +598,11 @@ class Importer(n5core.endpoint.Endpoint):
         subs = {
             tagmappe: ([], partial(self.import_mappe, sub=True) ),
             tagregistrering: ([], self.import_registrering),
-            tagmerknad: ([], self.import_merknad), # FIXME in mappe
+            tagmerknad: ([], self.import_merknad),
             tagpart: ([], self.import_part),
-#            taggradering: ([], self.import_gradering), # FIXME in klasse
-            tagpresedens: ([], self.import_presedens), # FIXME in mappe
-#            tagskjerming: ([], self.import_skjerming), # FIXME in mappe
+            taggradering: ([], None, self.import_gradering),
+            tagpresedens: ([], self.import_presedens),
+            tagskjerming: ([], None, self.import_skjerming),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -594,12 +631,12 @@ class Importer(n5core.endpoint.Endpoint):
         subs = {
             tagdokumentbeskrivelse: ([], self.import_dokumentbeskrivelse),
             tagkorrespondansepart: ([], self.import_korrespondansepart),
-#            taggradering: ([], self.import_gradering), # FIXME in registrering
-            tagmerknad: ([], self.import_merknad), # FIXME in registrering
+            taggradering: ([], None, self.import_gradering),
+            tagmerknad: ([], self.import_merknad),
             tagdokumentflyt: ([], self.import_dokumentflyt),
             tagpart: ([], self.import_part),
             tagforfatter: ([], self.import_forfatter),
-            tagpresedens: ([], self.import_presedens), # FIXME in registrering
+            tagpresedens: ([], self.import_presedens),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -709,9 +746,9 @@ FIXME flag inaccurate guesses somehow
         subs = {
             tagforfatter: ([], self.import_forfatter),
             tagpart: ([], self.import_part),
-#            taggradering: ([], self.import_gradering), # FIXME in dokumentbeskrivelse
-#            tagsletting: ([], self.import_sletting), # FIXME in dokumentbeskrivelse
-#            tagskjerming: ([], self.import_skjerming), # FIXME in dokumentbeskrivelse
+            taggradering: ([], None, self.import_gradering),
+#            tagsletting: ([], None, self.import_sletting), # FIXME in dokumentbeskrivelse
+            tagskjerming: ([], None, self.import_skjerming),
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentbeskrivelse/'
