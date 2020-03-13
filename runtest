@@ -1355,8 +1355,8 @@ or should it be rejected?
         # FIXME make test able to run again with --keep (normally the
         # created value will be removed).
         metadatavalue = {
-            'kode': 'XYZ',
-            'kodenavn': 'ZYX',
+            'kode': u'XYZ',
+            'kodenavn': u'ZYX',
         }
         links = self.parselinks(metadatalist['_links'])
         for metadata in knownmetadata:
