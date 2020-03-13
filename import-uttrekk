@@ -58,7 +58,6 @@ excludes = {
     ),
     'arkivdel': (
         'systemID',
-        'sletting',
     ),
     'klassifikasjonssystem': (
         'systemID',
@@ -557,7 +556,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagmappe: ([], self.import_mappe),
             taggradering: ([], None, self.import_gradering),
             tagskjerming: ([], None, self.import_skjerming),
-#            tagsletting: ([], None, self.import_sletting), # FIXME in arkivdel
+            tagsletting: ([], None, self.import_sletting),
             tagklassifikasjonssystem: ([], self.import_klassifikasjonssystem),
             tagregistrering: ([], self.import_registrering),
         }
@@ -748,7 +747,7 @@ FIXME flag inaccurate guesses somehow
             tagforfatter: ([], self.import_forfatter),
             tagpart: ([], self.import_part),
             taggradering: ([], None, self.import_gradering),
-#            tagsletting: ([], None, self.import_sletting), # FIXME in dokumentbeskrivelse
+            tagsletting: ([], None, self.import_sletting),
             tagskjerming: ([], None, self.import_skjerming),
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
         }
