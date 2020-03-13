@@ -1352,21 +1352,18 @@ or should it be rejected?
             self.failure("not logged in, unable to test creation")
             return
 
-        # FIXME Disabling create test for now, until we are ready to
-        # make it a fatal check. [pere 2020-01-12]
-        return
-
         # FIXME make test able to run again with --keep (normally the
         # created value will be removed).
         metadata = {
-            'kode': 'X',
-            'kodenavn': 'Y',
+            'kode': 'XYZ',
+            'kodenavn': 'ZYX',
         }
         links = self.parselinks(metadatalist['_links'])
         for metadata in knownmetadata:
             rel = nikitarelbase + 'metadata/ny-%s/' % metadata
             try:
-                info = self.createEntity(metadata, rel, links, metadata)
+                info = self.createEntity(metadata, rel, links, metadata,
+                                         failureexpected=True)
             except HTTPError as e:
                 # Message already printed in createEntity()
                 pass
