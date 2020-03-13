@@ -1354,7 +1354,7 @@ or should it be rejected?
 
         # FIXME make test able to run again with --keep (normally the
         # created value will be removed).
-        metadata = {
+        metadatavalue = {
             'kode': 'XYZ',
             'kodenavn': 'ZYX',
         }
@@ -1362,7 +1362,7 @@ or should it be rejected?
         for metadata in knownmetadata:
             rel = nikitarelbase + 'metadata/ny-%s/' % metadata
             try:
-                info = self.createEntity(metadata, rel, links, metadata,
+                info = self.createEntity(metadata, rel, links, metadatavalue,
                                          failureexpected=True)
             except HTTPError as e:
                 # Message already printed in createEntity()
