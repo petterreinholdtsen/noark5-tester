@@ -1190,7 +1190,6 @@ or should it be rejected?
                     #"referanseSlettetAv": someid
                 },
             }
-            createdocdescrel = noarkrelbase + 'arkivstruktur/ny-dokumentbeskrivelse/'
             deldocdescinfo = self.createEntity('document description',
                                             createdocdescrel,
                                             self.parselinks(recordinfo['_links']),
@@ -1221,6 +1220,36 @@ or should it be rejected?
                                                 createdocdescrel,
                                                 self.parselinks(recordinfo['_links']),
                                                 scrndocdescdata, failureexpected=True)
+        except HTTPError as e:
+            pass # Problem already reported by createEntity, keep going
+
+        # Try metadata with same code 'B' for different types. Trigger
+        # bug in Nikita where the wrong metadata type is used to look
+        # up values.
+        try:
+            docdescdata = {
+                'tittel': u'Title of the test document description created %s' % now,
+
+                'dokumentnummer' : 4,
+                'tilknyttetRegistreringSom': {
+                    'kode': u'H',
+                    'kodenavn': u'Hoveddokument'
+                },
+                'dokumentstatus': {
+                    'kode': u'B',
+                    'kodenavn': u'Dokumentet er under redigering'
+                },
+                'dokumenttype': {
+                    'kode': u'B',
+                    'kodenavn': u'Brev'
+                },
+            }
+            mddocdescinfo = \
+                self.createEntity('document description',
+                                  createdocdescrel,
+                                  self.parselinks(recordinfo['_links']),
+                                  docdescdata,
+                                  failureexpected=True)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
