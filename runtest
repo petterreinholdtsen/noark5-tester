@@ -1226,6 +1226,7 @@ or should it be rejected?
         # Try metadata with same code 'B' for different types. Trigger
         # bug in Nikita where the wrong metadata type is used to look
         # up values.
+        # https://gitlab.com/OsloMet-ABI/nikita-noark5-core/-/issues/184
         try:
             docdescdata = {
                 'tittel': u'Title of the test document description created %s' % now,
