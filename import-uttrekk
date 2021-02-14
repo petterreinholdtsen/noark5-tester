@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 
@@ -22,11 +22,12 @@ import argparse
 import json
 import random
 import string
+import urllib2
 from functools import partial
 from lxml import etree
 
-import lib.n5core.endpoint
-from urllib.error import HTTPError
+import n5core.endpoint
+from n5core.endpoint import HTTPError
 
 strukturns = 'http://www.arkivverket.no/standarder/noark5/arkivstruktur'
 
@@ -287,11 +288,11 @@ def format2mime(format):
     else:
         return 'application/octet-stream'
 
-class Importer(lib.n5core.endpoint.Endpoint):
+class Importer(n5core.endpoint.Endpoint):
     def __init__(self, baseurl):
         self.nesting = 0
         self.dryrun = False
-        lib.n5core.endpoint.Endpoint.__init__(self, baseurl)
+        n5core.endpoint.Endpoint.__init__(self, baseurl)
         self.stats = {}
         self.formats = {}
         self.metadatacache = {}
@@ -842,7 +843,7 @@ def main():
                         action="store_true")
     parser.add_argument("--dryrun", help="print what would be imported, do not import",
                         action="store_true")
-    parser.add_argument("--basedir", nargs='+', help="directory with extract")
+    parser.add_argument("basedir", nargs='+', help="directory with extract")
     args = parser.parse_args()
 
     if args.baseurl:

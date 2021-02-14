@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python
 """
 
 Extract all emails in a Noark 5 file/mappe from the archive and hand
@@ -21,8 +21,8 @@ import subprocess
 import tempfile
 from time import strftime, gmtime, mktime, time
 
-import lib.n5core.endpoint
-from lib.n5core.pick import pickUnlessOne
+import n5core.endpoint
+from n5core.pick import pickUnlessOne
 
 def main():
     baseurl = "http://localhost:8092/noark5v4/"
@@ -48,7 +48,7 @@ def main():
 
     first=True
         
-    api = lib.n5core.endpoint.Endpoint(baseurl)
+    api = n5core.endpoint.Endpoint(baseurl)
     api.verbose = args.verbose
     api.login()
     
@@ -107,7 +107,7 @@ def main():
                             if not first:
                                 mailfile.write("\n\n")
                             mailfile.write("From nikita %s\n" % fromdate)
-                            ct = res.getheader('Content-Type')
+                            ct = res.info().getheader('Content-Type')
                             if 'message/rfc822' == ct:
                                 print("Received email from API (Content-Type %s)" % ct)
                             else:

@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python
 
 import sys
 import os
@@ -6,9 +6,10 @@ sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
 import json
-import lib.n5core.endpoint
+import n5core.endpoint
 import sqlite3
-from urllib.error import HTTPError
+import urllib2
+from n5core.endpoint import HTTPError
 
 createfondsrel = 'http://rel.arkivverket.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
 createseriesrel = 'http://rel.arkivverket.no/noark5/v4/api/arkivstruktur/ny-arkivdel/'
@@ -55,7 +56,7 @@ def main():
         if args.baseurl:
                 baseurl = args.baseurl
                 
-        e = lib.n5core.endpoint.Endpoint(baseurl)
+        e = n5core.endpoint.Endpoint(baseurl)
         e.verbose = args.verbose
         e.login()
 
@@ -185,8 +186,6 @@ def main():
                 docdescinfo = createEntity(e, 'docdesc', createdocdescrel,
                                            parselinks(registryentryinfo['_links']),
                                            docdescdata)
-        print("Added %d entries" % i)
-
-
+        print "Added %d entries" % i
 if __name__ == '__main__':
     main()
