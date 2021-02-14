@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3.7
 """
 
 Upload file to Noark 5 API for archiving.
@@ -19,8 +19,8 @@ import json
 import email
 import magic
 from hashlib import sha256
-import n5core.endpoint
-from n5core.pick import pickUnlessOne
+import lib.n5core.endpoint
+from lib.n5core.pick import pickUnlessOne
 try:
     # Python 3
     from PyPDF2 import PdfFileReader
@@ -138,7 +138,7 @@ def main():
         baseurl = args.baseurl
 
     retval = 0
-    api = n5core.endpoint.Endpoint(baseurl)
+    api = lib.n5core.endpoint.Endpoint(baseurl)
     api.verbose = args.verbose
     api.login()
 

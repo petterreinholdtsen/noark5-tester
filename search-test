@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3.7
 # -*- coding: utf-8 -*-
 
 """
@@ -29,13 +29,12 @@ import os
 sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
-import json
 import urllib
 import urllib2
-import n5core.endpoint
-from n5core.pick import pickUnlessOne
+import lib.n5core.endpoint
 
-class SimpleSearch (n5core.endpoint.Endpoint):
+
+class SimpleSearch (lib.n5core.endpoint.Endpoint):
     def __init__(self):
         baseurl = 'http://localhost:8092/noark5v4/'
         defaultentity = 'arkivstruktur/arkiv/'
@@ -49,7 +48,7 @@ class SimpleSearch (n5core.endpoint.Endpoint):
                             default = defaultentity)
         parser.add_argument("--filter", help="specify filter")
         self.args = parser.parse_args()
-        n5core.endpoint.Endpoint.__init__(self,self.args.baseurl)
+        lib.n5core.endpoint.Endpoint.__init__(self, self.args.baseurl)
 
     def main(self):
         self.login()
