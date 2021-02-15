@@ -7,6 +7,9 @@ import sys
 import os
 sys.path.append(os.path.join(sys.path[0],'lib'))
 
+from lib import n5core
+from lib.n5core import endpoint
+
 import argparse
 import dateutil.parser
 import email
@@ -15,16 +18,14 @@ import json
 import mailbox
 import re
 import time
-import urllib
+from urllib.error import HTTPError
 
 try:
     from urllib import quote_plus
 except ImportError:
     from urllib.parse import quote_plus
 
-import n5core.endpoint
-from n5core.endpoint import HTTPError
-from n5core.pick import pickUnlessOne
+from lib.n5core.pick import pickUnlessOne
 
 # stdnum version 1.10 missing support, it is present in 1.11
 from stdnum.no import orgnr
@@ -66,6 +67,8 @@ def decodeheader(s):
     if s is None:
         return s
     retval = None
+    # IDE is reporting an issue with 'email.header.decode_header(s)':
+    # Cannot find reference 'header' in '__init__.pyi'
     for ret, encoding in email.header.decode_header(s):
         if encoding!=None:
             try:
@@ -395,6 +398,8 @@ are in.
         print("MappeID: ", fileids.keys())
         if 0 < len(fileids.keys()):
             # FIXME what if there are several files?
+            # Upgrade to python 3.7. Getting warning:
+            # Class 'KeysView' does not define '__getitem__', so the '[]' operator cannot be used on its instances
             filehref = fileids[fileids.keys()[0]]
             (fc, fres) = self.json_get(filehref)
             fileinfo = json.loads(fc)
@@ -453,6 +458,8 @@ are in.
                                  docobjdata['mimeType'],
                                  length=len(content))
         except Exception as e:
+            # Upgrade to python 3.7. Getting warning:
+            # Unresolved attribute reference 'read' for class 'Exception'
             print("error: upload threw exception, removing object: %s %s" % (str(e),
                                                                              e.read()))
             for e in created[::-1]:

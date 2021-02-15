@@ -29,13 +29,11 @@ import os
 sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
-import json
 import urllib
-import urllib2
-import n5core.endpoint
-from n5core.pick import pickUnlessOne
+from urllib.error import HTTPError
+from lib.n5core import endpoint
 
-class SimpleSearch (n5core.endpoint.Endpoint):
+class SimpleSearch (endpoint.Endpoint):
     def __init__(self):
         baseurl = 'http://localhost:8092/noark5v4/'
         defaultentity = 'arkivstruktur/arkiv/'
@@ -49,7 +47,7 @@ class SimpleSearch (n5core.endpoint.Endpoint):
                             default = defaultentity)
         parser.add_argument("--filter", help="specify filter")
         self.args = parser.parse_args()
-        n5core.endpoint.Endpoint.__init__(self,self.args.baseurl)
+        endpoint.Endpoint.__init__(self,self.args.baseurl)
 
     def main(self):
         self.login()
@@ -57,12 +55,14 @@ class SimpleSearch (n5core.endpoint.Endpoint):
         relkey = self.relbaseurl + self.args.entity
         print("Locating relation %s" % relkey)
         url = self.findRelation(relkey)
+        # Upgrade to python 3.7. Getting warning:
+        # Cannot find reference 'quote_plus' in '__init__.pyi'
         url += "?$filter=" + urllib.quote_plus(self.args.filter)
         print(url)
         try:
             (content, response) = self.json_get(url)
             print(content, response)
-        except urllib2.HTTPError as e:
+        except HTTPError as e:
             print("GET %s failed: %s (%s)" % (url, str(e), e.read()))
             raise
         return 0
