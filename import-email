@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
@@ -10,12 +10,12 @@ sys.path.append(os.path.join(sys.path[0],'lib'))
 import argparse
 import dateutil.parser
 import email
+import email.header
 from email.utils import parseaddr, parsedate
 import json
 import mailbox
 import re
 import time
-import urllib
 
 try:
     from urllib import quote_plus
@@ -75,7 +75,7 @@ def decodeheader(s):
         if retval is None:
             retval = ret
         else:
-            retval += " " + ret
+            retval += " " + str(ret)
     return retval
 
 
@@ -395,7 +395,7 @@ are in.
         print("MappeID: ", fileids.keys())
         if 0 < len(fileids.keys()):
             # FIXME what if there are several files?
-            filehref = fileids[fileids.keys()[0]]
+            filehref = fileids[list(fileids.keys())[0]]
             (fc, fres) = self.json_get(filehref)
             fileinfo = json.loads(fc)
             #print(fileinfo)
@@ -453,10 +453,9 @@ are in.
                                  docobjdata['mimeType'],
                                  length=len(content))
         except Exception as e:
-            print("error: upload threw exception, removing object: %s %s" % (str(e),
-                                                                             e.read()))
-            for e in created[::-1]:
-                self.delete(e)
+            print("error: upload threw exception, removing object: %s" % e)
+            for o in created[::-1]:
+                self.delete(o)
             return False
         if 201 != res.code:
             print("error: upload failed (status == %d), removing objects"

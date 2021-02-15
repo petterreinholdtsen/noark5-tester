@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 
@@ -22,7 +22,6 @@ import argparse
 import json
 import random
 import string
-import urllib2
 from functools import partial
 from lxml import etree
 
@@ -348,7 +347,7 @@ class Importer(n5core.endpoint.Endpoint):
 
         # Prefer _links entries from ny-*, but fall back to searching
         # the entire API for the relevant metadata list.
-        if '_links' in default and unicode(relkey) in default['_links']:
+        if '_links' in default and str(relkey) in default['_links']:
             url = default['_links'][relkey]['href']
         else:
             print("error: unable to find %s in ny-%s, searching for it" % (relkey, entity))
@@ -433,7 +432,7 @@ class Importer(n5core.endpoint.Endpoint):
                     data[k] = default[k]
         except HTTPError as e:
             print("error: HTTP failure for %s: %s (%s)" % (
-                url, str(e), e.response.content))
+                url, str(e), e.reason))
             pass
         try:
             # Map values if needed

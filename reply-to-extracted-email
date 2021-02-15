@@ -107,7 +107,7 @@ def main():
                             if not first:
                                 mailfile.write("\n\n")
                             mailfile.write("From nikita %s\n" % fromdate)
-                            ct = res.info().getheader('Content-Type')
+                            ct = res.getheader('Content-Type')
                             if 'message/rfc822' == ct:
                                 print("Received email from API (Content-Type %s)" % ct)
                             else:

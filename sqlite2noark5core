@@ -8,7 +8,6 @@ import argparse
 import json
 import n5core.endpoint
 import sqlite3
-import urllib2
 from n5core.endpoint import HTTPError
 
 createfondsrel = 'http://rel.arkivverket.no/noark5/v4/api/arkivstruktur/ny-arkiv/'
@@ -186,6 +185,7 @@ def main():
                 docdescinfo = createEntity(e, 'docdesc', createdocdescrel,
                                            parselinks(registryentryinfo['_links']),
                                            docdescdata)
-        print "Added %d entries" % i
+        print("Added %d entries" % i)
+
 if __name__ == '__main__':
     main()

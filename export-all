@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
@@ -12,6 +12,7 @@ import datetime
 import json
 import pytz
 import n5core.endpoint
+import six
 from n5core.endpoint import HTTPError
 import codecs
 from xml.sax.saxutils import escape
@@ -53,7 +54,7 @@ class XMLFile(object):
 
 
     def writetag(self, tagname, s):
-        if str == type(s) or unicode == type(s):
+        if isinstance(s, six.text_type):
             s = escape(s)
         self.fh.write('%s<%s>%s</%s>\n' % ('  ' * self.level[0], tagname, s, tagname))
 
@@ -441,13 +442,13 @@ class ContentDumper(n5core.endpoint.Endpoint):
 Not yet working because of
 https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 """
-        sequence = (
+        sequence = [
             'avskrivningsdato',
             'avskrevetAv',
             'avskrivningsmaate.kodenavn>avskrivningsmaate',
             'avskrivningsmaate.kode>[null]',
             'referanseAvskrivesAvJournalpost',
-        )
+        ]
         if self.xml_extended:
             sequence.extend((
                 'referanseAvskrivesAvKorrespondansepart',
@@ -853,7 +854,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                     sys.stdout.flush()
                 (content, res) = self.json_get(url)
 
-                ctype = res.info().getheader('Content-Type')
+                ctype = res.getheader('Content-Type')
 
                 if self.verbose:
                     print('info: Creating %s for %s' % (path, url))

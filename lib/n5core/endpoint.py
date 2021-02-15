@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (C) 2017,2019 Petter Reinholdtsen <pere@hungry.com>
 #
 # Licensed under the GNU General Public License Version 2
@@ -17,12 +18,12 @@
 
 import base64
 import json
-import mechanize
 import urllib
-import urllib2
-import urlparse
-from mechanize import HTTPError
-from mechanize import URLError
+import urllib.request
+from urllib.request import Request, urlopen
+from urllib.parse import urlparse, urljoin
+from urllib.error import HTTPError
+from urllib.error import URLError
 
 class LoginFailure(RuntimeError):
     """Report a login failure"""
@@ -31,7 +32,6 @@ class LoginFailure(RuntimeError):
 class Endpoint:
     def __init__(self, baseurl):
         self.baseurl = baseurl
-        self._browser = mechanize.Browser()
         self.verbose = False
         self.relbaseurl = 'https://rel.arkivverket.no/noark5/v5/api/'
         self.nikitarelbaseurl = "https://nikita.arkivlab.no/noark5/v5/"
@@ -40,7 +40,7 @@ class Endpoint:
 #        print(self.baseurl, path)
         if path is None:
             raise ValueError("asked to expand undefined URL path")
-        url = urlparse.urljoin(self.baseurl, path)
+        url = urljoin(self.baseurl, path)
         return url
     def login(self, username = None, password = None):
         url7519 = self.findRelation("%slogin/rfc7519/" % self.nikitarelbaseurl)
@@ -50,7 +50,7 @@ class Endpoint:
             url = url7519
             try:
                 if username is None:
-                    username = 'admin'
+                    username = 'admin@example.com'
                 if password is None:
                     password = 'password'
                 data = {
@@ -75,9 +75,9 @@ class Endpoint:
                     'username': username,
                     'password': password,
                 }
-                datastr = urllib.urlencode(data)
+                datastr = urllib.parse.urlencode(data)
                 a = '%s:%s' % ('nikita-client', 'secret')
-                self.token = 'Basic %s' % base64.encodestring(a).strip()
+                self.token = 'Basic %s' % base64.encodebytes(a).strip()
                 (c,r) = self.post(url, datastr, 'application/x-www-form-urlencoded')
             except HTTPError as e:
                 raise LoginFailure("Posting to login relation %s failed: %s (%s)" % (url, str(e), e.read()))
@@ -92,15 +92,21 @@ class Endpoint:
                     username = 'admin@example.com'
                 if password is None:
                     password = 'password'
+                client_id = 'nikita-client'
                 data = {
                     'grant_type': 'password',
+                    'client_id': client_id,
                     'username': username,
                     'password': password,
                 }
-                datastr = urllib.urlencode(data)
+                datastr = urllib.parse.urlencode(data)
                 a = '%s:%s' % ('nikita-client', 'secret')
-                self.token = 'Basic %s' % base64.encodestring(a).strip()
-                (c,r) = self.post(url, datastr, 'application/x-www-form-urlencoded')
+                key_bytes = base64.b64encode(str.encode(a))
+                key_str = key_bytes.decode('ascii')
+                self.token = 'Basic {}'.format(key_str)
+                # Manually encode query parameters in the URL:
+                updated_url = url + "?" + datastr
+                (c,r) = self.post(updated_url, None, 'application/x-www-form-urlencoded')
             except HTTPError as e:
                 raise LoginFailure("Posting to login relation %s failed: %s (%s)" % (url, str(e), e.read()))
             j = json.loads(c)
@@ -123,7 +129,7 @@ Recursively look for relation in API.
             urlseen[url] = 1
             try:
                 (content, res) = self.json_get(url)
-                ctype = res.info().getheader('Content-Type')
+                ctype = res.getheader('Content-Type')
                 if 0 == ctype.find('application/vnd.noark5+json'):
                     if self.verbose:
                         print(content)
@@ -146,22 +152,27 @@ Recursively look for relation in API.
                 # Ignore errors from GET, we only try to locate links, not detect problems.
                 pass
 
-    def post(self, path, data, mimetype, length=None):
+    def post(self, path, data, mimetype, length=0):
         url = self.expandurl(path)
-        if length is None:
-            length = len(data)
         headers = {
             'Accept' : 'application/vnd.noark5+json',
             'Content-Type': mimetype,
-            'Content-Length' : length,
         }
+
+        if data is not None and length is 0:
+            length = len(data)
+        headers['Content-Length'] = length
         if hasattr(self, 'token'):
             headers['Authorization'] = self.token
         if self.verbose:
             print("POST %s: %s" % (url, headers))
-        request = urllib2.Request(url, data, headers)
-        response = self._browser.open(request)
-        content = response.read()
+        request = Request(url, headers=headers)
+        if data is not None:
+            response = urlopen(request, data=str.encode(data))
+        else:
+            request.get_method = lambda: 'POST'
+            response = urlopen(request)
+        content = response.read().decode("utf-8")
         if self.verbose:
             print(content)
         return (content, response)
@@ -187,10 +198,10 @@ Recursively look for relation in API.
             print("PUT %s: %s" % (url, headers))
         if self.verbose:
             print(headers)
-        request = urllib2.Request(url, data, headers)
+        request = Request(url, str(data).encode(), headers=headers)
         request.get_method = lambda: 'PUT'
-        response = self._browser.open(request)
-        content = response.read()
+        response = urlopen(request)
+        content = response.read().decode("utf-8")
         if self.verbose:
             print(content)
         return (content, response)
@@ -203,9 +214,9 @@ Recursively look for relation in API.
             headers = {}
         if hasattr(self, 'token'):
             headers['Authorization'] = self.token
-        request = urllib2.Request(url, None, headers)
-        response = self._browser.open(request)
-        content = response.read()
+        request = Request(url, None, headers=headers)
+        response = urlopen(request)
+        content = response.read().decode("utf-8")
         if self.verbose:
             print(content)
         return (content, response)
@@ -219,8 +230,8 @@ Recursively look for relation in API.
 
     def options(self, path):
         url = self.expandurl(path)
-        opener = urllib2.build_opener(urllib2.HTTPHandler)
-        request = urllib2.Request(url)
+        opener = urllib.request.build_opener(urllib.request.HTTPHandler)
+        request = urllib.request.Request(url)
         request.get_method = lambda: 'OPTIONS'
         response = opener.open(request)
         content = response.read()
@@ -228,14 +239,14 @@ Recursively look for relation in API.
 
     def delete(self, path, headers = None, etag = None):
         url = self.expandurl(path)
-        opener = urllib2.build_opener(urllib2.HTTPHandler)
+        opener = urllib.request.build_opener(urllib.request.HTTPHandler)
         if headers is None:
             headers = {}
         if hasattr(self, 'token'):
             headers['Authorization'] = self.token
         if etag is not None:
             headers['ETag'] = etag
-        request = urllib2.Request(url, None, headers)
+        request = urllib.request.Request(url, None, headers)
         request.get_method = lambda: 'DELETE'
         response = opener.open(request)
         content = response.read()

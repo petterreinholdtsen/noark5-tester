@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
@@ -29,23 +29,18 @@ from __future__ import print_function
 
 import sys
 import os
-sys.path.append(os.path.join(sys.path[0],'lib'))
+sys.path.append(os.path.join(sys.path[0], 'lib'))
 
 # Enforce ASCII on stdout, also on redirect and pipes, replace
 # non-ascii characters with '?'.
-#import codecs
-#sys.stdout = codecs.getwriter('ascii')(sys.stdout, errors='replace')
+# sys.stdout = codecs.getwriter('ascii')(sys.stdout, errors='replace')
 
 import argparse
 import datetime
 from hashlib import sha256
 import json
-import mechanize
 import re
 from subprocess import call
-import urllib2
-import urlparse
-import xml.etree.ElementTree
 import n5core.endpoint
 from n5core.endpoint import HTTPError
 from n5core.endpoint import URLError
@@ -263,6 +258,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-plan/?',
     ]
     verbose = False
+
     def __init__(self):
         baseurl = 'http://localhost:8092/noark5v5/'
         refurl = 'http://n5test.kxml.no/api/'
@@ -281,7 +277,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             self.baseurl = args.baseurl
         else:
             self.baseurl = baseurl
-        n5core.endpoint.Endpoint.__init__(self,self.baseurl)
+        n5core.endpoint.Endpoint.__init__(self, self.baseurl)
         self.created = []
         self.verbose = args.verbose
         self.keeptestdata = args.keep
@@ -350,10 +346,10 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             urlseen[url] = 1
             try:
                 (content, res) = self.json_get(url)
-                allow = res.info().getheader('Allow')
+                allow = res.getheader('Allow')
                 self.success("GET %s worked with code %d"  % (url, res.code))
                 self.verify(allow is not None, "GET header should include Allow for %s" % url)
-                ctype = res.info().getheader('Content-Type')
+                ctype = res.getheader('Content-Type')
 
                 if -1 != ctype.find('application/json') and \
                    -1 != url.find('.well-known/openid-configuration'):
@@ -443,7 +439,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                     # Check if CORS can work for the URL
                     (ocontent, ores) = self.options(url)
                     allow = []
-                    allowstr = ores.info().getheader('Allow')
+                    allowstr = ores.getheader('Allow')
                     if allowstr:
                         allow = allowstr.split(',')
                         self.verify(-1 != allow.index('GET'), 'OPTIONS header Allow should include GET for %s' % url)
@@ -475,7 +471,7 @@ code 401 before logging in.
         except HTTPError as e:
             self.xverify(401 == e.code and 'www-authenticate' in e.hdrs,
                         "level 0 API should support support Basic access authentication")
-        
+
     def testBasis(self):
         """
 Test basis requirements for NOARK 5 Core.
@@ -497,7 +493,7 @@ Test basis requirements for NOARK 5 Core.
         try:
             (content, res) = self.json_get(".")
             self.success("level 0 JSON - found base")
-            contenttype = res.info().getheader('Content-Type')
+            contenttype = res.getheader('Content-Type')
             if 0 != contenttype.find('application/vnd.noark5+json'):
                 self.failure('level 0 JSON - incorrect content-type for base: %s' % contenttype)
             else:
@@ -544,13 +540,13 @@ Test basis requirements for NOARK 5 Core.
                 if not k == '_links' and k not in data:
                     data[k] = default[k]
             self.success("GET %s worked with code %d"  % (url, gres.code))
-            etag = gres.info().getheader('ETag')
+            etag = gres.getheader('ETag')
             self.verify(etag is None, "no ETag from GET on %s" % url)
             try:
-                # Verify OPTIONS announce POST support 
+                # Verify OPTIONS announce POST support
                 (ocontent, ores) = self.options(url)
                 allow = []
-                allowstr = ores.info().getheader('Allow')
+                allowstr = ores.getheader('Allow')
                 if allowstr:
                     allow = allowstr.split(',')
                     verify(-1 != allow.index('POST'), 'OPTIONS header Allow should include POST for %s' % url)
@@ -618,7 +614,7 @@ Test basis requirements for NOARK 5 Core.
             try:
                 (infostr, res) = self.json_get(entityurl)
                 info = json.loads(infostr)
-                etag = res.info().getheader('ETag')
+                etag = res.getheader('ETag')
                 self.verify(etag is not None,
                             "DELETE endpoint return ETag on %s" % entityurl)
                 (dcontent, dres) = self.delete(entityurl, etag=etag)
@@ -664,12 +660,13 @@ Test basis requirements for NOARK 5 Core.
         }
         for type in testdata.keys():
             rel = testdata[type]["rel"]
+            # FIXME get this code working
             fondinfo = self.createEntity(type, rel, self.rels, data)
             linkrefs = self.parselinks(fondinfo['_links'])
             if 'self' in linkrefs:
                 selfurl = self.parselinks(fondinfo['_links'])['self']
                 self.delete(selfurl)
-                
+
             if fondinfo is None:
                 return
             return fondinfo
@@ -679,7 +676,7 @@ Test basis requirements for NOARK 5 Core.
             try:
                 (infostr, res) = self.json_get(url)
                 info = json.loads(infostr)
-                etag = res.info().getheader('ETag')
+                etag = res.getheader('ETag')
                 self.verify(etag is not None,
                             "PUT endpoint return ETag on %s" % url)
                 for key in info.keys():
@@ -799,7 +796,7 @@ or should it be rejected?
                                             recordcreatordata)
         if recordcreatorinfo is None:
             return
-            
+
         createfondsrel = noarkrelbase + 'arkivstruktur/ny-arkiv/'
         fondsdata = {
             "tittel"          : u"Title of the test fonds created %s" % now,
@@ -812,7 +809,7 @@ or should it be rejected?
                                      fondsdata)
         if fondinfo is None:
             return
-            
+
         seriesdata = {
             "tittel"          : u"Title of the test series created %s" % now,
 #            "beskrivelse"     : "Description of the test series",
@@ -910,7 +907,7 @@ or should it be rejected?
             except HTTPError as e:
                 self.failure("creating long UTF-8 title in %s failed: %s (%s)" %
                              (url, str(e), e.read())
-                )
+                    )
 
         filedata = {
 #            "mappeID"            : "2017/01",
@@ -1057,7 +1054,7 @@ or should it be rejected?
 
         try:
             precedencedata = {
-                'presedensDato': unicode(datetime.date.today().isoformat() + "Z"),
+                'presedensDato': str(datetime.date.today().isoformat() + "Z"),
                 'tittel': u'Because that is the way it is',
                 'rettskildefaktor': u'The Boss',
             }
@@ -1270,18 +1267,18 @@ or should it be rejected?
         xmldata = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml></xml>\n"
         hashalg = u'SHA-256'
         hasher = sha256()
-        hasher.update(xmldata)
+        hasher.update(xmldata.encode('utf-8'))
         hash = hasher.hexdigest()
-        
+
         docobjdata = {
 #            "versjonsnummer"  : 1,
 #            "variantformat"   : "Arkivformat",
             "format"          : { 'kode': "fmt/101" },
 #            "formatDetaljer"  : "home made XML",
-            "sjekksum"          : unicode(hash),
-            "sjekksumAlgoritme" : unicode(hashalg),
+            "sjekksum"          : str(hash),
+            "sjekksumAlgoritme" : str(hashalg),
             "filstoerrelse"     : len(xmldata),
-#            "mimeType"       : "application/xml", 
+#            "mimeType"       : "application/xml",
         }
         createdocobjrel = noarkrelbase + 'arkivstruktur/ny-dokumentobjekt/'
         docobjinfo = self.createEntity('document object', createdocobjrel,
@@ -1316,7 +1313,7 @@ or should it be rejected?
             (c, res) = self._get(url)
             self.verify(c == xmldata,
                         "downloaded file should match uploaded file")
-            ctype = res.info().getheader('Content-Type')
+            ctype = res.getheader('Content-Type')
             self.verify(ctype and 0 == ctype.find('application/xml'),
                         "MIME type %s should be application/xml for url %s" %
                         (ctype, url))
