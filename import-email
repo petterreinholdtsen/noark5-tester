@@ -78,7 +78,7 @@ def decodeheader(s):
         if retval is None:
             retval = ret
         else:
-            retval += " " + ret
+            retval += " " + str(ret)
     return retval
 
 
