@@ -457,12 +457,9 @@ are in.
                                  docobjdata['mimeType'],
                                  length=len(content))
         except Exception as e:
-            # Upgrade to python 3.7. Getting warning:
-            # Unresolved attribute reference 'read' for class 'Exception'
-            print("error: upload threw exception, removing object: %s %s" % (str(e),
-                                                                             e.read()))
-            for e in created[::-1]:
-                self.delete(e)
+            print("error: upload threw exception, removing object: %s" % e)
+            for o in created[::-1]:
+                self.delete(o)
             return False
         if 201 != res.code:
             print("error: upload failed (status == %d), removing objects"
