@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (C) 2017,2019 Petter Reinholdtsen <pere@hungry.com>
 #
 # Licensed under the GNU General Public License Version 2
@@ -22,6 +23,7 @@ import urllib.request
 from urllib.request import Request, urlopen
 from urllib.parse import urlparse, urljoin
 from urllib.error import HTTPError
+from urllib.error import URLError
 
 class LoginFailure(RuntimeError):
     """Report a login failure"""

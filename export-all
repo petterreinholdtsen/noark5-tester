@@ -1,19 +1,19 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
 
 import sys
 import os
-from lib.n5core import endpoint
 sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
 import datetime
 import json
 import pytz
+import n5core.endpoint
 import six
-from urllib.error import HTTPError
+from n5core.endpoint import HTTPError
 import codecs
 from xml.sax.saxutils import escape
 
@@ -59,7 +59,7 @@ class XMLFile(object):
         self.fh.write('%s<%s>%s</%s>\n' % ('  ' * self.level[0], tagname, s, tagname))
 
 
-class ContentDumper(endpoint.Endpoint):
+class ContentDumper(n5core.endpoint.Endpoint):
     def __init__(self):
         self.baseurl = 'http://localhost:8092/noark5v4/'
         utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc)
@@ -78,7 +78,7 @@ class ContentDumper(endpoint.Endpoint):
             self.baseurl = args.baseurl
         if args.savedir:
             self.savedir = args.savedir
-        endpoint.Endpoint.__init__(self,self.baseurl)
+        n5core.endpoint.Endpoint.__init__(self,self.baseurl)
         self.verbose = args.verbose
         self.xml = args.xml
         self.xml_extended = args.xml_extended
@@ -444,16 +444,14 @@ class ContentDumper(endpoint.Endpoint):
 Not yet working because of
 https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 """
-        sequence = (
+        sequence = [
             'avskrivningsdato',
             'avskrevetAv',
             'avskrivningsmaate.kodenavn>avskrivningsmaate',
             'avskrivningsmaate.kode>[null]',
             'referanseAvskrivesAvJournalpost',
-        )
+        ]
         if self.xml_extended:
-            # Upgrade to python 3.7. Getting warning:
-            # Unresolved attribute reference 'extend' for class '(str, str, str, str, str)'
             sequence.extend((
                 'referanseAvskrivesAvKorrespondansepart',
             ))
@@ -807,7 +805,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
     def recurse_xml(self):
         try:
             self.login()
-        except endpoint.LoginFailure:
+        except n5core.endpoint.LoginFailure:
             pass
         arkivhref = self.findRelation('%sarkivstruktur/arkiv/' % self.relbaseurl)
         (c, res) = self.json_get(arkivhref)
@@ -830,7 +828,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
     def recurse(self):
         try:
             self.login()
-        except endpoint.LoginFailure:
+        except n5core.endpoint.LoginFailure:
             pass
         print('Saving to %s' % self.savedir)
         urlsleft = ['.']

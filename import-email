@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
@@ -7,25 +7,24 @@ import sys
 import os
 sys.path.append(os.path.join(sys.path[0],'lib'))
 
-from lib import n5core
-from lib.n5core import endpoint
-
 import argparse
 import dateutil.parser
 import email
+import email.header
 from email.utils import parseaddr, parsedate
 import json
 import mailbox
 import re
 import time
-from urllib.error import HTTPError
 
 try:
     from urllib import quote_plus
 except ImportError:
     from urllib.parse import quote_plus
 
-from lib.n5core.pick import pickUnlessOne
+import n5core.endpoint
+from n5core.endpoint import HTTPError
+from n5core.pick import pickUnlessOne
 
 # stdnum version 1.10 missing support, it is present in 1.11
 from stdnum.no import orgnr
@@ -400,7 +399,7 @@ are in.
             # FIXME what if there are several files?
             # Upgrade to python 3.7. Getting warning:
             # Class 'KeysView' does not define '__getitem__', so the '[]' operator cannot be used on its instances
-            filehref = fileids[fileids.keys()[0]]
+            filehref = fileids[(fileids.keys())[0]]
             (fc, fres) = self.json_get(filehref)
             fileinfo = json.loads(fc)
             #print(fileinfo)

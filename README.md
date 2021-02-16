@@ -21,6 +21,3 @@ https://github.com/HiOA-ABI/nikita-noark5-core .
 
 The latest version of the test scripts can be found in
 https://github.com/petterreinholdtsen/noark5-tester
-
-You might need to install `python-mechanize` if you don't already have it
-installed.

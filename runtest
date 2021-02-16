@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
@@ -29,9 +29,6 @@ from __future__ import print_function
 
 import sys
 import os
-
-from lib.n5core import endpoint
-
 sys.path.append(os.path.join(sys.path[0], 'lib'))
 
 # Enforce ASCII on stdout, also on redirect and pipes, replace
@@ -44,13 +41,14 @@ from hashlib import sha256
 import json
 import re
 from subprocess import call
-from urllib.error import HTTPError
-from urllib.error import URLError
+import n5core.endpoint
+from n5core.endpoint import HTTPError
+from n5core.endpoint import URLError
 
 noarkrelbase = 'https://rel.arkivverket.no/noark5/v5/api/'
 nikitarelbase = 'https://nikita.arkivlab.no/noark5/v5/'
 
-class Noark5Tester (endpoint.Endpoint):
+class Noark5Tester (n5core.endpoint.Endpoint):
     knownrels = [
         noarkrelbase + 'admin/',
         noarkrelbase + 'admin/administrativenhet/',
@@ -279,7 +277,7 @@ class Noark5Tester (endpoint.Endpoint):
             self.baseurl = args.baseurl
         else:
             self.baseurl = baseurl
-        endpoint.Endpoint.__init__(self, self.baseurl)
+        n5core.endpoint.Endpoint.__init__(self, self.baseurl)
         self.created = []
         self.verbose = args.verbose
         self.keeptestdata = args.keep
@@ -662,7 +660,8 @@ Test basis requirements for NOARK 5 Core.
         }
         for type in testdata.keys():
             rel = testdata[type]["rel"]
-            fondinfo = self.createEntity(type, rel, self.rels, testdata)
+            # FIXME get this code working
+            fondinfo = self.createEntity(type, rel, self.rels, data)
             linkrefs = self.parselinks(fondinfo['_links'])
             if 'self' in linkrefs:
                 selfurl = self.parselinks(fondinfo['_links'])['self']
@@ -1276,8 +1275,8 @@ or should it be rejected?
 #            "variantformat"   : "Arkivformat",
             "format"          : { 'kode': "fmt/101" },
 #            "formatDetaljer"  : "home made XML",
-            "sjekksum": str(hash),
-            "sjekksumAlgoritme": str(hashalg),
+            "sjekksum"          : str(hash),
+            "sjekksumAlgoritme" : str(hashalg),
             "filstoerrelse"     : len(xmldata),
 #            "mimeType"       : "application/xml",
         }
@@ -1405,7 +1404,7 @@ or should it be rejected?
                 self.login()
                 self.gotlogin = True
                 self.success("able to log in using admin/password")
-            except endpoint.LoginFailure as e:
+            except n5core.endpoint.LoginFailure as e:
                 self.gotlogin = False
                 self.failure("unable to log in, operating in read only mode: %s" % e)
             self.recursiveHateoas()
