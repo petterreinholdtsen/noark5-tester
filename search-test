@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
@@ -29,8 +29,13 @@ import os
 sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
-import urllib
-from ncore.endpoint import HTTPError
+
+try:
+    from urllib import quote_plus
+except ImportError:
+    from urllib.parse import quote_plus
+
+from n5core.endpoint import HTTPError
 import n5core.endpoint
 
 class SimpleSearch (n5core.endpoint.Endpoint):
@@ -55,9 +60,7 @@ class SimpleSearch (n5core.endpoint.Endpoint):
         relkey = self.relbaseurl + self.args.entity
         print("Locating relation %s" % relkey)
         url = self.findRelation(relkey)
-        # Upgrade to python 3.7. Getting warning:
-        # Cannot find reference 'quote_plus' in '__init__.pyi'
-        url += "?$filter=" + urllib.quote_plus(self.args.filter)
+        url += "?$filter=" + quote_plus(self.args.filter)
         print(url)
         try:
             (content, response) = self.json_get(url)
