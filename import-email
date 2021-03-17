@@ -73,7 +73,7 @@ def decodeheader(s):
             except UnicodeDecodeError:
                 pass # Ignore bogus headers, store them raw
         if retval is None:
-            retval = ret
+            retval = str(ret)
         else:
             retval += " " + str(ret)
     return retval
