@@ -527,8 +527,8 @@ last digit is a control digit.
         docdescrel = '%sarkivstruktur/ny-dokumentbeskrivelse/' % self.relbaseurl
 
         created = []
-        content = message.as_string()
-        body = content.split("\n\n", 1)[1]
+        content = message.as_bytes()
+        body = message.as_string().split("\n\n", 1)[1]
         subject = message['subject']
         identifiers = self.locateIdentifiers(body)
         identifiers = self.locateIdentifiers(subject, found=identifiers)

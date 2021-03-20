@@ -1264,10 +1264,10 @@ or should it be rejected?
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
-        xmldata = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml></xml>\n"
+        xmldata = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml></xml>\n".encode('utf-8')
         hashalg = u'SHA-256'
         hasher = sha256()
-        hasher.update(xmldata.encode('utf-8'))
+        hasher.update(xmldata)
         hash = hasher.hexdigest()
 
         docobjdata = {

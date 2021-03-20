@@ -168,7 +168,7 @@ Recursively look for relation in API.
             print("POST %s: %s" % (url, headers))
         request = Request(url, headers=headers)
         if data is not None:
-            response = urlopen(request, data=str.encode(data))
+            response = urlopen(request, data=data)
         else:
             request.get_method = lambda: 'POST'
             response = urlopen(request)
@@ -178,7 +178,7 @@ Recursively look for relation in API.
         return (content, response)
 
     def json_post(self, path, data):
-        jsondata = json.dumps(data)
+        jsondata = json.dumps(data).encode('UTF-8')
         return self.post(path, jsondata, 'application/vnd.noark5+json')
 
     def put(self, path, data, mimetype, length=None, etag=None):
