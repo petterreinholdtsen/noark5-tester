@@ -1312,7 +1312,7 @@ or should it be rejected?
             headers = { 'Accept' : 'application/xml' }
             (c, res) = self._get(url)
             self.verify(c == xmldata,
-                        "downloaded file should match uploaded file")
+                        "downloaded file should match uploaded file ('%s' != '%s') (%s %s)" % (xmldata, c, type(xmldata), type(c)))
             ctype = res.getheader('Content-Type')
             self.verify(ctype and 0 == ctype.find('application/xml'),
                         "MIME type %s should be application/xml for url %s" %

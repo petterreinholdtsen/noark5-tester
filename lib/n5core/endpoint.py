@@ -216,7 +216,7 @@ Recursively look for relation in API.
             headers['Authorization'] = self.token
         request = Request(url, None, headers=headers)
         response = urlopen(request)
-        content = response.read().decode("utf-8")
+        content = response.read()
         if self.verbose:
             print(content)
         return (content, response)
@@ -226,7 +226,9 @@ Recursively look for relation in API.
             'X_REQUESTED_WITH' :'XMLHttpRequest',
             'Accept' : 'application/json, application/vnd.noark5+json, text/javascript, */*; q=0.01',
             }
-        return self._get(path, headers)
+        content, response = self._get(path, headers)
+        content = content.decode("utf-8")
+        return (content, response)
 
     def options(self, path):
         url = self.expandurl(path)
