@@ -282,7 +282,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         try:
                             (data, r) = self._get(url)
                             with open('%s/DOKUMENT/%s' % (
-                                    self.savepath, filename), 'w') as fh:
+                                    self.savepath, filename), 'wb') as fh:
                                 fh.write(data)
                             output.writetag('referanseDokumentfil',
                                             'DOKUMENT/%s' % filename)
