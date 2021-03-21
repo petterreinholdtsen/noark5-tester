@@ -57,11 +57,10 @@ class Endpoint:
                     'username': username,
                     'password': password,
                 }
-                jsondata = json.dumps(data)
-                (c,r) = self.post(url, jsondata, 'application/json')
+                (j,r) = self.json_post(url, jsondata,
+                                       contenttype='application/json')
             except HTTPError as e:
                 raise LoginFailure("Posting to login relation %s failed: %s" % (url, e))
-            j = json.loads(c)
             self.token = j['token']
         elif url6749 is not None:
             url = url6749
@@ -81,7 +80,7 @@ class Endpoint:
                 (c,r) = self.post(url, datastr, 'application/x-www-form-urlencoded')
             except HTTPError as e:
                 raise LoginFailure("Posting to login relation %s failed: %s (%s)" % (url, str(e), e.read()))
-            j = json.loads(c)
+            j = json.loads(c.decode('UTF-8'))
             self.token = "%s %s" % (j['token_type'], j['access_token'])
         elif urloidc is not None:
             (content, res) = self.json_get(urloidc)
@@ -109,7 +108,7 @@ class Endpoint:
                 (c,r) = self.post(updated_url, None, 'application/x-www-form-urlencoded')
             except HTTPError as e:
                 raise LoginFailure("Posting to login relation %s failed: %s (%s)" % (url, str(e), e.read()))
-            j = json.loads(c)
+            j = json.loads(c.decode('UTF-8'))
             self.token = "%s %s" % (j['token_type'], j['access_token'])
         else:
             raise LoginFailure("Unable to find login relation")
@@ -172,14 +171,16 @@ Recursively look for relation in API.
         else:
             request.get_method = lambda: 'POST'
             response = urlopen(request)
-        content = response.read().decode("utf-8")
+        content = response.read()
         if self.verbose:
             print(content)
         return (content, response)
 
-    def json_post(self, path, data):
+    def json_post(self, path, data, contenttype='application/vnd.noark5+json'):
         jsondata = json.dumps(data).encode('UTF-8')
-        return self.post(path, jsondata, 'application/vnd.noark5+json')
+        content, response = self.post(path, jsondata, contenttype)
+        content = content.decode("UTF-8")
+        return (content, response)
 
     def put(self, path, data, mimetype, length=None, etag=None):
         url = self.expandurl(path)
@@ -201,7 +202,7 @@ Recursively look for relation in API.
         request = Request(url, str(data).encode(), headers=headers)
         request.get_method = lambda: 'PUT'
         response = urlopen(request)
-        content = response.read().decode("utf-8")
+        content = response.read().decode("UTF-8")
         if self.verbose:
             print(content)
         return (content, response)
@@ -227,7 +228,7 @@ Recursively look for relation in API.
             'Accept' : 'application/json, application/vnd.noark5+json, text/javascript, */*; q=0.01',
             }
         content, response = self._get(path, headers)
-        content = content.decode("utf-8")
+        content = content.decode("UTF-8")
         return (content, response)
 
     def options(self, path):
