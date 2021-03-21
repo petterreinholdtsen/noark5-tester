@@ -161,7 +161,7 @@ Recursively look for relation in API.
 
         if data is not None and length is 0:
             length = len(data)
-        headers['Content-Length'] = length
+        headers['Content-Length'] = str(length)
         if hasattr(self, 'token'):
             headers['Authorization'] = self.token
         if self.verbose:
