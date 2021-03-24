@@ -81,7 +81,7 @@ def decodeheader(s):
 
 class MboxImporter(n5core.endpoint.Endpoint):
     def __init__(self):
-        baseurl = 'http://localhost:8092/noark5v4/'
+        baseurl = 'http://localhost:8092/noark5v5/'
         self.mbox = 'input.mbox'
         parser = argparse.ArgumentParser()
         parser.add_argument("--baseurl", help="(default is %s)" % baseurl)

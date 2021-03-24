@@ -46,7 +46,7 @@ def createEntity(ep, name, rel, rels, data):
         return info
 
 def main():
-        baseurl = "http://localhost:8092/noark5v4/"
+        baseurl = "http://localhost:8092/noark5v5/"
         parser = argparse.ArgumentParser()
         parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
         parser.add_argument("--verbose", help="print more debug information",

@@ -61,7 +61,7 @@ class XMLFile(object):
 
 class ContentDumper(n5core.endpoint.Endpoint):
     def __init__(self):
-        self.baseurl = 'http://localhost:8092/noark5v4/'
+        self.baseurl = 'http://localhost:8092/noark5v5/'
         utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc)
         self.savedir = 'json-dump-%s' % utcnow.isoformat()
         parser = argparse.ArgumentParser()
