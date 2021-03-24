@@ -165,12 +165,12 @@ Recursively look for relation in API.
             headers['Authorization'] = self.token
         if self.verbose:
             print("POST %s: %s" % (url, headers))
-        request = Request(url, headers=headers)
         if data is not None:
-            response = urlopen(request, data=data)
+            request = Request(url, headers=headers, data=data)
         else:
+            request = Request(url, headers=headers)
             request.get_method = lambda: 'POST'
-            response = urlopen(request)
+        response = urlopen(request)
         content = response.read()
         if self.verbose:
             print(content)
