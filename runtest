@@ -1418,14 +1418,14 @@ or should it be rejected?
             searchurl = url + '?$filter=' + quote_plus(s[1])
             if self.verbose:
                 print("Searching with %s" % searchurl)
-            (s, res) = self.json_get(searchurl)
+            (body, res) = self.json_get(searchurl)
             if self.verbose:
-                print("Search string:", s)
+                print("Search string:", body)
             try:
-                searchinfo = json.loads(s)
+                searchinfo = json.loads(body)
             except json.decoder.JSONDecodeError as e:
                 self.failure("search %s returned non-json output '%s': %s" %
-                             (searchurl, s, str(e)))
+                             (searchurl, body, str(e)))
                 continue
             if self.verbose:
                 print("Search result:\n", json.dumps(searchinfo, indent=4))
