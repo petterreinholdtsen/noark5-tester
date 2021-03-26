@@ -41,6 +41,8 @@ from hashlib import sha256
 import json
 import re
 from subprocess import call
+from urllib.parse import quote_plus
+
 import n5core.endpoint
 from n5core.endpoint import HTTPError
 from n5core.endpoint import URLError
@@ -1396,6 +1398,48 @@ or should it be rejected?
             except TypeError as e:
                 self.xfailure("unable to create %s" % metadata)
 
+    def testOdataSearch(self):
+        """Try to find and count the stuff inserted by testNewDocument()
+"""
+        searches = ( # relkey path - filter string - result count
+            ('arkivstruktur/dokumentobjekt/',
+             "sjekksumAlgoritme eq 'SHA-256'", 1),
+
+            ('arkivstruktur/dokumentbeskrivelse/',
+             "opprettetAv eq 'admin@example com'", 1),
+
+            # FIXME Figure out notation to search for this
+            ('arkivstruktur/mappe/',
+             "organisasjonsnummer eq '02020202022'", 0),
+        )
+
+        for s in searches:
+            url = self.findRelation('%s%s' % (self.relbaseurl, s[0]))
+            searchurl = url + '?$filter=' + quote_plus(s[1])
+            if self.verbose:
+                print("Searching with %s" % searchurl)
+            (s, res) = self.json_get(searchurl)
+            if self.verbose:
+                print("Search string:", s)
+            try:
+                searchinfo = json.loads(s)
+            except json.decoder.JSONDecodeError as e:
+                self.failure("search %s returned non-json output '%s': %s" %
+                             (searchurl, s, str(e)))
+                continue
+            if self.verbose:
+                print("Search result:\n", json.dumps(searchinfo, indent=4))
+            if 'results' in searchinfo:
+                self.success("search %s worked" % searchurl)
+                if 'count' in searchinfo and s[2] == int(searchinfo['count']):
+                    self.success("search %s returned %d items" %
+                                 (searchurl, s[2]))
+                else:
+                    self.failure("search %s returned %s not %d items" %
+                                  (searchurl, searchinfo['count'], s[2]))
+            else:
+                self.failure("search %s failed" % searchurl)
+
     def runtests(self):
         try:
             baseref = self.testBasis()
@@ -1419,6 +1463,7 @@ or should it be rejected?
             self.testNewDocument()
             self.modifyAllCreated()
             self.testMetadata()
+            self.testOdataSearch()
             if not self.keeptestdata:
                 self.deleteCreated()
         finally:
