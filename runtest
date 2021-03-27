@@ -1408,9 +1408,15 @@ or should it be rejected?
             ('arkivstruktur/dokumentbeskrivelse/',
              "opprettetAv eq 'admin@example.com'", 1),
 
+            ('arkivstruktur/dokumentbeskrivelse/',
+             "dokumentstatus/kode eq 'B'", 1),
+
+            ('arkivstruktur/registrering/',
+             "contains(tittel, 'test')", 1),
+
             # FIXME Figure out notation to search for this
             ('arkivstruktur/mappe/',
-             "organisasjonsnummer eq '02020202022'", 0),
+             "enhetsidentifikator/organisasjonsnummer eq '02020202022'", 0),
         )
 
         for s in searches:
