@@ -1406,7 +1406,7 @@ or should it be rejected?
              "sjekksumAlgoritme eq 'SHA-256'", 2),
 
             ('arkivstruktur/dokumentbeskrivelse/',
-             "opprettetAv eq 'admin@example com'", 1),
+             "opprettetAv eq 'admin@example.com'", 1),
 
             # FIXME Figure out notation to search for this
             ('arkivstruktur/mappe/',
