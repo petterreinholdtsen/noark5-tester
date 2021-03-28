@@ -1248,8 +1248,7 @@ or should it be rejected?
                 self.createEntity('document description',
                                   createdocdescrel,
                                   self.parselinks(recordinfo['_links']),
-                                  docdescdata,
-                                  failureexpected=True)
+                                  docdescdata)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
