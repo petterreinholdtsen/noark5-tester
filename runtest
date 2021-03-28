@@ -1416,12 +1416,16 @@ or should it be rejected?
 
             # FIXME Figure out notation to search for this
             ('arkivstruktur/mappe/',
-             "enhetsidentifikator/organisasjonsnummer eq '02020202022'", 0),
+             "enhetsidentifikator/organisasjonsnummer eq '02020202022'", -1),
         )
 
         for s in searches:
             url = self.findRelation('%s%s' % (self.relbaseurl, s[0]))
             searchurl = url + '?$filter=' + quote_plus(s[1])
+            if -1 == s[2]:
+                failure=self.xfailure
+            else:
+                failure=self.failure
             if self.verbose:
                 print("Searching with %s" % searchurl)
             (body, res) = self.json_get(searchurl)
@@ -1430,7 +1434,7 @@ or should it be rejected?
             try:
                 searchinfo = json.loads(body)
             except json.decoder.JSONDecodeError as e:
-                self.failure("search %s returned non-json output '%s': %s" %
+                failure("search %s returned non-json output '%s': %s" %
                              (searchurl, body, str(e)))
                 continue
             if self.verbose:
@@ -1441,10 +1445,10 @@ or should it be rejected?
                     self.success("search %s returned %d items" %
                                  (searchurl, s[2]))
                 else:
-                    self.failure("search %s returned %s not %d items" %
+                    failure("search %s returned %s not %d items" %
                                   (searchurl, searchinfo['count'], s[2]))
             else:
-                self.failure("search %s failed" % searchurl)
+                failure("search %s failed" % searchurl)
 
     def runtests(self):
         try:
