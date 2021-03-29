@@ -1416,6 +1416,12 @@ or should it be rejected?
             # FIXME Figure out notation to search for this
             ('arkivstruktur/mappe/',
              "enhetsidentifikator/organisasjonsnummer eq '02020202022'", -1),
+
+            ('arkivstruktur/mappe/',
+             "contains(part/navn, 'Eksempel')", -1),
+
+            ('arkivstruktur/mappe/',
+             "part/partRolle/kodenavn eq 'ADV'", -1),
         )
 
         for s in searches:
