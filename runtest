@@ -1413,6 +1413,12 @@ or should it be rejected?
             ('arkivstruktur/registrering/',
              "contains(tittel, 'test')", 1),
 
+            ('arkivstruktur/mappe/',
+             "contains(part/navn, 'Eksempel')", 1),
+
+            ('arkivstruktur/mappe/',
+             "part/partRolle/kode eq 'ADV'", 1),
+
             # FIXME Figure out notation to search for this
             ('arkivstruktur/mappe/',
              "enhetsidentifikator/organisasjonsnummer eq '02020202022'", -1),
@@ -1428,12 +1434,6 @@ or should it be rejected?
 
             ('arkivstruktur/mappe/',
              "nasjonalidentifikator/foedselsnummer ne null", -1),
-
-            ('arkivstruktur/mappe/',
-             "contains(part/navn, 'Eksempel')", -1),
-
-            ('arkivstruktur/mappe/',
-             "part/partRolle/kodenavn eq 'ADV'", -1),
         )
 
         for s in searches:
