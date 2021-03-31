@@ -1434,6 +1434,15 @@ or should it be rejected?
 
             ('arkivstruktur/mappe/',
              "nasjonalidentifikator/foedselsnummer ne null", -1),
+
+            ('arkivstruktur/mappe/', # både plan og matrikkel
+             "nasjonalidentifikator/kommunenummer eq '0101'", -1),
+
+            ('arkivstruktur/mappe/',
+             "nasjonalidentifikator/koordinatsystem/kode eq 'EPSG:4326'", -1),
+
+            ('arkivstruktur/mappe/',
+             "nasjonalidentifikator/x gt 1.0'", -1),
         )
 
         for s in searches:
