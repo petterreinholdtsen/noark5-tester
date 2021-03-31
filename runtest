@@ -1418,6 +1418,18 @@ or should it be rejected?
              "enhetsidentifikator/organisasjonsnummer eq '02020202022'", -1),
 
             ('arkivstruktur/mappe/',
+             "nasjonalidentifikator/organisasjonsnummer eq '02020202022'", -1),
+
+            ('arkivstruktur/mappe/',
+             "nasjonalidentifikator/foedselsnummer eq '03030303033'", -1),
+
+            ('arkivstruktur/mappe/',
+             "personidentifikator/foedselsnummer eq '03030303033'", -1),
+
+            ('arkivstruktur/mappe/',
+             "nasjonalidentifikator/foedselsnummer ne null", -1),
+
+            ('arkivstruktur/mappe/',
              "contains(part/navn, 'Eksempel')", -1),
 
             ('arkivstruktur/mappe/',
