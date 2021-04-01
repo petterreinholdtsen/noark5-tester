@@ -1402,7 +1402,7 @@ or should it be rejected?
 """
         searches = ( # relkey path - filter string - result count
             ('arkivstruktur/dokumentobjekt/',
-             "sjekksumAlgoritme eq 'SHA-256'", 2),
+             "sjekksumAlgoritme eq 'SHA-256'", 1),
 
             ('arkivstruktur/dokumentbeskrivelse/',
              "opprettetAv eq 'admin@example.com'", 1),
