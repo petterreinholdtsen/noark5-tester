@@ -1419,6 +1419,9 @@ or should it be rejected?
             ('arkivstruktur/mappe/',
              "part/partRolle/kode eq 'ADV'", 1),
 
+            ('arkivstruktur/mappe/',
+             "contains(tittel, 'file') AND dokumentmedium/kode eq null and saksaar ne null", 1),
+
             # FIXME Figure out notation to search for this
             ('arkivstruktur/mappe/',
              "enhetsidentifikator/organisasjonsnummer eq '02020202022'", -1),
@@ -1443,11 +1446,14 @@ or should it be rejected?
 
             ('arkivstruktur/mappe/',
              "nasjonalidentifikator/x gt 1.0'", -1),
+
+            ('arkivstruktur/mappe/',
+             'noekkelord ne null', -1)
         )
 
         for s in searches:
             url = self.findRelation('%s%s' % (self.relbaseurl, s[0]))
-            searchurl = url + '?$filter=' + quote_plus(s[1])
+            searchurl = url + '?$filter=' + quote_plus(s[1]) + '&$top=1'
             if -1 == s[2]:
                 failure=self.xfailure
             else:
