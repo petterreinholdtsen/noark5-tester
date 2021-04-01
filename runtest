@@ -1410,6 +1410,9 @@ or should it be rejected?
             ('arkivstruktur/dokumentbeskrivelse/',
              "dokumentstatus/kode eq 'B'", 1),
 
+            ('arkivstruktur/dokumentbeskrivelse/',
+             "dokumentstatus/kode EQ 'B'", 1),
+
             ('arkivstruktur/registrering/',
              "contains(tittel, 'test')", 1),
 
