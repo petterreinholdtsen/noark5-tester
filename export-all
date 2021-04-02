@@ -27,7 +27,10 @@ class XMLTag(object):
 
     def __enter__(self):
         if self.attr:
-            self.fh.write('%s<%s %s>\n' % ('  ' * self.level[0], self.tagname, self.attr))
+            attr = \
+                str.join(" ",
+                         ['"%s"="%s"' % (i[0], i[1]) for i in self.attr.items()])
+            self.fh.write('%s<%s %s>\n' % ('  ' * self.level[0], self.tagname, attr))
         else:
             self.fh.write('%s<%s>\n' % ('  ' * self.level[0], self.tagname))
         self.level[0] +=1
@@ -494,7 +497,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         }
         attr = None
         if entityrel in typemap:
-            attr = 'xsi:type="%s"' % typemap[entityrel]
+            attr = {'xsi:type': typemap[entityrel]}
         merknadrel = '%sarkivstruktur/merknad/' % self.relbaseurl
         forfatterrel = '%sforfatter/' % self.nikitarelbaseurl
         dokbeskrrel = '%sarkivstruktur/dokumentbeskrivelse/' % self.relbaseurl
@@ -540,7 +543,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             (korrpartrel, self.recurse_xml_korrespondansepart),
             (nirel, self.recurse_xml_national_identifier),
         )
-        if 'xsi:type="journalpost"' == attr:
+        if attr and 'journalpost' == attr['xsi:type']:
             sequence = sequence + (
                 'journalaar',
                 'journalsekvensnummer',
@@ -565,7 +568,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 (presedensrel, self.recurse_xml_presedens),
                 ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
             )
-        if 'xsi:type="arkivnotat"' == attr:
+        if attr and 'arkivnotat'== attr['xsi:type']:
             sequence = sequence + (
                 'dokumentetsDato',
                 'mottattDato',
@@ -577,7 +580,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 'utlaantTil',
                 (dokflytrel, self.recurse_xml_dokumentflyt),
             )
-        if 'xsi:type="moeteregistrering"' == attr:
+        if attr and 'moeteregistrering' == attr['xsi:type']:
             sequence = sequence + (
                 'moeteregistreringstype.kodenavn>moeteregistreringstype',
                 'moeteregistreringstype.kode>[null]',
@@ -600,7 +603,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         }
         attr = None
         if entityrel in typemap:
-            attr = 'xsi:type="%s"' % typemap[entityrel]
+            attr = {'xsi:type': typemap[entityrel]}
         merknadrel = '%sarkivstruktur/merknad/' % self.relbaseurl
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
         undermapperel = '%sarkivstruktur/undermappe/' % self.relbaseurl
@@ -642,7 +645,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             (registreringrel,          self.recurse_xml_registrering),
             (nirel, self.recurse_xml_national_identifier),
         )
-        if 'xsi:type="saksmappe"' == attr:
+        if attr and 'saksmappe' == attr['xsi:type']:
             sequence = sequence + (
                 'saksaar',
                 'sakssekvensnummer',
@@ -657,7 +660,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 #                ('referanseSekundaerKlassifikasjon'), # FIXME for saksmappe
                 (presedensrel, self.recurse_xml_presedens),
             )
-        if 'xsi:type="moetemappe"' == attr:
+        if attr and 'moetemappe' == attr['xsi:type']:
             sequence = sequence + (
                 'moetenummer',
                 'utvalg',
@@ -796,7 +799,11 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         )
         attr = None
         if first:
-            attr = 'xmlns="http://www.arkivverket.no/standarder/noark5/arkivstruktur" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
+            attr = {
+                'xmlns': 'http://www.arkivverket.no/standarder/noark5/arkivstruktur',
+                'xmlns:xsd': 'http://www.w3.org/2001/XMLSchema',
+                'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance'
+            }
         self.recurse_xml_out_ordered(output, 'arkiv', content, sequence, attr=attr)
 
 
