@@ -1286,7 +1286,7 @@ or should it be rejected?
                                        self.parselinks(docdescinfo['_links']),
                                        docobjdata)
 
-        # FIXME try to upload a file, for examle an xml file and large
+        # FIXME try to upload a file, for example an xml file and large
         # chunked file.
         reffilerel = noarkrelbase + 'arkivstruktur/fil/'
         self.verify(reffilerel in self.parselinks(docobjinfo['_links']),
