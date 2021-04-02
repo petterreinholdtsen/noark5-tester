@@ -990,6 +990,27 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                     output = XMLFile(fh)
                     self.recurse_xml_arkiv(output, arkiv, first=True)
 
+        endringslogghref = self.findRelation('%sloggingogsporing/endringslogg/' % self.relbaseurl)
+        (c, res) = self.json_get(endringslogghref)
+        endringslogginfo = json.loads(c)
+        if 'count' not in endringslogginfo or 0 < endringslogginfo['count']:
+            with codecs.open('%s/endringslogg.xml' % self.savepath, 'w',
+                             encoding='UTF-8') as fh:
+                output = XMLFile(fh)
+                sequence = (
+                    'systemID>[null]',
+                    'referanseArkivenhet',
+                    'referanseMetadata',
+                    'endretAv',
+                    'endretDato',
+                    'tidligereVerdi',
+                    'nyVerdi',
+                )
+                with output.tag('endringslogg'):
+                    for content in endringslogginfo['results']:
+                        self.recurse_xml_out_ordered(output, 'endring',
+                                                     content, sequence)
+
 
     def recurse(self):
         try:
