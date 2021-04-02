@@ -49,6 +49,7 @@ tagkorrespondansepart    = '{%s}korrespondansepart' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
 tagkonvertering          = '{%s}konvertering' % strukturns
+tagvsm                   = '{%s}virksomhetsspesifikkeMetadata' % strukturns
 
 # List of fields to ignore during import until Nikita handle them correctly
 excludes = {
@@ -539,6 +540,11 @@ class Importer(n5core.endpoint.Endpoint):
         return self.import_inline('gradering', parentinfo, element,
                                   {'grad': 'graderingskode'})
 
+    def import_vsm(self, parentinfo, element):
+        # FIXME use VSM XSD info to create required field names
+        return self.import_inline('virksomhetsspesifikkeMetadata',
+                                  parentinfo, element, {})
+
     def import_presedens(self, parentinfo, element):
         subs = {}
         rel = self.relbaseurl + 'sakarkiv/ny-presedens/'
@@ -602,6 +608,7 @@ class Importer(n5core.endpoint.Endpoint):
             taggradering: ([], None, self.import_gradering),
             tagpresedens: ([], self.import_presedens),
             tagskjerming: ([], None, self.import_skjerming),
+            tagvsm: ([], None, self.import_vsm),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -636,6 +643,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagpart: ([], self.import_part),
             tagforfatter: ([], self.import_forfatter),
             tagpresedens: ([], self.import_presedens),
+            tagvsm: ([], None, self.import_vsm),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -684,6 +692,7 @@ FIXME flag inaccurate guesses somehow
             'telefonnummer':          'kontaktinformasjon.mobiltelefon|telefon',
             'partID':                 'systemID', # FIXME verify this mapping
         }
+        # FIXME implement virksomhetsspesifikkeMetadata in *part
         data = {}
         for sub in element.iterchildren():
             field = sub.tag.replace('{%s}' % strukturns, '')
@@ -749,6 +758,7 @@ FIXME flag inaccurate guesses somehow
             tagsletting: ([], None, self.import_sletting),
             tagskjerming: ([], None, self.import_skjerming),
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
+            tagvsm: ([], None, self.import_vsm),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentbeskrivelse/'
         self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, subs)
