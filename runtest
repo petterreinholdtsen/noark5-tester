@@ -1336,6 +1336,69 @@ or should it be rejected?
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
+        # Test simple VSM entry, first with a name currently not
+        # listed in the vsm directory.
+        filedata = {
+            u'tittel' : u"Title of the vsm test file created %s" % now,
+            'virksomhetsspesifikkeMetadata': {
+                u'n5t-v1:bogus': u'42',
+            }
+        }
+        createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
+        fileinfo = self.createEntity('file', createfilerel,
+                                     self.parselinks(serieinfo['_links']),
+                                     filedata, failureexpected=True)
+
+        # Next, ensure we use an existing VSM name or register a new
+        # one.
+        metadatarel = noarkrelbase + 'metadata/'
+        vsmrel = "%smetadata/virksomhetsspesifikkeMetadata/" \
+            % self.relbaseurl
+        # FIXME should use relbaseurl, but nikita do not
+        createvsmrel = "%smetadata/ny-virksomhetsspesifikkeMetadata/" \
+            % nikitarelbase
+        url = self.findRelation(metadatarel)
+        (entry, res) = self.json_get(url)
+        metadatalist = json.loads(entry)
+        links = self.parselinks(metadatalist['_links'])
+
+        try:
+            (entry, res) = self.json_get(links[vsmrel])
+            vsmlist = json.loads(entry)
+        except HTTPError as e:
+            print("GET %s failed: %s (%s)" % (url, str(e), e.read()))
+            raise
+        self.vsmkey = None
+        if 0 < vsmlist['count']:
+            # Pick and use the first with type 'string'
+            for v in vsmlist['results']:
+                if 'string' == v['type']:
+                    self.vsmkey = v['navn']
+                    break
+        if not self.vsmkey: # Create one to use during testing
+            self.vsmkey = 'n5t-v1:real'
+            vsmdata = {
+                u'navn' : self.vsmkey,
+                u'type' : u'string',
+#                'beskrivelse' : '',
+#                'kilde' : '',
+#                'utdatert' : False,
+            }
+            vsmmetainfo = self.createEntity('virksomhetsspesifikkeMetadata',
+                                            createvsmrel, links, vsmdata)
+
+        # Create one with well known vsm value too
+        filedata = {
+            u'tittel' : u"Title of the vsm test file created %s" % now,
+            u'virksomhetsspesifikkeMetadata': {
+                self.vsmkey : u'one for the team',
+            }
+        }
+        createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
+        fileinfo = self.createEntity('file', createfilerel,
+                                     self.parselinks(serieinfo['_links']),
+                                     filedata)
+
 
     def testMetadata(self):
         # This one is special, do not treat it as a normal metadata type
@@ -1456,7 +1519,10 @@ or should it be rejected?
              "nasjonalidentifikator/x gt 1.0'", -1),
 
             ('arkivstruktur/mappe/',
-             'noekkelord ne null', -1)
+             'noekkelord ne null', -1),
+
+            ('arkivstruktur/mappe/',
+             'virksomhetsspesifikkeMetadata/%s eq "one for the team"' % self.vsmkey, -1),
         )
 
         for s in searches:
