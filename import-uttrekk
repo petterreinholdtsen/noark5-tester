@@ -21,6 +21,7 @@ sys.path.append(os.path.join(sys.path[0],'lib'))
 import argparse
 import json
 import random
+import re
 import string
 from functools import partial
 from lxml import etree
@@ -52,20 +53,15 @@ tagkorrespondansepart    = '{%s}korrespondansepart' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
 tagkonvertering          = '{%s}konvertering' % strukturns
+tagvsm                   = '{%s}virksomhetsspesifikkeMetadata' % strukturns
 
 # List of fields to ignore during import until Nikita handle them correctly
 excludes = {
-    'administrativenhet': (
-        'virksomhetsspesifikkeMetadata',
-    ),
     'arkiv': (
         'systemID',
     ),
     'arkivdel': (
         'systemID',
-    ),
-    'bruker': (
-        'virksomhetsspesifikkeMetadata',
     ),
     'klassifikasjonssystem': (
         'systemID',
@@ -85,11 +81,9 @@ excludes = {
     'mappe': (
         'systemID',
         'part',
-        'virksomhetsspesifikkeMetadata',
     ),
     'registrering': (
         'systemID',
-        'virksomhetsspesifikkeMetadata',
     ),
     'journalpost': (
         'systemID',
@@ -108,7 +102,6 @@ excludes = {
         # is not settable by the client. This means import will set the
         # value for you.
         'dokumentnummer',
-        'virksomhetsspesifikkeMetadata',
     ),
     'dokumentobjekt': (
         'systemID',
@@ -121,30 +114,6 @@ excludes = {
         # during upload that way.
         'referanseDokumentfil',
         'filstoerrelse',
-    ),
-    'korrespondansepart': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'korrespondansepartenhet': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'korrespondansepartperson': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'korrespondansepartintern': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'part': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'partenhet': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'partperson': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'partintern': (
-        'virksomhetsspesifikkeMetadata',
     ),
 }
 
@@ -535,6 +504,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagarkivskaper: ([], self.import_arkivskaper),
             tagarkivdel: ([], self.import_arkivdel),
             tagoppbevaringssted: ([], self.import_oppbevaringssted),
+            tagvsm: ([], None, self.import_vsm),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-arkiv/'
         self.import_entity('arkiv', rel, parentinfo, element, subs)
@@ -564,6 +534,28 @@ class Importer(n5core.endpoint.Endpoint):
     def import_gradering(self, parentinfo, element):
         return self.import_inline('gradering', parentinfo, element,
                                   {'grad': 'graderingskode'})
+
+    def add_metadata_vsm(self, namespace, field, type):
+        pass
+
+    def import_vsm(self, parentinfo, element):
+        print("import_vsm")
+        # FIXME use XSD info to create required field names with correct type
+        # FIXME rewrite hack to use XSD instead of string editing
+        # FIXME figure out how to find XSD and parse it
+        fields = {}
+        namespaces = []
+        for sub in element.iterchildren():
+            nsstr = str(sub.tag)
+            m = re.match(r'^{(.+)}(.+)$', nsstr)
+            ns = m.group(1)
+            t = m.group(2)
+            namespaces.append(ns)
+            for fsub in sub.iterchildren():
+                k = str(fsub.tag)
+                field = k.replace("{%s}" % ns, f"{t}:")
+                fields[field] = fsub.text
+        return fields
 
     def import_presedens(self, parentinfo, element):
         subs = {}
@@ -610,12 +602,14 @@ class Importer(n5core.endpoint.Endpoint):
             tagklassifikasjonssystem: ([], self.import_klassifikasjonssystem),
             tagregistrering: ([], self.import_registrering),
             tagoppbevaringssted: ([], self.import_oppbevaringssted),
+            tagvsm: ([], None, self.import_vsm),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-arkivdel/'
         self.import_entity('arkivdel', rel, parentinfo, element, subs)
 
     def import_klassifikasjonssystem(self, parentinfo, element):
         subs = {
+            tagvsm: ([], None, self.import_vsm),
             tagklasse: ([], self.import_klasse),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-klassifikasjonssystem/'
@@ -628,6 +622,7 @@ class Importer(n5core.endpoint.Endpoint):
             taggradering: ([], None, self.import_gradering),
             tagskjerming: ([], None, self.import_skjerming),
             tagnoekkelord: ([], self.import_noekkelord),
+            tagvsm: ([], None, self.import_vsm),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-klasse/'
 
@@ -657,6 +652,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagskjerming: ([], None, self.import_skjerming),
             tagnoekkelord: ([], self.import_noekkelord),
             tagoppbevaringssted: ([], self.import_oppbevaringssted),
+            tagvsm: ([], None, self.import_vsm),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -693,6 +689,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagpresedens: ([], self.import_presedens),
             tagnoekkelord: ([], self.import_noekkelord),
             tagoppbevaringssted: ([], self.import_oppbevaringssted),
+            tagvsm: ([], None, self.import_vsm),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -751,6 +748,7 @@ FIXME flag inaccurate guesses somehow
             'telefonnummer':          'kontaktinformasjon.mobiltelefon|telefon',
             #'partID':                 'systemID', # FIXME verify this mapping
         }
+        # FIXME implement virksomhetsspesifikkeMetadata in *part
         data = {}
         for sub in element.iterchildren():
             field = sub.tag.replace('{%s}' % strukturns, '')
@@ -816,6 +814,7 @@ FIXME flag inaccurate guesses somehow
             tagsletting: ([], None, self.import_sletting),
             tagskjerming: ([], None, self.import_skjerming),
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
+            tagvsm: ([], None, self.import_vsm),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentbeskrivelse/'
         self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, subs)
@@ -835,6 +834,7 @@ FIXME flag inaccurate guesses somehow
     def import_dokumentobjekt(self, parentinfo, element):
         subs = {
             tagkonvertering: ([], self.import_konvertering),
+            tagvsm: ([], None, self.import_vsm),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentobjekt/'
 
