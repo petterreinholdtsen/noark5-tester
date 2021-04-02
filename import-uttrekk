@@ -52,20 +52,15 @@ tagkorrespondansepart    = '{%s}korrespondansepart' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
 tagdokumentobjekt        = '{%s}dokumentobjekt' % strukturns
 tagkonvertering          = '{%s}konvertering' % strukturns
+tagvsm                   = '{%s}virksomhetsspesifikkeMetadata' % strukturns
 
 # List of fields to ignore during import until Nikita handle them correctly
 excludes = {
-    'administrativenhet': (
-        'virksomhetsspesifikkeMetadata',
-    ),
     'arkiv': (
         'systemID',
     ),
     'arkivdel': (
         'systemID',
-    ),
-    'bruker': (
-        'virksomhetsspesifikkeMetadata',
     ),
     'klassifikasjonssystem': (
         'systemID',
@@ -85,11 +80,9 @@ excludes = {
     'mappe': (
         'systemID',
         'part',
-        'virksomhetsspesifikkeMetadata',
     ),
     'registrering': (
         'systemID',
-        'virksomhetsspesifikkeMetadata',
     ),
     'journalpost': (
         'systemID',
@@ -108,7 +101,6 @@ excludes = {
         # is not settable by the client. This means import will set the
         # value for you.
         'dokumentnummer',
-        'virksomhetsspesifikkeMetadata',
     ),
     'dokumentobjekt': (
         'systemID',
@@ -121,30 +113,6 @@ excludes = {
         # during upload that way.
         'referanseDokumentfil',
         'filstoerrelse',
-    ),
-    'korrespondansepart': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'korrespondansepartenhet': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'korrespondansepartperson': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'korrespondansepartintern': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'part': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'partenhet': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'partperson': (
-        'virksomhetsspesifikkeMetadata',
-    ),
-    'partintern': (
-        'virksomhetsspesifikkeMetadata',
     ),
 }
 
@@ -581,6 +549,27 @@ class Importer(n5core.endpoint.Endpoint):
         return self.import_inline('gradering', parentinfo, element,
                                   {'grad': 'graderingskode'})
 
+    def add_metadata_vsm(self, namespace, field, type):
+        pass
+
+    def import_vsm(self, parentinfo, element):
+        # FIXME use XSD info to create required field names with correct type
+        # FIXME rewrite hack to use XSD instead of string editing
+        # FIXME figure out how to find XSD and parse it
+        fieldmap = {}
+        ns = ''
+        for sub in element.iterchildren():
+            k = str(sub.tag)
+            field = k.replace('{https://nikita.oslomet.no/noark5v5/schemas/', '') \
+                     .replace('.xsd}', ':')
+            fieldmap[k] = field
+
+        s = self.import_inline('virksomhetsspesifikkeMetadata',
+                                  parentinfo, element, fieldmap)
+        print(s)
+        exit(1)
+        return s
+
     def import_presedens(self, parentinfo, element):
         subs = {}
         rel = self.relbaseurl + 'sakarkiv/ny-presedens/'
@@ -673,6 +662,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagskjerming: ([], None, self.import_skjerming),
             tagnoekkelord: ([], self.import_noekkelord),
             tagoppbevaringssted: ([], self.import_oppbevaringssted),
+            tagvsm: ([], None, self.import_vsm),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -709,6 +699,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagpresedens: ([], self.import_presedens),
             tagnoekkelord: ([], self.import_noekkelord),
             tagoppbevaringssted: ([], self.import_oppbevaringssted),
+            tagvsm: ([], None, self.import_vsm),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -767,6 +758,7 @@ FIXME flag inaccurate guesses somehow
             'telefonnummer':          'kontaktinformasjon.mobiltelefon|telefon',
             #'partID':                 'systemID', # FIXME verify this mapping
         }
+        # FIXME implement virksomhetsspesifikkeMetadata in *part
         data = {}
         for sub in element.iterchildren():
             field = sub.tag.replace('{%s}' % strukturns, '')
@@ -832,6 +824,7 @@ FIXME flag inaccurate guesses somehow
             tagsletting: ([], None, self.import_sletting),
             tagskjerming: ([], None, self.import_skjerming),
             tagdokumentobjekt: ([], self.import_dokumentobjekt),
+            tagvsm: ([], None, self.import_vsm),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-dokumentbeskrivelse/'
         self.import_entity('dokumentbeskrivelse', rel, parentinfo, element, subs)
