@@ -167,6 +167,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         noarkrelbase + 'metadata/tilgangsrestriksjon/',
         noarkrelbase + 'metadata/tilknyttetregistreringsom/',
         noarkrelbase + 'metadata/variantformat/',
+        noarkrelbase + 'metadata/virksomhetsspesifikkeMetadata/',
         noarkrelbase + 'sakarkiv/',
         noarkrelbase + 'sakarkiv/arkivnotat/',
         noarkrelbase + 'sakarkiv/avskrivning/',
