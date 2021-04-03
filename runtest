@@ -1533,6 +1533,28 @@ or should it be rejected?
             except TypeError as e:
                 self.failure("unable to create %s" % metadata)
 
+
+    def testLogging(self):
+        """Try logging a few changes and events."""
+        url = self.findRelation('%sloggingogsporing/' % self.relbaseurl)
+        createeventlogrel = '%sloggingogsporing/ny-hendelseslogg/' \
+            % self.relbaseurl
+        (body, res) = self.json_get(url)
+        log = json.loads(body)
+        data = {
+#            referanseArkivenhet : SystemID [0..1]
+#            referanseMetadata : string [0..1]
+#            endretDato : datetime
+#            endretAv : string
+#            referanseEndretAv : SystemID
+#            tidligereVerdi : string [0..1]
+#            nyVerdi : string [0..1]
+            'hendelsetype' : { u'kode': u"U" }, # Endret
+            'beskrivelse' : u'Destruktiv testing av API',
+#            hendelseDato : datetime
+        }
+
+
     def testOdataSearch(self):
         """Try to find and count the stuff inserted by testNewDocument()
 """
@@ -1655,6 +1677,7 @@ or should it be rejected?
             self.modifyAllCreated()
             self.testMetadata()
             self.testOdataSearch()
+            self.testLogging()
             if not self.keeptestdata:
                 self.deleteCreated()
         finally:
