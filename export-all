@@ -29,7 +29,7 @@ class XMLTag(object):
         if self.attr:
             attr = \
                 str.join(" ",
-                         ['"%s"="%s"' % (i[0], i[1]) for i in self.attr.items()])
+                         ['%s="%s"' % (i[0], i[1]) for i in self.attr.items()])
             self.fh.write('%s<%s %s>\n' % ('  ' * self.level[0], self.tagname, attr))
         else:
             self.fh.write('%s<%s>\n' % ('  ' * self.level[0], self.tagname))
