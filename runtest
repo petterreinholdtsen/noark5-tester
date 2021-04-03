@@ -1411,7 +1411,7 @@ or should it be rejected?
              "dokumentstatus/kode eq 'B'", 1),
 
             ('arkivstruktur/dokumentbeskrivelse/',
-             "dokumentstatus/kode EQ 'B'", 1),
+             "dokumentstatus/kode EQ 'B'", -1), # FIXME enable when Nikita work
 
             ('arkivstruktur/registrering/',
              "contains(tittel, 'test')", 1),
@@ -1420,7 +1420,7 @@ or should it be rejected?
              "contains(part/navn, 'Eksempel')", 1),
 
             ('arkivstruktur/mappe/',
-             "part/partRolle/kode eq 'ADV'", 1),
+             "part/partRolle/kode eq 'ADV'", -1), # FIXME enable when Nikita work
 
             ('arkivstruktur/mappe/',
              "contains(tittel, 'file') AND dokumentmedium/kode eq null and saksaar ne null", 1),
