@@ -1338,10 +1338,14 @@ or should it be rejected?
 
 
     def testMetadata(self):
+        # This one is special, do not treat it as a normal metadata type
+        vsmrel = noarkrelbase + 'metadata/virksomhetsspesifikkeMetadata/',        
         # First, check if all known metadata relations are listed under metadat.
         knownmetarels = []
         knownmetadata = []
         for rel in self.knownrels:
+            if vsmrel == rel: # Skip the VSM endpoint here
+                continue
             r = re.match(r'.*/metadata/(\w+)/?', rel)
             if r and -1 == rel.find('/ny-'):
                 knownmetarels.append(rel)
