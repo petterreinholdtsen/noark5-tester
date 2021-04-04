@@ -1534,14 +1534,30 @@ or should it be rejected?
                 self.failure("unable to create %s" % metadata)
 
 
+    def logevent(self, msg, type):
+        """Try one event into the API event log."""
+        url = self.findRelation('%sloggingogsporing/' % self.relbaseurl)
+        createeventlogrel = '%sloggingogsporing/ny-hendelseslogg/' \
+            % self.relbaseurl
+        (body, res) = self.json_get(url)
+        logtop = json.loads(body)
+        logdata = {
+            'hendelsetype' : { u'kode': type },
+            'beskrivelse' : msg,
+        }
+        info = self.createEntity('hendelseslogg', createeventlogrel,
+                                 self.parselinks(logtop['_links']),
+                                 logdata, failureexpected=True)
+
+
     def testLogging(self):
         """Try logging a few changes and events."""
         url = self.findRelation('%sloggingogsporing/' % self.relbaseurl)
         createeventlogrel = '%sloggingogsporing/ny-hendelseslogg/' \
             % self.relbaseurl
         (body, res) = self.json_get(url)
-        log = json.loads(body)
-        data = {
+        logtop = json.loads(body)
+        logdata = {
 #            referanseArkivenhet : SystemID [0..1]
 #            referanseMetadata : string [0..1]
 #            endretDato : datetime
@@ -1553,6 +1569,15 @@ or should it be rejected?
             'beskrivelse' : u'Destruktiv testing av API',
 #            hendelseDato : datetime
         }
+        try:
+            info = self.createEntity('hendelseslogg', createeventlogrel,
+                                     self.parselinks(logtop['_links']),
+                                     logdata, failureexpected=True)
+        except HTTPError as e:
+            # Message already printed in createEntity()
+            pass
+        except TypeError as e:
+            self.xfailure("unable to log entry %s" % logdata)
 
 
     def testOdataSearch(self):
@@ -1681,10 +1706,12 @@ or should it be rejected?
             if not self.keeptestdata:
                 self.deleteCreated()
         finally:
-            print("%d successes, %d failures, %d expected failures"
-                  % (len(self.successes.keys()),
-                     len(self.failures.keys()),
-                     len(self.xfailures.keys())))
+            msg = "%d successes, %d failures, %d expected failures" \
+                % (len(self.successes.keys()),
+                   len(self.failures.keys()),
+                   len(self.xfailures.keys()))
+            self.logevent(msg, 'C')
+            print(msg)
         return not (0 == len(self.failures.keys()))
 def main():
     t = Noark5Tester()
