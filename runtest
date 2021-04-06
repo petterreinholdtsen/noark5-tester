@@ -1380,7 +1380,7 @@ or should it be rejected?
             vsmdata = {
                 u'navn' : self.vsmkey,
                 u'type' : u'string',
-#                'beskrivelse' : '',
+                'beskrivelse' : 'VSM value using by noark5-tester/runtest during testing',
 #                'kilde' : '',
 #                'utdatert' : False,
             }
