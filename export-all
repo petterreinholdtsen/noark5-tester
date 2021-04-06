@@ -315,10 +315,17 @@ class ContentDumper(n5core.endpoint.Endpoint):
         merknadrel = '%sarkivstruktur/merknad/' % self.relbaseurl
         forfatterrel = '%sforfatter/' % self.nikitarelbaseurl
         dokobjrel = '%sarkivstruktur/dokumentobjekt/' % self.relbaseurl
-        sequence = (
+        sequence = [
             'systemID',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+        ]
+        if self.xml_extended:
+            sequence.extend((
+                'endretDato',
+                'endretAv',
+            ))
+        sequence.extend((
             'dokumenttype.kodenavn>dokumenttype',
             'dokumenttype.kode>[null]',
             'dokumentstatus.kodenavn>dokumentstatus',
@@ -346,12 +353,13 @@ class ContentDumper(n5core.endpoint.Endpoint):
             ('gradering', self.recurse_xml_gradering),
             ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
             (dokobjrel, self.recurse_xml_dokumentobjekt),
-        )
+        ))
         self.recurse_xml_out_ordered(output, 'dokumentbeskrivelse', content, sequence)
 
     def recurse_xml_national_identifier(self, output, content):
         if not self.xml_extended:
             return
+        # FIXME should these be grouped?
         sequence = (
             'systemID>[null]',
             'organisasjonsnummer>organisasjonsnummer',
@@ -359,12 +367,13 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'dNummer>dNummer',
 
             'koordinatsystem.kode>koordinatsystem',
+            'koordinatsystem.kodenavn>[null]',
             'x>x',
             'y>y',
             'z>z',
 
             'kommunenummer>kommunenummer',
-            'fylkesnummernummer>fylkesnummernummer',
+            'fylkesnummer>fylkesnummer',
             'landkode.kode>[null]',
             'landkode.kodenavn>land',
             'planidentifikasjon>planidentifikasjon',
@@ -403,8 +412,19 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
 
     def recurse_xml_part(self, output, content):
-        sequence = (
+        sequence = [
             'systemID>partID',
+            'oppdatertAv>[null]',
+            'oppdatertDato>[null]',
+        ]
+        if self.xml_extended:
+            sequence.extend((
+                'opprettetDato',
+                'opprettetAv',
+                'endretDato',
+                'endretAv',
+            ))
+        sequence.extend((
             'partRolle.kodenavn>partRolle',
             'partRolle.kode>[null]',
             'navn>partNavn',
@@ -421,9 +441,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'administrativEnhet',
             'saksbehandler',
             'virksomhetsspesifikkeMetadata',
-            'oppdatertAv>[null]',
-            'oppdatertDato>[null]',
-        )
+        ))
         self.recurse_xml_out_ordered(output, 'part', content, sequence)
 
 
@@ -446,6 +464,7 @@ Not yet working because of
 https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 """
         sequence = [
+            'systemID>[null]',
             'avskrivningsdato',
             'avskrevetAv',
             'avskrivningsmaate.kodenavn>avskrivningsmaate',
@@ -509,12 +528,19 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         nirel = '%sarkivstruktur/nasjonalidentifikator/' % self.relbaseurl
-        sequence = (
+        sequence = [
             'systemID',
-            'oppdatertAv>[null]',
-            'oppdatertDato>[null]',
             'opprettetDato',
             'opprettetAv',
+            'oppdatertAv>[null]',
+            'oppdatertDato>[null]',
+        ]
+        if self.xml_extended:
+            sequence.extend((
+                'endretDato',
+                'endretAv',
+            ))
+        sequence.extend((
             'arkivertDato',
             'arkivertAv',
             'referanseArkivdel',
@@ -542,9 +568,9 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 #            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for registrering
             (korrpartrel, self.recurse_xml_korrespondansepart),
             (nirel, self.recurse_xml_national_identifier),
-        )
+        ))
         if attr and 'journalpost' == attr['xsi:type']:
-            sequence = sequence + (
+            sequence.extend((
                 'journalaar',
                 'journalsekvensnummer',
                 'journalpostnummer',
@@ -567,9 +593,9 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 (dokflytrel, self.recurse_xml_dokumentflyt),
                 (presedensrel, self.recurse_xml_presedens),
                 ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
-            )
+        ))
         if attr and 'arkivnotat'== attr['xsi:type']:
-            sequence = sequence + (
+            sequence.extend((
                 'dokumentetsDato',
                 'mottattDato',
                 'sendtDato',
@@ -579,9 +605,9 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 'utlaantDato',
                 'utlaantTil',
                 (dokflytrel, self.recurse_xml_dokumentflyt),
-            )
+        ))
         if attr and 'moeteregistrering' == attr['xsi:type']:
-            sequence = sequence + (
+            sequence.extend((
                 'moeteregistreringstype.kodenavn>moeteregistreringstype',
                 'moeteregistreringstype.kode>[null]',
                 'moetesakstype.kodenavn>moetesakstype',
@@ -592,7 +618,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 'saksbehandler',
 #                ('referanseTilMoeteregistrering'), # FIXME for moeteregistrering
 #                ('referanseFraMoeteregistrering'), # FIXME for moeteregistrering
-            )
+        ))
         self.recurse_xml_out_ordered(output, 'registrering', content, sequence, attr=attr)
 
 
@@ -612,10 +638,17 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         nirel = '%sarkivstruktur/nasjonalidentifikator/' % self.relbaseurl
-        sequence = (
+        sequence = [
             'systemID',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+        ]
+        if self.xml_extended:
+            sequence.extend((
+                'endretDato',
+                'endretAv',
+            ))
+        sequence.extend((
             'mappeID',
             'tittel',
             'offentligTittel',
@@ -644,9 +677,9 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             (undermapperel,            self.recurse_xml_mappe),
             (registreringrel,          self.recurse_xml_registrering),
             (nirel, self.recurse_xml_national_identifier),
-        )
+        ))
         if attr and 'saksmappe' == attr['xsi:type']:
-            sequence = sequence + (
+            sequence.extend((
                 'saksaar',
                 'sakssekvensnummer',
                 'saksdato',
@@ -659,9 +692,9 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 'utlaantTil',
 #                ('referanseSekundaerKlassifikasjon'), # FIXME for saksmappe
                 (presedensrel, self.recurse_xml_presedens),
-            )
+        ))
         if attr and 'moetemappe' == attr['xsi:type']:
-            sequence = sequence + (
+            sequence.extend((
                 'moetenummer',
                 'utvalg',
                 'moetedato',
@@ -669,7 +702,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 'referanseForrigeMoete',
                 'referanseNesteMoete',
                 'moetedeltaker',
-            )
+        ))
         self.recurse_xml_out_ordered(output, 'mappe', content, sequence, attr=attr)
 
 
@@ -678,11 +711,18 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
-        sequence = (
+        sequence = [
             'systemID',
             'klasseID',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+        ]
+        if self.xml_extended:
+            sequence.extend((
+                'endretDato',
+                'endretAv',
+            ))
+        sequence.extend((
             'tittel',
             'beskrivelse',
 #            ('noekkelord'), # FIXME for klasse
@@ -699,16 +739,23 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             (underklasserel,  self.recurse_xml_klasse),
             (mapperel,        self.recurse_xml_mappe),
             (registreringrel, self.recurse_xml_registrering),
-        )
+        ))
         self.recurse_xml_out_ordered(output, 'klasse', content, sequence)
 
 
     def recurse_xml_klassifikasjonssystem(self, output, content):
         klasserel = '%sarkivstruktur/klasse/' % self.relbaseurl
-        sequence = (
+        sequence = [
             'systemID',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+        ]
+        if self.xml_extended:
+            sequence.extend((
+                'endretDato',
+                'endretAv',
+            ))
+        sequence.extend((
             'klassifikasjonstype.kodenavn>klassifikasjonstype',
             'klassifikasjonstype.kode>[null]',
             'tittel',
@@ -718,7 +765,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             'avsluttetDato',
             'avsluttetAv',
             (klasserel, self.recurse_xml_klasse),
-            )
+        ))
         self.recurse_xml_out_ordered(output, 'klassifikasjonssystem', content, sequence)
 
 
@@ -738,10 +785,17 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         saksmapperel = '%sarkivstruktur/saksmappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
         oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
-        sequence = (
+        sequence = [
             'systemID',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+        ]
+        if self.xml_extended:
+            sequence.extend((
+                'endretDato',
+                'endretAv',
+            ))
+        sequence.extend((
             'tittel',
             'beskrivelse',
             'arkivdelstatus.kodenavn>arkivdelstatus',
@@ -767,7 +821,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             (mapperel, self.recurse_xml_mappe),
             (saksmapperel, self.recurse_xml_mappe),
             (registreringrel, self.recurse_xml_registrering),
-        )
+        ))
         self.recurse_xml_out_ordered(output, 'arkivdel', content, sequence)
 
 
@@ -778,10 +832,17 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
 
         # From n5v5 arkivstruktur.xsd:
-        sequence = (
+        sequence = [
             'systemID',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+        ]
+        if self.xml_extended:
+            sequence.extend((
+                'endretDato',
+                'endretAv',
+            ))
+        sequence.extend((
             'tittel',
             'beskrivelse',
             'arkivstatus.kodenavn>arkivstatus',
@@ -796,7 +857,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             (arkivskaperrel, self.recurse_xml_arkivskaper),
             (underarkivrel,  self.recurse_xml_arkiv),
             (arkivdelrel,    self.recurse_xml_arkivdel),
-        )
+        ))
         attr = None
         if first:
             attr = {
