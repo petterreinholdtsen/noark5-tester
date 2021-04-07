@@ -85,7 +85,7 @@ class XMLFile(object):
             attr = ""
         if s:
             self.fh.write('%s<%s%s>%s</%s>\n' % ('  ' * self.level[0], tagname, attr, s, tagname))
-        else:
+        elif '' != attr: # Skip these, ref. Noark 6.4.5
             self.fh.write('%s<%s%s/>\n' % ('  ' * self.level[0], tagname, attr))
 
 class ContentDumper(n5core.endpoint.Endpoint):
@@ -276,7 +276,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         with output.tag('virksomhetsspesifikkeMetadata'):
             for k in content.keys():
                 output.writetag(k, content[k])
-                self.seenvsm[k] = True
+                ns = k.split(':', 1)[1]
+                self.seenvsm[k] = ns
 
 
     def recurse_xml_dokumentobjekt(self, output, content):
@@ -895,10 +896,13 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         ))
         attr = None
         if first:
+            vsmurl = 'http://fixme/fixme.xsd'
             attr = {
                 'xmlns': 'http://www.arkivverket.no/standarder/noark5/arkivstruktur',
                 'xmlns:xsd': 'http://www.w3.org/2001/XMLSchema',
-                'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance'
+                'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+                'xmlns:fixme': vsmurl,
+                'xsi:schemaLocation': "%s fixme.xsd" % vsmurl,
             }
         self.recurse_xml_out_ordered(output, 'arkiv', content, sequence, attr=attr)
 
@@ -906,56 +910,61 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
     def save_xml_vsm_xsd(self, savepath):
         if hasattr(self, 'seenvsm'):
             self._mkdir_recursive(savepath)
-            with codecs.open('%s/virksomhetsspesifikkemetadata.xsd'
-                             % self.savepath, 'w', encoding='UTF-8') as fh:
-                output = XMLFile(fh)
-                relurl = "%s/metadata/virksomhetsspesifikkeMetadata/" \
-                    % self.relbaseurl
-                url = self.findRelation(relurl)
-                print("Looking for %s, found %s" % (relurl, url))
-                # FIXME remove workaround for missing relkey link
-                url = 'https://nikita.oslomet.no/noark5v5/api/metadata/virksomhetsspesifikkeMetadata/'
-                (entry, res) = self.json_get(url)
-                vsmlist = json.loads(entry)
-                if 'count' in vsmlist and 0 >= vsmlist['count']:
-                    # Something is wrong in API, missing information
-                    # needed to generate XSD file.
-                    print("error: Missing metadata information for virksomhetsspesifikkeMetadata XSD")
-                    return
-                with output.tag('xs:schema', attr={
-                        'attributeFormDefault': 'unqualified',
-                        'elementFormDefault': 'qualified',
-                        'xmlns:xs' :'http://www.w3.org/2001/XMLSchema',
-                        'version': '1',
-                        # FIXME, figure out how to generate namespace refs
-                        'xmlns:vnd-nikita': "http://nikita.oslomet.no/felter",
-                }):
-                    knownelement = {}
-                    with output.tag('xs:annotation'):
-                        with output.tag('xs.documentation'):
+            relurl = "%s/metadata/virksomhetsspesifikkeMetadata/" \
+                % self.relbaseurl
+            url = self.findRelation(relurl)
+            print("Looking for %s, found %s" % (relurl, url))
+            # FIXME remove workaround for missing relkey link
+            url = 'https://nikita.oslomet.no/noark5v5/api/metadata/virksomhetsspesifikkeMetadata/'
+            (entry, res) = self.json_get(url)
+            vsmlist = json.loads(entry)
+            if 'count' in vsmlist and 0 >= vsmlist['count']:
+                # Something is wrong in API, missing information
+                # needed to generate XSD file.
+                print("error: Missing metadata information for virksomhetsspesifikkeMetadata XSD")
+                return
+            for ns in self.seenvsm.values():
+                with codecs.open('%s/%s.xsd'
+                                 % (self.savepath, ns), 'w',
+                                 encoding='UTF-8') as fh:
+                    output = XMLFile(fh)
+                    vsmurl = 'https://fixme/%s.xsd' % ns
+                    with output.tag('xs:schema', attr={
+                            'attributeFormDefault': 'unqualified',
+                            'elementFormDefault': 'qualified',
+                            'xmlns' : vsmurl,
+                            'xmlns:xs' :'http://www.w3.org/2001/XMLSchema',
+                            'version': '1.0',
+                    }):
+                        knownelement = {}
+                        with output.tag('xs:annotation'):
                             for t in vsmlist['results']:
-                                if t['navn'] in self.seenvsm:
+                                if t['navn'] in self.seenvsm \
+                                   and ns == self.seenvsm[t['Navn']]:
                                     knownelement[t['navn']] = t
-                                    output.write("%s: %s\n    %s\n" %
-                                                 (t['navn'],
-                                                  t.get('beskrivelse', ''),
-                                                  t.get('kilde', '')))
-                    for navn, t in sorted(knownelement.items()):
+                                    output.writetag('xs.documentation',
+                                                    '%s: %s\n    %s\n' %
+                                                     (t['navn'],
+                                                      t.get('beskrivelse', ''),
+                                                      t.get('kilde', '')))
                         output.writetag('xs:element',
-                                        attr={'name': t['navn'],
-                                              'type': 'xs:%s' % t['type'],
-                                              'minOccurs': '0'})
+                                        attr={'name': ns, 'type': ns})
+                        for navn, t in sorted(knownelement.items()):
+                            with output.tag('xs:simpleType',
+                                            attr={'name': t['navn']}):
+                                output.writetag('xs:restriction',
+                                                attr={'base': t['type']})
 
-                    with output.tag('xs:element',
-                                    attr={'navn': 'virksomhetsspesifikkeMetadata'}):
-                        with output.tag('xs:complexType'):
-                            with output.tag('xs:sequence'):
-                                for k in sorted(self.seenvsm.keys()):
-                                    if k in knownelement:
-                                        output.writetag('xs:element',
-                                                        attr={'ref': k})
-                                    else:
-                                        output.write('<!-- element %s used but not listed in catalog -->\n' % k)
+                        with output.tag('xs:element', attr={'navn': ns}):
+                            with output.tag('xs:complexType'):
+                                with output.tag('xs:sequence'):
+                                    for k in sorted(self.seenvsm.keys()):
+                                        if k in knownelement:
+                                            output.writetag('xs:element',
+                                                            attr={'type': k,
+                                                                  'minOccurs': '0'})
+                                        else:
+                                            output.write('<!-- element %s used but not listed in catalog -->\n' % k)
 
 
     def recurse_xml(self):
