@@ -1522,6 +1522,12 @@ or should it be rejected?
              'noekkelord ne null', -1),
 
             ('arkivstruktur/mappe/',
+             'virksomhetsspesifikkeMetadata/%s eq null' % self.vsmkey, 1),
+
+            ('arkivstruktur/mappe/',
+             'virksomhetsspesifikkeMetadata/%s ne null' % self.vsmkey, 1),
+
+            ('arkivstruktur/mappe/',
              'virksomhetsspesifikkeMetadata/%s eq "one for the team"' % self.vsmkey, -1),
         )
 
