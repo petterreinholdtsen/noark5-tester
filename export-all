@@ -906,13 +906,13 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             vsmlist = self.get_vsm_list()
             if 'count' in vsmlist and 0 < vsmlist['count']:
                 for t in sorted(vsmlist['results']):
-                    ns, field = t['Navn'].split(':', 1)
+                    ns, field = t['navn'].split(':', 1)
                     if ns not in vsmns:
                         vsmns.append(ns)
-                        vsmurl = '%s/schemas/%s.xsd' % (self.baseurl, ns)
+                        vsmurl = '%sschemas/%s.xsd' % (self.baseurl, ns)
                         attr['xmlns:%s' % ns] = vsmurl
-                        schemaLocation.append("%s %s.xsd" % (vsmurl, ns))
-                if schemaLocation:
+                        schemaLocations.append("%s %s.xsd" % (vsmurl, ns))
+                if schemaLocations:
                     attr['xsi:schemaLocation'] = " ".join(schemaLocations)
 
         self.recurse_xml_out_ordered(output, 'arkiv', content, sequence, attr=attr)
@@ -921,9 +921,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         relurl = "%smetadata/virksomhetsspesifikkeMetadata/" \
             % self.relbaseurl
         url = self.findRelation(relurl)
-        print("looking up %s" % url)
         (entry, res) = self.json_get(url)
-        print(entry)
         return json.loads(entry)
 
     def save_xml_vsm_xsd(self, savepath):
@@ -937,12 +935,16 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 return
         else:
             namespaces = []
-            seen = self.seedvsm.copy()
+            if hasattr(self, 'seenvsm'):
+                seen = self.seenvsm.copy()
+            else:
+                seen = {}
             for t in sorted(vsmlist['results']):
-                ns, field = t['Navn'].split(':', 1)
+                ns, field = t['navn'].split(':', 1)
                 if ns not in namespaces:
                     namespaces.append(ns)
-                del seen[t['Navn']]
+                if t['navn'] in seen:
+                    del seen[t['navn']]
             if seen:
                 print("error: missing virksomhetsspesifikkeMetadata definitions:", seen.keys())
             for ns in namespaces:
@@ -950,7 +952,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                                  % (self.savepath, ns), 'w',
                                  encoding='UTF-8') as fh:
                     output = XMLFile(fh)
-                    vsmurl = '%s/schemas/%s.xsd' % (self.baseurl, ns)
+                    vsmurl = '%sschemas/%s.xsd' % (self.baseurl, ns)
                     with output.tag('xs:schema', attr={
                             'attributeFormDefault': 'unqualified',
                             'elementFormDefault': 'qualified',
@@ -961,7 +963,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                         knownelement = {}
                         with output.tag('xs:annotation'):
                             for t in vsmlist['results']:
-                                fieldns = t['Navn'].split(':', 1)[0]
+                                fieldns = t['navn'].split(':', 1)[0]
                                 if fieldns == ns:
                                     knownelement[t['navn']] = t
                                     output.writetag('xs.documentation',
@@ -982,7 +984,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                                 with output.tag('xs:sequence'):
                                     for t in sorted(knownelement):
                                         output.writetag('xs:element',
-                                                        attr={'type': k,
+                                                        attr={'type': t,
                                                               'minOccurs': '0'})
 
 
