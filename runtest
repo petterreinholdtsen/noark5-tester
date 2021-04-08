@@ -1345,9 +1345,12 @@ or should it be rejected?
             }
         }
         createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
-        fileinfo = self.createEntity('file', createfilerel,
-                                     self.parselinks(serieinfo['_links']),
-                                     filedata, failureexpected=True)
+        try:
+            fileinfo = self.createEntity('file', createfilerel,
+                                         self.parselinks(serieinfo['_links']),
+                                         filedata, failureexpected=True)
+        except HTTPError as e:
+            pass # Problem already reported by createEntity, keep going
 
         # Next, ensure we use an existing VSM name or register a new
         # one.
