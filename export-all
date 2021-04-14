@@ -949,7 +949,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 else:
                     sys.stdout.write('.')
                     sys.stdout.flush()
-                (content, res) = self.json_get(url)
+                (content, res) = self._get(url)
 
                 ctype = res.getheader('Content-Type')
 
@@ -957,11 +957,12 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                     print('info: Creating %s for %s' % (path, url))
                 dir = os.path.dirname(path)
                 self._mkdir_recursive(dir)
-                f = open(path, 'w')
                 if 0 == ctype.find('application/vnd.noark5+json'):
-                    j = json.loads(content)
+                    f = open(path, 'w')
+                    j = json.loads(content.decode("UTF-8"))
                     f.write(json.dumps(j, indent=2))
                 else:
+                    f = open(path, 'wb')
                     f.write(content)
                 f.close()
 
