@@ -74,17 +74,19 @@ class ContentDumper(n5core.endpoint.Endpoint):
         parser.add_argument('--savedir', help='(default is %s)' % self.savedir)
         parser.add_argument('--verbose', help='enable debug output',
                             action='store_true')
+        parser.add_argument('--onlyclosed', help='only export closed entities',
+                            action='store_true')
         parser.add_argument('--xml-extended', help='enable extended (aka non-official) XML output',
                             action='store_true')
-        args = parser.parse_args()
-        if args.baseurl:
-            self.baseurl = args.baseurl
-        if args.savedir:
-            self.savedir = args.savedir
+        self.args = parser.parse_args()
+        if self.args.baseurl:
+            self.baseurl = self.args.baseurl
+        if self.args.savedir:
+            self.savedir = self.args.savedir
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
-        self.verbose = args.verbose
-        self.xml = args.xml
-        self.xml_extended = args.xml_extended
+        self.verbose = self.args.verbose
+        self.xml = self.args.xml
+        self.xml_extended = self.args.xml_extended
 
     def _mkdir_recursive(self, path):
         sub_path = os.path.dirname(path)
@@ -125,6 +127,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                     rel = k[0]
                     if rel in content['_links']:
                         url = content['_links'][rel]['href']
+                        if 2 < len(k):
+                            url += k[2] # Add filter if present
                         (c, res) = self.json_get(url)
                         info = json.loads(c)
                         # Process list if relation gave non-empty result
@@ -638,6 +642,12 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         nirel = '%sarkivstruktur/nasjonalidentifikator/' % self.relbaseurl
+
+        if self.args.onlyclosed:
+            filter = '?$filter=avsluttetDato+ne+null'
+        else:
+            filter = ""
+
         sequence = [
             'systemID',
             'oppdatertAv>[null]',
@@ -674,7 +684,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             ('skjerming', self.recurse_xml_skjerming),
             ('gradering', self.recurse_xml_gradering),
 
-            (undermapperel,            self.recurse_xml_mappe),
+            (undermapperel,            self.recurse_xml_mappe, filter),
             (registreringrel,          self.recurse_xml_registrering),
             (nirel, self.recurse_xml_national_identifier),
         ))
@@ -711,6 +721,12 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
+
+        if self.args.onlyclosed:
+            filter = '?$filter=avsluttetDato+ne+null'
+        else:
+            filter = ""
+
         sequence = [
             'systemID',
             'klasseID',
@@ -737,8 +753,8 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             ('gradering', self.recurse_xml_gradering),
 
             (underklasserel,  self.recurse_xml_klasse),
-            (mapperel,        self.recurse_xml_mappe),
-            (registreringrel, self.recurse_xml_registrering),
+            (mapperel,        self.recurse_xml_mappe, filter),
+            (registreringrel, self.recurse_xml_registrering, filter),
         ))
         self.recurse_xml_out_ordered(output, 'klasse', content, sequence)
 
@@ -785,6 +801,12 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         saksmapperel = '%sarkivstruktur/saksmappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
         oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
+
+        if self.args.onlyclosed:
+            filter = '?$filter=avsluttetDato+ne+null'
+        else:
+            filter = ""
+
         sequence = [
             'systemID',
             'oppdatertAv>[null]',
@@ -818,9 +840,9 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             ('gradering', self.recurse_xml_gradering),
 
             (klassifikasjonssystemrel, self.recurse_xml_klassifikasjonssystem),
-            (mapperel, self.recurse_xml_mappe),
-            (saksmapperel, self.recurse_xml_mappe),
-            (registreringrel, self.recurse_xml_registrering),
+            (mapperel, self.recurse_xml_mappe, filter),
+            (saksmapperel, self.recurse_xml_mappe, filter),
+            (registreringrel, self.recurse_xml_registrering, filter),
         ))
         self.recurse_xml_out_ordered(output, 'arkivdel', content, sequence)
 
@@ -830,6 +852,11 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         arkivdelrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
         arkivskaperrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
         oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
+
+        if self.args.onlyclosed:
+            filter = '?$filter=avsluttetDato+ne+null'
+        else:
+            filter = ""
 
         # From n5v5 arkivstruktur.xsd:
         sequence = [
@@ -855,8 +882,8 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             'avsluttetDato',
             'avsluttetAv',
             (arkivskaperrel, self.recurse_xml_arkivskaper),
-            (underarkivrel,  self.recurse_xml_arkiv),
-            (arkivdelrel,    self.recurse_xml_arkivdel),
+            (underarkivrel,  self.recurse_xml_arkiv, filter),
+            (arkivdelrel,    self.recurse_xml_arkivdel, filter),
         ))
         attr = None
         if first:
@@ -874,6 +901,8 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         except n5core.endpoint.LoginFailure:
             pass
         arkivhref = self.findRelation('%sarkivstruktur/arkiv/' % self.relbaseurl)
+        if self.args.onlyclosed:
+            arkivhref += '?$filter=avsluttetDato+ne+null'
         (c, res) = self.json_get(arkivhref)
         arkivinfo = json.loads(c)
 
