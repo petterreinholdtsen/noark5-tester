@@ -968,7 +968,9 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 
                 if ctype is None:
                     print('error: No Content-Type from %s' % url)
-                if ctype is None or 0 != ctype.find('application/vnd.noark5+json'):
+                if ctype is None \
+                   or (0 != ctype.find('application/vnd.noark5+json') \
+                       and 0 != ctype.find('application/json')):
                     print('info: ignoring %s' % url)
                 else:
                     try:
