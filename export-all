@@ -675,8 +675,10 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 
         if self.args.onlyclosed:
             filter = '?$filter=avsluttetDato+ne+null'
+            rfilter = '?$filter=arkivertDato+ne+null'
         else:
             filter = ""
+            rfilter = ""
 
         sequence = [
             'systemID',
@@ -715,7 +717,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             ('gradering', self.recurse_xml_gradering),
 
             (undermapperel,            self.recurse_xml_mappe, filter),
-            (registreringrel,          self.recurse_xml_registrering),
+            (registreringrel,          self.recurse_xml_registrering, rfilter),
             (nirel, self.recurse_xml_national_identifier),
         ))
         if attr and 'saksmappe' == attr['xsi:type']:
@@ -754,8 +756,10 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 
         if self.args.onlyclosed:
             filter = '?$filter=avsluttetDato+ne+null'
+            rfilter = '?$filter=arkivertDato+ne+null'
         else:
             filter = ""
+            rfilter = ""
 
         sequence = [
             'systemID',
@@ -784,7 +788,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 
             (underklasserel,  self.recurse_xml_klasse),
             (mapperel,        self.recurse_xml_mappe, filter),
-            (registreringrel, self.recurse_xml_registrering, filter),
+            (registreringrel, self.recurse_xml_registrering, rfilter),
         ))
         self.recurse_xml_out_ordered(output, 'klasse', content, sequence)
 
@@ -834,8 +838,10 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 
         if self.args.onlyclosed:
             filter = '?$filter=avsluttetDato+ne+null'
+            rfilter = '?$filter=arkivertDato+ne+null'
         else:
             filter = ""
+            rfilter = ""
 
         sequence = [
             'systemID',
@@ -872,7 +878,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             (klassifikasjonssystemrel, self.recurse_xml_klassifikasjonssystem),
             (mapperel, self.recurse_xml_mappe, filter),
             (saksmapperel, self.recurse_xml_mappe, filter),
-            (registreringrel, self.recurse_xml_registrering, filter),
+            (registreringrel, self.recurse_xml_registrering, rfilter),
         ))
         self.recurse_xml_out_ordered(output, 'arkivdel', content, sequence)
 
