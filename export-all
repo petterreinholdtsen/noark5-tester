@@ -300,19 +300,49 @@ class ContentDumper(n5core.endpoint.Endpoint):
                     continue
                 keytype = type(k)
                 if str == keytype:
-                    if k in content:
-                        output.writetag(k, content[k])
+                    if -1 != k.find('>'):
+                        f, t = k.split('>')
+                        if -1 != f.find('.'):
+                            a, b = f.split('.')
+                            if a in content and b in content[a]:
+                                if '[null]' != t:
+                                    output.writetag(t, content[a][b])
+                                del content[a][b]
+                                if not content[a].keys():
+                                    del content[a]
+                        else:
+                            if f in content:
+                                if '[null]' != t:
+                                    output.writetag(t, content[f])
+                                del content[f]
+                    else:
+                        if k in content:
+                            output.writetag(k, content[k])
+                            del content[k]
                 elif tuple == keytype:
                     rel = k[0]
                     if rel in content['_links']:
-                        (c, res) = self.json_get(content['_links'][rel]['href'])
+                        url = content['_links'][rel]['href']
+                        if 2 < len(k):
+                            url += k[2] # Add filter if present
+                        (c, res) = self.json_get(url)
                         info = json.loads(c)
                         # Process list if relation gave non-empty result
                         if ('count' in info and 0 < info['count']) \
                            or 'results' in info:
                             for sub in info['results']:
                                 k[1](output, sub)
-
+                        elif not 'count' in info:
+                            print('warning: GET %s did not return list' % (url))
+                            k[1](output, info)
+                    elif rel in content:
+                        k[1](output, content[rel])
+                        del content[rel]
+            if '_links' in content:
+                del content['_links']
+            if content.keys():
+                print('warning: %s XML attribute not exported: %s'
+                      % ('dokumentobjekt', content))
 
     def recurse_xml_dokumentbeskrivelse(self, output, content):
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
