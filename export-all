@@ -949,6 +949,14 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         self.recurse_xml_out_ordered(output, 'arkiv', content, sequence, attr=attr)
 
 
+    def install_xsd(self, dir):
+        import shutil
+        import glob
+        xsddir = "schemas"
+        for xsdpath in glob.glob("%s/*.xsd" % xsddir):
+            shutil.copy(xsdpath, dir)
+
+
     def recurse_xml(self):
         try:
             self.login()
@@ -968,6 +976,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                     arkiv['systemID'],
                     arkiv['tittel'].replace('/', '_'))
                 self._mkdir_recursive(self.savepath)
+                self.install_xsd(self.savepath)
                 with codecs.open('%s/arkivstruktur.xml' % self.savepath, 'w',
                                  encoding='UTF-8') as fh:
                     output = XMLFile(fh)
