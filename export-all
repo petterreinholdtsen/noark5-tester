@@ -100,17 +100,19 @@ class ContentDumper(n5core.endpoint.Endpoint):
         parser.add_argument('--savedir', help='(default is %s)' % self.savedir)
         parser.add_argument('--verbose', help='enable debug output',
                             action='store_true')
+        parser.add_argument('--onlyclosed', help='only export closed entities',
+                            action='store_true')
         parser.add_argument('--xml-extended', help='enable extended (aka non-official) XML output',
                             action='store_true')
-        args = parser.parse_args()
-        if args.baseurl:
-            self.baseurl = args.baseurl
-        if args.savedir:
-            self.savedir = args.savedir
+        self.args = parser.parse_args()
+        if self.args.baseurl:
+            self.baseurl = self.args.baseurl
+        if self.args.savedir:
+            self.savedir = self.args.savedir
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
-        self.verbose = args.verbose
-        self.xml = args.xml
-        self.xml_extended = args.xml_extended
+        self.verbose = self.args.verbose
+        self.xml = self.args.xml
+        self.xml_extended = self.args.xml_extended
 
     def _mkdir_recursive(self, path):
         sub_path = os.path.dirname(path)
@@ -151,6 +153,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                     rel = k[0]
                     if rel in content['_links']:
                         url = content['_links'][rel]['href']
+                        if 2 < len(k):
+                            url += k[2] # Add filter if present
                         (c, res) = self.json_get(url)
                         info = json.loads(c)
                         # Process list if relation gave non-empty result
@@ -332,19 +336,49 @@ class ContentDumper(n5core.endpoint.Endpoint):
                     continue
                 keytype = type(k)
                 if str == keytype:
-                    if k in content:
-                        output.writetag(k, content[k])
+                    if -1 != k.find('>'):
+                        f, t = k.split('>')
+                        if -1 != f.find('.'):
+                            a, b = f.split('.')
+                            if a in content and b in content[a]:
+                                if '[null]' != t:
+                                    output.writetag(t, content[a][b])
+                                del content[a][b]
+                                if not content[a].keys():
+                                    del content[a]
+                        else:
+                            if f in content:
+                                if '[null]' != t:
+                                    output.writetag(t, content[f])
+                                del content[f]
+                    else:
+                        if k in content:
+                            output.writetag(k, content[k])
+                            del content[k]
                 elif tuple == keytype:
                     rel = k[0]
                     if rel in content['_links']:
-                        (c, res) = self.json_get(content['_links'][rel]['href'])
+                        url = content['_links'][rel]['href']
+                        if 2 < len(k):
+                            url += k[2] # Add filter if present
+                        (c, res) = self.json_get(url)
                         info = json.loads(c)
                         # Process list if relation gave non-empty result
                         if ('count' in info and 0 < info['count']) \
                            or 'results' in info:
                             for sub in info['results']:
                                 k[1](output, sub)
-
+                        elif not 'count' in info:
+                            print('warning: GET %s did not return list' % (url))
+                            k[1](output, info)
+                    elif rel in content:
+                        k[1](output, content[rel])
+                        del content[rel]
+            if '_links' in content:
+                del content['_links']
+            if content.keys():
+                print('warning: %s XML attribute not exported: %s'
+                      % ('dokumentobjekt', content))
 
     def recurse_xml_dokumentbeskrivelse(self, output, content):
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
@@ -674,6 +708,14 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         nirel = '%sarkivstruktur/nasjonalidentifikator/' % self.relbaseurl
+
+        if self.args.onlyclosed:
+            filter = '?$filter=avsluttetDato+ne+null'
+            rfilter = '?$filter=arkivertDato+ne+null'
+        else:
+            filter = ""
+            rfilter = ""
+
         sequence = [
             'systemID',
             'oppdatertAv>[null]',
@@ -710,8 +752,8 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             ('skjerming', self.recurse_xml_skjerming),
             ('gradering', self.recurse_xml_gradering),
 
-            (undermapperel,            self.recurse_xml_mappe),
-            (registreringrel,          self.recurse_xml_registrering),
+            (undermapperel,            self.recurse_xml_mappe, filter),
+            (registreringrel,          self.recurse_xml_registrering, rfilter),
             (nirel, self.recurse_xml_national_identifier),
         ))
         if attr and 'saksmappe' == attr['xsi:type']:
@@ -747,6 +789,14 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
+
+        if self.args.onlyclosed:
+            filter = '?$filter=avsluttetDato+ne+null'
+            rfilter = '?$filter=arkivertDato+ne+null'
+        else:
+            filter = ""
+            rfilter = ""
+
         sequence = [
             'systemID',
             'klasseID',
@@ -773,8 +823,8 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             ('gradering', self.recurse_xml_gradering),
 
             (underklasserel,  self.recurse_xml_klasse),
-            (mapperel,        self.recurse_xml_mappe),
-            (registreringrel, self.recurse_xml_registrering),
+            (mapperel,        self.recurse_xml_mappe, filter),
+            (registreringrel, self.recurse_xml_registrering, rfilter),
         ))
         self.recurse_xml_out_ordered(output, 'klasse', content, sequence)
 
@@ -821,6 +871,14 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         saksmapperel = '%sarkivstruktur/saksmappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
         oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
+
+        if self.args.onlyclosed:
+            filter = '?$filter=avsluttetDato+ne+null'
+            rfilter = '?$filter=arkivertDato+ne+null'
+        else:
+            filter = ""
+            rfilter = ""
+
         sequence = [
             'systemID',
             'oppdatertAv>[null]',
@@ -854,9 +912,9 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             ('gradering', self.recurse_xml_gradering),
 
             (klassifikasjonssystemrel, self.recurse_xml_klassifikasjonssystem),
-            (mapperel, self.recurse_xml_mappe),
-            (saksmapperel, self.recurse_xml_mappe),
-            (registreringrel, self.recurse_xml_registrering),
+            (mapperel, self.recurse_xml_mappe, filter),
+            (saksmapperel, self.recurse_xml_mappe, filter),
+            (registreringrel, self.recurse_xml_registrering, rfilter),
         ))
         self.recurse_xml_out_ordered(output, 'arkivdel', content, sequence)
 
@@ -866,6 +924,11 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         arkivdelrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
         arkivskaperrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
         oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
+
+        if self.args.onlyclosed:
+            filter = '?$filter=avsluttetDato+ne+null'
+        else:
+            filter = ""
 
         # From n5v5 arkivstruktur.xsd:
         sequence = [
@@ -891,8 +954,8 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             'avsluttetDato',
             'avsluttetAv',
             (arkivskaperrel, self.recurse_xml_arkivskaper),
-            (underarkivrel,  self.recurse_xml_arkiv),
-            (arkivdelrel,    self.recurse_xml_arkivdel),
+            (underarkivrel,  self.recurse_xml_arkiv, filter),
+            (arkivdelrel,    self.recurse_xml_arkivdel, filter),
         ))
         attr = None
         if first:
@@ -988,12 +1051,22 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                                                               'minOccurs': '0'})
 
 
+    def install_xsd(self, dir):
+        import shutil
+        import glob
+        xsddir = "schemas"
+        for xsdpath in glob.glob("%s/*.xsd" % xsddir):
+            shutil.copy(xsdpath, dir)
+
+
     def recurse_xml(self):
         try:
             self.login()
         except n5core.endpoint.LoginFailure:
             pass
         arkivhref = self.findRelation('%sarkivstruktur/arkiv/' % self.relbaseurl)
+        if self.args.onlyclosed:
+            arkivhref += '?$filter=avsluttetDato+ne+null'
         (c, res) = self.json_get(arkivhref)
         arkivinfo = json.loads(c)
 
@@ -1005,6 +1078,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                     arkiv['systemID'],
                     arkiv['tittel'].replace('/', '_'))
                 self._mkdir_recursive(self.savepath)
+                self.install_xsd(self.savepath)
                 with codecs.open('%s/arkivstruktur.xml' % self.savepath, 'w',
                                  encoding='UTF-8') as fh:
                     output = XMLFile(fh)
@@ -1041,7 +1115,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 else:
                     sys.stdout.write('.')
                     sys.stdout.flush()
-                (content, res) = self.json_get(url)
+                (content, res) = self._get(url)
 
                 ctype = res.getheader('Content-Type')
 
@@ -1049,17 +1123,20 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                     print('info: Creating %s for %s' % (path, url))
                 dir = os.path.dirname(path)
                 self._mkdir_recursive(dir)
-                f = open(path, 'w')
                 if 0 == ctype.find('application/vnd.noark5+json'):
-                    j = json.loads(content)
+                    f = open(path, 'w')
+                    j = json.loads(content.decode("UTF-8"))
                     f.write(json.dumps(j, indent=2))
                 else:
+                    f = open(path, 'wb')
                     f.write(content)
                 f.close()
 
                 if ctype is None:
                     print('error: No Content-Type from %s' % url)
-                if ctype is None or 0 != ctype.find('application/vnd.noark5+json'):
+                if ctype is None \
+                   or (0 != ctype.find('application/vnd.noark5+json') \
+                       and 0 != ctype.find('application/json')):
                     print('info: ignoring %s' % url)
                 else:
                     try:

@@ -213,6 +213,7 @@ datefields = (
     'avskrivningsdato',
     'avsluttetDato',
     'dokumentetsDato',
+    'endretDato',
     'flytMottattDato',
     'flytSendtDato',
     'graderingsdato',
