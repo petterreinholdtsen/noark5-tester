@@ -166,7 +166,7 @@ class MboxImporter(n5core.endpoint.Endpoint):
         if mimetype in mimetypemap:
             format = mimetypemap[mimetype]
             if not self.isKnownFormat(format):
-                print("format %s not known by API, asking API to pick format code" % format)
+                print("format %s for %s not known by API, asking API to pick format code" % (format, mimetype))
                 format = None
             return format
         return None
@@ -499,13 +499,17 @@ last digit is a control digit.
         # 261249 14484
         # 998787173
         # 813 905 582
-        matches =\
-            re.findall(r"""(?x)
-                           (?<!\d)
-                           \b(\d{9}|\d{6}\s\d{5}|\d{11}|\d{3}\s\d{3}\s\d{3})\b
-                           (?!\d)
-                           """, content)
+        p = r"""(?x)
+                (?<!\d)
+                \b(\d{9}|\d{6}\s\d{5}|\d{11}|\d{3}\s\d{3}\s\d{3})\b
+                (?!\d)
+"""
+        if bytes == type(content):
+            p = p.encode('UTF-8')
+        matches = re.findall(p, content)
         for m in matches:
+            if bytes == type(m):
+                m = m.decode('UTF-8')
             m = m.replace(" ", "")
             digits = len(m)
             if 9 == digits and orgnr.is_valid(m):
