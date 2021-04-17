@@ -78,6 +78,12 @@ excludes = {
         'systemID',
         'part',
     ),
+    'partenhet': (
+        'systemID',
+    ),
+    'partperson': (
+        'systemID',
+    ),
     'registrering': (
         'systemID',
         'noekkelord',
