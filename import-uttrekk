@@ -75,6 +75,7 @@ excludes = {
         'administrativEnhet', 'saksansvarlig',
     ),
     'mappe': (
+        'systemID',
         'part',
     ),
     'registrering': (
