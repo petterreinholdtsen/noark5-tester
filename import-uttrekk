@@ -78,12 +78,6 @@ excludes = {
         'systemID',
         'part',
     ),
-    'part': (
-        'systemID',
-    ),
-    'korrespondansepart': (
-        'systemID',
-    ),
     'registrering': (
         'systemID',
         'noekkelord',
@@ -690,7 +684,7 @@ FIXME flag inaccurate guesses somehow
             'land':                   'postadresse.landkode',
             'epostadresse':           'kontaktinformasjon.epostadresse',
             'telefonnummer':          'kontaktinformasjon.mobiltelefon|telefon',
-            'partID':                 'systemID', # FIXME verify this mapping
+            #'partID':                 'systemID', # FIXME verify this mapping
         }
         data = {}
         for sub in element.iterchildren():

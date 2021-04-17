@@ -465,7 +465,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
     def recurse_xml_part(self, output, content):
         sequence = [
-            'systemID>partID',
+            'systemID>[null]',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
         ]
@@ -494,6 +494,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'saksbehandler',
             'virksomhetsspesifikkeMetadata',
         ))
+        # FIXME figure out how to handle partID
         self.recurse_xml_out_ordered(output, 'part', content, sequence)
 
 
