@@ -1388,7 +1388,7 @@ or should it be rejected?
             % self.relbaseurl
         # FIXME should use relbaseurl, but nikita do not
         createvsmrel = "%smetadata/ny-virksomhetsspesifikkeMetadata/" \
-            % nikitarelbase
+            % self.relbaseurl
         url = self.findRelation(metadatarel)
         (entry, res) = self.json_get(url)
         metadatalist = json.loads(entry)
@@ -1487,7 +1487,7 @@ or should it be rejected?
         }
         links = self.parselinks(metadatalist['_links'])
         for metadata in knownmetadata:
-            rel = nikitarelbase + 'metadata/ny-%s/' % metadata
+            rel = self.relbaseurl + 'metadata/ny-%s/' % metadata
             try:
                 info = self.createEntity(metadata, rel, links, metadatavalue,
                                          failureexpected=True)
