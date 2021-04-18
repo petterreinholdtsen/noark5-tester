@@ -45,12 +45,12 @@ class XMLTag(object):
 
     def __enter__(self):
         if self.attr:
-            attr = " " + str.join(" ",
-                                  ['%s="%s"' % (i[0], i[1])
-                                   for i in self.attr.items()])
+            attr = \
+                str.join(" ",
+                         ['%s="%s"' % (i[0], i[1]) for i in self.attr.items()])
+            self.fh.write('%s<%s %s>\n' % ('  ' * self.level[0], self.tagname, attr))
         else:
-            attr = ""
-        self.fh.write('%s<%s%s>\n' % ('  ' * self.level[0], self.tagname, attr))
+            self.fh.write('%s<%s>\n' % ('  ' * self.level[0], self.tagname))
         self.level[0] +=1
 
 
@@ -74,19 +74,11 @@ class XMLFile(object):
         return self.fh.write(s)
 
 
-    def writetag(self, tagname, s=None, attr=None):
+    def writetag(self, tagname, s):
         if isinstance(s, six.text_type):
             s = escape(s)
-        if attr:
-            attr = " " + str.join(" ",
-                                  ['%s="%s"' % (i[0], i[1])
-                                   for i in attr.items()])
-        else:
-            attr = ""
-        if s:
-            self.fh.write('%s<%s%s>%s</%s>\n' % ('  ' * self.level[0], tagname, attr, s, tagname))
-        elif '' != attr: # Skip these, ref. Noark 6.4.5
-            self.fh.write('%s<%s%s/>\n' % ('  ' * self.level[0], tagname, attr))
+        self.fh.write('%s<%s>%s</%s>\n' % ('  ' * self.level[0], tagname, s, tagname))
+
 
 class ContentDumper(n5core.endpoint.Endpoint):
     def __init__(self):
@@ -272,16 +264,6 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'verifisertAv',
         )
         self.recurse_xml_out_ordered(output, 'elektroniskSignatur', content, sequence)
-
-
-    def recurse_xml_virksomhetsspesifikkeMetadata(self, output, content):
-        if not hasattr(self, 'seenvsm'):
-            self.seenvsm = {}
-        with output.tag('virksomhetsspesifikkeMetadata'):
-            for k in content.keys():
-                output.writetag(k, content[k])
-                ns = k.split(':', 1)[1]
-                self.seenvsm[k] = ns
 
 
     def recurse_xml_dokumentobjekt(self, output, content):
@@ -476,7 +458,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'kontaktperson',
             'administrativEnhet',
             'saksbehandler',
-            ('virksomhetsspesifikkeMetadata', self.recurse_xml_virksomhetsspesifikkeMetadata),
+            'virksomhetsspesifikkeMetadata',
         )
         self.recurse_xml_out_ordered(output, 'korrespondansepart', content, sequence)
 
@@ -510,7 +492,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'kontaktperson',
             'administrativEnhet',
             'saksbehandler',
-            ('virksomhetsspesifikkeMetadata', self.recurse_xml_virksomhetsspesifikkeMetadata),
+            'virksomhetsspesifikkeMetadata',
         ))
         # FIXME figure out how to handle partID
         self.recurse_xml_out_ordered(output, 'part', content, sequence)
@@ -633,7 +615,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             'dokumentmedium.kodenavn>dokumentmedium',
             'dokumentmedium.kode>[null]',
             (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for registrering
-            ('virksomhetsspesifikkeMetadata', self.recurse_xml_virksomhetsspesifikkeMetadata),
+            'virksomhetsspesifikkeMetadata',
 
             (merknadrel, self.recurse_xml_merknad),
 #            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for registrering
@@ -744,7 +726,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 # i arkivstruktur.xsd med 0..*.  Derimot finnes det en relasjon til
 # arkivdel med 0..1.
 #            ('referanseArkivdel'), # FIXME for mappe
-            ('virksomhetsspesifikkeMetadata', self.recurse_xml_virksomhetsspesifikkeMetadata),
+            'virksomhetsspesifikkeMetadata',
 
             (partrel,                  self.recurse_xml_part),
 #            (kryssrefrel, self.recurse_xml_kryssreferanse), # FIXME for mappe
@@ -965,91 +947,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 'xmlns:xsd': 'http://www.w3.org/2001/XMLSchema',
                 'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance'
             }
-            vsmns = []
-            schemaLocations = []
-            vsmlist = self.get_vsm_list()
-            if 'count' in vsmlist and 0 < vsmlist['count']:
-                for t in sorted(vsmlist['results']):
-                    ns, field = t['navn'].split(':', 1)
-                    if ns not in vsmns:
-                        vsmns.append(ns)
-                        vsmurl = '%sschemas/%s.xsd' % (self.baseurl, ns)
-                        attr['xmlns:%s' % ns] = vsmurl
-                        schemaLocations.append("%s %s.xsd" % (vsmurl, ns))
-                if schemaLocations:
-                    attr['xsi:schemaLocation'] = " ".join(schemaLocations)
-
         self.recurse_xml_out_ordered(output, 'arkiv', content, sequence, attr=attr)
-
-    def get_vsm_list(self):
-        relurl = "%smetadata/virksomhetsspesifikkeMetadata/" \
-            % self.relbaseurl
-        url = self.findRelation(relurl)
-        (entry, res) = self.json_get(url)
-        return json.loads(entry)
-
-    def save_xml_vsm_xsd(self, savepath):
-        self._mkdir_recursive(savepath)
-        vsmlist = self.get_vsm_list()
-        if 'count' in vsmlist and 0 >= vsmlist['count']:
-            if hasattr(self, 'seenvsm'):
-                # Something is wrong in API, missing information
-                # needed to generate XSD file.
-                print("error: Missing metadata information for virksomhetsspesifikkeMetadata XSD")
-                return
-        else:
-            namespaces = []
-            if hasattr(self, 'seenvsm'):
-                seen = self.seenvsm.copy()
-            else:
-                seen = {}
-            for t in sorted(vsmlist['results']):
-                ns, field = t['navn'].split(':', 1)
-                if ns not in namespaces:
-                    namespaces.append(ns)
-                if t['navn'] in seen:
-                    del seen[t['navn']]
-            if seen:
-                print("error: missing virksomhetsspesifikkeMetadata definitions:", seen.keys())
-            for ns in namespaces:
-                with codecs.open('%s/%s.xsd'
-                                 % (self.savepath, ns), 'w',
-                                 encoding='UTF-8') as fh:
-                    output = XMLFile(fh)
-                    vsmurl = '%sschemas/%s.xsd' % (self.baseurl, ns)
-                    with output.tag('xs:schema', attr={
-                            'attributeFormDefault': 'unqualified',
-                            'elementFormDefault': 'qualified',
-                            'xmlns' : vsmurl,
-                            'xmlns:xs' :'http://www.w3.org/2001/XMLSchema',
-                            'version': '1.0',
-                    }):
-                        knownelement = {}
-                        with output.tag('xs:annotation'):
-                            for t in vsmlist['results']:
-                                fieldns = t['navn'].split(':', 1)[0]
-                                if fieldns == ns:
-                                    knownelement[t['navn']] = t
-                                    output.writetag('xs.documentation',
-                                                    '%s: %s\n    %s\n' %
-                                                     (t['navn'],
-                                                      t.get('beskrivelse', ''),
-                                                      t.get('kilde', '')))
-                        output.writetag('xs:element',
-                                        attr={'name': ns, 'type': ns})
-                        for navn, t in sorted(knownelement.items()):
-                            with output.tag('xs:simpleType',
-                                            attr={'name': t['navn']}):
-                                output.writetag('xs:restriction',
-                                                attr={'base': t['type']})
-
-                        with output.tag('xs:element', attr={'navn': ns}):
-                            with output.tag('xs:complexType'):
-                                with output.tag('xs:sequence'):
-                                    for t in sorted(knownelement):
-                                        output.writetag('xs:element',
-                                                        attr={'type': t,
-                                                              'minOccurs': '0'})
 
 
     def install_xsd(self, dir):
@@ -1084,7 +982,6 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                                  encoding='UTF-8') as fh:
                     output = XMLFile(fh)
                     self.recurse_xml_arkiv(output, arkiv, first=True)
-                self.save_xml_vsm_xsd(self.savepath)
 
 
     def recurse(self):
