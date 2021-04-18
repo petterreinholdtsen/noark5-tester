@@ -375,7 +375,7 @@ class Importer(n5core.endpoint.Endpoint):
             print("info: trying to create new %s metadata catalog entry (%s,%s)" %(
                 metadatatype, kode, kodenavn,
             ))
-            newrelkey = self.nikitarelbaseurl + 'metadata/ny-%s/' % metadatatype
+            newrelkey =  self.relbaseurl + 'metadata/ny-%s/' % metadatatype
             url = self.findRelation(newrelkey)
             if url:
                 kode = self.metadata_make_up_unused_code(metadatatype, kodenavn)
