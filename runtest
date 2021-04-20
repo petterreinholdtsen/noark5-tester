@@ -1201,7 +1201,6 @@ or should it be rejected?
 #            "dokumentstatus"  : "status of document",
             "tittel"          : u"Title of the test document description created %s" % now,
 #            "tilknyttetRegistreringSom" : "Associated with record as"
-            "dokumentnummer" : 1,
         }
         createdocdescrel = noarkrelbase + 'arkivstruktur/ny-dokumentbeskrivelse/'
         docdescinfo = self.createEntity('document description',
@@ -1211,7 +1210,6 @@ or should it be rejected?
         try:
             docdescdata = {
                 "tittel"          : u"Title of deleted test document description created %s" % now,
-                "dokumentnummer" : 2,
                 "sletting": {
                     "slettingstype": {
                         "kode": "SP",
@@ -1232,7 +1230,6 @@ or should it be rejected?
         try:
             scrndocdescdata = {
                 'tittel'          : u'Title of screened test document description created %s' % now,
-                'dokumentnummer' : 3,
                 'skjerming': {
                     'tilgangsrestriksjon': {
                         'kode': 'P',
@@ -1262,8 +1259,6 @@ or should it be rejected?
         try:
             docdescdata = {
                 'tittel': u'Title of the test document description created %s' % now,
-
-                'dokumentnummer' : 4,
                 'tilknyttetRegistreringSom': {
                     'kode': u'H',
                     'kodenavn': u'Hoveddokument'
