@@ -1483,7 +1483,7 @@ or should it be rejected?
              "nasjonalidentifikator/x gt 1.0'", -1),
 
             ('arkivstruktur/mappe/',
-             'noekkelord ne null', -1)
+             'noekkelord ne null', -1),
         )
 
         for s in searches:
