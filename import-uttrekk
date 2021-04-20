@@ -98,12 +98,12 @@ excludes = {
     'dokumentbeskrivelse' : (
         'systemID',
         'referanseArkivdel',
-    ),
-    'dokumentobjekt': (
-        'systemID',
         # is not settable by the client. This means import will set the
         # value for you.
         'dokumentnummer',
+    ),
+    'dokumentobjekt': (
+        'systemID',
         # Exclude values related to the files that are handled during
         # upload and not during dokumentobjekt creation.  Dropping
         # filestoerrelse might seem like a bad idea, but it is most
