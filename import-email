@@ -474,12 +474,9 @@ not loosing the timezone information.
 """
         d = dateutil.parser.parse(s)
         if d.tzinfo:
-            return d.isoformat() \
-                + str.format('{0:+06.2f}',
-                             float(d.tzinfo.utcoffset(d).total_seconds()) / 3600)\
-                     .replace('.', ':')
+            return d.isoformat()
         else:
-            return d.date().isoformat() + 'Z'
+            return d.isoformat() + 'Z'
 
 
     def locateIdentifiers(self, content, found = None):
