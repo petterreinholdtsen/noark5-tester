@@ -67,15 +67,18 @@ def decodeheader(s):
         return s
     retval = None
     for ret, encoding in email.header.decode_header(s):
-        if encoding!=None:
-            try:
-                ret = ret.decode(encoding)
-            except UnicodeDecodeError:
-                pass # Ignore bogus headers, store them raw
+        if bytes == type(ret):
+            if encoding is None:
+                ret = ret.decode('ASCII')
+            else:
+                try:
+                    ret = ret.decode(encoding)
+                except UnicodeDecodeError:
+                    pass # Ignore bogus headers, store them raw
         if retval is None:
-            retval = str(ret)
+            retval = ret
         else:
-            retval += " " + str(ret)
+            retval += ret
     return retval
 
 
