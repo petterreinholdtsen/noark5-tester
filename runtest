@@ -258,7 +258,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'api/sakarkiv/saksmappe/[-0-9a-z]+/ny-saksmappe/?',
     ]
     knownwithoutlinksregex = [
-        'api/metadata/ny-.*/?',
+        'api/metadata/ny-[a-zA-Z]+/?',
         'api/admin/ny-bruker/?',
         'api/admin/system/?',
         'api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-forfatter/?',
