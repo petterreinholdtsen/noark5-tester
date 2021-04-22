@@ -380,28 +380,28 @@
     <xs:annotation>
       <xs:documentation>M100</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="journaldato">
     <xs:annotation>
       <xs:documentation>M101</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="moetedato">
     <xs:annotation>
       <xs:documentation>M102</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="dokumentetsDato">
     <xs:annotation>
       <xs:documentation>M103</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="mottattDato">
@@ -422,56 +422,56 @@
     <xs:annotation>
       <xs:documentation>M106</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="arkivperiodeStartDato">
     <xs:annotation>
       <xs:documentation>M107</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="arkivperiodeSluttDato">
     <xs:annotation>
       <xs:documentation>M108</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="forfallsdato">
     <xs:annotation>
       <xs:documentation>M109</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="offentlighetsvurdertDato">
     <xs:annotation>
       <xs:documentation>M110</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="presedensDato">
     <xs:annotation>
       <xs:documentation>M111</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="journalStartDato">
     <xs:annotation>
       <xs:documentation>M112</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="journalSluttDato">
     <xs:annotation>
       <xs:documentation>M113</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <!-- M200-M299:	Referanser -->
@@ -838,7 +838,7 @@
     <xs:annotation>
       <xs:documentation>M452</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="kassasjonshjemmel">
@@ -899,7 +899,7 @@
     <xs:annotation>
       <xs:documentation>M505</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="grad">
@@ -1094,7 +1094,7 @@
     <xs:annotation>
       <xs:documentation>M617</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="avskrevetAv">
@@ -1135,7 +1135,7 @@
     <xs:annotation>
       <xs:documentation>M622</xs:documentation>
     </xs:annotation>
-    <xs:restriction base="xs:date"/>
+    <xs:restriction base="xs:dateTime"/>
   </xs:simpleType>
 
   <xs:simpleType name="verifisertAv">
