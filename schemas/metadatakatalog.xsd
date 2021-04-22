@@ -1409,4 +1409,22 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <xs:simpleType name="mimeType">
+    <xs:annotation>
+      <xs:documentation>M716</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="filnavn">
+    <xs:annotation>
+      <xs:documentation>M??? https://github.com/arkivverket/noark5-standard/issues/120</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
 </xs:schema>
