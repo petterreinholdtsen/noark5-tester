@@ -39,6 +39,7 @@ import argparse
 import datetime
 from hashlib import sha256
 import json
+import pytz
 import re
 from subprocess import call
 from urllib.parse import quote_plus
@@ -49,6 +50,11 @@ from n5core.endpoint import URLError
 
 noarkrelbase = 'https://rel.arkivverket.no/noark5/v5/api/'
 nikitarelbase = 'https://nikita.arkivlab.no/noark5/v5/'
+
+def utcnowtz():
+    u = datetime.datetime.utcnow()
+    u = u.replace(tzinfo=pytz.utc)
+    return u
 
 class Noark5Tester (n5core.endpoint.Endpoint):
     knownrels = [
@@ -799,7 +805,9 @@ or should it be rejected?
                     level("unable to create record with %s='%s'" % (field, timevalue))
 
     def testNewDocument(self):
-        now = datetime.datetime.now().isoformat()
+        now = utcnowtz().replace(microsecond=0) \
+                        .isoformat() \
+                        .replace('+00:00', 'Z')
         if not self.gotlogin:
             self.failure("not logged in, unable to test creation")
             return
@@ -866,7 +874,7 @@ or should it be rejected?
             }
             delserieinfo = self.createEntity('serie', createseriesrel,
                                           self.parselinks(fondinfo['_links']),
-                                          seriesdata, failureexpected=True)
+                                          seriesdata)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
@@ -941,6 +949,8 @@ or should it be rejected?
         fileinfo = self.createEntity('file', createfilerel,
                                      self.parselinks(serieinfo['_links']),
                                      filedata)
+
+        self.xverify('mappeID' in fileinfo, "new file should have mappeID added automatically")
 
         for (c, f) in [
                 ('enhet', u'navn'),
@@ -1069,11 +1079,12 @@ or should it be rejected?
         casefileinfo = self.createEntity('casefile', createcasefilerel,
                                          self.parselinks(serieinfo['_links']),
                                          casefiledata)
+        self.verify('mappeID' in casefileinfo, "new case file should have mappeID added automatically")
         casefileurl = self.parselinks(casefileinfo['_links'])['self']
 
         try:
             precedencedata = {
-                'presedensDato': str(datetime.date.today().isoformat() + "Z"),
+                'presedensDato': now,
                 'tittel': u'Because that is the way it is',
                 'rettskildefaktor': u'The Boss',
             }
@@ -1082,7 +1093,7 @@ or should it be rejected?
                 'precedence',
                 createprecedencerel,
                 self.parselinks(casefileinfo['_links']),
-                precedencedata, failureexpected=True)
+                precedencedata)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
@@ -1121,7 +1132,7 @@ or should it be rejected?
             docflowinfo = self.createEntity('document flow',
                                             createdocflowrel,
                                             self.parselinks(archivenoteinfo['_links']),
-                                            docflowdata, failureexpected=True)
+                                            docflowdata)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
@@ -1207,7 +1218,7 @@ or should it be rejected?
             deldocdescinfo = self.createEntity('document description',
                                             createdocdescrel,
                                             self.parselinks(recordinfo['_links']),
-                                            docdescdata, failureexpected=True)
+                                            docdescdata)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
@@ -1226,7 +1237,7 @@ or should it be rejected?
                     ],
                     'skjermingDokument': { 'kode': 'H', 'kodenavn': 'Skjerming av hele dokumentet' },
                     'skjermingsvarighet': 60,
-                    'skjermingOpphoererDato': '1942-07-25Z',
+                    'skjermingOpphoererDato': '1942-07-25T12:00:00Z',
                 }
             }
             scrndocdescinfo = self.createEntity('document description',
@@ -1389,7 +1400,7 @@ or should it be rejected?
             if kodenavn == s['kodenavn']:
                 found = True
                 break
-        self.xverify(found, "looking for UTF-8 metadata journalstatus value")
+        self.verify(found, "looking for UTF-8 metadata journalstatus value")
 
         if not self.gotlogin:
             self.failure("not logged in, unable to test creation")
