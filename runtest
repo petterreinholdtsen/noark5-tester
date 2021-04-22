@@ -237,7 +237,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-oppbevaringssted/?',
         'api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/oppbevaringssted/?',
         'api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/konverterFil/?',
-        'api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/referanseFil/?',
         'api/arkivstruktur/klasse/[-0-9a-z]+/kryssreferanse/?',
         'api/arkivstruktur/klasse/[-0-9a-z]+/ny-kryssreferanse/?',
         'api/arkivstruktur/klassifikasjonssystem/[-0-9a-z]+/ny-sekundaerklassifikasjon/?',
