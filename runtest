@@ -1369,9 +1369,10 @@ or should it be rejected?
             if vsmrel == rel: # Skip the VSM endpoint here
                 continue
             r = re.match(r'.*/metadata/(\w+)/?', rel)
-            if r and -1 == rel.find('/ny-'):
+            if r:
                 knownmetarels.append(rel)
-                knownmetadata.append(r.group(1))
+                if -1 == rel.find('/ny-'):
+                    knownmetadata.append(r.group(1))
 
         metadatarel = noarkrelbase + 'metadata/'
         url = self.findRelation(metadatarel)
