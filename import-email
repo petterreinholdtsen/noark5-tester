@@ -99,7 +99,10 @@ class MboxImporter(n5core.endpoint.Endpoint):
                             action="store_true")
         parser.add_argument("--verbose", help="enable debug output",
                             action="store_true")
+        parser.add_argument("--vsm", help="enable VMS fields",
+                            action="store_true")
         args = parser.parse_args()
+        self.args = args
         self.usesaksmappe = args.saksmappe
         self.storageurl = args.storageurl
         self.maxinserts = args.maxinserts
@@ -634,6 +637,12 @@ last digit is a control digit.
             'tittel' : decodeheader(message['subject']),
             'oppbevaringssted' : threadstarterid ,
         }
+        if self.args.vsm:
+            docdescdata['virksomhetsspesifikkeMetadata'] = {
+                'vnd-email-v1:thread': threadstarterid,
+                'vnd-email-v1:message-id': message['message-id'],
+            }
+
         docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
                                         recordinfo['_links'],
                                         docdescdata)
@@ -738,9 +747,65 @@ last digit is a control digit.
         # Add to existing file
         return self.addMessageToFile(threadfile, message)
 
+    def createVSM(self):
+        if not self.args.vsm:
+            return
+        metadatarel = self.relbaseurl + 'metadata/'
+        vsmrel = "%smetadata/virksomhetsspesifikkeMetadata/" \
+            % self.relbaseurl
+        createvsmrel = "%smetadata/ny-virksomhetsspesifikkeMetadata/" \
+            % self.relbaseurl
+        url = self.findRelation(metadatarel)
+        (entry, res) = self.json_get(url)
+        metadatalist = json.loads(entry)
+
+        try:
+            vsmhref = metadatalist['_links'][vsmrel]['href']
+            (entry, res) = self.json_get(vsmhref)
+            vsmlist = json.loads(entry)
+        except HTTPError as e:
+            print("GET %s failed: %s (%s)" % (url, str(e), e.read()))
+            raise
+        vsmused = (
+            ('vnd-email-v1:thread', 'string',
+             'Message-ID of first or previous email in email thread.'),
+            ('vnd-email-v1:message-id', 'string',
+             'Message-ID of archived email.'),
+        )
+        for vsmkey, vsmtype, vsmdesc in vsmused:
+            # Only create if missing
+            found = False
+            if 0 < vsmlist['count']:
+                for v in vsmlist['results']:
+                    if vsmkey == v['navn']:
+                        if vsmtype == v['type']:
+                            found = True
+                            break
+                        else:
+                            raise Exception("Conflicting VSM type for %s (%s, not %s)"
+                                            % (vsmkey, v['type'], vsmtype))
+            if not found:
+                vsmdata = {
+                    u'navn' : vsmkey,
+                    u'type' : vsmtype,
+                    u'beskrivelse' : vsmdesc,
+                    #'kilde' : '',
+                    #'utdatert' : False,
+                }
+                try:
+                    vsmmetainfo = \
+                        self.createEntity('virksomhetsspesifikkeMetadata:%s'
+                                          % vsmkey, createvsmrel,
+                                          metadatalist['_links'], vsmdata)
+                except HTTPError as e:
+                    print("error: unable to create required VSM entry, exiting: %s (%s)"
+                          % (str(e), e.read()))
+                    praise
+
     def loadMbox(self):
         retval = True
         mbox = mailbox.mbox(self.mbox)
+        self.createVSM()
         last = time.time()
         count = 0
         inserted = 0
@@ -764,6 +829,7 @@ last digit is a control digit.
     def loadEmail(self):
         """ Load a single email from stdin like /usr/sbin/sendmail does. """
         message = email.message_from_file(sys.stdin)
+        self.createVSM()
         if not self.uploadEmail(message):
             print("error: not loading email %s" % message['message-id'])
             return False
