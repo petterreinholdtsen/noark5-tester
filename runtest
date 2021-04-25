@@ -644,7 +644,7 @@ Test basis requirements for NOARK 5 Core.
                             "DELETE endpoint return ETag on %s" % entityurl)
                 (dcontent, dres) = self.delete(entityurl, etag=etag)
                 self.success("able to DELETE %s" % entityurl)
-                self.xverify(204 == dres.code, "status code=%d (should be 204) for DELETE %s" % (dres.code, entityurl))
+                self.verify(204 == dres.code, "status code=%d (should be 204) for DELETE %s" % (dres.code, entityurl))
             except HTTPError as e:
                 # Until we figure out how sletting vs. DELETE should
                 # work, make missing DELETE support an expected
