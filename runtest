@@ -1227,10 +1227,6 @@ or should it be rejected?
                         'kodenavn': 'Personalsaker'
                     },
                     'skjermingshjemmel': 'Unntatt etter Offentleglova',
-                    'skjermingMetadata': [
-                        { 'kode': 'NA', 'kodenavn': 'Skjerming navn avsender' },
-                        { 'kode': 'TKL', 'kodenavn': 'Skjerming tittel klasse' },
-                    ],
                     'skjermingDokument': { 'kode': 'H', 'kodenavn': 'Skjerming av hele dokumentet' },
                     'skjermingsvarighet': 60,
                     'skjermingOpphoererDato': '1942-07-25T12:00:00Z',
@@ -1239,7 +1235,17 @@ or should it be rejected?
             scrndocdescinfo = self.createEntity('document description',
                                                 createdocdescrel,
                                                 self.parselinks(recordinfo['_links']),
-                                                scrndocdescdata, failureexpected=True)
+                                                scrndocdescdata)
+            scrmetarel = nikitarelbase + 'arkivstruktur/ny-skjermingMetadata/'
+            for scrmetadata in (
+                    { 'kode': 'NA', 'kodenavn': 'Skjerming navn avsender' },
+                    { 'kode': 'TKL', 'kodenavn': 'Skjerming tittel klasse' },
+            ):
+                scrnmetainfo = \
+                    self.createEntity('skjermingMetadata',
+                                      scrmetarel,
+                                      self.parselinks(scrndocdescinfo['_links']),
+                                      scrmetadata, failureexpected=True)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
