@@ -740,11 +740,12 @@ Test basis requirements for NOARK 5 Core.
                     self.xfailure('unable to find anything to modify among %s' % info.keys())
                     print(info)
                 infostr = json.dumps(info)
-                putinfo = self.put(url, infostr,
+                putinfo, putres = self.put(url, infostr,
                                    'application/vnd.noark5+json',
                                    etag=etag)
-                print(putinfo)
+                #print(putinfo)
                 self.success("able to modify %s" % url)
+                self.verify(200 == putres.code, "status code=%d (should be 200) for PUT %s" % (putres.code, url))
             except HTTPError as e:
                 if self.isknownmissing(url):
                     self.xfailure("unable to modify %s: %s (%s)" % (url, str(e), e.read()))
