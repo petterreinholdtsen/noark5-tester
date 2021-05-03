@@ -1362,14 +1362,10 @@ or should it be rejected?
 
 
     def testMetadata(self):
-        # This one is special, do not treat it as a normal metadata type
-        vsmrel = noarkrelbase + 'metadata/virksomhetsspesifikkeMetadata/',        
         # First, check if all known metadata relations are listed under metadat.
         knownmetarels = []
         knownmetadata = []
         for rel in self.knownrels:
-            if vsmrel == rel: # Skip the VSM endpoint here
-                continue
             r = re.match(r'.*/metadata/(\w+)/?', rel)
             if r:
                 knownmetarels.append(rel)
@@ -1386,7 +1382,7 @@ or should it be rejected?
             else:
                 self.xfailure("unofficial relation %s from %s" % (rel, url))
         if knownmetarels:
-            self.xfailure("metadata relation keys %s not listed under %s"
+            self.failure("metadata relation keys %s not listed under %s"
                           % (knownmetarels, url))
         else:
             self.success("all known metadata relation keys listed under %s" % url)
@@ -1417,15 +1413,17 @@ or should it be rejected?
         }
         links = self.parselinks(metadatalist['_links'])
         for metadata in knownmetadata:
+            # VSM entpoint is special, do not treat it as a normal metadata type
+            if 'virksomhetsspesifikkeMetadata' == metadata:
+                continue
             rel = self.relbaseurl + 'metadata/ny-%s/' % metadata
             try:
-                info = self.createEntity(metadata, rel, links, metadatavalue,
-                                         failureexpected=True)
+                info = self.createEntity(metadata, rel, links, metadatavalue)
             except HTTPError as e:
                 # Message already printed in createEntity()
                 pass
             except TypeError as e:
-                self.xfailure("unable to create %s" % metadata)
+                self.failure("unable to create %s" % metadata)
 
     def testOdataSearch(self):
         """Try to find and count the stuff inserted by testNewDocument()
