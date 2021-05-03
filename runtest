@@ -155,7 +155,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         noarkrelbase + 'metadata/kassasjonsvedtak/',
         noarkrelbase + 'metadata/koordinatsystem/',
         noarkrelbase + 'metadata/klassifikasjonstype/',
-        noarkrelbase + 'metadata/koordinatsystem/',
         noarkrelbase + 'metadata/korrespondanseparttype/',
         noarkrelbase + 'metadata/land/',
         noarkrelbase + 'metadata/mappetype/',
