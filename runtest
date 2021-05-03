@@ -1386,8 +1386,8 @@ or should it be rejected?
             else:
                 self.xfailure("unofficial relation %s from %s" % (rel, url))
         if knownmetarels:
-            self.xfailure("metadata relation keys [%s] not listed under %s" % (
-                knownmetarels, url))
+            self.xfailure("metadata relation keys %s not listed under %s"
+                          % (knownmetarels, url))
         else:
             self.success("all known metadata relation keys listed under %s" % url)
 
