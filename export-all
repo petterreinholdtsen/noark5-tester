@@ -106,6 +106,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.xml = self.args.xml
         self.xml_extended = self.args.xml_extended
 
+        self.screeningmetadatarel = '%sskjermingmetadata/' % self.nikitarelbaseurl
+
     def _mkdir_recursive(self, path):
         sub_path = os.path.dirname(path)
         if '' != sub_path and not os.path.exists(sub_path):
@@ -158,7 +160,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                             print('warning: GET %s did not return list' % (url))
                             k[1](output, info)
                     elif rel in content:
-                        k[1](output, content[rel])
+                        k[1](output, content[rel], content)
                         del content[rel]
             if '_links' in content:
                 del content['_links']
@@ -197,7 +199,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         output.writetag('forfatter', content['forfatter'])
 
 
-    def recurse_xml_kassasjon(self, output, content):
+    def recurse_xml_kassasjon(self, output, content, parent=None):
         sequence = (
             'kassasjonsvedtak.kodenavn>kassasjonsvedtak',
             'kassasjonsvedtak.kode>[null]',
@@ -208,7 +210,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.recurse_xml_out_ordered(output, 'kassasjon', content, sequence)
 
 
-    def recurse_xml_utfoertKassasjon(self, output, content):
+    def recurse_xml_utfoertKassasjon(self, output, content, parent=None):
         sequence = (
             'kassertDato',
             'kassertAv',
@@ -216,7 +218,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.recurse_xml_out_ordered(output, 'utfoertKassasjon', content, sequence)
 
 
-    def recurse_xml_sletting(self, output, content):
+    def recurse_xml_sletting(self, output, content, parent=None):
         sequence = (
             'slettingstype.kodenavn>slettingstype',
             'slettingstype.kode>[null]',
@@ -227,22 +229,26 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.recurse_xml_out_ordered(output, 'sletting', content, sequence)
 
 
-    def recurse_xml_skjerming(self, output, content):
+    def recurse_xml_skjermingmetadata(self, output, content):
+        output.writetag('skjermingMetadata', content['kodenavn'])
+
+
+    def recurse_xml_skjerming(self, output, content, parent=None):
         sequence = (
             'tilgangsrestriksjon.kodenavn>tilgangsrestriksjon',
             'tilgangsrestriksjon.kode>[null]',
             'skjermingshjemmel',
-            'skjermingMetadata.kodenavn>skjermingMetadata',
-            'skjermingMetadata.kode>[null]',
+            (self.screeningmetadatarel, self.recurse_xml_skjermingmetadata),
             'skjermingDokument.kodenavn>skjermingDokument',
             'skjermingDokument.kode>[null]',
             'skjermingsvarighet',
             'skjermingOpphoererDato',
         )
+        content['_links'] = parent['_links']
         self.recurse_xml_out_ordered(output, 'skjerming', content, sequence)
 
 
-    def recurse_xml_gradering(self, output, content):
+    def recurse_xml_gradering(self, output, content, parent=None):
         sequence = (
             'graderingskode.kodenavn>grad',
             'graderingskode.kode>[null]',
@@ -254,7 +260,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.recurse_xml_out_ordered(output, 'gradering', content, sequence)
 
 
-    def recurse_xml_elektroniskSignatur(self, output, content):
+    def recurse_xml_elektroniskSignatur(self, output, content, parent=None):
         sequence = (
             'elektroniskSignaturSikkerhetsnivaa.kodenavn>elektroniskSignaturSikkerhetsnivaa',
             'elektroniskSignaturSikkerhetsnivaa.kode>[null]',
@@ -354,7 +360,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                             print('warning: GET %s did not return list' % (url))
                             k[1](output, info)
                     elif rel in content:
-                        k[1](output, content[rel])
+                        k[1](output, content[rel], content)
                         del content[rel]
             if '_links' in content:
                 del content['_links']
