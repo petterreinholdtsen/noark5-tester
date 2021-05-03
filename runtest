@@ -266,6 +266,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'api/admin/ny-bruker/?',
         'api/admin/system/?',
         'api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-forfatter/?',
+        'api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-skjermingmetadata',
         'api/arkivstruktur/dokumentobjekt/[-0-9a-z]+/ny-konvertering/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/arkivdel/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-bygning/?',
