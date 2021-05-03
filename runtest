@@ -573,8 +573,8 @@ Test basis requirements for NOARK 5 Core.
                 allowstr = ores.getheader('Allow')
                 if allowstr:
                     allow = allowstr.split(',')
-                    verify(-1 != allow.index('POST'), 'OPTIONS header Allow should include POST for %s' % url)
-                    verify(-1 != allow.index('GET'), 'OPTIONS header Allow should include GET for %s' % url)
+                    verify('POST' in allow, 'OPTIONS header Allow should include POST for %s' % url)
+                    verify('GET' in allow, 'OPTIONS header Allow should include GET for %s' % url)
                 else:
                     failure("OPTIONS for URL %s missing Allow header" % url)
             except HTTPError as e:
@@ -1236,7 +1236,7 @@ or should it be rejected?
                                                 createdocdescrel,
                                                 self.parselinks(recordinfo['_links']),
                                                 scrndocdescdata)
-            scrmetarel = nikitarelbase + 'arkivstruktur/ny-skjermingMetadata/'
+            scrmetarel = nikitarelbase + 'ny-skjermingmetadata/'
             for scrmetadata in (
                     { 'kode': 'NA', 'kodenavn': 'Skjerming navn avsender' },
                     { 'kode': 'TKL', 'kodenavn': 'Skjerming tittel klasse' },
