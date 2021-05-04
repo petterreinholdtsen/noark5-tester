@@ -106,6 +106,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.xml = self.args.xml
         self.xml_extended = self.args.xml_extended
 
+        self.forfatterrel = '%sforfatter/' % self.nikitarelbaseurl
+        self.noekkelordrel = '%snoekkelord/' % self.nikitarelbaseurl
+        self.oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
         self.screeningmetadatarel = '%sskjermingmetadata/' % self.nikitarelbaseurl
 
     def _mkdir_recursive(self, path):
@@ -371,7 +374,6 @@ class ContentDumper(n5core.endpoint.Endpoint):
     def recurse_xml_dokumentbeskrivelse(self, output, content):
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
         merknadrel = '%sarkivstruktur/merknad/' % self.relbaseurl
-        forfatterrel = '%sforfatter/' % self.nikitarelbaseurl
         dokobjrel = '%sarkivstruktur/dokumentobjekt/' % self.relbaseurl
         sequence = [
             'systemID',
@@ -390,12 +392,12 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'dokumentstatus.kode>[null]',
             'tittel',
             'beskrivelse',
-            (forfatterrel, self.recurse_xml_forfatter),
+            (self.forfatterrel, self.recurse_xml_forfatter),
             'opprettetDato',
             'opprettetAv',
             'dokumentmedium.kodenavn>dokumentmedium',
             'dokumentmedium.kode>[null]',
-            'oppbevaringssted',
+#            (self.oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME 404 on dokumentbeskivelse
 #            ('referanseArkivdel'), # FIXME for dokumentbeskrivelse
             'tilknyttetRegistreringSom.kodenavn>tilknyttetRegistreringSom',
             'tilknyttetRegistreringSom.kode>[null]',
@@ -537,6 +539,10 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         self.recurse_xml_out_ordered(output, 'avskrivning', content, sequence)
 
 
+    def recurse_xml_noekkelord(self, output, content):
+        output.writetag('noekkelord', content['noekkelord'])
+
+
     def recurse_xml_oppbevaringssted(self, output, content):
         output.writetag('oppbevaringssted', content['oppbevaringssted'])
 
@@ -577,13 +583,11 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         if entityrel in typemap:
             attr = {'xsi:type': typemap[entityrel]}
         merknadrel = '%sarkivstruktur/merknad/' % self.relbaseurl
-        forfatterrel = '%sforfatter/' % self.nikitarelbaseurl
         dokbeskrrel = '%sarkivstruktur/dokumentbeskrivelse/' % self.relbaseurl
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
         korrpartrel = '%sarkivstruktur/korrespondansepart/' % self.relbaseurl
         dokflytrel = '%ssakarkiv/dokumentflyt/' % self.relbaseurl
         avskrel = '%ssakarkiv/avskrivning/' % self.relbaseurl
-        oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         nirel = '%sarkivstruktur/nasjonalidentifikator/' % self.relbaseurl
@@ -616,11 +620,11 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             'tittel',
             'offentligTittel',
             'beskrivelse',
-            'noekkelord',
-            (forfatterrel, self.recurse_xml_forfatter),
+            (self.noekkelordrel, self.recurse_xml_noekkelord),
+            (self.forfatterrel, self.recurse_xml_forfatter),
             'dokumentmedium.kodenavn>dokumentmedium',
             'dokumentmedium.kode>[null]',
-            (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for registrering
+            (self.oppbevrel, self.recurse_xml_oppbevaringssted),
             'virksomhetsspesifikkeMetadata',
 
             (merknadrel, self.recurse_xml_merknad),
@@ -693,7 +697,6 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
         undermapperel = '%sarkivstruktur/undermappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
-        oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
         kryssrefrel = '%sarkivstruktur/kryssreferanse/' % self.relbaseurl
         presedensrel = '%ssakarkiv/presedens/' % self.relbaseurl
         nirel = '%sarkivstruktur/nasjonalidentifikator/' % self.relbaseurl
@@ -720,10 +723,10 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             'tittel',
             'offentligTittel',
             'beskrivelse',
-#            ('noekkelord'), # FIXME for mappe
+            (self.noekkelordrel, self.recurse_xml_noekkelord),
             'dokumentmedium.kodenavn>dokumentmedium',
             'dokumentmedium.kode>[null]',
-            (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for mappe
+            (self.oppbevrel, self.recurse_xml_oppbevaringssted),
             'opprettetDato',
             'opprettetAv',
             'avsluttetDato',
@@ -800,7 +803,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         sequence.extend((
             'tittel',
             'beskrivelse',
-#            ('noekkelord'), # FIXME for klasse
+            (self.noekkelordrel, self.recurse_xml_noekkelord),
             'opprettetDato',
             'opprettetAv',
             'avsluttetDato',
@@ -859,7 +862,6 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
         saksmapperel = '%sarkivstruktur/saksmappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
-        oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
 
         if self.args.onlyclosed:
             filter = '?$filter=avsluttetDato+ne+null'
@@ -885,7 +887,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             'arkivdelstatus.kode>[null]',
             'dokumentmedium.kodenavn>dokumentmedium',
             'dokumentmedium.kode>[null]',
-#            (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for arkivdel
+#            (self.oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME 404 on arkivdel
             'opprettetDato',
             'opprettetAv',
             'avsluttetDato',
@@ -912,7 +914,6 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         underarkivrel = '%sarkivstruktur/underarkiv/' % self.relbaseurl
         arkivdelrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
         arkivskaperrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
-        oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
 
         if self.args.onlyclosed:
             filter = '?$filter=avsluttetDato+ne+null'
@@ -937,7 +938,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             'arkivstatus.kode>[null]',
             'dokumentmedium.kodenavn>dokumentmedium',
             'dokumentmedium.kode>[null]',
-            (oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME for arkiv
+            (self.oppbevrel, self.recurse_xml_oppbevaringssted),
             'opprettetDato',
             'opprettetAv',
             'avsluttetDato',
