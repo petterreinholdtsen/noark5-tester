@@ -1477,8 +1477,12 @@ or should it be rejected?
             ('arkivstruktur/mappe/',
              "nasjonalidentifikator/x gt 1.0'", -1),
 
+            # Is this the way to search for author and noekkelord?
             ('arkivstruktur/mappe/',
-             'noekkelord ne null', -1),
+             'noekkelord/noekkelord ne null', -1),
+
+            ('arkivstruktur/dokumentbeskrivelse/',
+             "forfatter/forfatter eq 'Henrik Ibsen'", -1), # enable when Nikita work
         )
 
         for s in searches:
