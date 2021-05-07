@@ -639,6 +639,7 @@ Test basis requirements for NOARK 5 Core.
             try:
                 (infostr, res) = self.json_get(entityurl)
                 info = json.loads(infostr)
+                # FIXME Should DELETE  return ETag?
                 etag = res.getheader('ETag')
                 self.verify(etag is not None,
                             "DELETE endpoint return ETag on %s" % entityurl)
@@ -646,10 +647,7 @@ Test basis requirements for NOARK 5 Core.
                 self.success("able to DELETE %s" % entityurl)
                 self.verify(204 == dres.code, "status code=%d (should be 204) for DELETE %s" % (dres.code, entityurl))
             except HTTPError as e:
-                # Until we figure out how sletting vs. DELETE should
-                # work, make missing DELETE support an expected
-                # failure.
-                self.xfailure("unable to DELETE %s: %s" % (entityurl, e.read()))
+                self.failure("unable to DELETE %s: %s" % (entityurl, e.read()))
 
 
     def testAllAttributes(self):
