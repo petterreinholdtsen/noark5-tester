@@ -52,11 +52,17 @@ tagkonvertering          = '{%s}konvertering' % strukturns
 
 # List of fields to ignore during import until Nikita handle them correctly
 excludes = {
+    'administrativenhet': (
+        'virksomhetsspesifikkeMetadata',
+    ),
     'arkiv': (
         'systemID',
     ),
     'arkivdel': (
         'systemID',
+    ),
+    'bruker': (
+        'virksomhetsspesifikkeMetadata',
     ),
     'klassifikasjonssystem': (
         'systemID',
@@ -77,10 +83,12 @@ excludes = {
     'mappe': (
         'systemID',
         'part',
+        'virksomhetsspesifikkeMetadata',
     ),
     'registrering': (
         'systemID',
         'noekkelord',
+        'virksomhetsspesifikkeMetadata',
     ),
     'journalpost': (
         'systemID',
@@ -101,6 +109,7 @@ excludes = {
         # is not settable by the client. This means import will set the
         # value for you.
         'dokumentnummer',
+        'virksomhetsspesifikkeMetadata',
     ),
     'dokumentobjekt': (
         'systemID',
@@ -113,6 +122,30 @@ excludes = {
         # during upload that way.
         'referanseDokumentfil',
         'filstoerrelse',
+    ),
+    'korrespondansepart': (
+        'virksomhetsspesifikkeMetadata',
+    ),
+    'korrespondansepartenhet': (
+        'virksomhetsspesifikkeMetadata',
+    ),
+    'korrespondansepartperson': (
+        'virksomhetsspesifikkeMetadata',
+    ),
+    'korrespondansepartintern': (
+        'virksomhetsspesifikkeMetadata',
+    ),
+    'part': (
+        'virksomhetsspesifikkeMetadata',
+    ),
+    'partenhet': (
+        'virksomhetsspesifikkeMetadata',
+    ),
+    'partperson': (
+        'virksomhetsspesifikkeMetadata',
+    ),
+    'partintern': (
+        'virksomhetsspesifikkeMetadata',
     ),
 }
 
