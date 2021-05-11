@@ -677,7 +677,6 @@ Test basis requirements for NOARK 5 Core.
                 },
                 "optional" : {
                     "beskrivelse"          : "arkiv",
-                    #"oppbevaringssted"     : [ "location" ],
                     "arkivstatus"          : "arkivstatus",
                     "dokumentmedium"       : "Elektronisk arkiv",
                     "avsluttetDato"        : timestamp,
@@ -834,7 +833,6 @@ or should it be rejected?
         fondsdata = {
             "tittel"          : u"Title of the test fonds created %s" % now,
 #            "beskrivelse"     : "Description of the test fonds",
-#            "oppbevaringssted" : [ "location 1", "location2", "location3" ],
 #            "dokumentmedium"  : "Elektronisk arkiv",
         }
         fondinfo = self.createEntity('fonds', createfondsrel,
@@ -846,7 +844,6 @@ or should it be rejected?
         seriesdata = {
             "tittel"          : u"Title of the test series created %s" % now,
 #            "beskrivelse"     : "Description of the test series",
-#            "oppbevaringssted" : [ "location 1", "location2", "location3" ],
 #            "dokumentmedium"  : "Elektronisk arkiv",
 #            "arkivdelstatus" : { "kode": u"O" },
             "gradering": {
@@ -943,8 +940,6 @@ or should it be rejected?
 #            "offentligTittel"    : "Public title of the test file created %s" % now,
             "tittel"             : u"Title of the test file created %s" % now,
 #            "beskrivelse"        : "Description of the test file",
-#            "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
-#            "oppbevaringssted"    : [ "location 1", "location2", "location3" ],
 #            "dokumentmedium"     : "Elektronisk arkiv",
         }
         createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
@@ -985,6 +980,34 @@ or should it be rejected?
                                             commentdata)
         except HTTPError as e:
             pass
+
+        # Test adding keyword to file
+        createkeywordrel = nikitarelbase + 'ny-noekkelord/'
+        for keyword in (u'new', u'interesting'):
+            keyworddata = {
+                'noekkelord': keyword,
+            }
+            try:
+                keywordinfo = \
+                    self.createEntity('keyword', createkeywordrel,
+                                      self.parselinks(fileinfo['_links']),
+                                      keyworddata, failureexpected=True)
+            except HTTPError as e:
+                pass
+
+        # Test adding location to file
+        createlocationrel = nikitarelbase + 'ny-oppbevaringssted/'
+        for location in (u'hjemme', u'bomberommet'):
+            locationdata = {
+                'oppbevaringssted': location,
+            }
+            try:
+                locationinfo = \
+                    self.createEntity('location', createlocationrel,
+                                      self.parselinks(fileinfo['_links']),
+                                      locationdata, failureexpected=True)
+            except HTTPError as e:
+                pass
 
         # Test adding nasjonal identifiers to file
         nitestdata = [
@@ -1069,8 +1092,6 @@ or should it be rejected?
 #            "offentligTittel"    : "Public title of the test case file created %s" % now,
             "tittel"             : u"Title of the test case file created %s" % now,
 #            "beskrivelse"        : "Description of the test file",
-#            "noekkelord"         : ["nøkkelord 1", "nøkkelord 2"],
-#            "oppbevaringssted"    : [ "location 1", "location2", "location3" ],
 #            "dokumentmedium"     : "Elektronisk arkiv",
 #            "saksdato"           : "2016-10-04",
 #            "administrativEnhet" : "The administrative unit",
@@ -1554,6 +1575,9 @@ or should it be rejected?
              "nasjonalidentifikator/x gt 1.0'", -1),
 
             # Is this the way to search for author and noekkelord?
+            ('arkivstruktur/mappe/',
+             "noekkelord/noekkelord eq 'interesting'", -1),
+
             ('arkivstruktur/mappe/',
              'noekkelord/noekkelord ne null', -1),
 
