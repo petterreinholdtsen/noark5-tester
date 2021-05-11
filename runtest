@@ -708,12 +708,12 @@ Test basis requirements for NOARK 5 Core.
                 etag = res.getheader('ETag')
                 self.verify(etag is not None,
                             "PUT endpoint return ETag on %s" % url)
-                for key in info.keys():
+                for key in info.copy().keys():
                     keytype = type(info[key])
                     if list == keytype:
                         # list members are modified using other
                         # accessors.
-                        print("removing key %s" % key)
+                        print("removing key %s: %s" % (key, info[key]))
                         info.pop(key, None)
                 modkey = None
                 for keycandidate in (
