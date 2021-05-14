@@ -279,7 +279,9 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-plan/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-noekkelord/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-oppbevaringssted/?',
+        'api/arkivstruktur/mappe/[-0-9a-z]+/ny-kryssreferanse/?',
         'api/arkivstruktur/klasse/[-0-9a-z]+/ny-noekkelord/?',
+        'api/arkivstruktur/klasse/[-0-9a-z]+/ny-kryssreferanse/?',
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-noekkelord/?',
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-bygning/?',
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-dnummer/?',
@@ -288,6 +290,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-matrikkel/?',
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-oppbevaringssted/?',
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-plan/?',
+        'api/arkivstruktur/registrering/[-0-9a-z]+/ny-kryssreferanse/?'
     ]
     verbose = False
 
