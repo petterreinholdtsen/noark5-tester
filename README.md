@@ -17,7 +17,7 @@ standard](https://www.arkivverket.no/arkivverket/Offentleg-forvalting/Noark/Noar
 available from Arkivverket.
 
 This test suite was written to test the code in 
-https://github.com/HiOA-ABI/nikita-noark5-core .
+https://gitlab.com/OsloMet-ABI/nikita-noark5-core .
 
 The latest version of the test scripts can be found in
 https://github.com/petterreinholdtsen/noark5-tester
