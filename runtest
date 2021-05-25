@@ -265,7 +265,9 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'api/metadata/ny-[a-zA-Z]+/?',
         'api/admin/ny-bruker/?',
         'api/admin/system/?',
+        'api/arkivstruktur/ny-arkivskaper',
         'api/arkivstruktur/arkiv/[-0-9a-z]+/ny-oppbevaringssted/?',
+        'api/arkivstruktur/arkiv/[-0-9a-z]+/ny-arkivskaper/?',
         'api/arkivstruktur/arkivdel/[-0-9a-z]+/ny-oppbevaringssted/?',
         'api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-forfatter/?',
         'api/arkivstruktur/dokumentbeskrivelse/[-0-9a-z]+/ny-skjermingmetadata',
@@ -277,6 +279,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-foedselsnummer/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-matrikkel/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-plan/?',
+        'api/arkivstruktur/mappe/[-0-9a-z]+/ny-posisjon/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-noekkelord/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-oppbevaringssted/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-kryssreferanse/?',
@@ -290,7 +293,9 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-matrikkel/?',
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-oppbevaringssted/?',
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-plan/?',
-        'api/arkivstruktur/registrering/[-0-9a-z]+/ny-kryssreferanse/?'
+        'api/arkivstruktur/registrering/[-0-9a-z]+/ny-posisjon/?',
+        'api/arkivstruktur/registrering/[-0-9a-z]+/ny-kryssreferanse/?',
+        'api/metadata/virksomhetsspesifikkeMetadata'
     ]
     verbose = False
 
