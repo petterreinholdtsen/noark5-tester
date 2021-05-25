@@ -279,7 +279,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-foedselsnummer/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-matrikkel/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-plan/?',
-        'api/arkivstruktur/mappe/[-0-9a-z]+/ny-posisjon/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-noekkelord/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-oppbevaringssted/?',
         'api/arkivstruktur/mappe/[-0-9a-z]+/ny-kryssreferanse/?',
@@ -293,7 +292,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-matrikkel/?',
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-oppbevaringssted/?',
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-plan/?',
-        'api/arkivstruktur/registrering/[-0-9a-z]+/ny-posisjon/?',
         'api/arkivstruktur/registrering/[-0-9a-z]+/ny-kryssreferanse/?',
         'api/metadata/virksomhetsspesifikkeMetadata'
     ]
