@@ -1477,6 +1477,11 @@ or should it be rejected?
 
         metadatarel = noarkrelbase + 'metadata/'
         url = self.findRelation(metadatarel)
+
+        if not url:
+            self.failure("unable to find %s" % metadatarel)
+            return
+
         (entry, res) = self.json_get(url)
         metadatalist = json.loads(entry)
         for rel in metadatalist['_links'].keys():
