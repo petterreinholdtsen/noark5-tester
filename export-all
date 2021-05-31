@@ -289,6 +289,13 @@ class ContentDumper(n5core.endpoint.Endpoint):
         konvrel = '%sarkivstruktur/konvertering/' % self.relbaseurl
         sequence = [
             'systemID',
+        ]
+        if self.xml_extended:
+            sequence.extend((
+                'endretDato',
+                'endretAv',
+            ))
+        sequence.extend((
             'versjonsnummer',
             'variantformat.kodenavn>variantformat',
             'variantformat.kode>[null]',
@@ -301,7 +308,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'sjekksum',
             'sjekksumAlgoritme',
             'filstoerrelse',
-        ]
+        ))
         if self.xml_extended:
             sequence.extend((
                 'filnavn',
