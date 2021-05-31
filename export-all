@@ -45,12 +45,12 @@ class XMLTag(object):
 
     def __enter__(self):
         if self.attr:
-            attr = \
-                str.join(" ",
-                         ['%s="%s"' % (i[0], i[1]) for i in self.attr.items()])
-            self.fh.write('%s<%s %s>\n' % ('  ' * self.level[0], self.tagname, attr))
+            attr = " " + str.join(" ",
+                                  ['%s="%s"' % (i[0], i[1])
+                                   for i in self.attr.items()])
         else:
-            self.fh.write('%s<%s>\n' % ('  ' * self.level[0], self.tagname))
+            attr = ""
+        self.fh.write('%s<%s%s>\n' % ('  ' * self.level[0], self.tagname, attr))
         self.level[0] +=1
 
 
@@ -74,11 +74,19 @@ class XMLFile(object):
         return self.fh.write(s)
 
 
-    def writetag(self, tagname, s):
+    def writetag(self, tagname, s=None, attr=None):
         if isinstance(s, six.text_type):
             s = escape(s)
-        self.fh.write('%s<%s>%s</%s>\n' % ('  ' * self.level[0], tagname, s, tagname))
-
+        if attr:
+            attr = " " + str.join(" ",
+                                  ['%s="%s"' % (i[0], i[1])
+                                   for i in attr.items()])
+        else:
+            attr = ""
+        if s:
+            self.fh.write('%s<%s%s>%s</%s>\n' % ('  ' * self.level[0], tagname, attr, s, tagname))
+        elif '' != attr: # Skip these, ref. Noark 6.4.5
+            self.fh.write('%s<%s%s/>\n' % ('  ' * self.level[0], tagname, attr))
 
 class ContentDumper(n5core.endpoint.Endpoint):
     def __init__(self):
