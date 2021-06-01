@@ -44,6 +44,7 @@ tagforfatter             = '{%s}forfatter' % strukturns
 taggradering             = '{%s}gradering' % strukturns
 tagpresedens             = '{%s}presedens' % strukturns
 tagskjerming             = '{%s}skjerming' % strukturns
+tagskjermingMetadata     = '{%s}skjermingMetadata' % strukturns
 tagsletting              = '{%s}sletting' % strukturns
 tagkorrespondansepart    = '{%s}korrespondansepart' % strukturns
 tagdokumentbeskrivelse   = '{%s}dokumentbeskrivelse' % strukturns
@@ -516,7 +517,12 @@ class Importer(n5core.endpoint.Endpoint):
                     subs[sub.tag][0].append(sub)
                 else:
                     # transform for use inline
-                    data[field] = subs[sub.tag][2](parentinfo, sub)
+                    res = subs[sub.tag][2](parentinfo, sub)
+                    if tuple == type(res): # Special case for skjermingMetadata
+                        data[field] = res[0]
+                        subs.update(res[1])
+                    else:
+                        data[field] = res
             else:
                 if name in excludes and field in excludes[name]:
                         self.output('ignoring %s field %s [%s]' % (name, field, etree.tostring(sub)))
@@ -581,28 +587,33 @@ class Importer(n5core.endpoint.Endpoint):
         rel = self.relbaseurl + 'sakarkiv/ny-presedens/'
         self.import_entity('presedens', rel, parentinfo, element, subs)
 
+    def import_skjermingMetadata(self, parentinfo, element):
+        # Borrow _links list from parent element
+        default = { '_links': parentinfo['_links'] }
+        name = 'skjermingMetadata'
+        field = 'skjermingMetadata' # metadata katalog name
+        data = self.metadatalookup(default, name, field,
+                                   verdi={'kodenavn': element.text})
+        rel = '%sny-skjermingmetadata/' % self.nikitarelbaseurl
+        info = self.create_entity('skjermingMetadata', rel, parentinfo, data)
+
     def import_skjerming(self, parentinfo, element):
         mdvalues = []
         mdlist = element.iterchildren('{%s}skjermingMetadata' % strukturns)
         for mdentry in mdlist:
-            mdvalues.append(mdentry.text)
+            mdvalues.append(mdentry)
             element.remove(mdentry)
         mdlist = None # Iterator is unusable here, make sure it is not used
         retval = self.import_inline('skjerming', parentinfo, element, {})
-        newscreeningmetadatarel = '%sny-skjermingmetadata/' % self.nikitarelbaseurl
-        if True:
-            print("Should import skjermingMetadata, not working as parent entity is not yet created")
+        if mdvalues:
+            # Ask import_entity to add skjermingMetadata values after
+            # the entity is created.
+            subs = {
+                tagskjermingMetadata: (mdvalues, self.import_skjermingMetadata),
+            }
+            return retval, subs
         else:
-            # FIXME redesign data flow to handle skjermingMetadata
-            for mdvalue in mdvalues:
-                data = {
-                    'kodenavn': mdvalue,
-                }
-                print(data)
-                info = self.create_entity('skjermingMetadata',
-                                          newscreeningmetadatarel, parentinfo,
-                                          data)
-        return retval
+            return retval
 
     def import_sletting(self, parentinfo, element):
         return self.import_inline('sletting', parentinfo, element, {})
