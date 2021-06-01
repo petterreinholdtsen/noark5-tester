@@ -236,7 +236,6 @@ metadata = {
     'skjerming': (
         'tilgangsrestriksjon',
         'skjermingDokument',
-        'skjermingMetadata*', # list of metadata values
     ),
 }
 
@@ -583,7 +582,27 @@ class Importer(n5core.endpoint.Endpoint):
         self.import_entity('presedens', rel, parentinfo, element, subs)
 
     def import_skjerming(self, parentinfo, element):
-        return self.import_inline('skjerming', parentinfo, element, {})
+        mdvalues = []
+        mdlist = element.iterchildren('{%s}skjermingMetadata' % strukturns)
+        for mdentry in mdlist:
+            mdvalues.append(mdentry.text)
+            element.remove(mdentry)
+        mdlist = None # Iterator is unusable here, make sure it is not used
+        retval = self.import_inline('skjerming', parentinfo, element, {})
+        newscreeningmetadatarel = '%sny-skjermingmetadata/' % self.nikitarelbaseurl
+        if True:
+            print("Should import skjermingMetadata, not working as parent entity is not yet created")
+        else:
+            # FIXME redesign data flow to handle skjermingMetadata
+            for mdvalue in mdvalues:
+                data = {
+                    'kodenavn': mdvalue,
+                }
+                print(data)
+                info = self.create_entity('skjermingMetadata',
+                                          newscreeningmetadatarel, parentinfo,
+                                          data)
+        return retval
 
     def import_sletting(self, parentinfo, element):
         return self.import_inline('sletting', parentinfo, element, {})
