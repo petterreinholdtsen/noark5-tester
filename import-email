@@ -620,7 +620,7 @@ last digit is a control digit.
         
         docdescdata = {
             'tittel' : decodeheader(message['subject']),
-            #'oppbevaringssted' : threadstarterid , # FIXME
+            'oppbevaringssted' : threadstarterid ,
         }
         docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
                                         recordinfo['_links'],
@@ -676,7 +676,7 @@ last digit is a control digit.
 
                 docdescdata = {
                     'tittel' : decodeheader(message['subject']),
-                    #'oppbevaringssted' : threadstarterid , # FIXME
+                    'oppbevaringssted' : threadstarterid ,
                 }
                 docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
                                             recordinfo['_links'],
