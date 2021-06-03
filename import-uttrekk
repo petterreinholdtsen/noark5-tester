@@ -454,7 +454,7 @@ class Importer(n5core.endpoint.Endpoint):
         if rel not in parent['_links'] or 'href' not in parent['_links'][rel]:
             if self.verbose:
                 print(parent)
-            raise Exception("unable to find %s in provided relations" % rel)
+            raise Exception("unable to find %s in provided relations from %s" % (rel, parent['_links']['self']))
         url = parent['_links'][rel]['href']
         try:
             if self.verbose:

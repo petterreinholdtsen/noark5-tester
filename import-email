@@ -198,7 +198,9 @@ class MboxImporter(n5core.endpoint.Endpoint):
 
     def createEntity(self, name, rel, rels, data):
         if rel not in rels:
-            raise Exception("unable to find %s in provided relations" % rel)
+            if self.verbose:
+                print(rels)
+            raise Exception("unable to find %s in provided relations from %s" % (rel, rels['_links']['self']))
         url = rels[rel]['href']
         try:
             if self.verbose:
