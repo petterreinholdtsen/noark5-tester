@@ -719,7 +719,7 @@ class Importer(n5core.endpoint.Endpoint):
 
     def import_oppbevaringssted(self, parentinfo, element):
         subs = {}
-        rel = self.relbaseurl + 'arkivstruktur/ny-oppbevaringssted/'
+        rel = '%sny-oppbevaringssted/' % self.nikitarelbaseurl
         self.import_entity('oppbevaringssted', rel, parentinfo, element, subs)
 
     def import_noekkelord(self, parentinfo, element):
