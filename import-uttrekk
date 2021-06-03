@@ -38,6 +38,8 @@ tagklasse                = '{%s}klasse' % strukturns
 tagmappe                 = '{%s}mappe' % strukturns
 tagdokumentflyt          = '{%s}dokumentflyt' % strukturns
 tagmerknad               = '{%s}merknad' % strukturns
+tagnoekkelord            = '{%s}noekkelord' % strukturns
+tagoppbevaringssted      = '{%s}oppbevaringssted' % strukturns
 tagregistrering          = '{%s}registrering' % strukturns
 tagpart                  = '{%s}part' % strukturns
 tagforfatter             = '{%s}forfatter' % strukturns
@@ -70,7 +72,6 @@ excludes = {
     ),
     'klasse': (
         'systemID',
-        'noekkelord',
     ),
     'saksmappe' : (
         'systemID',
@@ -88,12 +89,10 @@ excludes = {
     ),
     'registrering': (
         'systemID',
-        'noekkelord',
         'virksomhetsspesifikkeMetadata',
     ),
     'journalpost': (
         'systemID',
-        'noekkelord',
         'avskrivning',
         'referanseArkivdel',
     ),
@@ -102,7 +101,6 @@ excludes = {
     ),
     'moeteregistrering': (
         'systemID',
-        'noekkelord',
     ),
     'dokumentbeskrivelse' : (
         'systemID',
@@ -552,6 +550,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagarkiv: ([], partial(self.import_arkiv, sub=True)),
             tagarkivskaper: ([], self.import_arkivskaper),
             tagarkivdel: ([], self.import_arkivdel),
+            tagoppbevaringssted: ([], self.import_oppbevaringssted),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-arkiv/'
         self.import_entity('arkiv', rel, parentinfo, element, subs)
@@ -626,6 +625,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagsletting: ([], None, self.import_sletting),
             tagklassifikasjonssystem: ([], self.import_klassifikasjonssystem),
             tagregistrering: ([], self.import_registrering),
+            tagoppbevaringssted: ([], self.import_oppbevaringssted),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-arkivdel/'
         self.import_entity('arkivdel', rel, parentinfo, element, subs)
@@ -643,6 +643,7 @@ class Importer(n5core.endpoint.Endpoint):
             tagmappe: ([], self.import_mappe),
             taggradering: ([], None, self.import_gradering),
             tagskjerming: ([], None, self.import_skjerming),
+            tagnoekkelord: ([], self.import_noekkelord),
         }
         rel = self.relbaseurl + 'arkivstruktur/ny-klasse/'
 
@@ -670,6 +671,8 @@ class Importer(n5core.endpoint.Endpoint):
             taggradering: ([], None, self.import_gradering),
             tagpresedens: ([], self.import_presedens),
             tagskjerming: ([], None, self.import_skjerming),
+            tagnoekkelord: ([], self.import_noekkelord),
+            tagoppbevaringssted: ([], self.import_oppbevaringssted),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -704,6 +707,8 @@ class Importer(n5core.endpoint.Endpoint):
             tagpart: ([], self.import_part),
             tagforfatter: ([], self.import_forfatter),
             tagpresedens: ([], self.import_presedens),
+            tagnoekkelord: ([], self.import_noekkelord),
+            tagoppbevaringssted: ([], self.import_oppbevaringssted),
         }
         self.import_entity(name, rel, parentinfo, element, subs)
 
@@ -711,6 +716,16 @@ class Importer(n5core.endpoint.Endpoint):
         subs = {}
         rel = self.relbaseurl + 'arkivstruktur/ny-merknad/'
         self.import_entity('merknad', rel, parentinfo, element, subs)
+
+    def import_oppbevaringssted(self, parentinfo, element):
+        subs = {}
+        rel = self.relbaseurl + 'arkivstruktur/ny-oppbevaringssted/'
+        self.import_entity('oppbevaringssted', rel, parentinfo, element, subs)
+
+    def import_noekkelord(self, parentinfo, element):
+        subs = {}
+        rel = '%sny-noekkelord/' % self.nikitarelbaseurl
+        self.import_entity('noekkelord', rel, parentinfo, element, subs)
 
     def guess_part_type(self, data):
         """

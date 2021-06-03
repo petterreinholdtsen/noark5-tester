@@ -412,7 +412,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'opprettetAv',
             'dokumentmedium.kodenavn>dokumentmedium',
             'dokumentmedium.kode>[null]',
-#            (self.oppbevrel, self.recurse_xml_oppbevaringssted), # FIXME 404 on dokumentbeskivelse
+            'oppbevaringssted',
 #            ('referanseArkivdel'), # FIXME for dokumentbeskrivelse
             'tilknyttetRegistreringSom.kodenavn>tilknyttetRegistreringSom',
             'tilknyttetRegistreringSom.kode>[null]',
