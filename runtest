@@ -907,7 +907,7 @@ or should it be rejected?
                 keywordinfo = \
                     self.createEntity('keyword', createkeywordrel,
                                       self.parselinks(classinfo['_links']),
-                                      keyworddata, failureexpected=True)
+                                      keyworddata)
             except HTTPError as e:
                 pass
 
@@ -998,7 +998,7 @@ or should it be rejected?
                 keywordinfo = \
                     self.createEntity('keyword', createkeywordrel,
                                       self.parselinks(fileinfo['_links']),
-                                      keyworddata, failureexpected=True)
+                                      keyworddata)
             except HTTPError as e:
                 pass
 
@@ -1012,7 +1012,7 @@ or should it be rejected?
                 locationinfo = \
                     self.createEntity('location', createlocationrel,
                                       self.parselinks(fileinfo['_links']),
-                                      locationdata, failureexpected=True)
+                                      locationdata)
             except HTTPError as e:
                 pass
 
@@ -1088,7 +1088,7 @@ or should it be rejected?
                 keywordinfo = \
                     self.createEntity('keyword', createkeywordrel,
                                       self.parselinks(recordinfo['_links']),
-                                      keyworddata, failureexpected=True)
+                                      keyworddata)
             except HTTPError as e:
                 pass
 
@@ -1293,7 +1293,7 @@ or should it be rejected?
                     self.createEntity('skjermingMetadata',
                                       scrmetarel,
                                       self.parselinks(scrndocdescinfo['_links']),
-                                      scrmetadata, failureexpected=True)
+                                      scrmetadata)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
