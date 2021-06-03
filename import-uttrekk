@@ -464,6 +464,7 @@ class Importer(n5core.endpoint.Endpoint):
                 if not k == '_links' and k not in data:
                     # Skip bad default values
                     if name in baddefaults and k in baddefaults[name]:
+                        print("error: dropping bad default '%s' from %s" % (name, url))
                         continue
                     data[k] = default[k]
         except HTTPError as e:
