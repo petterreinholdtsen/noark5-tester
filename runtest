@@ -911,6 +911,20 @@ or should it be rejected?
                               self.parselinks(classificationsysteminfo['_links']),
                               classdata)
 
+        # Test adding keyword to class
+        createkeywordrel = nikitarelbase + 'ny-noekkelord/'
+        for keyword in (u'old', u'facinating'):
+            keyworddata = {
+                'noekkelord': keyword,
+            }
+            try:
+                keywordinfo = \
+                    self.createEntity('keyword', createkeywordrel,
+                                      self.parselinks(classinfo['_links']),
+                                      keyworddata, failureexpected=True)
+            except HTTPError as e:
+                pass
+
         subclassdata = {
             'klasseID' : u'Test subclass created %s' % now,
             'tittel': u'Title of the test subclass created %s' % now,
@@ -1077,6 +1091,20 @@ or should it be rejected?
         recordinfo = self.createEntity('record', createrecordrel,
                                        self.parselinks(fileinfo['_links']),
                                        recorddata)
+
+        # Test adding keyword to record
+        createkeywordrel = nikitarelbase + 'ny-noekkelord/'
+        for keyword in (u'old', u'facinating'):
+            keyworddata = {
+                'noekkelord': keyword,
+            }
+            try:
+                keywordinfo = \
+                    self.createEntity('keyword', createkeywordrel,
+                                      self.parselinks(recordinfo['_links']),
+                                      keyworddata, failureexpected=True)
+            except HTTPError as e:
+                pass
 
         # Test adding nasjonal identifiers to record
         for (idtype, data) in nitestdata:
