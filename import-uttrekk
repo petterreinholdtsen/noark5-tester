@@ -288,26 +288,6 @@ intfields = (
 
 # Bad default values handed out from Nikita, values we remove from ny-* output
 baddefaults = {
-    'arkiv': (
-        'beskrivelse',
-    ),
-    'arkivskaper': (
-        'beskrivelse',
-    ),
-    'mappe': (
-        'beskrivelse',
-        'offentligTittel',
-    ),
-    'saksmappe': (
-        'beskrivelse',
-        'offentligTittel',
-    ),
-    'registrering': (
-        'beskrivelse',
-    ),
-    'journalpost': (
-        'beskrivelse',
-    ),
 }
 
 # FIXME figure out a better way to handle formats?
