@@ -18,6 +18,7 @@ sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
 import asyncio
+import json
 import re
 
 import n5core.endpoint
@@ -55,21 +56,43 @@ class ImapShim():
                     args = m.group(3)
 
                     if 'CAPABILITY' == command:
-                        self.imapreply(writer, '* CAPABILITY IMAP4rev1')
+                        capabilities = [
+                            'IMAP4rev1',
+#                            'AUTH=LOGIN',
+#                            'AUTH=PLAIN',
+#                            'CHILDREN',
+#                            'ENABLE',
+#                            'ID',
+                            'IDLE',
+#                            'LITERAL+',
+#                            'NAMESPACE',
+#                            'UIDPLUS',
+                        ]
+                        self.imapreply(writer, '* CAPABILITY %s' % ' '.join(sorted(capabilities)))
                         self.imapreply(writer, f"{msgid} OK CAPABILITY completed")
                     elif 'LIST' == command:
                         # FIXME implement
-                        self.imapreply(writer, '* LIST (\\Noselect) "/" ""')
+                        fondsrel = self.relbaseurl + 'arkivstruktur/arkiv/'
+                        fondshref = self.findRelation(fondsrel)
+                        (c, res) = self.json_get(fondshref)
+                        fondsinfo = json.loads(c)
+                        if 0 < fondsinfo['count']:
+                            for fond in fondsinfo['results']:
+                                #print(fond)
+                                self.imapreply(writer, f'* LIST (\\HasChildren)) "/" "{fond["tittel"]}"')
                         self.imapreply(writer, f"{msgid} OK LIST completed")
                     elif 'SELECT' == command:
                         # FIXME implement
                         self.imapreply(writer, '* 0 EXISTS')
                         self.imapreply(writer, '* 0 RECENT')
                         self.imapreply(writer, f"{msgid} OK [READ-WRITE] SELECT completed")
+                    elif 'FETCH' == command:
+                        # FIXME implement
+                        self.imapreply(writer, f"{msgid} NO Not yet implemented")
                     elif 'LOGIN' == command:
                         m = re.match(r'"(\S+)" "(\S*)"', args)
                         if not m:
-                            self.imapreply(writer, f"{msgid} FAIL LOGIN rejected")                            
+                            self.imapreply(writer, f"{msgid} BAD LOGIN rejected")
                             connected = False
                             #raise ValueError(f"Unable to locate username and password from {message!r}")
                         username = m.group(1)
@@ -78,7 +101,7 @@ class ImapShim():
                             self.login(username=username, password=password)
                             self.imapreply(writer, f"{msgid} OK LOGIN completed")
                         except LoginFailure as e:
-                            self.imapreply(writer, f"{msgid} FAIL LOGIN rejected")                            
+                            self.imapreply(writer, f"{msgid} NO LOGIN rejected")
                             connected = False
                     elif 'LOGOUT' == command:
                         self.imapreply(writer, f"{msgid} OK")
@@ -86,8 +109,7 @@ class ImapShim():
                     elif 'NOOP' == command:
                         self.imapreply(writer, f"{msgid} OK NOOP completed")
                     else:
-                        # FIXME switch logic?
-                        self.imapreply(writer, f"{msgid} OK I hope")
+                        self.imapreply(writer, f"{msgid} NO Sorry, not implemented")
                 await writer.drain()
 
             print("Close the connection")
