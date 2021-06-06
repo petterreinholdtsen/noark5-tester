@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+
+__license__ = 'GNU General Public License v2 or later at users choice'
+__author__ = "Petter Reinholdtsen"
+
+"""
+IMAP frontend for the Noark 5 Tjenestegrensesnitt API, to read archive
+material using an IMAP client.
+
+Based on the protocol description in
+https://datatracker.ietf.org/doc/html/rfc3501
+
+"""
+
+import sys
+import os
+sys.path.append(os.path.join(sys.path[0],'lib'))
+
+import argparse
+import asyncio
+import re
+
+import n5core.endpoint
+from n5core.endpoint import HTTPError, LoginFailure
+
+class ImapShim():
+    class ImapConnection(n5core.endpoint.Endpoint):
+        #baseurl = 'http://localhost:8092/noark5v5/'
+        baseurl = 'https://nikita.oslomet.no/noark5v5/'
+        def __init__(self):
+            n5core.endpoint.Endpoint.__init__(self, self.baseurl)
+
+        def imapreply(self, writer, msg):
+            msg = f"{msg}\r\n".encode()
+            print(f"Send: {msg!r}")
+            writer.write(msg)
+
+        def do_capability(self, args):
+            pass
+
+        async def protocol_handler(self, reader, writer):
+            writer.write(b"* OK IMAP4rev1 Service Ready\r\n")
+            connected = True
+            while connected:
+                addr = writer.get_extra_info('peername')
+                data = await reader.read(100)
+                for message in data.decode().split('\r\n'):
+                    if '' == message:
+                        continue
+                    print(f"Received {message!r} from {addr!r}")
+
+                    m = re.match(r"^(\S+) (\S+) ?(.+)?$", message)
+                    msgid = m.group(1)
+                    command = m.group(2)
+                    args = m.group(3)
+
+                    if 'CAPABILITY' == command:
+                        self.imapreply(writer, '* CAPABILITY IMAP4rev1')
+                        self.imapreply(writer, f"{msgid} OK CAPABILITY completed")
+                    elif 'LIST' == command:
+                        # FIXME implement
+                        self.imapreply(writer, '* LIST (\\Noselect) "/" ""')
+                        self.imapreply(writer, f"{msgid} OK LIST completed")
+                    elif 'SELECT' == command:
+                        # FIXME implement
+                        self.imapreply(writer, '* 0 EXISTS')
+                        self.imapreply(writer, '* 0 RECENT')
+                        self.imapreply(writer, f"{msgid} OK [READ-WRITE] SELECT completed")
+                    elif 'LOGIN' == command:
+                        m = re.match(r'"(\S+)" "(\S*)"', args)
+                        if not m:
+                            self.imapreply(writer, f"{msgid} FAIL LOGIN rejected")                            
+                            connected = False
+                            #raise ValueError(f"Unable to locate username and password from {message!r}")
+                        username = m.group(1)
+                        password = m.group(2)
+                        try:
+                            self.login(username=username, password=password)
+                            self.imapreply(writer, f"{msgid} OK LOGIN completed")
+                        except LoginFailure as e:
+                            self.imapreply(writer, f"{msgid} FAIL LOGIN rejected")                            
+                            connected = False
+                    elif 'LOGOUT' == command:
+                        self.imapreply(writer, f"{msgid} OK")
+                        connected = False
+                    elif 'NOOP' == command:
+                        self.imapreply(writer, f"{msgid} OK NOOP completed")
+                    else:
+                        # FIXME switch logic?
+                        self.imapreply(writer, f"{msgid} OK I hope")
+                await writer.drain()
+
+            print("Close the connection")
+            writer.close()
+    
+    async def handle_imap(self, reader, writer):
+        c = self.ImapConnection()
+        try:
+            await c.protocol_handler(reader, writer)
+        except Exception as e:
+            print("Error, exiting connection: %s" % e)
+            writer.close()
+            
+
+    async def main():
+        s = ImapShim()        
+        s.server = await asyncio.start_server(s.handle_imap, '127.0.0.1', 143)
+
+        addr = s.server.sockets[0].getsockname()
+        print(f'Serving on {addr}')
+
+        async with s.server:
+            await s.server.serve_forever()
+
+asyncio.run(ImapShim.main())
