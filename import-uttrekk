@@ -486,7 +486,8 @@ class Importer(n5core.endpoint.Endpoint):
     def import_entity(self, name, rel, parentinfo, element, subs):
         self.nesting += 1
         data = {}
-        for sub in element.iterchildren():
+        if 0 != len(element):
+          for sub in element.iterchildren():
             field = sub.tag.replace('{%s}' % strukturns, '')
             if self.verbose:
                 self.output("%s: '%s' - '%s'" % (name, sub.tag, sub.text))
@@ -510,6 +511,8 @@ class Importer(n5core.endpoint.Endpoint):
                         data[field] = {'kode': None, 'kodenavn': sub.text}
                     else:
                         data[field] = sub.text
+        else:
+          data[name] = element.text
         if self.verbose or self.dryrun:
             self.output("POST: %s" % data)
         if self.dryrun:
