@@ -286,41 +286,21 @@ class ContentDumper(n5core.endpoint.Endpoint):
     def recurse_xml_virksomhetsspesifikkeMetadata(self, output, content, parent=None):
         if not hasattr(self, 'seenvsm'):
             self.seenvsm = {}
+        # Organize on namespace
+        nslist = {}
+        for k in content.keys():
+            ns = k.split(':', 1)[0]
+            if not ns in nslist:
+                nslist[ns] = []
+            nslist[ns].append(k)
         with output.tag('virksomhetsspesifikkeMetadata'):
-            for k in content.keys():
-                output.writetag(k, content[k])
-                ns = k.split(':', 1)[1]
-                self.seenvsm[k] = ns
+            for ns in sorted(nslist.keys()):
+                with output.tag(f"{ns}:{ns}"):
+                    for k in nslist[ns]:
+                        output.writetag(k, content[k])
+                        field = k.split(':', 1)[1]
+                        self.seenvsm[k] = field
 
-#  <virksomhetsspesifikkeMetadata>
-#    <n5t-v1:myComplexType>
-#       <n5t-v1:real>one for the team</n5t-v1:real>
-#       <n5t-v1:realX>one for the team</n5t-v1:realX>
-#    </n5t-v1:myComplexType>n5t-v1:myComplexType&gt;
-#  </virksomhetsspesifikkeMetadata>
-
-# da kan du gjøre dette:
-#       <virksomhetsspesifikkeMetadata>
-#         <n5t-v1:myComplexType>
-#           <n5t-v1:real>one for the team</n5t-v1:real>
-#           <n5t-v1:realX>one for the team</n5t-v1:realX>
-#         </n5t-v1:myComplexType>
-#  <n5t-v2:myOtherComplexType>
-#           <n5t-v2:value>one for the team</n5t-v2:value>
-#           <n5t-v2:otherValue>one for the team</n5t-v2:otherValue>
-#         </n5t-v2:myOtherComplexType>
-#       </virksomhetsspesifikkeMetadata>
-# alternativ kunne vi kanskje gjøre:
-#       <virksomhetsspesifikkeMetadata>
-#         <n5t-v1:n5t-v1>
-#           <n5t-v1:real>one for the team</n5t-v1:real>
-#           <n5t-v1:realX>one for the team</n5t-v1:realX>
-#         </n5t-v1:n5t-v1>
-#  <n5t-v2:n5t-v2>
-#           <n5t-v2:value>one for the team</n5t-v2:value>
-#           <n5t-v2:otherValue>one for the team</n5t-v2:otherValue>
-#         </n5t-v2:n5t-v2>
-#       </virksomhetsspesifikkeMetadata>
 
     def recurse_xml_dokumentobjekt(self, output, content):
         # Not using recurse_xml_out_ordered to handle referanseDokumentfil
