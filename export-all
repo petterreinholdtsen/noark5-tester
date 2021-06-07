@@ -1050,8 +1050,10 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                     with output.tag('xs:schema', attr={
                             'attributeFormDefault': 'unqualified',
                             'elementFormDefault': 'qualified',
-                            'xmlns' : vsmurl,
                             'xmlns:xs' :'http://www.w3.org/2001/XMLSchema',
+                            'xmlns' : vsmurl,
+                            f'xmlns:{ns}' : vsmurl,
+                            'targetNamespace': vsmurl,
                             'version': '1.0',
                     }):
                         knownelement = {}
@@ -1059,36 +1061,29 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                             fieldns = t['navn'].split(':', 1)[0]
                             if fieldns == ns:
                                 knownelement[t['navn']] = t
-                        for navn, t in sorted(knownelement.items()):
-                            (fieldns, fieldname) = navn.split(':', 1)
-                            with output.tag('xs:simpleType',
-                                            attr={'name': fieldname}):
-                                desc = t.get('beskrivelse', None)
-                                if desc:
-                                    with output.tag('xs:annotation'):
-                                        attr = {}
+                        output.writetag('xs:element', attr={
+                            'name': ns,
+                            'type': ns,
+                        })
+                        with output.tag('xs:complexType', attr={ 'name': ns }):
+                            with output.tag('xs:sequence'):
+                                for navn, t in sorted(knownelement.items()):
+                                    (fieldns, fieldname) = navn.split(':', 1)
+                                    with output.tag('xs:element', attr={
+                                            'name': fieldname,
+                                            'type': t['type'],
+                                            'minOccurs': 0,
+                                    }):
+                                        desc = t.get('beskrivelse', None)
                                         src = t.get('kilde', None)
+                                        attr = None
                                         if src:
                                             attr['source'] = src
-                                        output.writetag('xs:documentation',
-                                                        '%s' % desc,
-                                                        attr=attr)
-
-                                output.writetag('xs:restriction',
-                                                attr={'base': t['type']})
-
-                        with output.tag('xs:complexType',
-                                        attr={'name': ns}):
-                            with output.tag('xs:sequence'):
-                                for t in sorted(knownelement):
-                                    (fieldns, fieldname) = t.split(':', 1)
-                                    if fieldns == ns:
-                                        output.\
-                                            writetag('xs:element',
-                                                     attr={'type': fieldname,
-                                                           'minOccurs': '0'})
-                        output.writetag('xs:element',
-                                        attr={'name': ns, 'type': ns})
+                                        if desc:
+                                            with output.tag('xs:annotation'):
+                                                output.writetag('xs:documentation',
+                                                                f'{desc}',
+                                                                attr=attr)
 
 
     def install_xsd(self, dir):
