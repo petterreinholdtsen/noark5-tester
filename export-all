@@ -995,6 +995,8 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             }
             vsmns = []
             schemaLocations = []
+            schemaLocations.append("http://www.arkivverket.no/standarder/noark5/arkivstruktur "
+                                   "arkivstruktur.xsd")
             vsmlist = self.get_vsm_list()
             if 'count' in vsmlist and 0 < vsmlist['count']:
                 for t in sorted(vsmlist['results'], key=lambda x: x['navn']):
