@@ -296,7 +296,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         with output.tag('virksomhetsspesifikkeMetadata'):
             for ns in sorted(nslist.keys()):
                 with output.tag(f"{ns}:{ns}"):
-                    for k in nslist[ns]:
+                    for k in sorted(nslist[ns]):
                         output.writetag(k, content[k])
                         field = k.split(':', 1)[1]
                         self.seenvsm[k] = field
