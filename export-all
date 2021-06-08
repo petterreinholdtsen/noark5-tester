@@ -1073,7 +1073,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                                     (fieldns, fieldname) = navn.split(':', 1)
                                     with output.tag('xs:element', attr={
                                             'name': fieldname,
-                                            'type': t['type'],
+                                            'type': 'xs:' + t['type'],
                                             'minOccurs': 0,
                                     }):
                                         desc = t.get('beskrivelse', None)
