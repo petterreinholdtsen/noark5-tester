@@ -48,8 +48,7 @@ import n5core.endpoint
 from n5core.endpoint import HTTPError
 from n5core.endpoint import URLError
 
-noarkrelbase = 'https://rel.arkivverket.no/noark5/v5/api/'
-nikitarelbase = 'https://nikita.arkivlab.no/noark5/v5/'
+noarkrelbase = n5core.endpoint.Endpoint.relbaseurl
 
 def utcnowtz():
     u = datetime.datetime.utcnow()
@@ -656,7 +655,7 @@ Test basis requirements for NOARK 5 Core.
         testdata = {
             "arkiv" : {
                 "selfrel" : None,
-                "rel" : noarkrelbase + 'arkivstruktur/ny-arkiv/',
+                "rel" : self.relbaseurl + 'arkivstruktur/ny-arkiv/',
                 "required" : {
                     "tittel"               : "arkiv-tittel",
                 },
@@ -759,7 +758,7 @@ Also, should 'date' fields accept values with time of day in them,
 or should it be rejected?
 
 """
-        rel = noarkrelbase + 'arkivstruktur/ny-registrering/'
+        rel = self.relbaseurl + 'arkivstruktur/ny-registrering/'
         name = 'record'
         field = "arkivertDato"
 
@@ -810,7 +809,7 @@ or should it be rejected?
             self.failure("not logged in, unable to test creation")
             return
 
-        createrecordcreatorrel = noarkrelbase + 'arkivstruktur/ny-arkivskaper/'
+        createrecordcreatorrel = self.relbaseurl + 'arkivstruktur/ny-arkivskaper/'
         recordcreatordata = {
             'arkivskaperID' : u'123456789',
             'arkivskaperNavn': u'Mr. arkivskaper',
@@ -822,7 +821,7 @@ or should it be rejected?
         if recordcreatorinfo is None:
             return
 
-        createfondsrel = noarkrelbase + 'arkivstruktur/ny-arkiv/'
+        createfondsrel = self.relbaseurl + 'arkivstruktur/ny-arkiv/'
         fondsdata = {
             "tittel"          : u"Title of the test fonds created %s" % now,
 #            "beskrivelse"     : "Description of the test fonds",
@@ -850,7 +849,7 @@ or should it be rejected?
                 "nedgradertAv": "PST"
             },
         }
-        createseriesrel = noarkrelbase + 'arkivstruktur/ny-arkivdel/'
+        createseriesrel = self.relbaseurl + 'arkivstruktur/ny-arkivdel/'
         serieinfo = self.createEntity('serie', createseriesrel,
                                       self.parselinks(fondinfo['_links']),
                                       seriesdata)
@@ -879,7 +878,7 @@ or should it be rejected?
 #            'klassifikasjonstype' : { 'kode' : 'FH', },
         }
         createclassificationsystemrel = \
-            noarkrelbase + 'arkivstruktur/ny-klassifikasjonssystem/'
+            self.relbaseurl + 'arkivstruktur/ny-klassifikasjonssystem/'
         classificationsysteminfo = \
             self.createEntity('classificationsystem',
                               createclassificationsystemrel,
@@ -891,14 +890,14 @@ or should it be rejected?
             'tittel': u'Title of the test class created %s' % now,
         }
         createclassrel = \
-            noarkrelbase + 'arkivstruktur/ny-klasse/'
+            self.relbaseurl + 'arkivstruktur/ny-klasse/'
         classinfo = \
             self.createEntity('class', createclassrel,
                               self.parselinks(classificationsysteminfo['_links']),
                               classdata)
 
         # Test adding keyword to class
-        createkeywordrel = nikitarelbase + 'ny-noekkelord/'
+        createkeywordrel = self.nikitarelbaseurl + 'ny-noekkelord/'
         for keyword in (u'old', u'facinating'):
             keyworddata = {
                 'noekkelord': keyword,
@@ -923,7 +922,7 @@ or should it be rejected?
         subclassfiledata = {
             'tittel' : u"Title of the sub-class test file created %s" % now,
         }
-        createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
+        createfilerel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
         subclassfileinfo = \
             self.createEntity('file', createfilerel,
                               self.parselinks(subclassinfo['_links']),
@@ -934,7 +933,7 @@ or should it be rejected?
         u8filedata = {
             "tittel"      : u"Fly high, try the 🛫 created %s" % now,
         }
-        createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
+        createfilerel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
         try:
             u8fileinfo = self.createEntity('file', createfilerel,
                                            self.parselinks(serieinfo['_links']),
@@ -949,7 +948,7 @@ or should it be rejected?
 #            "beskrivelse"        : "Description of the test file",
 #            "dokumentmedium"     : "Elektronisk arkiv",
         }
-        createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
+        createfilerel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
         fileinfo = self.createEntity('file', createfilerel,
                                      self.parselinks(serieinfo['_links']),
                                      filedata)
@@ -960,7 +959,7 @@ or should it be rejected?
                 ('enhet', u'navn'),
                 ('person', u'navn'),
         ]:
-            partrel = noarkrelbase + 'arkivstruktur/ny-part%s/' % c
+            partrel = self.relbaseurl + 'arkivstruktur/ny-part%s/' % c
             for code in (u'KLI', u'PAA', u'FORM', u'ADV'):
                 partdata = {
                     'partRolle' : {
@@ -980,7 +979,7 @@ or should it be rejected?
         commentdata = {
             'merknadstekst': u'Title of file comment created %s' % now,
         }
-        createcommentrel = noarkrelbase + 'arkivstruktur/ny-merknad/'
+        createcommentrel = self.relbaseurl + 'arkivstruktur/ny-merknad/'
         try:
             commentinfo = self.createEntity('comment', createcommentrel,
                                             self.parselinks(fileinfo['_links']),
@@ -989,7 +988,7 @@ or should it be rejected?
             pass
 
         # Test adding keyword to file
-        createkeywordrel = nikitarelbase + 'ny-noekkelord/'
+        createkeywordrel = self.nikitarelbaseurl + 'ny-noekkelord/'
         for keyword in (u'new', u'interesting'):
             keyworddata = {
                 'noekkelord': keyword,
@@ -1003,7 +1002,7 @@ or should it be rejected?
                 pass
 
         # Test adding location to file
-        createlocationrel = nikitarelbase + 'ny-oppbevaringssted/'
+        createlocationrel = self.nikitarelbaseurl + 'ny-oppbevaringssted/'
         for location in (u'hjemme', u'bomberommet'):
             locationdata = {
                 'oppbevaringssted': location,
@@ -1058,7 +1057,7 @@ or should it be rejected?
                 }),
         ]
         for (idtype, data) in nitestdata:
-            rel = noarkrelbase + 'arkivstruktur/ny-%s/' % idtype
+            rel = self.relbaseurl + 'arkivstruktur/ny-%s/' % idtype
             try:
                 info = self.createEntity('national identifier %s' % idtype,
                                          rel,
@@ -1073,13 +1072,13 @@ or should it be rejected?
                 pass
         recorddata = {
         }
-        createrecordrel = noarkrelbase + 'arkivstruktur/ny-registrering/'
+        createrecordrel = self.relbaseurl + 'arkivstruktur/ny-registrering/'
         recordinfo = self.createEntity('record', createrecordrel,
                                        self.parselinks(fileinfo['_links']),
                                        recorddata)
 
         # Test adding keyword to record
-        createkeywordrel = nikitarelbase + 'ny-noekkelord/'
+        createkeywordrel = self.nikitarelbaseurl + 'ny-noekkelord/'
         for keyword in (u'old', u'facinating'):
             keyworddata = {
                 'noekkelord': keyword,
@@ -1094,7 +1093,7 @@ or should it be rejected?
 
         # Test adding nasjonal identifiers to record
         for (idtype, data) in nitestdata:
-            rel = noarkrelbase + 'arkivstruktur/ny-%s/' % idtype
+            rel = self.relbaseurl + 'arkivstruktur/ny-%s/' % idtype
             try:
                 info = self.createEntity('national identifier %s' % idtype,
                                          rel,
@@ -1119,7 +1118,7 @@ or should it be rejected?
 #            "saksansvarlig"      : "Joe the case handler",
 #            "saksstatus"         : "Opprettet",
         }
-        createcasefilerel = noarkrelbase + 'sakarkiv/ny-saksmappe/'
+        createcasefilerel = self.relbaseurl + 'sakarkiv/ny-saksmappe/'
         casefileinfo = self.createEntity('casefile', createcasefilerel,
                                          self.parselinks(serieinfo['_links']),
                                          casefiledata)
@@ -1132,7 +1131,7 @@ or should it be rejected?
                 'tittel': u'Because that is the way it is',
                 'rettskildefaktor': u'The Boss',
             }
-            createprecedencerel = noarkrelbase + 'sakarkiv/ny-presedens/'
+            createprecedencerel = self.relbaseurl + 'sakarkiv/ny-presedens/'
             precedenceinfo = self.createEntity(
                 'precedence',
                 createprecedencerel,
@@ -1145,7 +1144,7 @@ or should it be rejected?
                 ('enhet', u'navn'),
                 ('person', u'navn'),
         ]:
-            partrel = noarkrelbase + 'arkivstruktur/ny-part%s/' % c
+            partrel = self.relbaseurl + 'arkivstruktur/ny-part%s/' % c
             for code in (u'KLI', u'PAA', u'FORM', u'ADV'):
                 partdata = {
                     'partRolle' : {
@@ -1164,7 +1163,7 @@ or should it be rejected?
         archivenotedata = {
             'tittel': u'test av arkivnotat',
         }
-        archivenoterel = noarkrelbase + 'sakarkiv/ny-arkivnotat/'
+        archivenoterel = self.relbaseurl + 'sakarkiv/ny-arkivnotat/'
         archivenoteinfo = self.createEntity('archivenote', archivenoterel,
                                             self.parselinks(casefileinfo['_links']),
                                             archivenotedata)
@@ -1172,7 +1171,7 @@ or should it be rejected?
             docflowdata = {
                 'flytTil': u'Sjefen',
             }
-            createdocflowrel = noarkrelbase + 'sakarkiv/ny-dokumentflyt/'
+            createdocflowrel = self.relbaseurl + 'sakarkiv/ny-dokumentflyt/'
             docflowinfo = self.createEntity('document flow',
                                             createdocflowrel,
                                             self.parselinks(archivenoteinfo['_links']),
@@ -1187,7 +1186,7 @@ or should it be rejected?
             u'journalposttype': { u'kode': u'I' },
             u'journalstatus': { u'kode': u'J' },
         }
-        createjournalentryrel = noarkrelbase + 'sakarkiv/ny-journalpost/'
+        createjournalentryrel = self.relbaseurl + 'sakarkiv/ny-journalpost/'
         journalentryinfo = self.createEntity('journalentry',
                                              createjournalentryrel,
                                              self.parselinks(casefileinfo['_links']),
@@ -1209,7 +1208,7 @@ or should it be rejected?
             },
             'referanseAvskrivesAvJournalpost': ujournalentryinfo['systemID'],
         }
-        createsignoffrel = noarkrelbase + 'sakarkiv/ny-avskrivning/'
+        createsignoffrel = self.relbaseurl + 'sakarkiv/ny-avskrivning/'
         try:
             signoffinfo = \
                 self.createEntity('sign off',
@@ -1223,7 +1222,7 @@ or should it be rejected?
                        ('person', u'navn'),
                        # ('intern', 'administrativenhet') # FIXME not working yet
         ]:
-            corrpartrel = noarkrelbase + 'arkivstruktur/ny-korrespondansepart%s/' % c
+            corrpartrel = self.relbaseurl + 'arkivstruktur/ny-korrespondansepart%s/' % c
             for code in ('EA', 'EM', 'EK', 'GM', 'IA', 'IM', 'IK'):
                 corrdata = {
                     'korrespondanseparttype' : {
@@ -1241,7 +1240,7 @@ or should it be rejected?
             "tittel"          : u"Title of the test document description created %s" % now,
 #            "tilknyttetRegistreringSom" : "Associated with record as"
         }
-        createdocdescrel = noarkrelbase + 'arkivstruktur/ny-dokumentbeskrivelse/'
+        createdocdescrel = self.relbaseurl + 'arkivstruktur/ny-dokumentbeskrivelse/'
         docdescinfo = self.createEntity('document description',
                                         createdocdescrel,
                                         self.parselinks(recordinfo['_links']),
@@ -1284,7 +1283,7 @@ or should it be rejected?
                                                 createdocdescrel,
                                                 self.parselinks(recordinfo['_links']),
                                                 scrndocdescdata)
-            scrmetarel = nikitarelbase + 'ny-skjermingmetadata/'
+            scrmetarel = self.nikitarelbaseurl + 'ny-skjermingmetadata/'
             for scrmetadata in (
                     { 'kode': 'NA', 'kodenavn': 'Skjerming navn avsender' },
                     { 'kode': 'TKL', 'kodenavn': 'Skjerming tittel klasse' },
@@ -1329,7 +1328,7 @@ or should it be rejected?
         authordata = {
             'forfatter': u'Henrik Ibsen',
         }
-        createauthorrel = nikitarelbase + 'ny-forfatter/'
+        createauthorrel = self.nikitarelbaseurl + 'ny-forfatter/'
         try:
             authorinfo = \
                 self.createEntity('author', createauthorrel,
@@ -1354,14 +1353,14 @@ or should it be rejected?
             "filstoerrelse"     : len(xmldata),
 #            "mimeType"       : "application/xml",
         }
-        createdocobjrel = noarkrelbase + 'arkivstruktur/ny-dokumentobjekt/'
+        createdocobjrel = self.relbaseurl + 'arkivstruktur/ny-dokumentobjekt/'
         docobjinfo = self.createEntity('document object', createdocobjrel,
                                        self.parselinks(docdescinfo['_links']),
                                        docobjdata)
 
         # FIXME try to upload a file, for example an xml file and large
         # chunked file.
-        reffilerel = noarkrelbase + 'arkivstruktur/fil/'
+        reffilerel = self.relbaseurl + 'arkivstruktur/fil/'
         self.verify(reffilerel in self.parselinks(docobjinfo['_links']),
                     "_links in response from %s rel should include '%s' rel" % (createdocobjrel, reffilerel))
         rels = self.parselinks(docobjinfo['_links'])
@@ -1400,7 +1399,7 @@ or should it be rejected?
             "konverteringsverktoey": u"runtime tester",
             "konverteringskommentar": u"tullekonvertering",
         }
-        createconvrel = noarkrelbase + 'arkivstruktur/ny-konvertering/'
+        createconvrel = self.relbaseurl + 'arkivstruktur/ny-konvertering/'
         try:
             convinfo = self.createEntity('conversion', createconvrel,
                                          self.parselinks(docobjinfo['_links']),
@@ -1416,7 +1415,7 @@ or should it be rejected?
                 u'n5t-v1:bogus': u'42',
             }
         }
-        createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
+        createfilerel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
         try:
             fileinfo = self.createEntity('file', createfilerel,
                                          self.parselinks(serieinfo['_links']),
@@ -1426,7 +1425,7 @@ or should it be rejected?
 
         # Next, ensure we use an existing VSM name or register a new
         # one.
-        metadatarel = noarkrelbase + 'metadata/'
+        metadatarel = self.relbaseurl + 'metadata/'
         vsmrel = "%smetadata/virksomhetsspesifikkeMetadata/" \
             % self.relbaseurl
         createvsmrel = "%smetadata/ny-virksomhetsspesifikkeMetadata/" \
@@ -1472,7 +1471,7 @@ or should it be rejected?
                 self.vsmkey : u'one for the team',
             }
         }
-        createfilerel = noarkrelbase + 'arkivstruktur/ny-mappe/'
+        createfilerel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
         fileinfo = self.createEntity('file', createfilerel,
                                      self.parselinks(serieinfo['_links']),
                                      filedata)
@@ -1489,7 +1488,7 @@ or should it be rejected?
                 if -1 == rel.find('/ny-'):
                     knownmetadata.append(r.group(1))
 
-        metadatarel = noarkrelbase + 'metadata/'
+        metadatarel = self.relbaseurl + 'metadata/'
         url = self.findRelation(metadatarel)
 
         if not url:
@@ -1512,7 +1511,7 @@ or should it be rejected?
         # Make sure 'Journalført' is listed as a journalstatus entry.
         # Looking for this one to detect mojobake with æøå in entries.
         kodenavn = u'Journalført'
-        journalstatusrel = noarkrelbase + 'metadata/journalstatus/'
+        journalstatusrel = self.relbaseurl + 'metadata/journalstatus/'
         url = self.findRelation(journalstatusrel)
         (entry, res) = self.json_get(url)
         j = json.loads(entry)

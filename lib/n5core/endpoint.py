@@ -30,11 +30,11 @@ class LoginFailure(RuntimeError):
     pass
 
 class Endpoint:
+    relbaseurl = 'https://rel.arkivverket.no/noark5/v5/api/'
+    nikitarelbaseurl = "https://nikita.arkivlab.no/noark5/v5/"
     def __init__(self, baseurl):
         self.baseurl = baseurl
         self.verbose = False
-        self.relbaseurl = 'https://rel.arkivverket.no/noark5/v5/api/'
-        self.nikitarelbaseurl = "https://nikita.arkivlab.no/noark5/v5/"
 
     def expandurl(self, path):
 #        print(self.baseurl, path)
