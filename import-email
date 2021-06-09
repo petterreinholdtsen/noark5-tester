@@ -531,6 +531,7 @@ last digit is a control digit.
         recordrel = '%sarkivstruktur/ny-registrering/' % self.relbaseurl
         recordentryrel = '%ssakarkiv/ny-journalpost/' % self.relbaseurl
         docdescrel = '%sarkivstruktur/ny-dokumentbeskrivelse/' % self.relbaseurl
+        createkeywordrel = self.nikitarelbaseurl + 'ny-noekkelord/'
 
         created = []
         content = message.as_bytes()
@@ -619,6 +620,15 @@ last digit is a control digit.
                                            recorddata)
             created.append(recordinfo['_links']['self']['href'])
             self.recordMapping(fileinfo, recordinfo, 'registrering')
+
+        # Flag new email records using keyword 'new' to make it
+        # possible to locate them for post-processing after import.
+        keyworddata = {
+            'noekkelord': 'new',
+        }
+        keywordinfo = \
+            self.createEntity('keyword', createkeywordrel,
+                              recordinfo['_links'], keyworddata)
         
         docdescdata = {
             'tittel' : decodeheader(message['subject']),
