@@ -228,7 +228,10 @@ Recursively look for relation in API.
             'Accept' : 'application/json, application/vnd.noark5+json, text/javascript, */*; q=0.01',
             }
         content, response = self._get(path, headers)
-        content = content.decode("UTF-8")
+        ctype = response.getheader('Content-Type')
+        # Avoid trying to interpret non-json as UTF-8
+        if ctype in ('application/json', 'application/vnd.noark5+json'):
+            content = content.decode("UTF-8")
         return (content, response)
 
     def options(self, path):
