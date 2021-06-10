@@ -1080,7 +1080,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                                         src = t.get('kilde', None)
                                         attr = None
                                         if src:
-                                            attr['source'] = src
+                                            attr = {'source': src}
                                         if desc:
                                             with output.tag('xs:annotation'):
                                                 output.writetag('xs:documentation',
