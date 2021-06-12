@@ -885,6 +885,21 @@ or should it be rejected?
                               self.parselinks(serieinfo['_links']),
                               classificationsystemdata)
 
+
+        # Make sure creating file in parallel with classification
+        # system fail
+        extrafiledata = {
+            "tittel"      : u"file and classification system can not co-exist, created %s" % now,
+        }
+        createfilerel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
+        try:
+            u8fileinfo = self.createEntity('file', createfilerel,
+                                           self.parselinks(serieinfo['_links']),
+                                           extrafiledata, failureexpected=True)
+            self.xfailure("file and classification system should conflict")
+        except HTTPError as e:
+            self.success("file and classification system conflict")
+
         classdata = {
             'klasseID' : u'Test class created %s' % now,
             'tittel': u'Title of the test class created %s' % now,
@@ -936,7 +951,7 @@ or should it be rejected?
         createfilerel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
         try:
             u8fileinfo = self.createEntity('file', createfilerel,
-                                           self.parselinks(serieinfo['_links']),
+                                           self.parselinks(subclassinfo['_links']),
                                            u8filedata, failureexpected=True)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
