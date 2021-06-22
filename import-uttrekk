@@ -76,7 +76,8 @@ excludes = {
         'part',
 
         # FIXME these need to be created before using
-        'administrativEnhet', 'saksansvarlig',
+        'administrativEnhet',
+        'saksansvarlig',
     ),
     'mappe': (
         'systemID',
@@ -92,6 +93,7 @@ excludes = {
     ),
     'arkivnotat': (
         'systemID',
+        'dokumentmedium'
     ),
     'moeteregistrering': (
         'systemID',
@@ -114,6 +116,9 @@ excludes = {
         # during upload that way.
         'referanseDokumentfil',
         'filstoerrelse',
+    ),
+    'merknad': (
+        'merknadstype',
     ),
 }
 
@@ -902,7 +907,7 @@ FIXME flag inaccurate guesses somehow
 
 def main():
     baseurl = "https://localhost:8092/noark5v5/"
-    
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
     parser.add_argument("--verbose", help="print more debug information",
@@ -923,7 +928,7 @@ def main():
     retval = 0
     for basedir in args.basedir:
         i.loaddir(basedir)
-    
+
     i.printstats()
 
     return retval
