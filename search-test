@@ -29,6 +29,7 @@ import os
 sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
+import json
 
 try:
     from urllib import quote_plus
@@ -51,20 +52,30 @@ class SimpleSearch (n5core.endpoint.Endpoint):
                             help="where to search (default %s)" % defaultentity,
                             default = defaultentity)
         parser.add_argument("--filter", help="specify filter")
+        parser.add_argument("--search", help="specify search")
         self.args = parser.parse_args()
         n5core.endpoint.Endpoint.__init__(self,self.args.baseurl)
 
     def main(self):
         self.login()
-        print(self.args)
+        #print(self.args)
         relkey = self.relbaseurl + self.args.entity
-        print("Locating relation %s" % relkey)
+        if self.args.verbose:
+            print("Locating relation %s" % relkey)
         url = self.findRelation(relkey)
-        url += "?$filter=" + quote_plus(self.args.filter)
+        extra = []
+        if self.args.filter:
+            extra.append("$filter=" + quote_plus(self.args.filter))
+        if self.args.search:
+            extra.append("$search=" + quote_plus(self.args.search))
+        if extra:
+            print(extra)
+            url += "?" + '&'.join(extra)
         print(url)
         try:
             (content, response) = self.json_get(url)
-            print(content, response)
+            j = json.loads(content)
+            print(json.dumps(j, indent=4))
         except HTTPError as e:
             print("GET %s failed: %s (%s)" % (url, str(e), e.read()))
             raise
