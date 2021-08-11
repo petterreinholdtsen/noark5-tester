@@ -68,12 +68,15 @@ excludes = {
     ),
     'klasse': (
         'systemID',
+        'kryssreferanse',
     ),
     'saksmappe' : (
         'systemID',
         'referanseArkivdel',
         'merknad',
         'part',
+        'kryssreferanse',
+        'sakspart',
 
         # FIXME these need to be created before using
         'administrativEnhet',
