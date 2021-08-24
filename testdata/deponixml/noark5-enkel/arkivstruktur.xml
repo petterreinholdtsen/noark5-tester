@@ -26,8 +26,8 @@
     <opprettetAv>Arkivdels Oppretter</opprettetAv>
     <avsluttetDato>2018-12-31T12:00:00Z</avsluttetDato>
     <avsluttetAv>Arkivdels Avslutter</avsluttetAv>
-    <arkivperiodeStartDato>2018-01-01Z</arkivperiodeStartDato>
-    <arkivperiodeSluttDato>2018-12-31Z</arkivperiodeSluttDato>
+    <arkivperiodeStartDato>2018-01-01T12:00:00Z</arkivperiodeStartDato>
+    <arkivperiodeSluttDato>2018-12-31T12:00:00Z</arkivperiodeSluttDato>
     <mappe xsi:type="saksmappe">
       <systemID>f017c06c-44d7-11e9-b28c-cf0ada64bffd</systemID>
       <mappeID>mappe1</mappeID>
@@ -42,7 +42,6 @@
       <avsluttetAv>Saksmappe Avsluttetav</avsluttetAv>
       <referanseArkivdel>9b9574de-ab7b-11e9-9992-631dbf4ddde1</referanseArkivdel>
       <part>
-        <partID>Sakspart1</partID>
         <partNavn>Queen of Hearts</partNavn>
         <partRolle>Formynder</partRolle>
         <postadresse>Rabbithole 12</postadresse>
@@ -53,9 +52,11 @@
         <telefonnummer>22221122</telefonnummer>
         <kontaktperson>Alice</kontaktperson>
       </part>
+      <!--
       <kryssreferanse>
         <referanseTilMappe>b612d144-ab7b-11e9-ac4e-eb573ea44e8d</referanseTilMappe>
       </kryssreferanse>
+      -->
       <merknad>
         <merknadstekst>enMerknad</merknadstekst>
         <merknadstype>Merknad fra saksbehandler</merknadstype>
@@ -74,8 +75,7 @@
         <opprettetAv>Arkivnotat OpprettetAv</opprettetAv>
         <arkivertDato>1863-10-10T00:00:00Z</arkivertDato>
         <arkivertAv>Arkivnotat Arkivertav</arkivertAv>
-	<part>
-          <partID>Sakspart2</partID>
+	    <part>
           <partNavn>Ace of Spades</partNavn>
           <partRolle>Advokat</partRolle>
           <postadresse>Rabbithole 12</postadresse>
@@ -85,7 +85,7 @@
           <epostadresse>ace@spades.com</epostadresse>
           <telefonnummer>22221122</telefonnummer>
           <kontaktperson>Alice</kontaktperson>
-	</part>
+	    </part>
         <registreringsID>mappe1/jrnpst-2</registreringsID>
         <tittel>Eating the cake2 - Application to eat cake1</tittel>
         <offentligTittel>Eating the cake2 - Application to eat cake2</offentligTittel>
@@ -107,7 +107,7 @@
         <journalpostnummer>2</journalpostnummer>
         <journalposttype>Inngående dokument</journalposttype>
         <journalstatus>Journalført</journalstatus>
-        <journaldato>2017-04-02Z</journaldato>
+        <journaldato>2017-04-02T12:00:00Z</journaldato>
         <avskrivning>
           <avskrivningsdato>2018-12-31Z</avskrivningsdato>
           <avskrevetAv>Avskrivning AvskrevetAv</avskrevetAv>
@@ -126,7 +126,7 @@
           <skjermingMetadata>Skjermet</skjermingMetadata>
           <skjermingDokument>Skjerming av hele dokumentet</skjermingDokument>
           <skjermingsvarighet>60</skjermingsvarighet>
-          <skjermingOpphoererDato>1942-07-25Z</skjermingOpphoererDato>
+          <skjermingOpphoererDato>1942-07-25T12:00:00Z</skjermingOpphoererDato>
         </skjerming>
         <gradering>
           <grad>Strengt hemmelig (sikkerhetsgrad)</grad>
@@ -156,7 +156,7 @@
             <skjermingMetadata>Skjermet</skjermingMetadata>
             <skjermingDokument>Skjerming av hele dokumentet</skjermingDokument>
             <skjermingsvarighet>40</skjermingsvarighet>
-            <skjermingOpphoererDato>1941-01-10Z</skjermingOpphoererDato>
+            <skjermingOpphoererDato>1941-01-10T12:00:00Z</skjermingOpphoererDato>
           </skjerming>
           <dokumentobjekt>
             <systemID>53c8931a-ab7c-11e9-bc69-a332306c22dc</systemID>
@@ -209,7 +209,7 @@
       </registrering>
       <saksaar>2018</saksaar>
       <sakssekvensnummer>1</sakssekvensnummer>
-      <saksdato>2018-01-01Z</saksdato>
+      <saksdato>2018-01-01T12:00:00Z</saksdato>
       <administrativEnhet>DT</administrativEnhet>
       <saksansvarlig>Mappe Saksansvarlig</saksansvarlig>
       <journalenhet>journalseksjonen</journalenhet>
