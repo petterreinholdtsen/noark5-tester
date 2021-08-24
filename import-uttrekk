@@ -850,7 +850,7 @@ FIXME flag inaccurate guesses somehow
         if '\\' in filepath:
             filepath = filepath.replace('\\', '/')
         try:
-            with open(filepath) as content:
+            with open(filepath, 'rb') as content:
                 size = os.path.getsize(filepath)
                 # FIXME Workaround for bruken runtime and nikita 2020-01-13
                 if 'format' in info:
