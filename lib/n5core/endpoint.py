@@ -35,6 +35,7 @@ class Endpoint:
     def __init__(self, baseurl):
         self.baseurl = baseurl
         self.verbose = False
+        self.tokenheader = 'Authorization'
 
     def expandurl(self, path):
 #        print(self.baseurl, path)
@@ -162,7 +163,7 @@ Recursively look for relation in API.
             length = len(data)
         headers['Content-Length'] = length
         if hasattr(self, 'token'):
-            headers['Authorization'] = self.token
+            headers[self.tokenheader] = self.token
         if self.verbose:
             print("POST %s: %s" % (url, headers))
         if data is not None:
@@ -192,7 +193,7 @@ Recursively look for relation in API.
             'Content-Length' : length,
         }
         if hasattr(self, 'token'):
-            headers['Authorization'] = self.token
+            headers[self.tokenheader] = self.token
         if etag is not None:
             headers['ETag'] = etag
         if self.verbose:
@@ -214,7 +215,7 @@ Recursively look for relation in API.
         if headers is None:
             headers = {}
         if hasattr(self, 'token'):
-            headers['Authorization'] = self.token
+            headers[self.tokenheader] = self.token
         request = Request(url, None, headers=headers)
         response = urlopen(request)
         content = response.read()
@@ -249,7 +250,7 @@ Recursively look for relation in API.
         if headers is None:
             headers = {}
         if hasattr(self, 'token'):
-            headers['Authorization'] = self.token
+            headers[self.tokenheader] = self.token
         if etag is not None:
             headers['ETag'] = etag
         request = urllib.request.Request(url, None, headers)
