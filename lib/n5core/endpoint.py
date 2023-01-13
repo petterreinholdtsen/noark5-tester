@@ -159,7 +159,7 @@ Recursively look for relation in API.
             'Content-Type': mimetype,
         }
 
-        if data is not None and length is 0:
+        if data is not None and length == 0:
             length = len(data)
         headers['Content-Length'] = length
         if hasattr(self, 'token'):
