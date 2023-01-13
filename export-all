@@ -97,6 +97,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
         parser.add_argument('--baseurl', help='(default is %s)' % self.baseurl)
         parser.add_argument('--xml', help='(default is false)',
                             default=False, action='store_true')
+        parser.add_argument('--gravitee-api-key',
+                            help='Gravitee API key.',
+                            default=None)
         parser.add_argument('--savedir', help='(default is %s)' % self.savedir)
         parser.add_argument('--verbose', help='enable debug output',
                             action='store_true')
@@ -110,6 +113,11 @@ class ContentDumper(n5core.endpoint.Endpoint):
         if self.args.savedir:
             self.savedir = self.args.savedir
         n5core.endpoint.Endpoint.__init__(self,self.baseurl)
+
+        if self.args.gravitee_api_key:
+            self.tokenheader = 'X-Gravitee-Api-Key'
+            self.token = self.args.gravitee_api_key
+
         self.verbose = self.args.verbose
         self.xml = self.args.xml
         self.xml_extended = self.args.xml_extended
@@ -1102,10 +1110,11 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 
 
     def recurse_xml(self):
-        try:
-            self.login()
-        except n5core.endpoint.LoginFailure:
-            pass
+        if not self.token:
+            try:
+                self.login()
+            except n5core.endpoint.LoginFailure:
+                pass
         arkivhref = self.findRelation('%sarkivstruktur/arkiv/' % self.relbaseurl)
         if self.args.onlyclosed:
             arkivhref += '?$filter=avsluttetDato+ne+null'
@@ -1132,10 +1141,11 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 
 
     def recurse(self):
-        try:
-            self.login()
-        except n5core.endpoint.LoginFailure:
-            pass
+        if not self.token:
+            try:
+                self.login()
+            except n5core.endpoint.LoginFailure:
+                pass
         print('Saving to %s' % self.savedir)
         urlsleft = ['.']
         urlseen = {}
