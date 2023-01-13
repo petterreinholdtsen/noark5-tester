@@ -1104,6 +1104,9 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         arkivhref = self.findRelation('%sarkivstruktur/arkiv/' % self.relbaseurl)
         if self.args.onlyclosed:
             arkivhref += '?$filter=avsluttetDato+ne+null'
+        if not arkivhref:
+            print(f"error: Unable to locate relation '{arkivhref}', unable to export")
+            return -1
         (c, res) = self.json_get(arkivhref)
         arkivinfo = json.loads(c)
 
