@@ -157,19 +157,24 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 elif tuple == keytype:
                     rel = k[0]
                     if rel in content['_links']:
-                        url = content['_links'][rel]['href']
-                        if 2 < len(k):
-                            url += k[2] # Add filter if present
-                        (c, res) = self.json_get(url)
-                        info = json.loads(c)
-                        # Process list if relation gave non-empty result
-                        if ('count' in info and 0 < info['count']) \
-                           or 'results' in info:
-                            for sub in info['results']:
-                                k[1](output, sub)
-                        elif not 'count' in info:
-                            print('warning: GET %s did not return list' % (url))
-                            k[1](output, info)
+                        urls = [ content['_links'][rel]['href'] ]
+                        while urls:
+                            url = urls.pop()
+                            if 2 < len(k):
+                                url += k[2] # Add filter if present
+                            (c, res) = self.json_get(url)
+                            info = json.loads(c)
+                            # Process list if relation gave non-empty result
+                            if ('count' in info and 0 < info['count']) \
+                               or 'results' in info:
+                                for sub in info['results']:
+                                    k[1](output, sub)
+                                if 'next' in info['_links']:
+                                    nexturl = info['_links']['next']['href']
+                                    urls.append(nexturl)
+                            elif not 'count' in info:
+                                print('warning: GET %s did not return list' % (url))
+                                k[1](output, info)
                     elif rel in content:
                         k[1](output, content[rel], content)
                         del content[rel]
