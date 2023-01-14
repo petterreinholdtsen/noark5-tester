@@ -88,6 +88,9 @@ class MboxImporter(n5core.endpoint.Endpoint):
         self.mbox = 'input.mbox'
         parser = argparse.ArgumentParser()
         parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
+        parser.add_argument('--gravitee-api-key',
+                            help='Gravitee API key.',
+                            default=None)
         parser.add_argument("--mda", help="behave as mail delivery agent, read single email from stdin",
                             action="store_true")
         parser.add_argument("--mbox", help="(default is %s)" % self.mbox)
@@ -117,6 +120,11 @@ class MboxImporter(n5core.endpoint.Endpoint):
         self.parentmap = {}
         self.formatcache = {}
         n5core.endpoint.Endpoint.__init__(self, baseurl)
+
+        if self.args.gravitee_api_key:
+            self.tokenheader = 'X-Gravitee-Api-Key'
+            self.token = self.args.gravitee_api_key
+
         self.verbose = args.verbose
 
     def mime2format(self, mimestr):
@@ -289,7 +297,7 @@ if a match is found.
 
         searchurl = self.docobjurl + '?$filter=' +\
             quote_plus("filnavn eq '%s'" % messageid)
-        #print(searchurl)
+        print("info: Quering", searchurl)
 
         (s, res) = self.json_get(searchurl)
         docobjsinfo = json.loads(s)
@@ -843,7 +851,8 @@ last digit is a control digit.
 
 def main():
     t = MboxImporter()
-    t.login()
+    if not t.token:
+        t.login()
     if t.findSeries() is None:
         print("error: unable to find arkivdel to use")
         return 1
