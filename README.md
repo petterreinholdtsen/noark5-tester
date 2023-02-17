@@ -20,4 +20,4 @@ This test suite was written to test the code in
 https://gitlab.com/OsloMet-ABI/nikita-noark5-core .
 
 The latest version of the test scripts can be found in
-https://codeberg.org/pere/noark5-tester
+https://codeberg.org/noark/noark5-tester
