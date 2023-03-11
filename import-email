@@ -555,7 +555,7 @@ last digit is a control digit.
         elif 'in-reply-to' in message:
             threadstarterid = self.parseInReplyTo(message['in-reply-to'])
         else:
-            threadstarterid = message['message-id']
+            threadstarterid = message['message-id'].strip()
 
         if self.usesaksmappe:
             recorddata = {
@@ -640,7 +640,7 @@ last digit is a control digit.
         if self.args.vsm:
             docdescdata['virksomhetsspesifikkeMetadata'] = {
                 'vnd-email-v1:thread': threadstarterid,
-                'vnd-email-v1:message-id': message['message-id'],
+                'vnd-email-v1:message-id': message['message-id'].strip(),
             }
 
         docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
@@ -656,7 +656,7 @@ last digit is a control digit.
                 'kodenavn': 'Produksjonsformat'
             },
             "filstoerrelse"   : messagelen,
-            "filnavn"         : message['message-id'],       
+            "filnavn"         : message['message-id'].strip(),       
             "mimeType"        : mimetype,
         }
         if format:
@@ -813,7 +813,7 @@ last digit is a control digit.
                               key=lambda email: parsedate(email.get('Date'))):
             count += 1
             if not self.uploadEmail(message):
-                print("error: not loading email %s" % message['message-id'])
+                print("error: not loading email %s" % message['message-id'].strip())
                 retval = False
             else:
                 inserted += 1
@@ -831,7 +831,7 @@ last digit is a control digit.
         message = email.message_from_file(sys.stdin)
         self.createVSM()
         if not self.uploadEmail(message):
-            print("error: not loading email %s" % message['message-id'])
+            print("error: not loading email %s" % message['message-id'].strip())
             return False
         return True
 
