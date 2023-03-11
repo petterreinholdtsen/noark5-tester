@@ -284,7 +284,7 @@ Look up email Message-Id in dokumentobjekt.filename, and return true
 if a match is found.
         """
         self.getDocObjUrl()
-        messageid = message['message-id']
+        messageid = message['message-id'].strip()
         print("Looking for msgid: %s" % messageid)
 
         searchurl = self.docobjurl + '?$filter=' +\
@@ -357,7 +357,7 @@ are in.
         if 'references' in message:
             for msgid in message['references'].replace("\n", " ").split(" "):
                 if msgid != "":
-                    thread.append(msgid)
+                    thread.append(msgid.strip())
         if 0 == len(thread):
             return None
         #print(thread)
