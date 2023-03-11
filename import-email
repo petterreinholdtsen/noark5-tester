@@ -284,7 +284,7 @@ Look up email Message-Id in dokumentobjekt.filename, and return true
 if a match is found.
         """
         self.getDocObjUrl()
-        messageid = message['message-id']
+        messageid = message['message-id'].strip()
         print("Looking for msgid: %s" % messageid)
 
         searchurl = self.docobjurl + '?$filter=' +\
@@ -357,7 +357,7 @@ are in.
         if 'references' in message:
             for msgid in message['references'].replace("\n", " ").split(" "):
                 if msgid != "":
-                    thread.append(msgid)
+                    thread.append(msgid.strip())
         if 0 == len(thread):
             return None
         #print(thread)
@@ -555,7 +555,7 @@ last digit is a control digit.
         elif 'in-reply-to' in message:
             threadstarterid = self.parseInReplyTo(message['in-reply-to'])
         else:
-            threadstarterid = message['message-id']
+            threadstarterid = message['message-id'].strip()
 
         if self.usesaksmappe:
             recorddata = {
@@ -640,7 +640,7 @@ last digit is a control digit.
         if self.args.vsm:
             docdescdata['virksomhetsspesifikkeMetadata'] = {
                 'vnd-email-v1:thread': threadstarterid,
-                'vnd-email-v1:message-id': message['message-id'],
+                'vnd-email-v1:message-id': message['message-id'].strip(),
             }
 
         docdescinfo = self.createEntity('dokumentbeskrivelse', docdescrel,
@@ -656,7 +656,7 @@ last digit is a control digit.
                 'kodenavn': 'Produksjonsformat'
             },
             "filstoerrelse"   : messagelen,
-            "filnavn"         : message['message-id'],       
+            "filnavn"         : message['message-id'].strip(),       
             "mimeType"        : mimetype,
         }
         if format:
@@ -813,7 +813,7 @@ last digit is a control digit.
                               key=lambda email: parsedate(email.get('Date'))):
             count += 1
             if not self.uploadEmail(message):
-                print("error: not loading email %s" % message['message-id'])
+                print("error: not loading email %s" % message['message-id'].strip())
                 retval = False
             else:
                 inserted += 1
@@ -831,7 +831,7 @@ last digit is a control digit.
         message = email.message_from_file(sys.stdin)
         self.createVSM()
         if not self.uploadEmail(message):
-            print("error: not loading email %s" % message['message-id'])
+            print("error: not loading email %s" % message['message-id'].strip())
             return False
         return True
 
