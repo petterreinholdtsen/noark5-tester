@@ -304,7 +304,7 @@
        </registrering>
        <saksaar>1864</saksaar>
        <sakssekvensnummer>013</sakssekvensnummer>
-       <saksdato>1864-02-07</saksdato>
+       <saksdato>1864-02-07T00:00:00+01:00</saksdato>
        <administrativEnhet>DT</administrativEnhet>
        <saksansvarlig>Espen Tønnessen</saksansvarlig>
        <journalenhet>journalseksjonen</journalenhet>
