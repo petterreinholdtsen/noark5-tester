@@ -24,8 +24,8 @@
   <opprettetAv>Steve Jackson</opprettetAv>
   <avsluttetDato>1864-12-26T00:00:00+00:00</avsluttetDato>
   <avsluttetAv>Kristian Hunskaar</avsluttetAv>
-  <arkivperiodeStartDato>1864-03-12</arkivperiodeStartDato>
-  <arkivperiodeSluttDato>1864-02-02</arkivperiodeSluttDato>
+  <arkivperiodeStartDato>1864-03-12T00:00:00+01:00</arkivperiodeStartDato>
+  <arkivperiodeSluttDato>1864-02-02T00:00:00+01:00</arkivperiodeSluttDato>
   <klassifikasjonssystem>
    <systemID>klassSys57d6608566c0b6.73735847</systemID>
    <klassifikasjonstype>Travel</klassifikasjonstype>
