@@ -290,6 +290,9 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
         parser.add_argument("--reference", help="set baseurl to to demo API site (override --baseurl)",
                             action="store_true")
+        parser.add_argument('--gravitee-api-key',
+                            help='Gravitee API key.',
+                            default=None)
         parser.add_argument("--verbose", help="enable debug output",
                             action="store_true")
         parser.add_argument("--keep", help="do not delete created objects",
@@ -302,6 +305,9 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         else:
             self.baseurl = baseurl
         n5core.endpoint.Endpoint.__init__(self, self.baseurl)
+        if args.gravitee_api_key:
+            self.tokenheader = 'X-Gravitee-Api-Key'
+            self.token = args.gravitee_api_key
         self.created = []
         self.verbose = args.verbose
         self.keeptestdata = args.keep
@@ -1682,7 +1688,8 @@ or should it be rejected?
             baseref = self.testBasis()
             self.recursiveHateoas()
             try:
-                self.login()
+                if not self.token:
+                    self.login()
                 self.gotlogin = True
                 self.success("able to log in using admin/password")
             except n5core.endpoint.LoginFailure as e:
