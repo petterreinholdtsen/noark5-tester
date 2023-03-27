@@ -1565,7 +1565,7 @@ or should it be rejected?
     def testOdataSearch(self):
         """Try to find and count the stuff inserted by testNewDocument()
 """
-        searches = ( # relkey path - filter string - result count
+        searches = [ # relkey path - filter string - result count
             ('arkivstruktur/dokumentobjekt/',
              "sjekksumAlgoritme eq 'SHA-256'", 1),
 
@@ -1624,13 +1624,21 @@ or should it be rejected?
 
             ('arkivstruktur/dokumentbeskrivelse/',
              "forfatter/forfatter eq 'Henrik Ibsen'", -1), # enable when Nikita work
-
-            ('arkivstruktur/mappe/',
-             'virksomhetsspesifikkeMetadata/%s eq "one for the team"' % self.vsmkey, -1),
-        )
+        ]
+        if hasattr(self, 'vsmkey'):
+            searches.append(
+                ('arkivstruktur/mappe/',
+                 'virksomhetsspesifikkeMetadata/%s eq "one for the team"' % self.vsmkey, -1),
+            )
+        else:
+            self.failure("Unable to search VSM metadata, not implemented?")
 
         for s in searches:
-            url = self.findRelation('%s%s' % (self.relbaseurl, s[0]))
+            relkey = '%s%s' % (self.relbaseurl, s[0])
+            url = self.findRelation(relkey)
+            if not url:
+                self.failure("unable to find relkey %s for searching" % relkey)
+                continue
             searchurl = url + '?$filter=' + quote_plus(s[1]) + '&$top=1'
             if -1 == s[2]:
                 failure=self.xfailure
