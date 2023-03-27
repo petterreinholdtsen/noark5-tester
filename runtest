@@ -1688,7 +1688,7 @@ or should it be rejected?
             baseref = self.testBasis()
             self.recursiveHateoas()
             try:
-                if not self.token:
+                if not self.token or False:
                     self.login()
                 self.gotlogin = True
                 self.success("able to log in using admin/password")
