@@ -1639,6 +1639,11 @@ or should it be rejected?
             if not url:
                 self.failure("unable to find relkey %s for searching" % relkey)
                 continue
+            m = re.match('^(.*)({.+})$', url)
+            if not m:
+                self.failure("no argument pattern in search url (%s)" % url)
+            else:
+                url = m.group(1)
             searchurl = url + '?$filter=' + quote_plus(s[1]) + '&$top=1'
             if -1 == s[2]:
                 failure=self.xfailure
@@ -1646,7 +1651,11 @@ or should it be rejected?
                 failure=self.failure
             if self.verbose:
                 print("Searching with %s" % searchurl)
-            (body, res) = self.json_get(searchurl)
+            try:
+                (body, res) = self.json_get(searchurl)
+            except HTTPError as e:
+                self.failure("Search query '%s' gave HTTP error: " + str(e))
+                continue
             if self.verbose:
                 print("Search string:", body)
             try:
