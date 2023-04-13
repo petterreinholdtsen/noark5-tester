@@ -826,7 +826,10 @@ or should it be rejected?
                                             createrecordcreatorrel, self.rels,
                                             recordcreatordata)
         if recordcreatorinfo is None:
-            return
+            self.failure(f'unable to use {createrecordcreatorrel}, trying next level')
+            links = self.rels
+        else:
+            links = self.parselinks(recordcreatorinfo['_links'])
 
         createfondsrel = self.relbaseurl + 'arkivstruktur/ny-arkiv/'
         fondsdata = {
@@ -835,9 +838,10 @@ or should it be rejected?
 #            "dokumentmedium"  : "Elektronisk arkiv",
         }
         fondinfo = self.createEntity('fonds', createfondsrel,
-                                     self.parselinks(recordcreatorinfo['_links']),
+                                     links,
                                      fondsdata)
         if fondinfo is None:
+            self.failure(f'unable to use {createfondsrel}, giving up')
             return
 
         seriesdata = {
@@ -1688,7 +1692,7 @@ or should it be rejected?
             baseref = self.testBasis()
             self.recursiveHateoas()
             try:
-                if not self.token or False:
+                if not self.token:
                     self.login()
                 self.gotlogin = True
                 self.success("able to log in using admin/password")
