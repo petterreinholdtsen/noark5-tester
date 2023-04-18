@@ -23,6 +23,8 @@ from __future__ import print_function
 
 import sys
 import os
+import urllib
+from urllib.parse import urlparse
 sys.path.append(os.path.join(sys.path[0],'lib'))
 
 import argparse
@@ -1146,7 +1148,10 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 continue
             urlseen[url] = 1
 
-            path = url.replace(self.baseurl, '')
+            purl = urlparse(url)
+            pathurl = purl._replace(query=urllib
+                                    .parse.quote_plus(purl.query)).geturl()
+            path = pathurl.replace(self.baseurl, '')
             path = path.rstrip('/').replace('/.', '/index')
             path = path + '.json'
             path = os.path.join(self.savedir, path)
