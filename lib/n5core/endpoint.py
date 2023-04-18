@@ -210,6 +210,9 @@ Recursively look for relation in API.
 
     def _get(self, path, headers = None):
         url = self.expandurl(path)
+        purl = urlparse(url)
+        url = purl._replace(query=urllib
+                            .parse.quote_plus(purl.query)).geturl()
         if self.verbose:
             print("GET %s" % url)
         if headers is None:
@@ -237,6 +240,9 @@ Recursively look for relation in API.
 
     def options(self, path):
         url = self.expandurl(path)
+        purl = urlparse(url)
+        url = purl._replace(query=urllib
+                            .parse.quote_plus(purl.query)).geturl()
         opener = urllib.request.build_opener(urllib.request.HTTPHandler)
         request = urllib.request.Request(url)
         request.get_method = lambda: 'OPTIONS'
@@ -246,6 +252,9 @@ Recursively look for relation in API.
 
     def delete(self, path, headers = None, etag = None):
         url = self.expandurl(path)
+        purl = urlparse(url)
+        url = purl._replace(query=urllib
+                            .parse.quote_plus(purl.query)).geturl()
         opener = urllib.request.build_opener(urllib.request.HTTPHandler)
         if headers is None:
             headers = {}
