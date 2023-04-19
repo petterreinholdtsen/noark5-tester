@@ -141,6 +141,9 @@ Recursively look for relation in API.
                         for rel in baseref['_links'].keys():
                             if 'href' in baseref['_links'][rel]:
                                 href = baseref['_links'][rel]['href']
+                                if 'templated' in baseref['_links'][rel] \
+                                   and baseref['_links'][rel]['templated']:
+                                    href = href.split('{')[0]
                                 if href not in urlseen:
                                     urlsleft.append(href)
                                 if rel != 'self' and \
