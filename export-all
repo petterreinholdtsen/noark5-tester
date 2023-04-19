@@ -170,6 +170,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         urls = [ content['_links'][rel]['href'] ]
                         while urls:
                             url = urls.pop()
+                            if 'templated' in content['_links'][rel] \
+                               and content['_links'][rel]['templated']:
+                                href = href.split('{')[0]
                             if 2 < len(k):
                                 url += k[2] # Add filter if present
                             (c, res) = self.json_get(url)
