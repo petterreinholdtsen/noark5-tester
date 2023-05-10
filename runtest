@@ -1259,7 +1259,10 @@ or should it be rejected?
 #            "dokumenttype"    : "type dokument",
 #            "dokumentstatus"  : "status of document",
             "tittel"          : u"Title of the test document description created %s" % now,
-#            "tilknyttetRegistreringSom" : "Associated with record as"
+            'tilknyttetRegistreringSom': {
+                'kode': u'H',
+                'kodenavn': u'Hoveddokument'
+            },
         }
         createdocdescrel = self.relbaseurl + 'arkivstruktur/ny-dokumentbeskrivelse/'
         docdescinfo = self.createEntity('document description',
@@ -1269,6 +1272,10 @@ or should it be rejected?
         try:
             docdescdata = {
                 "tittel"          : u"Title of deleted test document description created %s" % now,
+                'tilknyttetRegistreringSom': {
+                    'kode': u'H',
+                    'kodenavn': u'Hoveddokument'
+                },
                 "sletting": {
                     "slettingstype": {
                         "kode": "SP",
@@ -1289,6 +1296,10 @@ or should it be rejected?
         try:
             scrndocdescdata = {
                 'tittel'          : u'Title of screened test document description created %s' % now,
+                'tilknyttetRegistreringSom': {
+                    'kode': u'H',
+                    'kodenavn': u'Hoveddokument'
+                },
                 'skjerming': {
                     'tilgangsrestriksjon': {
                         'kode': 'P',
