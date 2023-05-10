@@ -1176,7 +1176,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                     print('info: Creating %s for %s' % (path, url))
                 dir = os.path.dirname(path)
                 self._mkdir_recursive(dir)
-                if 0 == ctype.find('application/vnd.noark5+json'):
+                if ctype and 0 == ctype.find('application/vnd.noark5+json'):
                     f = open(path, 'w')
                     j = json.loads(content.decode("UTF-8"))
                     f.write(json.dumps(j, indent=2))
