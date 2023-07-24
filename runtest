@@ -443,6 +443,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                                 and 'results' not in baseref) \
                                        and 'kode' not in baseref \
                                        and '/ny-' not in url \
+                                       and 'utvid-til-' not in url \
                                        and rel in self.rels \
                                        and href != self.rels[rel]:
                                         self.failure("unique duplicate rel %s in _links for %s" % (rel, url))
