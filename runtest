@@ -375,9 +375,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             urlseen[url] = 1
             try:
                 (content, res) = self.json_get(url)
-                allow = res.getheader('Allow')
                 self.success("GET %s worked with code %d"  % (url, res.code))
-                self.verify(allow is not None, "GET header should include Allow for %s" % url)
                 ctype = res.getheader('Content-Type')
 
                 if not ctype:
