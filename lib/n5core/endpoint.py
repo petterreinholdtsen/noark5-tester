@@ -86,7 +86,7 @@ class Endpoint:
         elif urloidc is not None:
             (content, res) = self.json_get(urloidc)
             j = json.loads(content)
-            url = j['authorization_endpoint']
+            url = j['token_endpoint']
             try:
                 if username is None:
                     username = 'admin@example.com'
@@ -105,8 +105,7 @@ class Endpoint:
                 key_str = key_bytes.decode('ascii')
                 self.token = 'Basic {}'.format(key_str)
                 # Manually encode query parameters in the URL:
-                updated_url = url + "?" + datastr
-                (c,r) = self.post(updated_url, None, 'application/x-www-form-urlencoded')
+                (c,r) = self.post(url, datastr.encode("utf-8"), 'application/x-www-form-urlencoded')
             except HTTPError as e:
                 raise LoginFailure("Posting to login relation %s failed: %s (%s)" % (url, str(e), e.read()))
             j = json.loads(c.decode('UTF-8'))
