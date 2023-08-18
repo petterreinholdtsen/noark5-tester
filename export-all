@@ -1146,7 +1146,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 
 
     def recurse(self):
-        if not self.token:
+        if not hasattr(self, 'token'):
             try:
                 self.login()
             except n5core.endpoint.LoginFailure:
