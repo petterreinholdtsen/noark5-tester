@@ -425,6 +425,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                             # Ignore non-standard relations
                             if 'href' in l \
                                and -1 == rel.find("//rel.arkivverket.no/noark5/") \
+                               and 'next' != rel
                                and 'self' != rel:
                                 self.xfailure("unofficial relation %s from %s" % (rel, url))
                             elif 'href' in l and \
