@@ -113,7 +113,7 @@ class Endpoint:
         else:
             raise LoginFailure("Unable to find login relation")
 
-    def findRelation(self, relation):
+    def findRelation(self, relation, templated=False):
         """
 Recursively look for relation in API.
 """
@@ -140,9 +140,10 @@ Recursively look for relation in API.
                         for rel in baseref['_links'].keys():
                             if 'href' in baseref['_links'][rel]:
                                 href = baseref['_links'][rel]['href']
-                                if 'templated' in baseref['_links'][rel] \
-                                   and baseref['_links'][rel]['templated']:
-                                    href = href.split('{')[0]
+                                if not templated:
+                                    if 'templated' in baseref['_links'][rel] \
+                                       and baseref['_links'][rel]['templated']:
+                                        href = href.split('{')[0]
                                 if href not in urlseen:
                                     urlsleft.append(href)
                                 if rel != 'self' and \

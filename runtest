@@ -1661,7 +1661,7 @@ or should it be rejected?
 
         for s in searches:
             relkey = '%s%s' % (self.relbaseurl, s[0])
-            url = self.findRelation(relkey)
+            url = self.findRelation(relkey, True)
             if not url:
                 self.failure("unable to find relkey %s for searching" % relkey)
                 continue
