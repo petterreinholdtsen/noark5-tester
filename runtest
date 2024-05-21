@@ -1670,7 +1670,7 @@ or should it be rejected?
                 self.failure("no argument pattern in search url (%s)" % url)
             else:
                 url = m.group(1)
-            searchurl = url + '?$filter=' + quote_plus(s[1]) + '&$top=1'
+            searchurl = url + '?$filter=' + s[1] + '&$top=1'
             if -1 == s[2]:
                 failure=self.xfailure
             else:
