@@ -1680,7 +1680,7 @@ or should it be rejected?
             try:
                 (body, res) = self.json_get(searchurl)
             except HTTPError as e:
-                self.failure("Search query '%s' gave HTTP error: " + str(e))
+                self.failure("Search query '%s' gave HTTP error: %s" % (url, str(e)))
                 continue
             if self.verbose:
                 print("Search string:", body)
