@@ -425,6 +425,8 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                 href = l['href']
                                 if 'templated' in l and l['templated']:
                                     href = href.split('{')[0]
+                                if -1 != href.find('{'):
+                                    self.xfailure('url %s present {} block without "templated": true' % url)
                                 if href not in urlseen:
                                     urlsleft.append(href)
                                 if rel != 'self':
