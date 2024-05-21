@@ -465,8 +465,13 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                     if '_links' in element and len(element['_links']) > 0:
                                         for ref in element['_links'].keys():
                                             href = element['_links'][ref]['href']
+                                            if 'templated' in element['_links'][ref] and element['_links'][ref]['templated']:
+                                                href = href.split('{')[0]
+                                            elif -1 != href.find('{'):
+                                                self.xfailure('url %s present {} block without "templated": true in _links for %s' % (url, ref))
                                             if href not in urlseen:
                                                 #self.failure("Found new link %s" % href)
+
                                                 urlsleft.append(href)
                 self.urls.append(url)
                 try:
