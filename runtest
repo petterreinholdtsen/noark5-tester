@@ -1660,7 +1660,7 @@ or should it be rejected?
             keyname = self.vsmkey
             searches.append(
                 ('arkivstruktur/mappe/',
-                 '%s eq "one for the team"' % keyname, -1),
+                 "%s eq 'one for the team'" % keyname, -1),
             )
         else:
             self.failure("Unable to search VSM metadata, not implemented?")
