@@ -1654,9 +1654,13 @@ or should it be rejected?
              "forfatter/forfatter eq 'Henrik Ibsen'", -1), # enable when Nikita work
         ]
         if hasattr(self, 'vsmkey'):
+            # Which one is the correct approach?  Nikita work
+            # 2024-05-22 with the short notation.
+            #keyname = "virksomhetsspesifikkeMetadata/%s" % self.vsmkey
+            keyname = self.vsmkey
             searches.append(
                 ('arkivstruktur/mappe/',
-                 'virksomhetsspesifikkeMetadata/%s eq "one for the team"' % self.vsmkey, -1),
+                 '%s eq "one for the team"' % keyname, -1),
             )
         else:
             self.failure("Unable to search VSM metadata, not implemented?")
