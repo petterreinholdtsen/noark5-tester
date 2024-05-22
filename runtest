@@ -1626,14 +1626,16 @@ or should it be rejected?
             ('arkivstruktur/mappe/',
              "nasjonalidentifikator/foedselsnummer eq '03030303033'", -1),
 
-            ('arkivstruktur/mappe/',
-             "personidentifikator/foedselsnummer eq '03030303033'", -1),
+# Disabled until we figure out the correct notation for this search
+#            ('arkivstruktur/mappe/',
+#             "personidentifikator/foedselsnummer eq '03030303033'", -1),
 
             ('arkivstruktur/mappe/',
              "nasjonalidentifikator/foedselsnummer ne null", -1),
 
-            ('arkivstruktur/mappe/', # både plan og matrikkel
-             "nasjonalidentifikator/kommunenummer eq '0101'", -1),
+# Disabled until we figure out the correct notation for this search
+#            ('arkivstruktur/mappe/', # både plan og matrikkel
+#             "nasjonalidentifikator/kommunenummer eq '0101'", -1),
 
             ('arkivstruktur/mappe/',
              "nasjonalidentifikator/koordinatsystem/kode eq 'EPSG:4326'", -1),
