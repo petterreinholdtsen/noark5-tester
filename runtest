@@ -1595,6 +1595,9 @@ or should it be rejected?
             ('arkivstruktur/dokumentobjekt/',
              "sjekksumAlgoritme eq 'SHA-256'", 1),
 
+            ('arkivstruktur/dokumentobjekt/',
+             'sjekksumAlgoritme eq "SHA-256"', 1),
+
             ('arkivstruktur/dokumentbeskrivelse/',
              "opprettetAv eq 'admin@example.com'", 1),
 
