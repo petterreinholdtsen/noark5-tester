@@ -869,6 +869,7 @@ or should it be rejected?
         serieinfo = self.createEntity('serie', createseriesrel,
                                       self.parselinks(fondinfo['_links']),
                                       seriesdata)
+        fileinsertinfo = serieinfo
 
         try:
             seriesdata = {
@@ -949,6 +950,7 @@ or should it be rejected?
             self.createEntity('subclass', createclassrel,
                               self.parselinks(classinfo['_links']),
                               subclassdata)
+        fileinsertinfo = subclassinfo
 
         subclassfiledata = {
             'tittel' : u"Title of the sub-class test file created %s" % now,
@@ -967,7 +969,7 @@ or should it be rejected?
         createfilerel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
         try:
             u8fileinfo = self.createEntity('file', createfilerel,
-                                           self.parselinks(subclassinfo['_links']),
+                                           self.parselinks(fileinsertinfo['_links']),
                                            u8filedata, failureexpected=True)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
@@ -981,7 +983,7 @@ or should it be rejected?
         }
         createfilerel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
         fileinfo = self.createEntity('file', createfilerel,
-                                     self.parselinks(serieinfo['_links']),
+                                     self.parselinks(fileinsertinfo['_links']),
                                      filedata)
 
         self.xverify('mappeID' in fileinfo, "new file should have mappeID added automatically")
@@ -1151,7 +1153,7 @@ or should it be rejected?
         }
         createcasefilerel = self.relbaseurl + 'sakarkiv/ny-saksmappe/'
         casefileinfo = self.createEntity('casefile', createcasefilerel,
-                                         self.parselinks(serieinfo['_links']),
+                                         self.parselinks(fileinsertinfo['_links']),
                                          casefiledata)
         self.verify('mappeID' in casefileinfo, "new case file should have mappeID added automatically")
         casefileurl = self.parselinks(casefileinfo['_links'])['self']
@@ -1460,7 +1462,7 @@ or should it be rejected?
         createfilerel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
         try:
             fileinfo = self.createEntity('file', createfilerel,
-                                         self.parselinks(serieinfo['_links']),
+                                         self.parselinks(fileinsertinfo['_links']),
                                          filedata, failureexpected=True)
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
@@ -1515,7 +1517,7 @@ or should it be rejected?
         }
         createfilerel = self.relbaseurl + 'arkivstruktur/ny-mappe/'
         fileinfo = self.createEntity('file', createfilerel,
-                                     self.parselinks(serieinfo['_links']),
+                                     self.parselinks(fileinsertinfo['_links']),
                                      filedata)
 
 
