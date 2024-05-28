@@ -390,7 +390,8 @@ class Importer(n5core.endpoint.Endpoint):
         # Map datestamps
         elif field in datefields:
             # Make sure the required time zone is in place
-            if -1 == value.find('+') and 'Z' != value[-1]:
+            if -1 == value.find('+') and 'Z' != value[-1] \
+               and not re.match(r'^.+-\d{2}:\d{2}', value):
                 print("warning: adding hardcoded timezone %s to %s.%s" %
                       (default_timezone, name, field))
                 value = value + default_timezone
