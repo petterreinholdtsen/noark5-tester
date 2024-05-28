@@ -1620,8 +1620,9 @@ or should it be rejected?
              "contains(tittel, 'file') AND dokumentmedium/kode eq null and saksaar ne null", 1),
 
             # FIXME Figure out notation to search for this
-            ('arkivstruktur/mappe/',
-             "enhetsidentifikator/organisasjonsnummer eq '02020202022'", -1),
+# Disabled until we figure out the correct notation for this search
+#            ('arkivstruktur/mappe/',
+#             "enhetsidentifikator/organisasjonsnummer eq '02020202022'", -1),
 
             ('arkivstruktur/mappe/',
              "nasjonalidentifikator/organisasjonsnummer eq '02020202022'", -1),
