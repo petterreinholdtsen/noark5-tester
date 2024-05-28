@@ -1622,9 +1622,9 @@ or should it be rejected?
              "contains(tittel, 'file') AND dokumentmedium/kode eq null and saksaar ne null", 1),
 
             # FIXME Figure out notation to search for this
-# Disabled until we figure out the correct notation for this search
-#            ('arkivstruktur/mappe/',
-#             "enhetsidentifikator/organisasjonsnummer eq '02020202022'", -1),
+# We do not know the correct notation for this search
+            ('arkivstruktur/mappe/',
+             "enhetsidentifikator/organisasjonsnummer eq '02020202022'", -2),
 
             ('arkivstruktur/mappe/',
              "nasjonalidentifikator/organisasjonsnummer eq '02020202022'", -1),
@@ -1632,16 +1632,16 @@ or should it be rejected?
             ('arkivstruktur/mappe/',
              "nasjonalidentifikator/foedselsnummer eq '03030303033'", -1),
 
-# Disabled until we figure out the correct notation for this search
-#            ('arkivstruktur/mappe/',
-#             "personidentifikator/foedselsnummer eq '03030303033'", -1),
+# We do not know the correct notation for this search
+            ('arkivstruktur/mappe/',
+             "personidentifikator/foedselsnummer eq '03030303033'", -2),
 
             ('arkivstruktur/mappe/',
              "nasjonalidentifikator/foedselsnummer ne null", -1),
 
-# Disabled until we figure out the correct notation for this search
-#            ('arkivstruktur/mappe/', # både plan og matrikkel
-#             "nasjonalidentifikator/kommunenummer eq '0101'", -1),
+# We do not know the correct notation for this search
+            ('arkivstruktur/mappe/', # både plan og matrikkel
+             "nasjonalidentifikator/kommunenummer eq '0101'", -2),
 
             ('arkivstruktur/mappe/',
              "nasjonalidentifikator/koordinatsystem/kode eq 'EPSG:4326'", -1),
@@ -1683,7 +1683,7 @@ or should it be rejected?
             else:
                 url = m.group(1)
             searchurl = url + '?$filter=' + s[1] + '&$top=1'
-            if -1 == s[2]:
+            if 0 > s[2]:
                 failure=self.xfailure
             else:
                 failure=self.failure
@@ -1692,7 +1692,11 @@ or should it be rejected?
             try:
                 (body, res) = self.json_get(searchurl)
             except HTTPError as e:
-                self.failure("Search query '%s' not ok: %s" % (searchurl, str(e)))
+                msg = "Search query '%s' not ok: %s" % (searchurl, str(e))
+                if -1 > s[2]:
+                    self.xfailure(msg)
+                else:
+                    self.failure(msg)
                 continue
             if self.verbose:
                 print("Search string:", body)
