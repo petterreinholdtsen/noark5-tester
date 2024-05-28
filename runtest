@@ -1209,6 +1209,19 @@ or should it be rejected?
                                             createdocflowrel,
                                             self.parselinks(archivenoteinfo['_links']),
                                             docflowdata)
+            try: # Try to update flytMottattDato to mirror flytSendtDato
+                url = docflowinfo['_links']['self']['href']
+                (infostr, res) = self.json_get(url)
+                info = json.loads(infostr)
+                info['flytMottattDato'] = info['flytSendtDato']
+                putinfo, putres = \
+                    self.put(url, json.dumps(info),
+                             'application/vnd.noark5+json',
+                             etag=res.getheader('ETag'))
+                self.success("able to set flytMottattDato of %s" % url)
+                self.verify(200 == putres.code, "status code=%d (should be 200) for PUT %s" % (putres.code, url))
+            except HTTPError as e:
+                self.failure("unable to modify %s: %s (%s)" % (url, str(e), e.read()))
         except HTTPError as e:
             pass # Problem already reported by createEntity, keep going
 
