@@ -534,9 +534,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 'endretAv',
             ))
         sequence.extend((
+            'navn>partNavn',
             'partRolle.kodenavn>partRolle',
             'partRolle.kode>[null]',
-            'navn>partNavn',
             'postadresse.addresselinje1>postadresse',
             'postadresse.addresselinje2>postadresse',
             'postadresse.addresselinje3>postadresse',
