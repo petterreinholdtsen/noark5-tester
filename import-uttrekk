@@ -333,7 +333,10 @@ class Importer(n5core.endpoint.Endpoint):
         # Prefer _links entries from ny-*, but fall back to searching
         # the entire API for the relevant metadata list.
         if '_links' in default and str(relkey) in default['_links']:
-            url = default['_links'][relkey]['href']
+            l = default['_links'][relkey]
+            url = l['href']
+            if 'templated' in l and l['templated']:
+                url = url.split('{')[0]
         else:
             print("error: unable to find %s in ny-%s, searching for it" % (relkey, entity))
             url = self.findRelation(relkey)
