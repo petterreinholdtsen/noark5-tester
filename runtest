@@ -913,7 +913,7 @@ or should it be rejected?
             u8fileinfo = self.createEntity('file', createfilerel,
                                            self.parselinks(serieinfo['_links']),
                                            extrafiledata, failureexpected=True)
-            self.xfailure("file and classification system should conflict")
+            self.failure("file and classification system should conflict")
         except HTTPError as e:
             self.success("file and classification system conflict")
 
