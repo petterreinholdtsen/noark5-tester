@@ -37,6 +37,13 @@ from n5core.endpoint import HTTPError
 import codecs
 from xml.sax.saxutils import escape
 
+def sha256_of_file(filename):
+    from hashlib import file_digest
+    with open(filename, "rb") as f:
+        hasher = file_digest(f, "sha256")
+        return hasher.hexdigest()
+
+
 class XMLTag(object):
     def __init__(self, level, fh, tagname, attr=None):
         self.fh = fh
@@ -120,6 +127,21 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.noekkelordrel = '%snoekkelord/' % self.nikitarelbaseurl
         self.oppbevrel = '%soppbevaringssted/' % self.nikitarelbaseurl
         self.screeningmetadatarel = '%sskjermingmetadata/' % self.nikitarelbaseurl
+
+        self.stats = {}
+        self.files = {}
+        self.schemas = {}
+
+
+    def stats_add(self, classname):
+        if classname not in self.stats:
+            self.stats[classname] = 0
+        self.stats[classname] += 1
+
+    def stats_get(self, classname):
+        if classname in self.stats:
+            return self.stats[classname]
+        return 0
 
     def _mkdir_recursive(self, path):
         sub_path = os.path.dirname(path)
@@ -365,6 +387,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                                 fh.write(data)
                             output.writetag('referanseDokumentfil',
                                             'DOKUMENT/%s' % filename)
+                            self.stats_add('referanseDokumentfil')
                         except HTTPError as e:
                             print("error: unable to download %s: %s (%s)" % (
                                 url, str(e), e.read()))
@@ -732,6 +755,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 #                ('referanseFraMoeteregistrering'), # FIXME for moeteregistrering
         ))
         self.recurse_xml_out_ordered(output, 'registrering', content, sequence, attr=attr)
+        self.stats_add('registrering')
 
 
     def recurse_xml_mappe(self, output, content):
@@ -823,6 +847,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 'moetedeltaker',
         ))
         self.recurse_xml_out_ordered(output, 'mappe', content, sequence, attr=attr)
+        self.stats_add('mappe')
 
 
     def recurse_xml_klasse(self, output, content):
@@ -1054,9 +1079,8 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             if seen:
                 print("error: missing virksomhetsspesifikkeMetadata definitions:", seen.keys())
             for ns in namespaces:
-                with codecs.open('%s/%s.xsd'
-                                 % (self.savepath, ns), 'w',
-                                 encoding='UTF-8') as fh:
+                filename = '%s/%s.xsd' % (self.savepath, ns)
+                with codecs.open(filename, 'w', encoding='UTF-8') as fh:
                     output = XMLFile(fh)
                     vsmurl = '%sschemas/%s.xsd' % (self.baseurl, ns)
                     with output.tag('xs:schema', attr={
@@ -1096,6 +1120,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                                                 output.writetag('xs:documentation',
                                                                 f'{desc}',
                                                                 attr=attr)
+                self.schemas[os.path.basename(filename)] = sha256_of_file(filename)
 
 
     def install_xsd(self, dir):
@@ -1104,6 +1129,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         xsddir = "schemas"
         for xsdpath in glob.glob("%s/*.xsd" % xsddir):
             shutil.copy(xsdpath, dir)
+            self.schemas[os.path.basename(xsdpath)] = sha256_of_file(xsdpath)
 
 
     def recurse_xml(self):
@@ -1129,11 +1155,109 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                     arkiv['tittel'].replace('/', '_'))
                 self._mkdir_recursive(self.savepath)
                 self.install_xsd(self.savepath)
-                with codecs.open('%s/arkivstruktur.xml' % self.savepath, 'w',
+                filename = '%s/arkivstruktur.xml' % self.savepath
+                with codecs.open(filename, 'w',
                                  encoding='UTF-8') as fh:
                     output = XMLFile(fh)
                     self.recurse_xml_arkiv(output, arkiv, first=True)
+                    self.files['arkivstruktur.xml'] = sha256_of_file(filename)
                 self.save_xml_vsm_xsd(self.savepath)
+                self.recurse_xml_save_arkivuttrekk()
+
+
+    def recurse_xml_save_arkivuttrekk(self):
+        with codecs.open('%s/arkivuttrekk.xml' % self.savepath, 'w',
+                         encoding='UTF-8') as fh:
+            output = XMLFile(fh)
+            attr = {
+                'xmlns': 'http://www.arkivverket.no/standarder/addml',
+                'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+                'name': 'dummy Noark 5 arkivuttrekk',
+
+            }
+            def element(output, name, value):
+                with output.tag('additionalElement', attr={'name': name}):
+                     output.writetag('value', value)
+            def property(output, name, value, dataType=None):
+                attr={'name': name}
+                if dataType:
+                    attr['dataType'] = dataType
+                with output.tag('property', attr=attr):
+                    output.writetag('value', value)
+            def xmlfile(output, filetype, filename, filesha256):
+                with output.tag('property', attr={'name': filetype}):
+                    property(output, 'name', filename)
+                    with output.tag('property', attr={'name': 'format'}):
+                        with output.tag('properties'):
+                            output.writetag('property', '1.0', attr={'name': 'version'})
+                    with output.tag('property', attr={'name': 'format'}):
+                        output.writetag('value', 'XML')
+                        with output.tag('properties'):
+                            property(output, 'algorithm', 'SHA-256')
+                            property(output, 'value', filesha256)
+            with output.tag('addml', attr=attr):
+                with output.tag('dataset'):
+                    output.writetag('description', 'dummy archive description')
+                    with output.tag('reference'):
+                        with output.tag('context'):
+                            with output.tag('additionalElements'):
+                                element(output, 'recordCreators', 'dummy creator name')
+                                element(output, 'systemType', 'dummy system type')
+                                element(output, 'systemName', 'dummy system name')
+                                element(output, 'arcihve', 'dummy archive name')
+                        with output.tag('context'):
+                            with output.tag('additionalElements'):
+                                with output.tag('additionalElement',
+                                                attr={'name': 'archivalPeriod'}):
+                                    with output.tag('properties'):
+                                        property(output, 'startDate', '0000-00-00 dummy')
+                                        property(output, 'endDate',   '0000-00-00 dummy')
+                    with output.tag('dataObjects'):
+                        with output.tag('dataObject',
+                                        attr={'name': 'dummy object name'}):
+                            with output.tag('properties'):
+                                with output.tag('property',
+                                                attr={'name': 'info'}):
+                                    with output.tag('properties'):
+                                        with output.tag('property',
+                                                        attr={'name': 'type'}):
+                                            output.tag('value', 'dummy type')
+                                            with output.tag('properties'):
+                                                property(output, 'version', 'dummy version')
+                                        with output.tag('property',
+                                                        attr={'name': 'additionalInfo'}):
+                                            with output.tag('properties'):
+                                                with output.tag('property',
+                                                                attr={'name': 'periode'}):
+                                                    with output.tag('properties'):
+                                                        property(output, 'inngaaendeSkille', 'mykt dummy')
+                                                        property(output, 'utgaaendeSkille', 'mykt dummy')
+                                                property(output, 'inneholderSkjermetInformasjon', 'false dummy')
+                                                property(output, 'omfatterDokumenterSomErKassert', 'false dummy')
+                                                property(output, 'inneholderDokumenterSomSkalKasseres', 'false dummy')
+                                                if hasattr(self, 'seenvsm'):
+                                                    property(output, 'inneholderVirksomhetsspesifikkeMetadata', 'true')
+                                                else:
+                                                    property(output, 'inneholderVirksomhetsspesifikkeMetadata', 'false')
+                                                print("Count", self.stats_get('referanseDokumentfil'))
+                                                property(output, 'antallDokumentfiler', str(self.stats_get('referanseDokumentfil')))
+                            with output.tag('dataObjects'):
+                                with output.tag('dataObject', attr={'name': 'arkivstruktur'}):
+                                    with output.tag('properties'):
+                                        for filename in self.files.keys():
+                                            xmlfile(output, 'file', filename, self.files[filename])
+                                        for schema in self.schemas.keys():
+                                            xmlfile(output, 'schema', schema, self.schemas[schema])
+                                        with output.tag('property', attr={'name':'numberOfOccurrences'}):
+                                            output.writetag('value', 'mappe')
+                                            with output.tag('properties'):
+                                                property(output, 'elementPath', '//mappe')
+                                                property(output, 'value', str(self.stats_get('mappe')), dataType='integer')
+                                        with output.tag('property', attr={'name':'numberOfOccurrences'}):
+                                            output.writetag('value', 'registrering')
+                                            with output.tag('properties'):
+                                                property(output, 'elementPath', '//registrering')
+                                                property(output, 'value', str(self.stats_get('registrering')), dataType='integer')
 
 
     def recurse(self):
