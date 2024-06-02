@@ -38,11 +38,13 @@ import codecs
 from xml.sax.saxutils import escape
 
 def sha256_of_file(filename):
-    from hashlib import file_digest
-    with open(filename, "rb") as f:
-        hasher = file_digest(f, "sha256")
-        return hasher.hexdigest()
-
+    from hashlib import sha256
+    hasher = sha256()
+    mv = memoryview(bytearray(128*1024))
+    with open(filename, 'rb', buffering=0) as f:
+        while n := f.readinto(mv):
+            hasher.update(mv[:n])
+    return hasher.hexdigest()
 
 class XMLTag(object):
     def __init__(self, level, fh, tagname, attr=None):
@@ -96,6 +98,11 @@ class XMLFile(object):
             self.fh.write('%s<%s%s>%s</%s>\n' % ('  ' * self.level[0], tagname, attr, s, tagname))
         elif '' != attr: # Skip these, ref. Noark 6.4.5
             self.fh.write('%s<%s%s/>\n' % ('  ' * self.level[0], tagname, attr))
+    @staticmethod
+    def bool2str(istrue):
+        if istrue:
+            return "true"
+        return "false"
 
 class ContentDumper(n5core.endpoint.Endpoint):
     def __init__(self):
@@ -133,14 +140,14 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.schemas = {}
 
 
-    def stats_add(self, classname):
-        if classname not in self.stats:
-            self.stats[classname] = 0
-        self.stats[classname] += 1
+    def stats_add(self, entity):
+        if entity not in self.stats:
+            self.stats[entity] = 0
+        self.stats[entity] += 1
 
-    def stats_get(self, classname):
-        if classname in self.stats:
-            return self.stats[classname]
+    def stats_get(self, entity):
+        if entity in self.stats:
+            return self.stats[entity]
         return 0
 
     def _mkdir_recursive(self, path):
@@ -209,6 +216,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 del content['_links']
             if content.keys():
                 print('warning: %s XML attribute not exported: %s' % (entity, content))
+        self.stats_add(entity)
 
 
     def recurse_xml_konvertering(self, output, content):
@@ -438,6 +446,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             if content.keys():
                 print('warning: %s XML attribute not exported: %s'
                       % ('dokumentobjekt', content))
+        self.stats_add('dokumentobjekt')
 
     def recurse_xml_dokumentbeskrivelse(self, output, content):
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
@@ -1146,9 +1155,19 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         (c, res) = self.json_get(arkivhref)
         arkivinfo = json.loads(c)
 
+        systemhref = self.findRelation('%sadmin/system/' % self.relbaseurl)
+        (c, res) = self.json_get(systemhref)
+        self.system = json.loads(c)
+
         utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc).isoformat()
         if 'count' not in arkivinfo or 0 < arkivinfo['count']:
             for arkiv in arkivinfo['results']:
+                # Blank stats per extract
+                self.stats = {}
+                self.files = {}
+                self.schemas = {}
+                if hasattr(self, 'seenvsm'):
+                    del self.seenvsm
                 self.savepath = 'uttrekk-%s/arkiv-%s-%s' % (
                     utcnow,
                     arkiv['systemID'],
@@ -1203,8 +1222,9 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                             with output.tag('additionalElements'):
                                 element(output, 'recordCreators', 'dummy creator name')
                                 element(output, 'systemType', 'dummy system type')
-                                element(output, 'systemName', 'dummy system name')
-                                element(output, 'arcihve', 'dummy archive name')
+                                element(output, 'systemName',
+                                        f"{self.system['leverandoer']} {self.system['produkt']} {self.system['versjon']}")
+                                element(output, 'archive', 'dummy archive name')
                         with output.tag('context'):
                             with output.tag('additionalElements'):
                                 with output.tag('additionalElement',
@@ -1232,14 +1252,18 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                                                     with output.tag('properties'):
                                                         property(output, 'inngaaendeSkille', 'mykt dummy')
                                                         property(output, 'utgaaendeSkille', 'mykt dummy')
-                                                property(output, 'inneholderSkjermetInformasjon', 'false dummy')
-                                                property(output, 'omfatterDokumenterSomErKassert', 'false dummy')
-                                                property(output, 'inneholderDokumenterSomSkalKasseres', 'false dummy')
-                                                if hasattr(self, 'seenvsm'):
-                                                    property(output, 'inneholderVirksomhetsspesifikkeMetadata', 'true')
-                                                else:
-                                                    property(output, 'inneholderVirksomhetsspesifikkeMetadata', 'false')
-                                                print("Count", self.stats_get('referanseDokumentfil'))
+                                                property(output,
+                                                         'inneholderSkjermetInformasjon',
+                                                         output.bool2str(0 < self.stats_get('skjerming')))
+                                                property(output,
+                                                         'omfatterDokumenterSomErKassert',
+                                                         output.bool2str(0 < self.stats_get('utfoertKassasjon')))
+                                                property(output,
+                                                         'inneholderDokumenterSomSkalKasseres',
+                                                         output.bool2str(0 < self.stats_get('kassasjon')))
+                                                property(output,
+                                                         'inneholderVirksomhetsspesifikkeMetadata',
+                                                         output.bool2str(hasattr(self, 'seenvsm')))
                                                 property(output, 'antallDokumentfiler', str(self.stats_get('referanseDokumentfil')))
                             with output.tag('dataObjects'):
                                 with output.tag('dataObject', attr={'name': 'arkivstruktur'}):
