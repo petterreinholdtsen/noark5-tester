@@ -37,6 +37,85 @@ from n5core.endpoint import HTTPError
 import codecs
 from xml.sax.saxutils import escape
 
+
+# This list is provided to work around the stupidity in § 5-31 of
+# <URL: https://lovdata.no/dokument/SF/forskrift/2017-12-19-2286 >,
+# which state "Filformat for arkivdokumenter angis ved filendelse,
+# f.eks. XML, PDF eller TIF.", ignoring the fact that file endings is
+# a useless format specifier (which is obvious from looking at the
+# many duplicates in this list), and that a proper format is specified
+# in the XML file using the <format> tag.
+# This list is based on
+# <URL: https://codeberg.org/noark/m701-noark5-katalog >.
+formatsuffix = {
+    'fmt/100': 'html',
+    'fmt/101': 'xml',
+    'fmt/1011': 'xml',
+    'fmt/103': 'html',
+    'fmt/1047': 'gml',
+    'fmt/1189': 'xml',
+    'fmt/120': 'xml',
+    'fmt/121': 'xml',
+    'fmt/1246': 'sosi',
+    'fmt/1247': 'sosi',
+    'fmt/1248': 'sosi',
+    'fmt/1249': 'sosi',
+    'fmt/1250': 'sosi',
+    'fmt/13': 'png',
+    'fmt/134': 'mp3',
+    'fmt/136': 'odt',
+    'fmt/137': 'ods',
+    'fmt/138': 'odp',
+    'fmt/155': 'tiff',
+    'fmt/156': 'tiff',
+    'fmt/199': 'mp4',
+    'fmt/206': 'sql',
+    'fmt/214': 'xlsx',
+    'fmt/215': 'pptx',
+    'fmt/278': 'mbox',
+    'fmt/279': 'flac',
+    'fmt/289': 'warc',
+    'fmt/290': 'odt',
+    'fmt/291': 'odt',
+    'fmt/292': 'odp',
+    'fmt/293': 'odp',
+    'fmt/294': 'ods',
+    'fmt/295': 'ods',
+    'fmt/353': 'tiff',
+    'fmt/354': 'pdf',
+    'fmt/41': 'jpeg',
+    'fmt/412': 'docx',
+    'fmt/42': 'jpeg',
+    'fmt/425': 'mpeg2',
+    'fmt/43': 'jpeg',
+    'fmt/44': 'jpeg',
+    'fmt/471': 'html',
+    'fmt/494': 'docx',
+    'fmt/494': 'pptx',
+    'fmt/494': 'xlsx',
+    'fmt/640': 'mpeg2',
+    'fmt/659': 'ifc',
+    'fmt/664': 'ifc',
+    'fmt/699': 'ifc',
+    'fmt/700': 'ifc',
+    'fmt/703': 'wav',
+    'fmt/704': 'wav',
+    'fmt/705': 'wav',
+    'fmt/896': 'xml',
+    'fmt/95': 'pdf',
+    'fmt/950': 'mbox',
+    'fmt/96': 'html',
+    'fmt/97': 'html',
+    'fmt/98': 'html',
+    'fmt/99': 'html',
+    'x-fmt/111': 'txt',
+    'x-fmt/18': 'csv',
+    'x-fmt/227': 'gml',
+    'x-fmt/263': 'zip',
+    'x-fmt/265': 'tar',
+    'x-fmt/392': 'jpeg2000',
+}
+
 def sha256_of_file(filename):
     from hashlib import sha256
     hasher = sha256()
@@ -385,8 +464,13 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         self._mkdir_recursive('%s/DOKUMENT' % self.savepath)
                         # Deriving filename from checksum provide
                         # automatic deduplication, assuming there is
-                        # no hash collition in the dataset.
-                        filename = '%s-%s' % (content['sjekksumAlgoritme'], content['sjekksum'])
+                        # no hash collition in the dataset and
+                        # consiste format string is used.
+                        if content['format'] in formatsuffix:
+                            suffix = formatsuffix[content['format']]
+                        else:
+                            suffix = 'dat'
+                        filename = '%s-%s.%s' % (content['sjekksumAlgoritme'], content['sjekksum'], suffix)
                         url = content['_links'][filrel]['href']
                         try:
                             (data, r) = self._get(url)
