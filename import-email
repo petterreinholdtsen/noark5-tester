@@ -264,6 +264,8 @@ Store the info about the entity in self.seriesinfo
                 print(info)
             raise Exception("missing from created dokumentobjekt: %s" % seriesrel)
         serieshref = info['_links'][seriesrel]['href']
+        if 'templated' in info['_links'][seriesrel] and info['_links'][seriesrel]['templated']:
+            serieshref = serieshref.split('{')[0]
 
         (c, res) = self.json_get(serieshref)
         seriesinfo = json.loads(c)
