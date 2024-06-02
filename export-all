@@ -466,10 +466,16 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         # automatic deduplication, assuming there is
                         # no hash collition in the dataset and
                         # consiste format string is used.
-                        if content['format'] in formatsuffix:
-                            suffix = formatsuffix[content['format']]
+                        if 'format' in content and 'kode' in content['format']:
+                            formatkode = content['format']['kode']
+                        else:
+                            formatkode = 'av/0'
+                        if formatkode in formatsuffix:
+                            suffix = formatsuffix[formatkode]
+                            print(f"warning: adding inaccurate '{suffix}' suffix to document file with format kode {formatkode}.")
                         else:
                             suffix = 'dat'
+                            print(f"error: adding bogus '{suffix}' suffix to document file with unknown format kode {formatkode}.")
                         filename = '%s-%s.%s' % (content['sjekksumAlgoritme'], content['sjekksum'], suffix)
                         url = content['_links'][filrel]['href']
                         try:
