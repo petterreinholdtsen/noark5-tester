@@ -21,6 +21,7 @@
 
 from __future__ import print_function
 
+import copy
 import sys
 import os
 import urllib
@@ -421,7 +422,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         self.seenvsm[k] = field
 
 
-    def recurse_xml_dokumentobjekt(self, output, content):
+    def recurse_xml_dokumentobjekt(self, output, origcontent):
+        content = copy.deepcopy(origcontent)
         # Not using recurse_xml_out_ordered to handle referanseDokumentfil
         filrel = '%sarkivstruktur/fil/' % self.relbaseurl
         konvrel = '%sarkivstruktur/konvertering/' % self.relbaseurl
@@ -466,8 +468,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         # automatic deduplication, assuming there is
                         # no hash collition in the dataset and
                         # consiste format string is used.
-                        if 'format' in content and 'kode' in content['format']:
-                            formatkode = content['format']['kode']
+                        if 'format' in origcontent and 'kode' in origcontent['format']:
+                            formatkode = origcontent['format']['kode']
                         else:
                             formatkode = 'av/0'
                         if formatkode in formatsuffix:
