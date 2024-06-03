@@ -1307,15 +1307,16 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                     output.writetag('value', value)
             def xmlfile(output, filetype, filename, filesha256):
                 with output.tag('property', attr={'name': filetype}):
-                    property(output, 'name', filename)
-                    with output.tag('property', attr={'name': 'format'}):
-                        with output.tag('properties'):
-                            output.writetag('property', '1.0', attr={'name': 'version'})
-                    with output.tag('property', attr={'name': 'format'}):
-                        output.writetag('value', 'XML')
-                        with output.tag('properties'):
-                            property(output, 'algorithm', 'SHA-256')
-                            property(output, 'value', filesha256)
+                    with output.tag('properties'):
+                        property(output, 'name', filename)
+                        with output.tag('property', attr={'name': 'format'}):
+                            with output.tag('properties'):
+                                property(output, 'property', '1.0')
+                        with output.tag('property', attr={'name': 'format'}):
+                            output.writetag('value', 'XML')
+                            with output.tag('properties'):
+                                property(output, 'algorithm', 'SHA-256')
+                                property(output, 'value', filesha256)
             with output.tag('addml', attr=attr):
                 with output.tag('dataset'):
                     description = 'dummy arkiv.beskrivelse blank'
@@ -1331,8 +1332,6 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                                 element(output, 'systemName',
                                         f"{self.system['leverandoer']} {self.system['produkt']} {self.system['versjon']}")
                                 element(output, 'archive', arkiv['tittel'])
-                        with output.tag('context'):
-                            with output.tag('additionalElements'):
                                 with output.tag('additionalElement',
                                                 attr={'name': 'archivalPeriod'}):
                                     with output.tag('properties'):
