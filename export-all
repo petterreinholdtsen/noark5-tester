@@ -126,6 +126,13 @@ def sha256_of_file(filename):
             hasher.update(mv[:n])
     return hasher.hexdigest()
 
+
+def utcnowtz():
+    u = datetime.datetime.utcnow()
+    u = u.replace(tzinfo=pytz.utc)
+    return u
+
+
 class XMLTag(object):
     def __init__(self, level, fh, tagname, attr=None):
         self.fh = fh
@@ -1023,6 +1030,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 
 
     def recurse_xml_arkivskaper(self, output, content):
+        self.recordCreators.append(copy.deepcopy(content))
         sequence = (
             'systemID>[null]',
             'arkivskaperID',
@@ -1254,10 +1262,12 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
         utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc).isoformat()
         if 'count' not in arkivinfo or 0 < arkivinfo['count']:
             for arkiv in arkivinfo['results']:
+                arkivcopy = copy.deepcopy(arkiv)
                 # Blank stats per extract
                 self.stats = {}
                 self.files = {}
                 self.schemas = {}
+                self.recordCreators = []
                 if hasattr(self, 'seenvsm'):
                     del self.seenvsm
                 self.savepath = 'uttrekk-%s/arkiv-%s-%s' % (
@@ -1273,17 +1283,17 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                     self.recurse_xml_arkiv(output, arkiv, first=True)
                     self.files['arkivstruktur.xml'] = sha256_of_file(filename)
                 self.save_xml_vsm_xsd(self.savepath)
-                self.recurse_xml_save_arkivuttrekk()
+                self.recurse_xml_save_arkivuttrekk(arkivcopy)
 
 
-    def recurse_xml_save_arkivuttrekk(self):
+    def recurse_xml_save_arkivuttrekk(self, arkiv):
         with codecs.open('%s/arkivuttrekk.xml' % self.savepath, 'w',
                          encoding='UTF-8') as fh:
             output = XMLFile(fh)
             attr = {
                 'xmlns': 'http://www.arkivverket.no/standarder/addml',
                 'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-                'name': 'dummy Noark 5 arkivuttrekk',
+                'name': arkiv['tittel'],
 
             }
             def element(output, name, value):
@@ -1308,22 +1318,32 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                             property(output, 'value', filesha256)
             with output.tag('addml', attr=attr):
                 with output.tag('dataset'):
-                    output.writetag('description', 'dummy archive description')
+                    description = 'dummy arkiv.beskrivelse blank'
+                    if 'beskrivelse' in arkiv:
+                        description = arkiv['beskrivelse']
+                    output.writetag('description', description)
                     with output.tag('reference'):
                         with output.tag('context'):
                             with output.tag('additionalElements'):
-                                element(output, 'recordCreators', 'dummy creator name')
+                                for recordCreator in self.recordCreators:
+                                    element(output, 'recordCreators', recordCreator['arkivskaperNavn'])
                                 element(output, 'systemType', 'dummy system type')
                                 element(output, 'systemName',
                                         f"{self.system['leverandoer']} {self.system['produkt']} {self.system['versjon']}")
-                                element(output, 'archive', 'dummy archive name')
+                                element(output, 'archive', arkiv['tittel'])
                         with output.tag('context'):
                             with output.tag('additionalElements'):
                                 with output.tag('additionalElement',
                                                 attr={'name': 'archivalPeriod'}):
                                     with output.tag('properties'):
-                                        property(output, 'startDate', '0000-00-00 dummy')
-                                        property(output, 'endDate',   '0000-00-00 dummy')
+                                        property(output, 'startDate', arkiv['opprettetDato'])
+                                        endDate = utcnowtz()\
+                                            .replace(microsecond=0) \
+                                            .isoformat() \
+                                            .replace('+00:00', 'Z')
+                                        if 'avsluttetDato' in arkiv:
+                                            endDate = arkiv['avsluttetDato']
+                                        property(output, 'endDate', endDate)
                     with output.tag('dataObjects'):
                         with output.tag('dataObject',
                                         attr={'name': 'dummy object name'}):
