@@ -246,7 +246,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
 
 
 
-    def recurse_xml_out_ordered(self, output, entity, content, sequence, attr=None):
+    def recurse_xml_out_ordered(self, output, entity, origcontent, sequence, attr=None, parents=[]):
+        content = copy.deepcopy(origcontent)
         with output.tag(entity, attr=attr):
 #            if self.verbose:
 #                print(content)
@@ -289,15 +290,15 @@ class ContentDumper(n5core.endpoint.Endpoint):
                             if ('count' in info and 0 < info['count']) \
                                or 'results' in info:
                                 for sub in info['results']:
-                                    k[1](output, sub)
+                                    k[1](output, sub, parents=[origcontent,]+parents)
                                 if 'next' in info['_links']:
                                     nexturl = info['_links']['next']['href']
                                     urls.append(nexturl)
                             elif not 'count' in info:
                                 print('warning: GET %s did not return list' % (url))
-                                k[1](output, info)
+                                k[1](output, info, parents=[origcontent,]+parents)
                     elif rel in content:
-                        k[1](output, content[rel], content)
+                        k[1](output, content[rel], parents=[origcontent,]+parents)
                         del content[rel]
             if '_links' in content:
                 del content['_links']
@@ -306,7 +307,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.stats_add(entity)
 
 
-    def recurse_xml_konvertering(self, output, content):
+    def recurse_xml_konvertering(self, output, content, parents):
         sequence = (
             'systemID>[null]',
             'konvertertDato',
@@ -318,10 +319,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'konverteringsverktoey',
             'konverteringskommentar'
         )
-        self.recurse_xml_out_ordered(output, 'konvertering', content, sequence)
+        self.recurse_xml_out_ordered(output, 'konvertering', content, sequence, parents=parents)
 
 
-    def recurse_xml_merknad(self, output, content):
+    def recurse_xml_merknad(self, output, content, parents):
         sequence = (
             'systemID>[null]',
             'merknadstekst',
@@ -330,14 +331,14 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'merknadsdato',
             'merknadRegistrertAv'
         )
-        self.recurse_xml_out_ordered(output, 'merknad', content, sequence)
+        self.recurse_xml_out_ordered(output, 'merknad', content, sequence, parents=parents)
 
 
-    def recurse_xml_forfatter(self, output, content):
+    def recurse_xml_forfatter(self, output, content, parents):
         output.writetag('forfatter', content['forfatter'])
 
 
-    def recurse_xml_kassasjon(self, output, content, parent=None):
+    def recurse_xml_kassasjon(self, output, content, parents):
         sequence = (
             'kassasjonsvedtak.kodenavn>kassasjonsvedtak',
             'kassasjonsvedtak.kode>[null]',
@@ -345,18 +346,18 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'bevaringstid',
             'kassasjonsdato',
         )
-        self.recurse_xml_out_ordered(output, 'kassasjon', content, sequence)
+        self.recurse_xml_out_ordered(output, 'kassasjon', content, sequence, parents=parents)
 
 
-    def recurse_xml_utfoertKassasjon(self, output, content, parent=None):
+    def recurse_xml_utfoertKassasjon(self, output, content, parents):
         sequence = (
             'kassertDato',
             'kassertAv',
         )
-        self.recurse_xml_out_ordered(output, 'utfoertKassasjon', content, sequence)
+        self.recurse_xml_out_ordered(output, 'utfoertKassasjon', content, sequence, parents=parents)
 
 
-    def recurse_xml_sletting(self, output, content, parent=None):
+    def recurse_xml_sletting(self, output, content, parents):
         sequence = (
             'slettingstype.kodenavn>slettingstype',
             'slettingstype.kode>[null]',
@@ -364,14 +365,14 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'slettetAv',
             #'referanseSlettetAv',
         )
-        self.recurse_xml_out_ordered(output, 'sletting', content, sequence)
+        self.recurse_xml_out_ordered(output, 'sletting', content, sequence, parents=parents)
 
 
-    def recurse_xml_skjermingmetadata(self, output, content):
+    def recurse_xml_skjermingmetadata(self, output, content, parents):
         output.writetag('skjermingMetadata', content['kodenavn'])
 
 
-    def recurse_xml_skjerming(self, output, content, parent=None):
+    def recurse_xml_skjerming(self, output, content, parents):
         sequence = (
             'tilgangsrestriksjon.kodenavn>tilgangsrestriksjon',
             'tilgangsrestriksjon.kode>[null]',
@@ -382,11 +383,11 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'skjermingsvarighet',
             'skjermingOpphoererDato',
         )
-        content['_links'] = parent['_links']
-        self.recurse_xml_out_ordered(output, 'skjerming', content, sequence)
+        content['_links'] = parents[0]['_links']
+        self.recurse_xml_out_ordered(output, 'skjerming', content, sequence, parents=parents)
 
 
-    def recurse_xml_gradering(self, output, content, parent=None):
+    def recurse_xml_gradering(self, output, content, parents):
         sequence = (
             'graderingskode.kodenavn>grad',
             'graderingskode.kode>[null]',
@@ -398,7 +399,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.recurse_xml_out_ordered(output, 'gradering', content, sequence)
 
 
-    def recurse_xml_elektroniskSignatur(self, output, content, parent=None):
+    def recurse_xml_elektroniskSignatur(self, output, content, parents):
         sequence = (
             'elektroniskSignaturSikkerhetsnivaa.kodenavn>elektroniskSignaturSikkerhetsnivaa',
             'elektroniskSignaturSikkerhetsnivaa.kode>[null]',
@@ -410,7 +411,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.recurse_xml_out_ordered(output, 'elektroniskSignatur', content, sequence)
 
 
-    def recurse_xml_virksomhetsspesifikkeMetadata(self, output, content, parent=None):
+    def recurse_xml_virksomhetsspesifikkeMetadata(self, output, content, parents):
         if not hasattr(self, 'seenvsm'):
             self.seenvsm = {}
         # Organize on namespace
@@ -429,7 +430,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         self.seenvsm[k] = field
 
 
-    def recurse_xml_dokumentobjekt(self, output, origcontent):
+    def recurse_xml_dokumentobjekt(self, output, origcontent, parents):
         content = copy.deepcopy(origcontent)
         # Not using recurse_xml_out_ordered to handle referanseDokumentfil
         filrel = '%sarkivstruktur/fil/' % self.relbaseurl
@@ -533,12 +534,12 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         if ('count' in info and 0 < info['count']) \
                            or 'results' in info:
                             for sub in info['results']:
-                                k[1](output, sub)
+                                k[1](output, sub, parents=[origcontent,]+parents)
                         elif not 'count' in info:
                             print('warning: GET %s did not return list' % (url))
-                            k[1](output, info)
+                            k[1](output, info, parents=[origcontent,]+parents)
                     elif rel in content:
-                        k[1](output, content[rel], content)
+                        k[1](output, content[rel], parents=[origcontent,]+parent)
                         del content[rel]
             if '_links' in content:
                 del content['_links']
@@ -547,7 +548,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                       % ('dokumentobjekt', content))
         self.stats_add('dokumentobjekt')
 
-    def recurse_xml_dokumentbeskrivelse(self, output, content):
+    def recurse_xml_dokumentbeskrivelse(self, output, content, parents):
         partrel = '%sarkivstruktur/part/' % self.relbaseurl
         merknadrel = '%sarkivstruktur/merknad/' % self.relbaseurl
         dokobjrel = '%sarkivstruktur/dokumentobjekt/' % self.relbaseurl
@@ -594,9 +595,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
             sequence.extend((
             ('virksomhetsspesifikkeMetadata', self.recurse_xml_virksomhetsspesifikkeMetadata),
             ))
-        self.recurse_xml_out_ordered(output, 'dokumentbeskrivelse', content, sequence)
+        self.recurse_xml_out_ordered(output, 'dokumentbeskrivelse', content, sequence, parents=parents)
 
-    def recurse_xml_national_identifier(self, output, content):
+    def recurse_xml_national_identifier(self, output, content, parents):
         if not self.xml_extended:
             return
         # FIXME should these be grouped?
@@ -626,9 +627,9 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'festenummer>festenummer',
             'seksjonsnummer>seksjonsnummer',
         )
-        self.recurse_xml_out_ordered(output, 'nasjonalidentifikator', content, sequence)
+        self.recurse_xml_out_ordered(output, 'nasjonalidentifikator', content, sequence, parents=parents)
 
-    def recurse_xml_korrespondansepart(self, output, content):
+    def recurse_xml_korrespondansepart(self, output, content, parents):
         sequence = (
             'systemID>[null]',
             'korrespondanseparttype.kodenavn>korrespondanseparttype',
@@ -648,10 +649,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'saksbehandler',
             ('virksomhetsspesifikkeMetadata', self.recurse_xml_virksomhetsspesifikkeMetadata),
         )
-        self.recurse_xml_out_ordered(output, 'korrespondansepart', content, sequence)
+        self.recurse_xml_out_ordered(output, 'korrespondansepart', content, sequence, parents=parents)
 
 
-    def recurse_xml_part(self, output, content):
+    def recurse_xml_part(self, output, content, parents):
         sequence = [
             'systemID>[null]',
             'oppdatertAv>[null]',
@@ -683,10 +684,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
             ('virksomhetsspesifikkeMetadata', self.recurse_xml_virksomhetsspesifikkeMetadata),
         ))
         # FIXME figure out how to handle partID
-        self.recurse_xml_out_ordered(output, 'part', content, sequence)
+        self.recurse_xml_out_ordered(output, 'part', content, sequence, parents=parents)
 
 
-    def recurse_xml_dokumentflyt(self, output, content):
+    def recurse_xml_dokumentflyt(self, output, content, parents):
         sequence = (
             'flytTil',
             'flytFra',
@@ -696,14 +697,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'flytStatus.kode>[null]',
             'flytMerknad',
         )
-        self.recurse_xml_out_ordered(output, 'dokumentflyt', content, sequence)
+        self.recurse_xml_out_ordered(output, 'dokumentflyt', content, sequence, parents=parents)
 
 
-    def recurse_xml_avskrivning(self, output, content):
-        """
-Not yet working because of
-https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
-"""
+    def recurse_xml_avskrivning(self, output, content, parents):
         sequence = [
             'systemID>[null]',
             'avskrivningsdato',
@@ -716,22 +713,22 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             sequence.extend((
                 'referanseAvskrivesAvKorrespondansepart',
             ))
-        self.recurse_xml_out_ordered(output, 'avskrivning', content, sequence)
+        self.recurse_xml_out_ordered(output, 'avskrivning', content, sequence, parents=parents)
 
 
-    def recurse_xml_noekkelord(self, output, content):
+    def recurse_xml_noekkelord(self, output, content, parents):
         output.writetag('noekkelord', content['noekkelord'])
 
 
-    def recurse_xml_oppbevaringssted(self, output, content):
+    def recurse_xml_oppbevaringssted(self, output, content, parents):
         output.writetag('oppbevaringssted', content['oppbevaringssted'])
 
 
-    def recurse_xml_kryssreferanse(self, output, content):
+    def recurse_xml_kryssreferanse(self, output, content, parents):
         print('error: "kryssreferanse" not yet implemented')
 
 
-    def recurse_xml_presedens(self, output, content):
+    def recurse_xml_presedens(self, output, content, parents):
         sequence = (
             'systemID>[null]',
             'presedensDato',
@@ -751,9 +748,9 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             'presedensStatus.kode>[null]',
             'presedensStatus.kodenavn>presedensStatus',
         )
-        self.recurse_xml_out_ordered(output, 'presedens', content, sequence)
+        self.recurse_xml_out_ordered(output, 'presedens', content, sequence, parents=parents)
 
-    def recurse_xml_registrering(self, output, content):
+    def recurse_xml_registrering(self, output, content, parents):
         entityrel = self.entity_rel(content)
         typemap = {
             '%ssakarkiv/journalpost/' % self.relbaseurl: 'journalpost',
@@ -837,6 +834,8 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 (presedensrel, self.recurse_xml_presedens),
                 ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
         ))
+            self.recurse_xml_save_journalregistrering(content, parents)
+            self.stats_add('journalpost')
         if attr and 'arkivnotat'== attr['xsi:type']:
             sequence.extend((
                 'dokumentetsDato',
@@ -849,6 +848,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 'utlaantTil',
                 (dokflytrel, self.recurse_xml_dokumentflyt),
         ))
+            self.stats_add('arkivnotat')
         if attr and 'moeteregistrering' == attr['xsi:type']:
             sequence.extend((
                 'moeteregistreringstype.kodenavn>moeteregistreringstype',
@@ -862,11 +862,12 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
 #                ('referanseTilMoeteregistrering'), # FIXME for moeteregistrering
 #                ('referanseFraMoeteregistrering'), # FIXME for moeteregistrering
         ))
-        self.recurse_xml_out_ordered(output, 'registrering', content, sequence, attr=attr)
+            self.stats_add('moeteregistrering')
+        self.recurse_xml_out_ordered(output, 'registrering', content, sequence, attr=attr, parents=parents)
         self.stats_add('registrering')
 
 
-    def recurse_xml_mappe(self, output, content):
+    def recurse_xml_mappe(self, output, content, parents):
         entityrel = self.entity_rel(content)
         typemap = {
             '%ssakarkiv/saksmappe/' % self.relbaseurl: 'saksmappe',
@@ -954,11 +955,11 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 'referanseNesteMoete',
                 'moetedeltaker',
         ))
-        self.recurse_xml_out_ordered(output, 'mappe', content, sequence, attr=attr)
+        self.recurse_xml_out_ordered(output, 'mappe', content, sequence, attr=attr, parents=parents)
         self.stats_add('mappe')
 
 
-    def recurse_xml_klasse(self, output, content):
+    def recurse_xml_klasse(self, output, content, parents):
         underklasserel = '%sarkivstruktur/underklasse/' % self.relbaseurl
         mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
         registreringrel = '%sarkivstruktur/registrering/' % self.relbaseurl
@@ -1000,10 +1001,10 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             (mapperel,        self.recurse_xml_mappe, filter),
             (registreringrel, self.recurse_xml_registrering, rfilter),
         ))
-        self.recurse_xml_out_ordered(output, 'klasse', content, sequence)
+        self.recurse_xml_out_ordered(output, 'klasse', content, sequence, parents=parents)
 
 
-    def recurse_xml_klassifikasjonssystem(self, output, content):
+    def recurse_xml_klassifikasjonssystem(self, output, content, parents):
         klasserel = '%sarkivstruktur/klasse/' % self.relbaseurl
         sequence = [
             'systemID',
@@ -1026,10 +1027,10 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             'avsluttetAv',
             (klasserel, self.recurse_xml_klasse),
         ))
-        self.recurse_xml_out_ordered(output, 'klassifikasjonssystem', content, sequence)
+        self.recurse_xml_out_ordered(output, 'klassifikasjonssystem', content, sequence, parents=parents)
 
 
-    def recurse_xml_arkivskaper(self, output, content):
+    def recurse_xml_arkivskaper(self, output, content, parents):
         self.recordCreators.append(copy.deepcopy(content))
         sequence = (
             'systemID>[null]',
@@ -1037,10 +1038,10 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             'arkivskaperNavn',
             'beskrivelse'
         )
-        self.recurse_xml_out_ordered(output, 'arkivskaper', content, sequence)
+        self.recurse_xml_out_ordered(output, 'arkivskaper', content, sequence, parents=parents)
 
 
-    def recurse_xml_arkivdel(self, output, content):
+    def recurse_xml_arkivdel(self, output, content, parents):
         klassifikasjonssystemrel = '%sarkivstruktur/klassifikasjonssystem/' % self.relbaseurl
         mapperel = '%sarkivstruktur/mappe/' % self.relbaseurl
         saksmapperel = '%sarkivstruktur/saksmappe/' % self.relbaseurl
@@ -1090,10 +1091,10 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             (saksmapperel, self.recurse_xml_mappe, filter),
             (registreringrel, self.recurse_xml_registrering, rfilter),
         ))
-        self.recurse_xml_out_ordered(output, 'arkivdel', content, sequence)
+        self.recurse_xml_out_ordered(output, 'arkivdel', content, sequence, parents=parents)
 
 
-    def recurse_xml_arkiv(self, output, content, first=False):
+    def recurse_xml_arkiv(self, output, content, parents=[], first=False):
         underarkivrel = '%sarkivstruktur/underarkiv/' % self.relbaseurl
         arkivdelrel = '%sarkivstruktur/arkivdel/' % self.relbaseurl
         arkivskaperrel = '%sarkivstruktur/arkivskaper/' % self.relbaseurl
@@ -1153,7 +1154,7 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 if schemaLocations:
                     attr['xsi:schemaLocation'] = " ".join(schemaLocations)
 
-        self.recurse_xml_out_ordered(output, 'arkiv', content, sequence, attr=attr)
+        self.recurse_xml_out_ordered(output, 'arkiv', content, sequence, attr=attr, parents=parents)
 
     def get_vsm_list(self):
         relurl = "%smetadata/virksomhetsspesifikkeMetadata/" \
@@ -1241,6 +1242,69 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
             self.schemas[os.path.basename(xsdpath)] = sha256_of_file(xsdpath)
 
 
+    def recurse_xml_save_journalregistrering(self, j, parents):
+        print("recurse_xml_save_journalregistrering")
+        output = self.ojoutput
+        with output.tag('journalregistrering'):
+            if 'klasseID' in parents[1]:
+                with output.tag('klasse'):
+                    output.writetag('klasseID', parents[1]['klasseID'])
+                    output.writetag('tittel', parents[1]['tittel'])
+            with output.tag('saksmappe'):
+                output.writetag('saksaar', parents[0]['saksaar'])
+                output.writetag('sakssekvensnummer', parents[0]['sakssekvensnummer'])
+                tittel = parents[0]['tittel']
+                if 'offentligTittel' in parents[0]:
+                    tittel = parents[0]['offentligTittel']
+                output.writetag('offentligTittel', tittel)
+            with output.tag('journalpost'):
+                output.writetag('systemID', j['systemID'])
+                output.writetag('journalaar', j['journalaar'])
+                output.writetag('journalsekvensnummer', j['journalsekvensnummer'])
+                output.writetag('journalpostnummer', j['journalpostnummer'])
+                tittel = j['tittel']
+                if 'offentligTittel' in j:
+                    tittel=j['offentligTittel']
+                output.writetag('offentligTittel', tittel)
+                if 'journaldato' in j:
+                    output.writetag('journaldato', j['journaldato'])
+                else:
+                    print(f"error: journalpost {j['systemID']} missing journaldate")
+                # FIXME figure out how to get these
+                if True:
+                    print("error: journalregistrering missing korrespondansepart")
+                else:
+                  with output.tag('korrespondansepart'):
+                    output.writetag('korrespondanseparttype', 'dummy')
+                    output.writetag('korrespondansepartNavn', 'dummy')
+
+    def recurse_xml_save_offentligJournal(self, callback):
+        filename = '%s/offentligJournal.xml' % self.savepath
+        with codecs.open(filename, 'w', encoding='UTF-8') as fh:
+            output = XMLFile(fh)
+            attr = {
+                'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+                'xmlns': 'http://www.arkivverket.no/standarder/noark5/offentligJournal',
+                'xmlns:n5mdk': 'http://www.arkivverket.no/standarder/noark5/metadatakatalog',
+                'xsi:schemaLocation': 'http://www.arkivverket.no/standarder/noark5/offentligJournal offentligJournal.xsd',
+            }
+            with output.tag('offentligJournal', attr=attr):
+                with output.tag('journalhode'):
+                    print("error: using dummy values in journalhode")
+                    output.writetag('journalStartDato', '1970-01-01')
+                    output.writetag('journalSluttDato', '1970-01-01')
+                    output.writetag('antallJournalposter', 'dummy')
+                    with output.tag('arkivskaper'):
+                        output.writetag('arkivskaperID', 'dummy')
+                        output.writetag('arkivskaperNavn', 'dummy')
+                        output.writetag('beskrivelse', 'dummy')
+                self.ojoutput = output
+                callback()
+                del self.ojoutput
+        self.files['offentligJournal.xml'] = sha256_of_file(filename)
+
+
+
     def recurse_xml(self):
         try:
             self.login()
@@ -1280,7 +1344,10 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core/issues/159
                 with codecs.open(filename, 'w',
                                  encoding='UTF-8') as fh:
                     output = XMLFile(fh)
-                    self.recurse_xml_arkiv(output, arkiv, first=True)
+                    self.recurse_xml_save_offentligJournal(
+                        lambda : self.recurse_xml_arkiv(output,
+                                                        arkiv, first=True)
+                    )
                     self.files['arkivstruktur.xml'] = sha256_of_file(filename)
                 self.save_xml_vsm_xsd(self.savepath)
                 self.recurse_xml_save_arkivuttrekk(arkivcopy)
