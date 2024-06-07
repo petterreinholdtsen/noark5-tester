@@ -834,7 +834,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 (presedensrel, self.recurse_xml_presedens),
                 ('elektroniskSignatur', self.recurse_xml_elektroniskSignatur),
         ))
-            self.recurse_xml_save_journalregistrering(content, parents)
+            self.recurse_xml_save_journalregistrering(self.ojoutput,
+                                                      content, parents)
+            self.recurse_xml_save_journalregistrering(self.ljoutput,
+                                                      content, parents, running=True)
             self.stats_add('journalpost')
         if attr and 'arkivnotat'== attr['xsi:type']:
             sequence.extend((
@@ -1242,66 +1245,99 @@ class ContentDumper(n5core.endpoint.Endpoint):
             self.schemas[os.path.basename(xsdpath)] = sha256_of_file(xsdpath)
 
 
-    def recurse_xml_save_journalregistrering(self, j, parents):
-        print("recurse_xml_save_journalregistrering")
-        output = self.ojoutput
+    def recurse_xml_save_journalregistrering(self, output, j, parents,
+                                             running=False):
+        def outputtitler(output, parents, running):
+            if running:
+                output.writetag('tittel', parents[0]['tittel'])
+                if 'offentligTittel' in parents[0]:
+                    output.writetag('offentligTittel', parents[0]['offentligTittel'])
+            else:
+                tittel = parents[0]['tittel']
+                if 'offentligTittel' in parents[0]:
+                    tittel = parents[0]['offentligTittel']
+                output.writetag('offentligTittel', tittel)
         with output.tag('journalregistrering'):
             if 'klasseID' in parents[1]:
                 with output.tag('klasse'):
                     output.writetag('klasseID', parents[1]['klasseID'])
                     output.writetag('tittel', parents[1]['tittel'])
+                    # output.writetag('skjermingMetadata', 'dummy')
             with output.tag('saksmappe'):
                 output.writetag('saksaar', parents[0]['saksaar'])
                 output.writetag('sakssekvensnummer', parents[0]['sakssekvensnummer'])
-                tittel = parents[0]['tittel']
-                if 'offentligTittel' in parents[0]:
-                    tittel = parents[0]['offentligTittel']
-                output.writetag('offentligTittel', tittel)
+                outputtitler(output, parents, running)
+                if running:
+                    output.writetag('skjermingMetadata', 'dummy')
             with output.tag('journalpost'):
                 output.writetag('systemID', j['systemID'])
                 output.writetag('journalaar', j['journalaar'])
                 output.writetag('journalsekvensnummer', j['journalsekvensnummer'])
                 output.writetag('journalpostnummer', j['journalpostnummer'])
-                tittel = j['tittel']
-                if 'offentligTittel' in j:
-                    tittel=j['offentligTittel']
-                output.writetag('offentligTittel', tittel)
+                outputtitler(output, parents, running)
+                # skjermingsmetadata
                 if 'journaldato' in j:
                     output.writetag('journaldato', j['journaldato'])
                 else:
                     print(f"error: journalpost {j['systemID']} missing journaldate")
-                # FIXME figure out how to get these
+                if 'dokumentetsDato' in j:
+                    output.writetag('dokumentetsDato', j['dokumentetsDato'])
+                # output.writetag('avskrivningsdato', j['avskrivningsdato'])
+                # output.writetag('avskrivningsmaate', j['avskrivningsmaate'])
+                # avskrivning.referanseAvskrivesAvJournalpost
+                # tilgang.tilgangsrestriksjon.kodenavn
+                # gradering.graderingskode.kodenavn -> grad
+                # Skjerming.skjermingshjemmel
+                # FIXME figure out how to output korrespondansepart
                 if True:
                     print("error: journalregistrering missing korrespondansepart")
                 else:
                   with output.tag('korrespondansepart'):
                     output.writetag('korrespondanseparttype', 'dummy')
                     output.writetag('korrespondansepartNavn', 'dummy')
+                    if running:
+                        # skjermingMetadata
+                        pass
 
-    def recurse_xml_save_offentligJournal(self, callback):
-        filename = '%s/offentligJournal.xml' % self.savepath
-        with codecs.open(filename, 'w', encoding='UTF-8') as fh:
-            output = XMLFile(fh)
-            attr = {
-                'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-                'xmlns': 'http://www.arkivverket.no/standarder/noark5/offentligJournal',
-                'xmlns:n5mdk': 'http://www.arkivverket.no/standarder/noark5/metadatakatalog',
-                'xsi:schemaLocation': 'http://www.arkivverket.no/standarder/noark5/offentligJournal offentligJournal.xsd',
-            }
-            with output.tag('offentligJournal', attr=attr):
-                with output.tag('journalhode'):
-                    print("error: using dummy values in journalhode")
-                    output.writetag('journalStartDato', '1970-01-01')
-                    output.writetag('journalSluttDato', '1970-01-01')
-                    output.writetag('antallJournalposter', 'dummy')
-                    with output.tag('arkivskaper'):
-                        output.writetag('arkivskaperID', 'dummy')
-                        output.writetag('arkivskaperNavn', 'dummy')
-                        output.writetag('beskrivelse', 'dummy')
-                self.ojoutput = output
-                callback()
-                del self.ojoutput
-        self.files['offentligJournal.xml'] = sha256_of_file(filename)
+    def recurse_xml_save_journal(self, callback):
+        ljfilename = '%s/loependeJournal.xml' % self.savepath
+        ojfilename = '%s/offentligJournal.xml' % self.savepath
+        with codecs.open(ljfilename, 'w', encoding='UTF-8') as ljfh:
+            with codecs.open(ojfilename, 'w', encoding='UTF-8') as ojfh:
+                ljoutput = XMLFile(ljfh)
+                ljattr = {
+                    'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+                    'xmlns': 'http://www.arkivverket.no/standarder/noark5/loependeJournal',
+                    'xmlns:n5mdk': 'http://www.arkivverket.no/standarder/noark5/metadatakatalog',
+                    'xsi:schemaLocation': 'http://www.arkivverket.no/standarder/noark5/loependeJournal loependeJournal.xsd',
+                }
+                ojoutput = XMLFile(ojfh)
+                ojattr = {
+                    'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+                    'xmlns': 'http://www.arkivverket.no/standarder/noark5/offentligJournal',
+                    'xmlns:n5mdk': 'http://www.arkivverket.no/standarder/noark5/metadatakatalog',
+                    'xsi:schemaLocation': 'http://www.arkivverket.no/standarder/noark5/offentligJournal offentligJournal.xsd',
+                }
+                with ojoutput.tag('offentligJournal', attr=ojattr):
+                    with ljoutput.tag('loependeJournal', attr=ljattr):
+                        for output in (ojoutput, ljoutput):
+                            with output.tag('journalhode'):
+                                print("error: using dummy values in journalhode")
+                                output.writetag('journalStartDato', '1970-01-01')
+                                output.writetag('journalSluttDato', '1970-01-01')
+                                #output.writetag('seleksjon', 'dummy')
+                                output.writetag('antallJournalposter', 'dummy')
+                                with output.tag('arkivskaper'):
+                                    output.writetag('arkivskaperID', 'dummy')
+                                    output.writetag('arkivskaperNavn', 'dummy')
+                                    output.writetag('beskrivelse', 'dummy')
+                        self.ojoutput = ojoutput
+                        self.ljoutput = ljoutput
+                        callback()
+                        del self.ljoutput
+                        del self.ojoutput
+        self.files['loependeJournal.xml'] = sha256_of_file(ljfilename)
+        self.files['offentligJournal.xml'] = sha256_of_file(ojfilename)
 
 
 
@@ -1344,7 +1380,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 with codecs.open(filename, 'w',
                                  encoding='UTF-8') as fh:
                     output = XMLFile(fh)
-                    self.recurse_xml_save_offentligJournal(
+                    self.recurse_xml_save_journal(
                         lambda : self.recurse_xml_arkiv(output,
                                                         arkiv, first=True)
                     )
