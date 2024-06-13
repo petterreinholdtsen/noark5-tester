@@ -226,6 +226,8 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.files = {}
         self.schemas = {}
 
+        self.hendelserel = '%sloggingogsporing/hendelseslogg/' % self.relbaseurl
+
 
     def stats_add(self, entity):
         if entity not in self.stats:
@@ -437,6 +439,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         konvrel = '%sarkivstruktur/konvertering/' % self.relbaseurl
         sequence = [
             'systemID',
+            (self.hendelserel,  self.recurse_xml_endring),
         ]
         if self.xml_extended:
             sequence.extend((
@@ -556,6 +559,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'systemID',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+            (self.hendelserel,  self.recurse_xml_endring),
         ]
         if self.xml_extended:
             sequence.extend((
@@ -774,6 +778,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'opprettetAv',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+            (self.hendelserel,  self.recurse_xml_endring),
         ]
         if self.xml_extended:
             sequence.extend((
@@ -897,6 +902,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'systemID',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+            (self.hendelserel,  self.recurse_xml_endring),
         ]
         if self.xml_extended:
             sequence.extend((
@@ -980,6 +986,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'klasseID',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+            (self.hendelserel,  self.recurse_xml_endring),
         ]
         if self.xml_extended:
             sequence.extend((
@@ -1013,6 +1020,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'systemID',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+            (self.hendelserel,  self.recurse_xml_endring),
         ]
         if self.xml_extended:
             sequence.extend((
@@ -1061,6 +1069,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'systemID',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+            (self.hendelserel,  self.recurse_xml_endring),
         ]
         if self.xml_extended:
             sequence.extend((
@@ -1112,6 +1121,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
             'systemID',
             'oppdatertAv>[null]',
             'oppdatertDato>[null]',
+            (self.hendelserel,  self.recurse_xml_endring),
         ]
         if self.xml_extended:
             sequence.extend((
@@ -1299,6 +1309,34 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         # skjermingMetadata
                         pass
 
+    def recurse_xml_endring(self, output, content, parents):
+        sequence = (
+            'referanseArkivenhet',
+            'referanseMetadata',
+            'endretDato',
+            'endretAv',
+            'tidligereVerdi',
+            'nyVerdi',
+        )
+        entityrel = self.entity_rel(content)
+        #print("recurse_xml_endring", entityrel)
+        #print(content)
+        if 'https://rel.arkivverket.no/noark5/v5/api/loggingogsporing/endringslogg/' == entityrel:
+            self.recurse_xml_out_ordered(self.eloutput, 'endring', content, sequence, parents=parents)
+
+
+    def recurse_xml_save_endringslogg(self, callback):
+        with codecs.open('%s/endringslogg.xml' % self.savepath,
+                         'w', encoding='UTF-8') as fh:
+            eloutput = XMLFile(fh)
+            attr = {
+                'xmlns': 'http://www.arkivverket.no/standarder/noark5/endringslogg',
+            }
+            with eloutput.tag('endringslogg', attr=attr):
+                self.eloutput = eloutput
+                callback()
+                del self.eloutput
+
     def recurse_xml_save_journal(self, callback):
         ljfilename = '%s/loependeJournal.xml' % self.savepath
         ojfilename = '%s/offentligJournal.xml' % self.savepath
@@ -1381,8 +1419,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
                                  encoding='UTF-8') as fh:
                     output = XMLFile(fh)
                     self.recurse_xml_save_journal(
-                        lambda : self.recurse_xml_arkiv(output,
-                                                        arkiv, first=True)
+                        lambda : self.recurse_xml_save_endringslogg(
+                            lambda : self.recurse_xml_arkiv(output, arkiv,
+                                                            first=True)
+                        )
                     )
                     self.files['arkivstruktur.xml'] = sha256_of_file(filename)
                 self.save_xml_vsm_xsd(self.savepath)
