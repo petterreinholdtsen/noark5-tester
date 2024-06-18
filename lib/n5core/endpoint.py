@@ -241,13 +241,23 @@ Recursively look for relation in API.
             content = content.decode("UTF-8")
         return (content, response)
 
-    def options(self, path):
+    def cors_options(self, path, headers=None, method=None):
+        if headers is None:
+            headers = {}
+        if method is None:
+            method = 'POST'
+
+        headers['Access-Control-Request-Method'] = method
+        headers['Origin'] = 'Origin: http://localhost:3000'
+        return self.options(path, headers, method)
+
+    def options(self, path, headers, method):
         url = self.expandurl(path)
         purl = urlparse(url)
         url = purl._replace(query=urllib
                             .parse.quote_plus(purl.query)).geturl()
         opener = urllib.request.build_opener(urllib.request.HTTPHandler)
-        request = urllib.request.Request(url)
+        request = urllib.request.Request(url, None, headers)
         request.get_method = lambda: 'OPTIONS'
         response = opener.open(request)
         content = response.read()

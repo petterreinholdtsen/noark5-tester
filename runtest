@@ -476,16 +476,26 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                 self.urls.append(url)
                 try:
                     # Check if CORS can work for the URL
-                    (ocontent, ores) = self.options(url)
-                    allow = []
-                    allowstr = ores.getheader('Allow')
-                    if allowstr:
-                        allow = allowstr.split(',')
-                        self.verify(-1 != allow.index('GET'), 'OPTIONS header Allow should include GET for %s' % url)
+                    (ocontent, ores) = self.cors_options(url, method='GET')
+                    allow_origin = ores.getheader('Access-Control-Allow-Origin')
+                    if allow_origin:
+                        self.verify(True, 'OPTIONS (CORS) header Access-Control-Allow-Origin is present for %s' % url)
                     else:
-                        self.failure("OPTIONS for URL %s missing Allow header" % url)
+                        self.failure("OPTIONS (CORS) for URL %s missing Access-Control-Allow-Origin header" % url)
+                    allow_methods = ores.getheader('Access-Control-Allow-Methods')
+                    if allow_methods:
+                        result = False
+                        if '*' in allow_methods:
+                            result = True
+                        else:
+                            allow = allow_methods.split(',')
+                            result = 'GET' in allow
+                        self.verify(result, 'OPTIONS (CORS) header Access-Control-Allow-Methods should include GET or (*) for %s' % url)
+                    else:
+                        self.failure("OPTIONS (CORS) for URL %s missing Access-Control-Allow-Methods header" % url)
+
                 except HTTPError as e:
-                    self.failure("OPTIONS failed for URL %s: %s (%s)" % (url, str(e), e.read()))
+                    self.failure("OPTIONS (CORS) failed for URL %s: %s (%s)" % (url, str(e), e.read()))
             except HTTPError as e:
                 if self.isknownmissing(url):
                     self.xfailure("unable to GET %s" % url)
@@ -519,7 +529,7 @@ Test basis requirements for NOARK 5 Core.
         # Verify CORS support,
         # https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
         try:
-            (ocontent, ores) = self.options('.')
+            (ocontent, ores) = self.cors_options('.')
             self.success("level 0 CORS - HTTP OPTIONS request worked")
         except HTTPError as e:
             self.failure("level 0 CORS - HTTP OPTIONS request not working")
@@ -583,17 +593,30 @@ Test basis requirements for NOARK 5 Core.
             self.verify(etag is None, "no ETag from GET on %s" % url)
             try:
                 # Verify OPTIONS announce POST support
-                (ocontent, ores) = self.options(url)
+                (ocontent, ores) = self.cors_options(url, method='POST')
                 allow = []
-                allowstr = ores.getheader('Allow')
-                if allowstr:
-                    allow = allowstr.split(',')
-                    verify('POST' in allow, 'OPTIONS header Allow should include POST for %s' % url)
-                    verify('GET' in allow, 'OPTIONS header Allow should include GET for %s' % url)
+                allow_origin = ores.getheader('Access-Control-Allow-Methods')
+                if allow_origin:
+                    allow = allow_origin.split(',')
+                    verify('POST' in allow, 'OPTIONS (CORS) header Access-Control-Allow-Origin should include POST for %s' % url)
+                    verify('GET' in allow, 'OPTIONS (CORS) header Access-Control-Allow-Origin should be present for %s' % url)
                 else:
-                    failure("OPTIONS for URL %s missing Allow header" % url)
+                    failure("OPTIONS (CORS) for URL %s missing Access-Control-Allow-Origin header" % url)
+
+                allow_methods = ores.getheader('Access-Control-Allow-Methods')
+                if allow_methods:
+                    if '*' in allow_methods:
+                        verify(True, 'OPTIONS (CORS) header Access-Control-Allow-Methods should include POST or (*) for %s' % url)
+                        verify(True, 'OPTIONS (CORS) header Access-Control-Allow-Methods should include GET or (*) for %s' % url)
+                    else:
+                        allow = allow_methods.split(',')
+                        verify('POST' in allow, 'OPTIONS (CORS) header Access-Control-Allow-Methods should include POST or (*) for %s' % url)
+                        verify('GET' in allow, 'OPTIONS (CORS) header Access-Control-Allow-Methods should include GET or (*) for %s' % url)
+                else:
+                    self.failure("OPTIONS (CORS) for URL %s missing Access-Control-Allow-Methods header" % url)
+
             except HTTPError as e:
-                failure('unable to OPTIONS %s: %s' % (url, e.read()))
+                failure('unable to OPTIONS (CORS) %s: %s' % (url, e.read()))
         except HTTPError as e:
             failure('unable to GET %s: %s' % (url, e.read()))
         print("POST %s: %s" % (url, data))
