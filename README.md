@@ -21,3 +21,12 @@ https://gitlab.com/OsloMet-ABI/nikita-noark5-core .
 
 The latest version of the test scripts can be found in
 https://codeberg.org/noark/noark5-tester
+
+
+Known dependencies
+------------------
+
+- python-magic
+- PyPDF2
+- pytz
+- six
