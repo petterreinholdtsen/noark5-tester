@@ -611,13 +611,15 @@ Test basis requirements for NOARK 5 Core.
 
                 allow_methods = ores.getheader('Access-Control-Allow-Methods')
                 if allow_methods:
+                    postresult = getresult = False
                     if '*' in allow_methods:
-                        verify(True, 'OPTIONS (CORS) header Access-Control-Allow-Methods should include POST or (*) for %s' % url)
-                        verify(True, 'OPTIONS (CORS) header Access-Control-Allow-Methods should include GET or (*) for %s' % url)
+                        postresult = getresult = True
                     else:
                         allow = allow_methods.split(',')
-                        verify('POST' in allow, 'OPTIONS (CORS) header Access-Control-Allow-Methods should include POST or (*) for %s' % url)
-                        verify('GET' in allow, 'OPTIONS (CORS) header Access-Control-Allow-Methods should include GET or (*) for %s' % url)
+                        postresult = 'POST' in allow
+                        getresult = 'GET' in allow
+                    verify(postresult, 'OPTIONS (CORS) header Access-Control-Allow-Methods should include POST or (*) for %s' % url)
+                    verify(getresult, 'OPTIONS (CORS) header Access-Control-Allow-Methods should include GET or (*) for %s' % url)
                 else:
                     self.failure("OPTIONS (CORS) for URL %s missing Access-Control-Allow-Methods header" % url)
 
