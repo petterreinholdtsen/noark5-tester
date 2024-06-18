@@ -49,6 +49,7 @@ from n5core.endpoint import HTTPError
 from n5core.endpoint import URLError
 
 noarkrelbase = n5core.endpoint.Endpoint.relbaseurl
+nikitarelbaseurl = n5core.endpoint.Endpoint.nikitarelbaseurl
 
 def utcnowtz():
     u = datetime.datetime.utcnow()
@@ -131,6 +132,11 @@ class Noark5Tester (n5core.endpoint.Endpoint):
         noarkrelbase + 'arkivstruktur/underklasse/',
         noarkrelbase + 'arkivstruktur/undermappe/',
         noarkrelbase + 'loggingogsporing/',
+        # Temporary list of rels until we decide what to do with logging in the API spec
+        nikitarelbaseurl + 'arkivstruktur/arkivenhet/',
+        nikitarelbaseurl + 'loggingogsporing/opprettelseslogg/',
+        nikitarelbaseurl + 'loggingogsporing/leselogg/',
+        nikitarelbaseurl + 'loggingogsporing/slettelogg/',
         noarkrelbase + 'loggingogsporing/endringslogg/',
         noarkrelbase + 'loggingogsporing/hendelseslogg/',
         noarkrelbase + 'loggingogsporing/ny-endringslogg/',
