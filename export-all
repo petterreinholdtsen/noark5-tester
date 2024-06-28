@@ -843,7 +843,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                                                       content, parents)
             self.recurse_xml_save_journalregistrering(self.ljoutput,
                                                       content, parents, running=True)
-            self.stats_add('journalpost')
+
         if attr and 'arkivnotat'== attr['xsi:type']:
             sequence.extend((
                 'dokumentetsDato',
@@ -856,7 +856,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 'utlaantTil',
                 (dokflytrel, self.recurse_xml_dokumentflyt),
         ))
-            self.stats_add('arkivnotat')
+
         if attr and 'moeteregistrering' == attr['xsi:type']:
             sequence.extend((
                 'moeteregistreringstype.kodenavn>moeteregistreringstype',
@@ -870,9 +870,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
 #                ('referanseTilMoeteregistrering'), # FIXME for moeteregistrering
 #                ('referanseFraMoeteregistrering'), # FIXME for moeteregistrering
         ))
-            self.stats_add('moeteregistrering')
         self.recurse_xml_out_ordered(output, 'registrering', content, sequence, attr=attr, parents=parents)
-        self.stats_add('registrering')
 
 
     def recurse_xml_mappe(self, output, content, parents):
@@ -965,7 +963,6 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 'moetedeltaker',
         ))
         self.recurse_xml_out_ordered(output, 'mappe', content, sequence, attr=attr, parents=parents)
-        self.stats_add('mappe')
 
 
     def recurse_xml_klasse(self, output, content, parents):
