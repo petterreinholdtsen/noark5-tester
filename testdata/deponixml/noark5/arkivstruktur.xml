@@ -24,8 +24,8 @@
   <opprettetAv>Steve Jackson</opprettetAv>
   <avsluttetDato>1864-12-26T00:00:00+00:00</avsluttetDato>
   <avsluttetAv>Kristian Hunskaar</avsluttetAv>
-  <arkivperiodeStartDato>1864-03-12</arkivperiodeStartDato>
-  <arkivperiodeSluttDato>1864-02-02</arkivperiodeSluttDato>
+  <arkivperiodeStartDato>1864-03-12T00:00:00+00:00</arkivperiodeStartDato>
+  <arkivperiodeSluttDato>1864-02-02T00:00:00+00:00</arkivperiodeSluttDato>
   <klassifikasjonssystem>
    <systemID>klassSys57d6608566c0b6.73735847</systemID>
    <klassifikasjonstype>Travel</klassifikasjonstype>
@@ -110,15 +110,8 @@
          <skjermingMetadata>Skjermet</skjermingMetadata>
          <skjermingDokument>Skjerming av hele dokumentet</skjermingDokument>
          <skjermingsvarighet>60</skjermingsvarighet>
-         <skjermingOpphoererDato>1942-07-25</skjermingOpphoererDato>
+         <skjermingOpphoererDato>1942-07-25T00:00:00+00:00</skjermingOpphoererDato>
         </skjerming>
-        <gradering>
-         <gradering>Strengt hemmelig (sikkerhetsgrad)</gradering>
-         <graderingsdato>1865-02-13T00:00:00+00:00</graderingsdato>
-         <gradertAv>PST</gradertAv>
-         <nedgraderingsdato>2070-02-13T12:00:00</nedgraderingsdato>
-         <nedgradertAv>PST</nedgradertAv>
-        </gradering>
         <dokumentbeskrivelse>
          <systemID>dokumentb57d6608566c0b5.71024350</systemID>
          <dokumenttype>Ordrebekreftelser</dokumenttype>
@@ -140,7 +133,7 @@
           <skjermingMetadata>Skjermet</skjermingMetadata>
           <skjermingDokument>Skjerming av hele dokumentet</skjermingDokument>
           <skjermingsvarighet>40</skjermingsvarighet>
-          <skjermingOpphoererDato>1941-01-10</skjermingOpphoererDato>
+          <skjermingOpphoererDato>1941-01-10T00:00:00+00:00</skjermingOpphoererDato>
          </skjerming>
          <dokumentobjekt>
           <versjonsnummer>1</versjonsnummer>
@@ -167,8 +160,8 @@
         <journalpostnummer>1</journalpostnummer>
         <journalposttype>Organinternt dokument for oppfølging</journalposttype>
         <journalstatus>Arkivert</journalstatus>
-        <journaldato>1863-08-09</journaldato>
-        <dokumentetsDato>1863-12-13</dokumentetsDato>
+        <journaldato>1863-08-09T00:00:00+00:00</journaldato>
+        <dokumentetsDato>1863-12-13T00:00:00+00:00</dokumentetsDato>
         <mottattDato>1863-10-06T00:00:00+00:00</mottattDato>
         <antallVedlegg>0</antallVedlegg>
         <journalenhet>journalseksjonen</journalenhet>
@@ -204,7 +197,7 @@
          <skjermingMetadata>Skjermet</skjermingMetadata>
          <skjermingDokument>Skjerming av hele dokumentet</skjermingDokument>
          <skjermingsvarighet>60</skjermingsvarighet>
-         <skjermingOpphoererDato>1940-04-12</skjermingOpphoererDato>
+         <skjermingOpphoererDato>1940-04-12T00:00:00+00:00</skjermingOpphoererDato>
         </skjerming>
         <dokumentbeskrivelse>
          <systemID>dokumentb57d6608569ed34.43360733</systemID>
@@ -227,7 +220,7 @@
           <skjermingMetadata>Skjermet</skjermingMetadata>
           <skjermingDokument>Skjerming av hele dokumentet</skjermingDokument>
           <skjermingsvarighet>40</skjermingsvarighet>
-          <skjermingOpphoererDato>1945-03-06</skjermingOpphoererDato>
+          <skjermingOpphoererDato>1945-03-06T00:00:00+00:00</skjermingOpphoererDato>
          </skjerming>
          <dokumentobjekt>
           <versjonsnummer>1</versjonsnummer>
@@ -261,8 +254,8 @@
         <journalpostnummer>2</journalpostnummer>
         <journalposttype>Inngående dokument</journalposttype>
         <journalstatus>Journalført</journalstatus>
-        <journaldato>1863-10-28</journaldato>
-        <dokumentetsDato>1864-04-10</dokumentetsDato>
+        <journaldato>1863-10-28T00:00:00+00:00</journaldato>
+        <dokumentetsDato>1864-04-10T00:00:00+00:00</dokumentetsDato>
         <mottattDato>1863-01-03T00:00:00+00:00</mottattDato>
         <antallVedlegg>0</antallVedlegg>
         <korrespondansepart>
@@ -307,7 +300,7 @@
        </registrering>
        <saksaar>1864</saksaar>
        <sakssekvensnummer>013</sakssekvensnummer>
-       <saksdato>1864-02-07</saksdato>
+       <saksdato>1864-02-07T00:00:00+00:00</saksdato>
        <administrativEnhet>DT</administrativEnhet>
        <saksansvarlig>Espen Tønnessen</saksansvarlig>
        <journalenhet>journalseksjonen</journalenhet>

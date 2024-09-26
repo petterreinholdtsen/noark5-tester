@@ -322,7 +322,8 @@ class Noark5Tester (n5core.endpoint.Endpoint):
     def success(self, msg):
         if msg not in self.successes:
             self.successes[msg] = 1
-            print("success: " + msg)
+            if self.verbose:
+                print("success: " + msg)
         return True
     def failure(self, msg):
         if msg not in self.failures:
@@ -337,7 +338,8 @@ class Noark5Tester (n5core.endpoint.Endpoint):
     def xsuccess(self, msg):
         if msg not in self.successes:
             self.successes[msg] = 1
-            print("xsuccess: " + msg)
+            if self.verbose:
+                print("xsuccess: " + msg)
         return True
     def xfailure(self, msg):
         if msg not in self.xfailures:
@@ -589,7 +591,7 @@ Test basis requirements for NOARK 5 Core.
         try:
             (gc, gres) = self.json_get(url)
             default = json.loads(gc)
-            print("GET %s returned %s" % (url, default))
+            #print("GET %s returned %s" % (url, default))
             # using default values in POST
             for k in default.keys():
                 if not k == '_links' and k not in data:
@@ -627,7 +629,7 @@ Test basis requirements for NOARK 5 Core.
                 failure('unable to OPTIONS (CORS) %s: %s' % (url, e.read()))
         except HTTPError as e:
             failure('unable to GET %s: %s' % (url, e.read()))
-        print("POST %s: %s" % (url, data))
+        #print("POST %s: %s" % (url, data))
         try:
             (c, res) = self.json_post(url, data)
         except HTTPError as e:
@@ -668,7 +670,8 @@ Test basis requirements for NOARK 5 Core.
                             print("data[%s]: %s" % (k, data[k]))
                             print("info[%s]: %s" % (k, info[k]))
                         for v in data[k].keys():
-                            print("checking %s key %s" % (k, v))
+                            if self.verbose:
+                                print("checking %s key %s" % (k, v))
                             verify(k in data and k in info
                                    and v in data[k] and v in info[k]
                                    and data[k][v] == info[k][v],
