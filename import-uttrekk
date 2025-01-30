@@ -906,8 +906,13 @@ FIXME flag inaccurate guesses somehow
 
 def main():
     baseurl = "https://localhost:8092/noark5v5/"
-    
+    username = 'admin@example.com'
+    password = 'password'
+    client_id = 'nikita-client'
     parser = argparse.ArgumentParser()
+    parser.add_argument('--username', help='(default is %s)' % username)
+    parser.add_argument('--password', help='(default is %s, \'prompt\' to prompt)' % password)
+    parser.add_argument('--client_id', help='(default is %s)' % client_id)
     parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
     parser.add_argument("--verbose", help="print more debug information",
                         action="store_true")
@@ -918,11 +923,21 @@ def main():
 
     if args.baseurl:
         baseurl = args.baseurl
+    if args.username:
+        username = args.username
+    if args.password:
+        password = args.password
+    if args.client_id:
+        client_id = args.client_id
 
     i = Importer(baseurl)
     i.verbose = args.verbose
     i.dryrun = args.dryrun
-    i.login()
+    try:
+        i.login(username=username, password=password, client_id=client_id)
+    except n5core.endpoint.LoginFailure as e:
+        i.gotlogin = False
+        print("warning: unable to log in, operating in read only mode: %s" % e)
 
     retval = 0
     for basedir in args.basedir:
