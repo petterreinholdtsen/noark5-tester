@@ -131,7 +131,6 @@ class Endpoint:
                     # token is still valid, renew
                     if self.oidcinfo['epoc_expires_in'] - 10 < now and \
                        now < self.oidcinfo['epoc_refresh_expires_in'] - 1:
-                        print(self.oidcmeta)
                         url = self.oidcmeta['token_endpoint']
                         data = {
                             'grant_type': 'refresh_token',
