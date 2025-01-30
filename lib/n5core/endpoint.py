@@ -18,6 +18,7 @@
 
 import base64
 import json
+import time
 import urllib
 import urllib.request
 from urllib.request import Request, urlopen
@@ -35,7 +36,13 @@ class Endpoint:
     def __init__(self, baseurl):
         self.baseurl = baseurl
         self.verbose = False
-        self.tokenheader = 'Authorization'
+        self.get_auth = \
+            lambda: (
+                'Authorization', self.token
+            ) if hasattr(self, 'token') else (
+                None, None
+            )
+
 
     def expandurl(self, path):
 #        print(self.baseurl, path)
@@ -47,6 +54,8 @@ class Endpoint:
         url7519 = self.findRelation("%slogin/rfc7519/" % self.nikitarelbaseurl)
         url6749 = self.findRelation("%slogin/rfc6749/" % self.nikitarelbaseurl)
         urloidc = self.findRelation("%slogin/oidc/" % self.relbaseurl)
+        client_id = 'nikita-client'
+        auth_pwd = 'secret'
         if url7519 is not None:
             url = url7519
             try:
@@ -76,9 +85,10 @@ class Endpoint:
                     'password': password,
                 }
                 datastr = urllib.parse.urlencode(data)
-                a = '%s:%s' % ('nikita-client', 'secret')
+                a = '%s:%s' % (client_id, auth_pwd)
                 self.token = 'Basic %s' % base64.encodebytes(a).strip()
-                (c,r) = self.post(url, datastr, 'application/x-www-form-urlencoded')
+                (c,r) = self.post(url, datastr, 'application/x-www-form-urlencoded',
+                                  accept='application/json')
             except HTTPError as e:
                 raise LoginFailure("Posting to login relation %s failed: %s (%s)" % (url, str(e), e.read()))
             j = json.loads(c.decode('UTF-8'))
@@ -92,7 +102,6 @@ class Endpoint:
                     username = 'admin@example.com'
                 if password is None:
                     password = 'password'
-                client_id = 'nikita-client'
                 data = {
                     'grant_type': 'password',
                     'client_id': client_id,
@@ -100,16 +109,55 @@ class Endpoint:
                     'password': password,
                 }
                 datastr = urllib.parse.urlencode(data)
-                a = '%s:%s' % ('nikita-client', 'secret')
+                a = '%s:%s' % (client_id, auth_pwd)
                 key_bytes = base64.b64encode(str.encode(a))
                 key_str = key_bytes.decode('ascii')
                 self.token = 'Basic {}'.format(key_str)
                 # Manually encode query parameters in the URL:
-                (c,r) = self.post(url, datastr.encode("utf-8"), 'application/x-www-form-urlencoded')
+                (c,r) = self.post(url, datastr.encode("utf-8"), 'application/x-www-form-urlencoded',
+                                  accept='application/json')
             except HTTPError as e:
                 raise LoginFailure("Posting to login relation %s failed: %s (%s)" % (url, str(e), e.read()))
-            j = json.loads(c.decode('UTF-8'))
-            self.token = "%s %s" % (j['token_type'], j['access_token'])
+            te = json.loads(c.decode('UTF-8'))
+            self.oidcmeta = j
+            self.oidcinfo = te
+            now = time.time()
+            self.oidcinfo['epoc_expires_in'] = now + self.oidcinfo['expires_in']
+            self.oidcinfo['epoc_refresh_expires_in'] = now + self.oidcinfo['refresh_expires_in']
+            def oidc_get_auth():
+                if hasattr(self, 'oidcinfo'):
+                    now = time.time()
+                    # Expires in 10 seconds or less and the refresh
+                    # token is still valid, renew
+                    if self.oidcinfo['epoc_expires_in'] - 10 < now and \
+                       now < self.oidcinfo['epoc_refresh_expires_in'] - 1:
+                        print(self.oidcmeta)
+                        url = self.oidcmeta['token_endpoint']
+                        data = {
+                            'grant_type': 'refresh_token',
+                            'refresh_token':self.oidcinfo['refresh_token'],
+                            'client_id': client_id,
+                        }
+                        datastr = urllib.parse.urlencode(data)
+                        (c,r) = self._post(url, datastr.encode("utf-8"),
+                                          'application/x-www-form-urlencoded',
+                                           length=0,
+                                           accept='application/json',
+                                           headers={},
+                                          )
+                        te = json.loads(c.decode('UTF-8'))
+                        self.oidcinfo = te
+                        self.oidcinfo['epoc_expires_in'] = \
+                            now + self.oidcinfo['expires_in']
+                        self.oidcinfo['epoc_refresh_expires_in'] = \
+                            now + self.oidcinfo['refresh_expires_in']
+                    token = "%s %s" % (self.oidcinfo['token_type'],
+                                       self.oidcinfo['access_token'])
+                    return ('Authorization', token)
+                else:
+                    return (None, None)
+
+            self.get_auth = oidc_get_auth
         else:
             raise LoginFailure("Unable to find login relation")
 
@@ -155,22 +203,27 @@ Recursively look for relation in API.
                 # Ignore errors from GET, we only try to locate links, not detect problems.
                 pass
 
-    def post(self, path, data, mimetype, length=0):
+    def post(self, path, data, mimetype, length=0, accept='application/vnd.noark5+json'):
+        headers = {}
+        h, t = self.get_auth()
+        if h:
+            headers[h] = t
+        return self._post(path, data, mimetype, length, accept, headers);
+
+    def _post(self, path, data, mimetype, length, accept, headers):
         url = self.expandurl(path)
-        headers = {
-            'Accept' : 'application/vnd.noark5+json',
-            'Content-Type': mimetype,
-        }
+        headers['Accept'] = accept
+        headers['Content-Type'] = mimetype
 
         if data is not None and length == 0:
             length = len(data)
         headers['Content-Length'] = length
-        if hasattr(self, 'token'):
-            headers[self.tokenheader] = self.token
         if self.verbose:
             print("POST %s: %s" % (url, headers))
         if data is not None:
             request = Request(url, headers=headers, data=data)
+            # Not printing data as it contain passwords when logging in
+            #if self.verbose: print("DATA: %s" % (data))
         else:
             request = Request(url, headers=headers)
             request.get_method = lambda: 'POST'
@@ -195,8 +248,9 @@ Recursively look for relation in API.
             'Content-Type': mimetype,
             'Content-Length' : length,
         }
-        if hasattr(self, 'token'):
-            headers[self.tokenheader] = self.token
+        h, t = self.get_auth()
+        if h:
+            headers[h] = t
         if etag is not None:
             headers['ETag'] = etag
         if self.verbose:
@@ -220,8 +274,9 @@ Recursively look for relation in API.
             print("GET %s" % url)
         if headers is None:
             headers = {}
-        if hasattr(self, 'token'):
-            headers[self.tokenheader] = self.token
+        h, t = self.get_auth()
+        if h:
+            headers[h] = t
         request = Request(url, None, headers=headers)
         response = urlopen(request)
         content = response.read()
@@ -271,8 +326,9 @@ Recursively look for relation in API.
         opener = urllib.request.build_opener(urllib.request.HTTPHandler)
         if headers is None:
             headers = {}
-        if hasattr(self, 'token'):
-            headers[self.tokenheader] = self.token
+        h, t = self.get_auth()
+        if h:
+            headers[h] = t
         if etag is not None:
             headers['ETag'] = etag
         request = urllib.request.Request(url, None, headers)
