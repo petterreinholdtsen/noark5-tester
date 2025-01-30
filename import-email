@@ -85,8 +85,14 @@ def decodeheader(s):
 class MboxImporter(n5core.endpoint.Endpoint):
     def __init__(self):
         baseurl = 'http://localhost:8092/noark5v5/'
+        self.username = 'admin@example.com'
+        self.password = 'password'
+        self.client_id = 'nikita-client'
         self.mbox = 'input.mbox'
         parser = argparse.ArgumentParser()
+        parser.add_argument('--username', help='(default is %s)' % self.username)
+        parser.add_argument('--password', help='(default is %s, \'prompt\' to prompt)' % self.password)
+        parser.add_argument('--client_id', help='(default is %s)' % self.client_id)
         parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
         parser.add_argument("--mda", help="behave as mail delivery agent, read single email from stdin",
                             action="store_true")
@@ -108,6 +114,12 @@ class MboxImporter(n5core.endpoint.Endpoint):
         self.maxinserts = args.maxinserts
         if args.baseurl:
             baseurl = args.baseurl
+        if self.args.username:
+            self.username = self.args.username
+        if self.args.password:
+            self.password = self.args.password
+        if self.args.client_id:
+            self.client_id = self.args.client_id
         if args.mda and args.mbox:
             raise Exception("invalid combination of arguments, can not use --mda and --mbox together")
         if args.mbox:
@@ -845,7 +857,11 @@ last digit is a control digit.
 
 def main():
     t = MboxImporter()
-    t.login()
+    try:
+        t.login(username=t.username, password=t.password, client_id=t.client_id)
+    except n5core.endpoint.LoginFailure as e:
+        t.gotlogin = False
+        print("warning: unable to log in, operating in read only mode: %s" % e)
     if t.findSeries() is None:
         print("error: unable to find arkivdel to use")
         return 1

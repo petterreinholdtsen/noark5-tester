@@ -297,7 +297,13 @@ class Noark5Tester (n5core.endpoint.Endpoint):
     def __init__(self):
         baseurl = 'http://localhost:8092/noark5v5/'
         refurl = 'http://n5test.kxml.no/api/'
+        self.username = 'admin@example.com'
+        self.password = 'password'
+        self.client_id = 'nikita-client'
         parser = argparse.ArgumentParser()
+        parser.add_argument('--username', help='(default is %s)' % self.username)
+        parser.add_argument('--password', help='(default is %s, \'prompt\' to prompt)' % self.password)
+        parser.add_argument('--client_id', help='(default is %s)' % self.client_id)
         parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
         parser.add_argument("--reference", help="set baseurl to to demo API site (override --baseurl)",
                             action="store_true")
@@ -312,6 +318,12 @@ class Noark5Tester (n5core.endpoint.Endpoint):
             self.baseurl = args.baseurl
         else:
             self.baseurl = baseurl
+        if args.username:
+            self.username = args.username
+        if args.password:
+            self.password = args.password
+        if args.client_id:
+            self.client_id = args.client_id
         n5core.endpoint.Endpoint.__init__(self, self.baseurl)
         self.created = []
         self.verbose = args.verbose
@@ -1768,7 +1780,8 @@ or should it be rejected?
             baseref = self.testBasis()
             self.recursiveHateoas()
             try:
-                self.login()
+                self.login(username=self.username, password=self.password,
+                           client_id=self.client_id)
                 self.gotlogin = True
                 self.success("able to log in using admin/password")
             except n5core.endpoint.LoginFailure as e:

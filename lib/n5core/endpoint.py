@@ -17,6 +17,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import base64
+import getpass
 import json
 import time
 import urllib
@@ -50,11 +51,11 @@ class Endpoint:
             raise ValueError("asked to expand undefined URL path")
         url = urljoin(self.baseurl, path)
         return url
-    def login(self, username = None, password = None):
+    def login(self, username = None, password = None,
+              client_id=None, auth_pwd='secret'):
         url7519 = self.findRelation("%slogin/rfc7519/" % self.nikitarelbaseurl)
         url6749 = self.findRelation("%slogin/rfc6749/" % self.nikitarelbaseurl)
         urloidc = self.findRelation("%slogin/oidc/" % self.relbaseurl)
-        client_id = 'nikita-client'
         auth_pwd = 'secret'
         if url7519 is not None:
             url = url7519
@@ -85,8 +86,9 @@ class Endpoint:
                     'password': password,
                 }
                 datastr = urllib.parse.urlencode(data)
-                a = '%s:%s' % (client_id, auth_pwd)
-                self.token = 'Basic %s' % base64.encodebytes(a).strip()
+                if client_id:
+                    a = '%s:%s' % (client_id, auth_pwd)
+                    self.token = 'Basic %s' % base64.encodebytes(a).strip()
                 (c,r) = self.post(url, datastr, 'application/x-www-form-urlencoded',
                                   accept='application/json')
             except HTTPError as e:
@@ -100,19 +102,22 @@ class Endpoint:
             try:
                 if username is None:
                     username = 'admin@example.com'
+                if 'prompt' == password:
+                    password = getpass.getpass(f'Password for {username}: ')
                 if password is None:
                     password = 'password'
                 data = {
                     'grant_type': 'password',
-                    'client_id': client_id,
                     'username': username,
                     'password': password,
                 }
+                if client_id:
+                    data['client_id'] = client_id
+                    a = '%s:%s' % (client_id, auth_pwd)
+                    key_bytes = base64.b64encode(str.encode(a))
+                    key_str = key_bytes.decode('ascii')
+                    self.token = 'Basic {}'.format(key_str)
                 datastr = urllib.parse.urlencode(data)
-                a = '%s:%s' % (client_id, auth_pwd)
-                key_bytes = base64.b64encode(str.encode(a))
-                key_str = key_bytes.decode('ascii')
-                self.token = 'Basic {}'.format(key_str)
                 # Manually encode query parameters in the URL:
                 (c,r) = self.post(url, datastr.encode("utf-8"), 'application/x-www-form-urlencoded',
                                   accept='application/json')
@@ -135,8 +140,9 @@ class Endpoint:
                         data = {
                             'grant_type': 'refresh_token',
                             'refresh_token':self.oidcinfo['refresh_token'],
-                            'client_id': client_id,
                         }
+                        if client_id:
+                            data['client_id'] = client_id
                         datastr = urllib.parse.urlencode(data)
                         (c,r) = self._post(url, datastr.encode("utf-8"),
                                           'application/x-www-form-urlencoded',
@@ -221,7 +227,7 @@ Recursively look for relation in API.
             print("POST %s: %s" % (url, headers))
         if data is not None:
             request = Request(url, headers=headers, data=data)
-            # Not printing data as it contain passwords when logging in
+            # Not printing data to not expose passwords in stdout and logs
             #if self.verbose: print("DATA: %s" % (data))
         else:
             request = Request(url, headers=headers)
