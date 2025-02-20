@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+
+Import a Noark 5 business specific value set from XML schema into the API.
+
+"""
+
+__license__ = 'GNU General Public License v2 or later at users choice'
+__author__ = 'Petter Reinholdtsen'
+
+import sys
+import os
+sys.path.append(os.path.join(sys.path[0],'lib'))
+
+import argparse
+import json
+from lxml import etree
+
+import n5core.endpoint
+from n5core.endpoint import HTTPError
+
+typemap = {
+    'xs:string': u'string',
+}
+
+class Importer(n5core.endpoint.Endpoint):
+    def __init__(self, baseurl):
+        self.dryrun = False
+        self.verbose = False
+        n5core.endpoint.Endpoint.__init__(self, baseurl)
+
+    def parselinks(self,links):
+        rels = {}
+        for rel in links.keys():
+            if 'href' in links[rel]:
+                rels[rel] = links[rel]['href']
+        return rels
+
+    def findEndpoints(self):
+        # Locate and store BSM related URLs in catalog.
+        metadatarel = self.relbaseurl + 'metadata/'
+        vsmrel = "%smetadata/virksomhetsspesifikkeMetadata/" % self.relbaseurl
+        url = self.findRelation(metadatarel)
+        (entry, res) = self.json_get(url)
+        metadatalist = json.loads(entry)
+        links = self.parselinks(metadatalist['_links'])
+        vsmrel = "%smetadata/virksomhetsspesifikkeMetadata/" % self.relbaseurl
+        self.bsmlisturl = links[vsmrel]
+        createvsmrel = "%smetadata/ny-virksomhetsspesifikkeMetadata/" \
+            % self.relbaseurl
+        self.createbsmlisturl = links[createvsmrel]
+
+    def create(self, bsms):
+
+        # FIXME Need to add handling long lists with pagination
+        try:
+            (entry, res) = self.json_get(self.bsmlisturl)
+            vsmlist = json.loads(entry)
+        except HTTPError as e:
+            print("GET %s failed: %s (%s)" % (url, str(e), e.read()))
+            raise
+        bsmpresent = {}
+        if 0 < vsmlist['count']:
+            for v in vsmlist['results']:
+                bsmpresent[v['navn']] = v['type']
+
+        for key in bsms.keys():
+            cat, field = key
+            meta = bsms[key]
+            name = f"{cat}:{field}"
+            if name not in bsmpresent:
+                # did not exist already, need to add it.
+                bsmdata = {
+                    u'navn' : name,
+                    u'type' : meta['type'],
+                    #                'kilde' : '',
+                    #                'utdatert' : False,
+                }
+                if 'desc' in meta:
+                    bsmdata['beskrivelse'] = meta['desc']
+                try:
+                    if self.verbose:
+                        print("POST: %s" % bsmdata)
+                    (c, res) = self.json_post(self.createbsmlisturl, bsmdata)
+                except HTTPError as e:
+                    msg = e.read()
+                    print("Error: ", msg)
+                    raise
+                bsmmetainfo = json.loads(c)
+
+
+    def loadbsm(self, filename):
+        xmlschemans = 'http://www.w3.org/2001/XMLSchema'
+        tagxmlschema = '{%s}schema' % xmlschemans
+        tagelement = '{%s}element' % xmlschemans
+        tagcomplextype = '{%s}complexType' % xmlschemans
+        tagsequence = '{%s}sequence' % xmlschemans
+        tagannotation = '{%s}annotation' % xmlschemans
+        tagdocumentation = '{%s}documentation' % xmlschemans
+
+        print(f"Processing {filename}")
+        parser = etree.XMLParser(remove_blank_text=True, remove_comments=True)
+        fh = open(filename)
+        tree = etree.parse(fh, parser)
+        fh.close()
+        element = tree.getroot()
+        elements = {}
+        bsms = {}
+        if element.tag == tagxmlschema:
+            for sub in element.iterchildren():
+                print(sub.tag)
+                if sub.tag == tagelement:
+                    print("element", sub.attrib['name'], sub.attrib['type'])
+                    elements[sub.attrib['name']] = 1
+                elif sub.tag == tagcomplextype:
+                    if sub.attrib['name'] not in elements:
+                        next
+                    for seq in sub.iterchildren():
+                        if seq.tag == tagsequence:
+                            for elem in seq.iterchildren():
+                                key = (sub.attrib['name'], elem.attrib['name'])
+                                bsms[key] = { 'type': typemap[elem.attrib['type']] }
+                                for ann in elem.iterchildren():
+                                    if ann.tag == tagannotation:
+                                        for doc in ann.iterchildren():
+                                            if doc.tag == tagdocumentation:
+                                                bsms[key]['desc'] = doc.text.strip().lstrip()
+        print(bsms)
+        self.create(bsms)
+                    
+
+    @staticmethod
+    def main():
+        baseurl = "https://localhost:8092/noark5v5/"
+        username = 'admin@example.com'
+        password = 'password'
+        client_id = 'nikita-client'
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--username', help='(default is %s)' % username)
+        parser.add_argument('--password', help='(default is %s, \'prompt\' to prompt)' % password)
+        parser.add_argument('--client_id', help='(default is %s)' % client_id)
+        parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
+        parser.add_argument("--verbose", help="print more debug information",
+                            action="store_true")
+        parser.add_argument("--dryrun", help="print what would be imported, do not import",
+                            action="store_true")
+        parser.add_argument("schemafile", nargs='+', help="XML Schema with field info")
+        args = parser.parse_args()
+
+        if args.baseurl:
+            baseurl = args.baseurl
+        if args.username:
+            username = args.username
+        if args.password:
+            password = args.password
+        if args.client_id:
+            client_id = args.client_id
+
+        i = Importer(baseurl)
+        i.args = args
+        i.verbose = i.args.verbose
+        i.dryrun = i.args.dryrun
+
+        try:
+            if not i.dryrun:
+                i.login(username=username, password=password, client_id=client_id)
+            True
+        except n5core.endpoint.LoginFailure as e:
+            i.gotlogin = False
+            print("warning: unable to log in, not able to continue: %s" % e)
+            return -1
+
+        if not i.dryrun:
+            i.findEndpoints()
+
+        retval = 0
+        for schemafile in args.schemafile:
+            i.loadbsm(schemafile)
+        return retval
+
+
+if __name__ == '__main__':
+    exit(Importer.main())
