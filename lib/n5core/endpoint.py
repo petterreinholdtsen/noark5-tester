@@ -34,15 +34,17 @@ class LoginFailure(RuntimeError):
 class Endpoint:
     relbaseurl = 'https://rel.arkivverket.no/noark5/v5/api/'
     nikitarelbaseurl = "https://nikita.arkivlab.no/noark5/v5/"
+
+    def get_auth_dummy(self):
+        if hasattr(self, 'token'):
+            return 'Authorization', self.token
+        else:
+            return None, None
+
     def __init__(self, baseurl):
         self.baseurl = baseurl
         self.verbose = False
-        self.get_auth = \
-            lambda: (
-                'Authorization', self.token
-            ) if hasattr(self, 'token') else (
-                None, None
-            )
+        self.get_auth = self.get_auth_dummy
 
 
     def expandurl(self, path):
@@ -51,6 +53,50 @@ class Endpoint:
             raise ValueError("asked to expand undefined URL path")
         url = urljoin(self.baseurl, path)
         return url
+
+
+    def oidc_renew(self):
+        now = time.time()
+        url = self.oidcmeta['token_endpoint']
+        data = {
+            'grant_type': 'refresh_token',
+            'refresh_token':self.oidcinfo['refresh_token'],
+        }
+        if 'client_id' in self.oidcinfo:
+            data['client_id'] = self.oidcinfo['client_id']
+        datastr = urllib.parse.urlencode(data)
+        (c,r) = self._post(url, datastr.encode("utf-8"),
+                          'application/x-www-form-urlencoded',
+                           length=0,
+                           accept='application/json',
+                           headers={},
+                          )
+        te = json.loads(c.decode('UTF-8'))
+        if 'client_id' in self.oidcinfo:
+            te['client_id'] = self.oidcinfo['client_id']
+        self.oidcinfo = te
+        self.oidcinfo['epoc_expires_in'] = \
+            now + self.oidcinfo['expires_in']
+        self.oidcinfo['epoc_refresh_expires_in'] = \
+            now + self.oidcinfo['refresh_expires_in']
+
+    def get_auth_oidc(self):
+        if hasattr(self, 'oidcinfo'):
+            now = time.time()
+            # Expires in 30 seconds or less and the refresh
+            # token is still valid, renew
+            if self.oidcinfo['epoc_expires_in'] - 30 < now \
+               or self.oidcinfo['epoc_refresh_expires_in'] - 30 < now:
+                if  now < self.oidcinfo['epoc_refresh_expires_in'] - 1:
+                    print(f"Renewing JWT token, {now} {self.oidcinfo['epoc_expires_in']} {self.oidcinfo['epoc_refresh_expires_in']}\n")
+                    self.oidc_renew()
+                else:
+                    print("Unable to renew JWT token, refresh token expired")
+            token = "%s %s" % (self.oidcinfo['token_type'],
+                               self.oidcinfo['access_token'])
+            return ('Authorization', token)
+        return (None, None)
+
     def login(self, username = None, password = None,
               client_id=None, auth_pwd='secret'):
         url7519 = self.findRelation("%slogin/rfc7519/" % self.nikitarelbaseurl)
@@ -127,42 +173,12 @@ class Endpoint:
             self.oidcmeta = j
             self.oidcinfo = te
             now = time.time()
+            if client_id:
+                self.oidcinfo['client_id'] = client_id
             self.oidcinfo['epoc_expires_in'] = now + self.oidcinfo['expires_in']
             self.oidcinfo['epoc_refresh_expires_in'] = now + self.oidcinfo['refresh_expires_in']
-            def oidc_get_auth():
-                if hasattr(self, 'oidcinfo'):
-                    now = time.time()
-                    # Expires in 10 seconds or less and the refresh
-                    # token is still valid, renew
-                    if self.oidcinfo['epoc_expires_in'] - 10 < now and \
-                       now < self.oidcinfo['epoc_refresh_expires_in'] - 1:
-                        url = self.oidcmeta['token_endpoint']
-                        data = {
-                            'grant_type': 'refresh_token',
-                            'refresh_token':self.oidcinfo['refresh_token'],
-                        }
-                        if client_id:
-                            data['client_id'] = client_id
-                        datastr = urllib.parse.urlencode(data)
-                        (c,r) = self._post(url, datastr.encode("utf-8"),
-                                          'application/x-www-form-urlencoded',
-                                           length=0,
-                                           accept='application/json',
-                                           headers={},
-                                          )
-                        te = json.loads(c.decode('UTF-8'))
-                        self.oidcinfo = te
-                        self.oidcinfo['epoc_expires_in'] = \
-                            now + self.oidcinfo['expires_in']
-                        self.oidcinfo['epoc_refresh_expires_in'] = \
-                            now + self.oidcinfo['refresh_expires_in']
-                    token = "%s %s" % (self.oidcinfo['token_type'],
-                                       self.oidcinfo['access_token'])
-                    return ('Authorization', token)
-                else:
-                    return (None, None)
-
-            self.get_auth = oidc_get_auth
+            self.get_auth = self.get_auth_oidc
+            print("OAuth2 complete, JWT nfo: ", self.oidcinfo)
         else:
             raise LoginFailure("Unable to find login relation")
 
