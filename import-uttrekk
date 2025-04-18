@@ -266,6 +266,15 @@ formatmap = {
     'text':  ('x-fmt/111', 'text/plain'), # Plain text
 }
 
+pronom2mime = {
+    'fmt/4':   'image/gif',
+    'fmt/41':  'image/jpeg',
+    'fmt/95':  'application/pdf',
+    'fmt/101': 'text/xml',
+    'fmt/278': 'message/rfc822',
+    'fmt/950': 'message/rfc822',
+}
+
 def format2mime(format):
     if format in formatmap:
         return formatmap[format][1]
@@ -858,7 +867,10 @@ FIXME flag inaccurate guesses somehow
                 size = os.path.getsize(filepath)
                 # FIXME Workaround for bruken runtime and nikita 2020-01-13
                 if 'format' in info:
-                    mimetype = format2mime( info['format']['kodenavn'] )
+                    if '/' in info['format']['kode']:
+                        mimetype = pronom2mime[info['format']['kode']]
+                    else:
+                        mimetype = format2mime( info['format']['kodenavn'] )
                 else:
                     mimetype = 'application/octet-stream'
                 if self.verbose:
