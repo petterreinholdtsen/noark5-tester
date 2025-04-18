@@ -1291,6 +1291,19 @@ or should it be rejected?
                                              self.parselinks(casefileinfo['_links']),
                                              journalentrydata)
 
+        # Journal entries need a correspondance part for the public journal
+        corrpartpersonrel = self.relbaseurl + 'arkivstruktur/ny-korrespondansepartperson/'
+        senderinfo =  {
+            'korrespondanseparttype' : {
+                'kode' : 'EA'
+            },
+            'navn' : u'Eksempel navn'
+        }
+        corrinfo = self.createEntity('correspondance part %s' % c,
+                                     corrpartpersonrel,
+                                     self.parselinks(ujournalentryinfo['_links']),
+                                     senderinfo)
+
         signoffdata = {
             'avskrivningsmaate' : {
                 'kode' : 'BU',
