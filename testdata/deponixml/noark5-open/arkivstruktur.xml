@@ -111,8 +111,6 @@
           <sjekksum>b78fa9dcdaf7f59f085de6824ab3a238d6dada74fa7178e7823a4347055a06c3</sjekksum>
           <sjekksumAlgoritme>SHA-256</sjekksumAlgoritme>
           <filstoerrelse>24553</filstoerrelse>
-          <filnavn>5000000.pdf</filnavn>
-          <mimeType>application/pdf</mimeType>
          </dokumentobjekt>
         </dokumentbeskrivelse>
         <registreringsID>mappe1/jrnpst-1</registreringsID>
@@ -179,8 +177,6 @@
           <sjekksum>b78fa9dcdaf7f59f085de6824ab3a238d6dada74fa7178e7823a4347055a06c3</sjekksum>
           <sjekksumAlgoritme>SHA-256</sjekksumAlgoritme>
           <filstoerrelse>24553</filstoerrelse>
-          <filnavn>5000001.pdf</filnavn>
-          <mimeType>application/pdf</mimeType>
           <konvertering>
            <konvertertDato>1864-05-02T00:00:00+00:00</konvertertDato>
            <konvertertAv>sakSystem</konvertertAv>
