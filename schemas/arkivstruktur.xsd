@@ -470,8 +470,8 @@
       <xs:element name="sjekksum" type="n5mdk:sjekksum"/>
       <xs:element name="sjekksumAlgoritme" type="n5mdk:sjekksumAlgoritme"/>
       <xs:element name="filstoerrelse" type="n5mdk:filstoerrelse"/>
-      <xs:element name="filnavn" type="n5mdk:filnavn"/>
-      <xs:element name="mimeType" type="n5mdk:mimeType"/>
+      <xs:element name="filnavn" type="n5mdk:filnavn" minOccurs="0"/>
+      <xs:element name="mimeType" type="n5mdk:mimeType" minOccurs="0"/>
       <xs:element name="elektroniskSignatur" type="elektroniskSignatur" minOccurs="0"/>
 
       <xs:element name="konvertering" type="konvertering" minOccurs="0" maxOccurs="unbounded"/>
