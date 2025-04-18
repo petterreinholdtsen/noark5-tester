@@ -1370,10 +1370,10 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         for output in (ojoutput, ljoutput):
                             with output.tag('journalhode'):
                                 print("error: using dummy values in journalhode")
-                                output.writetag('journalStartDato', '1970-01-01')
-                                output.writetag('journalSluttDato', '1970-01-01')
+                                output.writetag('journalStartDato', '1970-01-01T00:00:00+01:00')
+                                output.writetag('journalSluttDato', '1970-01-01T00:00:00+01:00')
                                 #output.writetag('seleksjon', 'dummy')
-                                output.writetag('antallJournalposter', 'dummy')
+                                output.writetag('antallJournalposter', '-1')
                                 with output.tag('arkivskaper'):
                                     output.writetag('arkivskaperID', 'dummy')
                                     output.writetag('arkivskaperNavn', 'dummy')
