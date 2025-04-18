@@ -1307,16 +1307,23 @@ class ContentDumper(n5core.endpoint.Endpoint):
                 # tilgang.tilgangsrestriksjon.kodenavn
                 # gradering.graderingskode.kodenavn -> grad
                 # Skjerming.skjermingshjemmel
-                # FIXME figure out how to output korrespondansepart
-                if True:
-                    print("error: journalregistrering missing korrespondansepart")
-                else:
-                  with output.tag('korrespondansepart'):
-                    output.writetag('korrespondanseparttype', 'dummy')
-                    output.writetag('korrespondansepartNavn', 'dummy')
-                    if running:
-                        # skjermingMetadata
-                        pass
+                korrpartrel = '%sarkivstruktur/korrespondansepart/' % self.relbaseurl
+                if korrpartrel in j['_links']:
+                    url = j['_links'][korrpartrel]['href'].split('{')[0]
+                    (c, res) = self.json_get(url)
+                    info = json.loads(c)
+                    if ('count' in info and 0 < info['count']) \
+                       or 'results' in info:
+                        for sub in info['results']:
+                            with output.tag('korrespondansepart'):
+                                output.writetag('korrespondanseparttype',
+                                   sub['korrespondanseparttype']['kodenavn'])
+                                output.writetag('korrespondansepartNavn',
+                                                sub['navn'])
+                                # FIXME figure out which skjermingMetadata to list
+                                if running:
+                                    pass
+
 
     def recurse_xml_endring(self, output, content, parents):
         sequence = (
