@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <arkiv xmlns="http://www.arkivverket.no/standarder/noark5/arkivstruktur" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
- <systemID>arkiv57d6608566c0b9.24287674</systemID>
+ <systemID>7ca53f1a-1c5d-11f0-9878-db19d05ffc89</systemID>
  <tittel>Alice in wonderland</tittel>
  <beskrivelse>Case archive relating to Alice's behaviour, while in wonderland</beskrivelse>
  <arkivstatus>Opprettet</arkivstatus>
@@ -15,7 +15,7 @@
   <beskrivelse>A small girls adventures in strange lands</beskrivelse>
  </arkivskaper>
  <arkivdel>
-  <systemID>arkivdel57d6608566c0b9.14601960</systemID>
+  <systemID>87b133b4-1c5d-11f0-9385-7f683819fa22</systemID>
   <tittel>Alice 1863-1864</tittel>
   <beskrivelse>Alice beginnings</beskrivelse>
   <arkivdelstatus>Opprettet</arkivdelstatus>
@@ -27,7 +27,7 @@
   <arkivperiodeStartDato>1864-03-12T00:00:00+01:00</arkivperiodeStartDato>
   <arkivperiodeSluttDato>1864-02-02T00:00:00+01:00</arkivperiodeSluttDato>
   <klassifikasjonssystem>
-   <systemID>klassSys57d6608566c0b6.73735847</systemID>
+   <systemID>8bbc786a-1c5d-11f0-962d-83825088e255</systemID>
    <klassifikasjonstype>Travel</klassifikasjonstype>
    <tittel>arkivdelNøkkel for Traveling to nonsense worlds</tittel>
    <beskrivelse>Traveling to nonsense worlds</beskrivelse>
@@ -36,7 +36,7 @@
    <avsluttetDato>1863-02-15T00:00:00+00:00</avsluttetDato>
    <avsluttetAv>Steve Jackson</avsluttetAv>
    <klasse>
-    <systemID>klasse57d6608566c0b6.68450327</systemID>
+    <systemID>924dcd78-1c5d-11f0-b043-23903ff633ef</systemID>
     <klasseID>4</klasseID>
     <tittel>Traveling</tittel>
     <beskrivelse>Walkabout</beskrivelse>
@@ -47,7 +47,7 @@
     <avsluttetDato>1864-10-18T00:00:00+00:00</avsluttetDato>
     <avsluttetAv>Espen Tønnessen</avsluttetAv>    
     <klasse>
-     <systemID>klasse57d6608566c0b1.75848454</systemID>
+     <systemID>9a08bb04-1c5d-11f0-8cfd-abd66cee24a2</systemID>
      <klasseID>45</klasseID>
      <tittel>Traveling to new worlds</tittel>
      <beskrivelse>new worlds</beskrivelse>
@@ -57,7 +57,7 @@
      <avsluttetDato>1864-08-10T00:00:00+00:00</avsluttetDato>
      <avsluttetAv>Steve Jackson</avsluttetAv>
      <klasse>
-      <systemID>klasse57d6608566c0b1.65492448</systemID>
+      <systemID>9e1b6a48-1c5d-11f0-95b3-27a74f4c7a3d</systemID>
       <klasseID>452</klasseID>
       <tittel>Traveling to new worlds - nonsense</tittel>
       <beskrivelse>new worlds - nonsense</beskrivelse>
@@ -67,7 +67,7 @@
       <avsluttetDato>1863-10-19T00:00:00+00:00</avsluttetDato>
       <avsluttetAv>Steve Jackson</avsluttetAv>
       <mappe xsi:type="saksmappe">
-       <systemID>mappe57d6608566c0b1.89088729</systemID>
+       <systemID>a3894194-1c5d-11f0-a775-572bb930db5a</systemID>
        <mappeID>mappe1</mappeID>
        <tittel>Eating the cake - 1</tittel>
        <offentligTittel>offentligTittel1</offentligTittel>
@@ -79,14 +79,14 @@
        <avsluttetDato>1863-08-22T00:00:00+00:00</avsluttetDato>
        <avsluttetAv>Steve Jackson</avsluttetAv>
        <registrering xsi:type="journalpost">
-        <systemID>journpost57d6608566c0b0.29878286</systemID>
+        <systemID>aa404b86-1c5d-11f0-920d-afa4518d9325</systemID>
         <opprettetDato>1863-10-18T00:00:00+00:00</opprettetDato>
         <opprettetAv>Steve Jackson</opprettetAv>
         <arkivertDato>1863-10-10T00:00:00+00:00</arkivertDato>
         <arkivertAv>Kristian Hunskaar</arkivertAv>
-        <referanseArkivdel>arkivdel57d6608566c0b9.14601960</referanseArkivdel>
+        <referanseArkivdel>87b133b4-1c5d-11f0-9385-7f683819fa22</referanseArkivdel>
         <dokumentbeskrivelse>
-         <systemID>dokumentb57d6608566c0b5.71024350</systemID>
+         <systemID>b02086c4-1c5d-11f0-9935-b79297511a59</systemID>
          <dokumenttype>Ordrebekreftelser</dokumenttype>
          <dokumentstatus>Dokumentet er ferdigstilt</dokumentstatus>
          <tittel>mappe1 - registering1</tittel>
@@ -94,12 +94,13 @@
          <opprettetDato>1864-07-21T00:00:00+00:00</opprettetDato>
          <opprettetAv>Kristian Hunskaar</opprettetAv>
          <dokumentmedium>Elektronisk arkiv</dokumentmedium>
-         <referanseArkivdel>arkivdel57d6608566c0b9.14601960</referanseArkivdel>
+         <referanseArkivdel>87b133b4-1c5d-11f0-9385-7f683819fa22</referanseArkivdel>
          <tilknyttetRegistreringSom>Hoveddokument</tilknyttetRegistreringSom>
          <dokumentnummer>1</dokumentnummer>
          <tilknyttetDato>1864-05-04T00:00:00+00:00</tilknyttetDato>
          <tilknyttetAv>Espen Tønnessen</tilknyttetAv>
          <dokumentobjekt>
+	  <systemID>1175d686-1c5e-11f0-99db-9f04da5daee8</systemID>
           <versjonsnummer>1</versjonsnummer>
           <variantformat>Arkivformat</variantformat>
           <format>pdf</format>
@@ -110,6 +111,8 @@
           <sjekksum>b78fa9dcdaf7f59f085de6824ab3a238d6dada74fa7178e7823a4347055a06c3</sjekksum>
           <sjekksumAlgoritme>SHA-256</sjekksumAlgoritme>
           <filstoerrelse>24553</filstoerrelse>
+          <filnavn>5000000.pdf</filnavn>
+          <mimeType>application/pdf</mimeType>
          </dokumentobjekt>
         </dokumentbeskrivelse>
         <registreringsID>mappe1/jrnpst-1</registreringsID>
@@ -118,6 +121,12 @@
         <beskrivelse>Eating the cake1 - Application to eat cake1</beskrivelse>
         <noekkelord>nøkkelordJrnpst1</noekkelord>
         <dokumentmedium>Elektronisk arkiv</dokumentmedium>
+        <korrespondansepart>
+         <korrespondanseparttype>Gruppemottaker</korrespondanseparttype>
+         <korrespondansepartNavn>Grace Hopper</korrespondansepartNavn>
+         <administrativEnhet>DT</administrativEnhet>
+         <saksbehandler>Espen Tønnessen</saksbehandler>
+        </korrespondansepart>
         <journalaar>1864</journalaar>
         <journalsekvensnummer>18642194</journalsekvensnummer>
         <journalpostnummer>1</journalpostnummer>
@@ -130,22 +139,22 @@
         <journalenhet>journalseksjonen</journalenhet>
        </registrering>
        <registrering xsi:type="journalpost">
-        <systemID>journpost57d6608569ed33.70652483</systemID>
+        <systemID>f49aed58-1c5d-11f0-8fdc-838e9d037887</systemID>
         <opprettetDato>1864-05-19T00:00:00+00:00</opprettetDato>
         <opprettetAv>Kristian Hunskaar</opprettetAv>
         <arkivertDato>1864-02-13T00:00:00+00:00</arkivertDato>
         <arkivertAv>Joachim Fugleberg</arkivertAv>
-        <referanseArkivdel>arkivdel57d6608566c0b9.14601960</referanseArkivdel>
+        <referanseArkivdel>87b133b4-1c5d-11f0-9385-7f683819fa22</referanseArkivdel>
         <skjerming>
          <tilgangsrestriksjon>Klientsaker</tilgangsrestriksjon>
          <skjermingshjemmel>Unntatt etter Offentleglova</skjermingshjemmel>
          <skjermingMetadata>Skjermet</skjermingMetadata>
          <skjermingDokument>Skjerming av hele dokumentet</skjermingDokument>
          <skjermingsvarighet>60</skjermingsvarighet>
-         <skjermingOpphoererDato>1940-04-12</skjermingOpphoererDato>
+         <skjermingOpphoererDato>1940-04-12T12:00:00+01:00</skjermingOpphoererDato>
         </skjerming>
         <dokumentbeskrivelse>
-         <systemID>dokumentb57d6608569ed34.43360733</systemID>
+         <systemID>fdb02fd4-1c5d-11f0-94cf-736b35a7f715</systemID>
          <dokumenttype>Faktura</dokumenttype>
          <dokumentstatus>Dokumentet er ferdigstilt</dokumentstatus>
          <tittel>mappe1 - registering2</tittel>
@@ -153,12 +162,13 @@
          <opprettetDato>1863-11-02T00:00:00+00:00</opprettetDato>
          <opprettetAv>Steve Jackson</opprettetAv>
          <dokumentmedium>Elektronisk arkiv</dokumentmedium>
-         <referanseArkivdel>arkivdel57d6608566c0b9.14601960</referanseArkivdel>
+         <referanseArkivdel>87b133b4-1c5d-11f0-9385-7f683819fa22</referanseArkivdel>
          <tilknyttetRegistreringSom>Hoveddokument</tilknyttetRegistreringSom>
          <dokumentnummer>1</dokumentnummer>
          <tilknyttetDato>1864-05-02T00:00:00+00:00</tilknyttetDato>
          <tilknyttetAv>Kristian Hunskaar</tilknyttetAv>
          <dokumentobjekt>
+	  <systemID>29c766dc-1c5e-11f0-a969-8fcb6a1024cc</systemID>
           <versjonsnummer>1</versjonsnummer>
           <variantformat>Arkivformat</variantformat>
           <format>pdf</format>
@@ -169,6 +179,8 @@
           <sjekksum>b78fa9dcdaf7f59f085de6824ab3a238d6dada74fa7178e7823a4347055a06c3</sjekksum>
           <sjekksumAlgoritme>SHA-256</sjekksumAlgoritme>
           <filstoerrelse>24553</filstoerrelse>
+          <filnavn>5000001.pdf</filnavn>
+          <mimeType>application/pdf</mimeType>
           <konvertering>
            <konvertertDato>1864-05-02T00:00:00+00:00</konvertertDato>
            <konvertertAv>sakSystem</konvertertAv>
@@ -184,6 +196,12 @@
         <offentligTittel>Eating the cake1 - Application to eat cake2</offentligTittel>
         <beskrivelse>Eating the cake1 - Application to eat cake2</beskrivelse>
         <dokumentmedium>Elektronisk arkiv</dokumentmedium>
+        <korrespondansepart>
+         <korrespondanseparttype>Gruppemottaker</korrespondanseparttype>
+         <korrespondansepartNavn>Alan Turing</korrespondansepartNavn>
+         <administrativEnhet>DT</administrativEnhet>
+         <saksbehandler>Espen Tønnessen</saksbehandler>
+        </korrespondansepart>
         <journalaar>1864</journalaar>
         <journalsekvensnummer>186476249</journalsekvensnummer>
         <journalpostnummer>2</journalpostnummer>
@@ -193,14 +211,8 @@
         <dokumentetsDato>1864-04-10T00:00:00+01:00</dokumentetsDato>
         <mottattDato>1863-01-03T00:00:00+00:00</mottattDato>
         <antallVedlegg>0</antallVedlegg>
-        <korrespondansepart>
-         <korrespondanseparttype>Gruppemottaker</korrespondanseparttype>
-         <korrespondansepartNavn>Alan Turing</korrespondansepartNavn>
-         <administrativEnhet>DT</administrativEnhet>
-         <saksbehandler>Espen Tønnessen</saksbehandler>
-        </korrespondansepart>
         <avskrivning>
-         <avskrivningsdato>1864-07-06</avskrivningsdato>
+         <avskrivningsdato>1864-07-06T12:00:00+01:00</avskrivningsdato>
          <avskrevetAv>Espen Tønnessen</avskrevetAv>
          <avskrivningsmaate>Tatt til orientering</avskrivningsmaate>
         </avskrivning>
@@ -228,7 +240,7 @@
         <elektroniskSignatur>
          <elektroniskSignaturSikkerhetsnivaa>Sendt med PKI/"person høy"-sertifikat</elektroniskSignaturSikkerhetsnivaa>
          <elektroniskSignaturVerifisert>Signatur påført og verifisert</elektroniskSignaturVerifisert>
-         <verifisertDato>1865-02-13</verifisertDato>
+         <verifisertDato>1865-02-13T12:00:00+01:00</verifisertDato>
          <verifisertAv>Joachim</verifisertAv>
         </elektroniskSignatur>
        </registrering>
