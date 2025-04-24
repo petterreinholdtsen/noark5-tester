@@ -432,8 +432,13 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                             if '/ny-' in rel and 'templated' in l \
                                and l['templated']:
                                 self.xfailure('templated=true relation %s in GET %s' % (rel, url))
-                            # Ignore non-standard relations
-                            if 'href' in l \
+                            # Ignore non-standard relations,
+                            # navigation relations and file upload
+                            # relations.
+                            reffilerel = self.relbaseurl + 'arkivstruktur/fil/'
+                            if reffilerel == rel:
+                                pass
+                            elif 'href' in l \
                                and -1 == rel.find("//rel.arkivverket.no/noark5/") \
                                and 'next' != rel \
                                and 'self' != rel:
