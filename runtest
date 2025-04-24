@@ -406,6 +406,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                         print("no checking for %s" % url)
                     continue
 
+                reffilerel = self.relbaseurl + 'arkivstruktur/fil/'
                 if (-1 == url.find('/referanseFil') and
                     self.verify(ctype and 0 == ctype.find('application/vnd.noark5+json'),
                                 "MIME type %s should be application/vnd.noark5+json for url %s" % (ctype, url))):
@@ -435,7 +436,6 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                             # Ignore non-standard relations,
                             # navigation relations and file upload
                             # relations.
-                            reffilerel = self.relbaseurl + 'arkivstruktur/fil/'
                             if reffilerel == rel:
                                 pass
                             elif 'href' in l \
@@ -486,12 +486,14 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                 for element in baseref[basekey]:
                                     #print(element)
                                     if '_links' in element and len(element['_links']) > 0:
-                                        for ref in element['_links'].keys():
-                                            href = element['_links'][ref]['href']
-                                            if 'templated' in element['_links'][ref] and element['_links'][ref]['templated']:
+                                        for rel in element['_links'].keys():
+                                            if reffilerel == rel:
+                                                continue
+                                            href = element['_links'][rel]['href']
+                                            if 'templated' in element['_links'][rel] and element['_links'][rel]['templated']:
                                                 href = href.split('{')[0]
                                             elif -1 != href.find('{'):
-                                                self.xfailure('url %s present {} block without "templated": true in _links for %s' % (url, ref))
+                                                self.xfailure('url %s present {} block without "templated": true in _links for %s' % (url, rel))
                                             if href not in urlseen:
                                                 #self.failure("Found new link %s" % href)
 
