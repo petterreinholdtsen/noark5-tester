@@ -102,6 +102,8 @@ class Endpoint:
         url7519 = self.findRelation("%slogin/rfc7519/" % self.nikitarelbaseurl)
         url6749 = self.findRelation("%slogin/rfc6749/" % self.nikitarelbaseurl)
         urloidc = self.findRelation("%slogin/oidc/" % self.relbaseurl)
+        url7617 = self.findRelation("%slogin/rfc7617/" % self.relbaseurl)
+
         auth_pwd = 'secret'
         if url7519 is not None:
             url = url7519
@@ -179,6 +181,16 @@ class Endpoint:
             self.oidcinfo['epoc_refresh_expires_in'] = now + self.oidcinfo['refresh_expires_in']
             self.get_auth = self.get_auth_oidc
             print("OAuth2 complete, JWT nfo: ", self.oidcinfo)
+        elif url7617 is not None:
+            # Basic auth
+            if 'prompt' == password:
+                password = getpass.getpass(f'Password for {username}: ')
+            if password is None:
+                password = 'password'
+            a = '%s:%s' % (username, password)
+            self.token = 'Basic %s' % base64.encodebytes(a.encode('UTF-8')).decode('UTF-8').strip()
+            print("token:", self.token)
+            (c,r) = self.json_get(url7617)
         else:
             raise LoginFailure("Unable to find login relation")
 
