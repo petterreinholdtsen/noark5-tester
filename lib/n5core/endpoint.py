@@ -113,7 +113,7 @@ class Endpoint:
                 if password is None:
                     password = 'password'
                 data = {
-                    'username': username,
+                    'username': self.username,
                     'password': password,
                 }
                 (j,r) = self.json_post(url, jsondata,
@@ -125,12 +125,12 @@ class Endpoint:
             url = url6749
             try:
                 if username is None:
-                    username = 'admin@example.com'
+                    self.username = 'admin@example.com'
                 if password is None:
                     password = 'password'
                 data = {
                     'grant_type': 'password',
-                    'username': username,
+                    'username': self.username,
                     'password': password,
                 }
                 datastr = urllib.parse.urlencode(data)
@@ -149,14 +149,14 @@ class Endpoint:
             url = j['token_endpoint']
             try:
                 if username is None:
-                    username = 'admin@example.com'
+                    self.username = 'admin@example.com'
                 if 'prompt' == password:
-                    password = getpass.getpass(f'Password for {username}: ')
+                    password = getpass.getpass(f'Password for {self.username}: ')
                 if password is None:
                     password = 'password'
                 data = {
                     'grant_type': 'password',
-                    'username': username,
+                    'username': self.username,
                     'password': password,
                 }
                 if client_id:
@@ -189,7 +189,6 @@ class Endpoint:
                 password = 'password'
             a = '%s:%s' % (username, password)
             self.token = 'Basic %s' % base64.encodebytes(a.encode('UTF-8')).decode('UTF-8').strip()
-            print("token:", self.token)
             (c,r) = self.json_get(url7617)
         else:
             raise LoginFailure("Unable to find login relation")
