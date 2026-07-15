@@ -270,7 +270,7 @@ pronom2mime = {
     'fmt/4':   'image/gif',
     'fmt/41':  'image/jpeg',
     'fmt/95':  'application/pdf',
-    'fmt/101': 'text/xml',
+    'fmt/101': 'application/xml',
     'fmt/278': 'message/rfc822',
     'fmt/950': 'message/rfc822',
 }
