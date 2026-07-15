@@ -113,7 +113,7 @@ class Endpoint:
                 if password is None:
                     password = 'password'
                 data = {
-                    'username': self.username,
+                    'username': username,
                     'password': password,
                 }
                 (j,r) = self.json_post(url, jsondata,
@@ -125,12 +125,12 @@ class Endpoint:
             url = url6749
             try:
                 if username is None:
-                    self.username = 'admin@example.com'
+                    username = 'admin@example.com'
                 if password is None:
                     password = 'password'
                 data = {
                     'grant_type': 'password',
-                    'username': self.username,
+                    'username': username,
                     'password': password,
                 }
                 datastr = urllib.parse.urlencode(data)
@@ -149,14 +149,14 @@ class Endpoint:
             url = j['token_endpoint']
             try:
                 if username is None:
-                    self.username = 'admin@example.com'
+                    username = 'admin@example.com'
                 if 'prompt' == password:
-                    password = getpass.getpass(f'Password for {self.username}: ')
+                    password = getpass.getpass(f'Password for {username}: ')
                 if password is None:
                     password = 'password'
                 data = {
                     'grant_type': 'password',
-                    'username': self.username,
+                    'username': username,
                     'password': password,
                 }
                 if client_id:
