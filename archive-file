@@ -22,11 +22,7 @@ import magic
 from hashlib import sha256
 import n5core.endpoint
 from n5core.pick import pickUnlessOne
-try:
-    # Python 3
-    from PyPDF2 import PdfFileReader
-except:
-    from pyPdf import PdfFileReader
+from pypdf import PdfReader
 
 class infoReader():
     def __init__(self, fh, filepath):
@@ -42,12 +38,18 @@ Extract document information from PDF.  Must read every value in the
 constructor, to avoid moving the file handle pointer for others later.
 """
         infoReader.__init__(self, fh, filepath)
-        reader = PdfFileReader(fh)
-        self.title = reader.getDocumentInfo().title
-        self.producer = reader.getDocumentInfo().producer
-        self.creator = reader.getDocumentInfo().creator
-        #reader.getDocumentInfo().creationdate ?
-        print(self.title)
+        reader = PdfReader(fh)
+        metadata = reader.metadata
+        self.title = getattr(metadata, '/Title', None) or None
+        self.producer = getattr(metadata, '/Producer', None) or None
+        self.creator = getattr(metadata, '/Creator', None) or None
+        # Detect PDF version from header like "%PDF-1.5"
+        hdr = reader.pdf_header  # e.g. "%PDF-1.5"
+        ver = hdr.split('-')[1] if '-' in hdr else ''
+        if ver in pdf_formatcodes:
+            self.format = {'kode': pdf_formatcodes[ver]}
+        else:
+            self.format = None
 
 class imageReader(infoReader):
     def __init__(self, fh, filepath):
@@ -70,23 +72,32 @@ class rfc822Reader(infoReader):
             self.filename = msg['message-id']
         return
 
+# PRONOM codes for PDF versions (from https://www.nationalarchives.gov.uk/PRONOM/)
+pdf_formatcodes = {
+    '1.2': 'fmt/16',   # PDF (1.2)
+    '1.3': 'fmt/17',   # PDF (1.3)
+    '1.4': 'fmt/18',   # PDF (1.4)
+    '1.5': 'fmt/19',   # PDF (1.5)
+    '1.6': 'fmt/20',   # ISO 32000-1:2008
+    '1.7': 'fmt/276',  # Acrobat PDF 1.7
+}
+
 # Mapping from magic string to Noark 5 format info
 # Based on the spec list of formats on page 173.
 formatlist = {
     # PDF/A - ISO 19005 1:205
     'application/pdf': {
         'inforeader': pdfReader,
-#        'format':     { 'kode': 'RA-PDF' },
         },
     # JPEG (ISO 10918-1:1994)
     'image/jpeg': {
         'inforeader': imageReader,
-#        'format':     { 'kode': 'RA-JPEG' },
+        'format':     { 'kode': 'fmt/42' },
     },
     # TIFF versjon 6
     'image/tiff': {
         'inforeader': imageReader,
-#        'format':     { 'kode': 'RA-TIFF6' },
+        'format':     { 'kode': 'fmt/353' },
     },
     # Ren text
     # XML v1
@@ -97,20 +108,23 @@ formatlist = {
     # Unofficial types:
     'message/rfc822': {
         'inforeader': rfc822Reader,
-#        'format':     { 'kode': 'RFC822' },
+        'format':     { 'kode': 'fmt/278' },
     },
 }
 
 def objectOperation(json, relation):
     """
 Return the URL/href for a given relation on the object represented by
-the json structure.
+the json structure.  If the link is templated, strip OData query params.
 
 """
     if json is None or '_links' not in json:
         return None
     if relation in json['_links']:
-        return json['_links'][relation]['href']
+        href = json['_links'][relation]['href']
+        if json['_links'][relation].get('templated', False):
+            href = href.split('{')[0]
+        return href
     return None
 
 def createObject(api, url, data):
@@ -130,6 +144,9 @@ def main():
     baseurl = "https://localhost:8092/noark5v5/"
     parser = argparse.ArgumentParser()
     parser.add_argument("--baseurl", help="(default is %s)" % baseurl)
+    parser.add_argument("--username", help="login username")
+    parser.add_argument("--password", help="login password")
+    parser.add_argument("--storageurl", help="URL of the mappe or registrering to store files under (bypasses interactive selection)")
     parser.add_argument("--verbose", help="print more debug information",
                         action="store_true")
     parser.add_argument("filename", nargs='+', help="file to archive")
@@ -141,46 +158,63 @@ def main():
     retval = 0
     api = n5core.endpoint.Endpoint(baseurl)
     api.verbose = args.verbose
-    api.login()
+    api.login(username=args.username, password=args.password)
 
-    fondsrel = relbase + '/arkivstruktur/arkiv/'
-    fondshref = api.findRelation(fondsrel)
-    
-    (c, res) = api.json_get(fondshref)
-    fondsinfo = json.loads(c)
-    info = pickUnlessOne(fondsinfo, 'arkiv')
-    if info is None:
-        print("error: Fant intet relasjon for %s.  Tom database?" % fondsrel)
-        print("error: Kan ikke laste opp dokumenter uten definert arkiv.")
-        return
+    fileinfo = None
+    if args.storageurl:
+        (c, res) = api.json_get(args.storageurl)
+        storageinfo = json.loads(c)
+        # If the URL is a collection, pick the first item; otherwise use it directly
+        if '_links' in storageinfo and 'self' in storageinfo['_links']:
+            fileinfo = storageinfo
+        elif isinstance(storageinfo.get('results'), list):
+            results = storageinfo['results']
+            if len(results) == 1:
+                fileinfo = results[0]
+            else:
+                print("error: Collection contains %d items, expected 1. Use a single entity URL." % len(results))
+                return
+        else:
+            fileinfo = storageinfo
+    else:
+        fondsrel = relbase + '/arkivstruktur/arkiv/'
+        fondshref = api.findRelation(fondsrel)
 
-    seriesrel = relbase + '/arkivstruktur/arkivdel/'
-    serieshref = objectOperation(info, seriesrel)
-    if serieshref is None:
-        print("error: Fant ingen relasjon for %s.  Tom database?" % seriesrel)
-        print("error: Kan ikke laste opp dokumenter uten definert arkivdel.")
-        return
-    (c, res) = api.json_get(serieshref)
-    seriesinfo = json.loads(c)
-    info = pickUnlessOne(seriesinfo, 'arkivdel')
-    if info is None:
-        print("error: Fant ingen arkivdel.  Tom database?")
-        print("error: Kan ikke laste opp dokumenter uten definert arkivdel.")
-        return
+        (c, res) = api.json_get(fondshref)
+        fondsinfo = json.loads(c)
+        info = pickUnlessOne(fondsinfo, 'arkiv')
+        if info is None:
+            print("error: Fant intet relasjon for %s.  Tom database?" % fondsrel)
+            print("error: Kan ikke laste opp dokumenter uten definert arkiv.")
+            return
 
-    filesrel = relbase + '/arkivstruktur/mappe/'
-    fileshref = objectOperation(info, filesrel)
-    if fileshref is None:
-        print("error: Fant intet relasjon for %s.  Tom database?" % filesrel)
-        print("error: Kan ikke laste opp dokumenter uten definert mappe.")
-        return
-    (c, res) = api.json_get(fileshref)
-    filesinfo = json.loads(c)
-    fileinfo = pickUnlessOne(filesinfo, 'mappe')
-    if fileinfo is None:
-        print("error: Fant ingen mappe.  Tom database?")
-        print("error: Kan ikke laste opp dokumenter uten definert mappe.")
-        return
+        seriesrel = relbase + '/arkivstruktur/arkivdel/'
+        serieshref = objectOperation(info, seriesrel)
+        if serieshref is None:
+            print("error: Fant ingen relasjon for %s.  Tom database?" % seriesrel)
+            print("error: Kan ikke laste opp dokumenter uten definert arkivdel.")
+            return
+        (c, res) = api.json_get(serieshref)
+        seriesinfo = json.loads(c)
+        info = pickUnlessOne(seriesinfo, 'arkivdel')
+        if info is None:
+            print("error: Fant ingen arkivdel.  Tom database?")
+            print("error: Kan ikke laste opp dokumenter uten definert arkivdel.")
+            return
+
+        filesrel = relbase + '/arkivstruktur/mappe/'
+        fileshref = objectOperation(info, filesrel)
+        if fileshref is None:
+            print("error: Fant intet relasjon for %s.  Tom database?" % filesrel)
+            print("error: Kan ikke laste opp dokumenter uten definert mappe.")
+            return
+        (c, res) = api.json_get(fileshref)
+        filesinfo = json.loads(c)
+        fileinfo = pickUnlessOne(filesinfo, 'mappe')
+        if fileinfo is None:
+            print("error: Fant ingen mappe.  Tom database?")
+            print("error: Kan ikke laste opp dokumenter uten definert mappe.")
+            return
 
     # Test if it is possible to reach a dokumentobject by following
     # the relations from the top.
@@ -211,7 +245,7 @@ def main():
         format = None
         mimetype = None
         inforeader = None
-        fh = file(filename, "rb")
+        fh = open(filename, "rb")
 
         hashalg = "SHA-256"
         hasher = sha256()
@@ -224,6 +258,8 @@ def main():
             inforeader = formatlist[mimetype]['inforeader']
             if 'format' in formatlist[mimetype]:
                 format = formatlist[mimetype]['format']
+        else:
+            inforeader = infoReader
         if mimetype is None:
             print("error: Unknown mime type '%s', skipping" % mimetype)
             continue
@@ -277,13 +313,14 @@ def main():
                 'kodenavn': variantformat,
             },
             "mimeType"       : mimetype,
-            "filstoerrelse"  : str(filesize),
+            "filstoerrelse"  : filesize,
             "filnavn"        : basename,
             "sjekksum"       : hash,
             "sjekksumAlgoritme" : hashalg,
         }
-        if format:
-            data['format'] = format
+        fmt = getattr(r, 'format', None) or format
+        if fmt:
+            data['format'] = fmt
         docobjinfo = createObject(api, newdocobjhref, data)
 
         newfilehref = objectOperation(docobjinfo, relbase + '/arkivstruktur/fil/')
