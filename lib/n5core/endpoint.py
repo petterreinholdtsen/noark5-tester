@@ -255,14 +255,19 @@ Recursively look for relation in API.
         if data is not None:
             request = Request(url, headers=headers, data=data)
             # Not printing data to not expose passwords in stdout and logs
-            #if self.verbose: print("DATA: %s" % (data))
+            #if self.verbose:
+            #    if isinstance(data, (bytes, str)):
+            #        decoded = data.decode('UTF-8', errors='replace') if isinstance(data, bytes) else str(data)
+            #        print("DATA: %s" % decoded)
+            #    elif hasattr(data, 'name'):
+            #        print("DATA: <file '%s'>" % data.name)
         else:
             request = Request(url, headers=headers)
             request.get_method = lambda: 'POST'
         response = urlopen(request)
         content = response.read()
         if self.verbose:
-            print(content)
+            print("RESPONSE (%d): %s" % (response.getcode(), content.decode('UTF-8', errors='replace')))
         return (content, response)
 
     def json_post(self, path, data, contenttype='application/vnd.noark5+json'):
@@ -313,7 +318,7 @@ Recursively look for relation in API.
         response = urlopen(request)
         content = response.read()
         if self.verbose:
-            print(content)
+            print("RESPONSE (%d): %s" % (response.getcode(), content.decode('UTF-8', errors='replace')))
         return (content, response)
 
     def json_get(self, path):
