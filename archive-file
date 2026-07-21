@@ -21,6 +21,7 @@ import email
 import magic
 from hashlib import sha256
 import n5core.endpoint
+from urllib.error import HTTPError
 from n5core.pick import pickUnlessOne
 from pypdf import PdfReader
 
@@ -128,9 +129,22 @@ the json structure.  If the link is templated, strip OData query params.
     return None
 
 def createObject(api, url, data):
+    try:
         (c, res) = api.json_post(url, data)
-        fondinfo = json.loads(c)
-        return fondinfo
+    except HTTPError as e:
+        body = e.read().decode('UTF-8', errors='replace')
+        print("error: POST to %s failed with HTTP %d:" % (url, e.code), file=sys.stderr)
+        try:
+            jbody = json.loads(body)
+            if 'feil' in jbody and 'beskrivelse' in jbody['feil']:
+                print("  %s" % jbody['feil']['beskrivelse'], file=sys.stderr)
+            else:
+                print("  %s" % body, file=sys.stderr)
+        except (json.JSONDecodeError, KeyError):
+            print("  %s" % body, file=sys.stderr)
+        raise
+    fondinfo = json.loads(c)
+    return fondinfo
 
 def getFileSize(filehandle):
     curpos = filehandle.tell()
@@ -203,18 +217,115 @@ def main():
             return
 
         filesrel = relbase + '/arkivstruktur/mappe/'
-        fileshref = objectOperation(info, filesrel)
-        if fileshref is None:
-            print("error: Fant intet relasjon for %s.  Tom database?" % filesrel)
-            print("error: Kan ikke laste opp dokumenter uten definert mappe.")
-            return
-        (c, res) = api.json_get(fileshref)
-        filesinfo = json.loads(c)
-        fileinfo = pickUnlessOne(filesinfo, 'mappe')
+
+        def findLeafMappe(mappe_list_info, depth=0):
+            """Recursively find a leaf mappe (one without undermappe children)."""
+            for cand in mappe_list_info.get('results', []):
+                undermappe_rel = relbase + '/arkivstruktur/undermappe/'
+                under_href = objectOperation(cand, undermappe_rel)
+                if not under_href:
+                    return cand  # no undermappe relation at all
+                (uc, ur) = api.json_get(under_href)
+                udata = json.loads(uc)
+                if len(udata.get('results', [])) == 0:
+                    return cand  # leaf mappe found
+                if depth < 10:
+                    child = findLeafMappe(udata, depth + 1)
+                    if child:
+                        return child
+            return None
+
+        def getMappesFromEntity(entity):
+            """Get the list of mapper from an entity (arkivdel, klasse, etc.)."""
+            fileshref = objectOperation(entity, filesrel)
+            if fileshref is None:
+                return None
+            (c, res) = api.json_get(fileshref)
+            return json.loads(c)
+
+        def pickLeafMappe(mappe_list_info):
+            """Pick a mappe from list, auto-drilling to leaf if needed."""
+            fileinfo = pickUnlessOne(mappe_list_info, 'mappe', quiet=True)
+            if fileinfo is None:
+                print("error: Fant ingen mappe.  Tom database?")
+                return None
+
+            # Skip mapper that have child mapper (Nikita rejects uploads into such mapper)
+            undermappe_rel = relbase + '/arkivstruktur/undermappe/'
+            under_href = objectOperation(fileinfo, undermappe_rel)
+            if under_href:
+                (uc, ur) = api.json_get(under_href)
+                udata = json.loads(uc)
+                if len(udata.get('results', [])) > 0:
+                    print("warning: Selected mappe has child mapper, finding a leaf mappe...")
+                    fileinfo = findLeafMappe(mappe_list_info)
+                    if fileinfo is None:
+                        print("error: No suitable leaf mappe found.")
+                        return None
+
+            href = fileinfo['_links']['self']['href']
+            label = fileinfo.get('tittel', fileinfo['systemID'])
+            print("using mappe: %s (%s)" % (label, href))
+            return fileinfo
+
+        # Check for klassifikasjonssystem path first (arkivdel->klassif->klasse->mappe)
+        ksrel = relbase + '/arkivstruktur/klassifikasjonssystem/'
+        kshref = objectOperation(info, ksrel)
+        if kshref:
+            (c, res) = api.json_get(kshref)
+            ksinfo = json.loads(c)
+            if len(ksinfo.get('results', [])) > 0:
+                print("Found klassifikasjonssystem under arkivdel, drilling down...")
+
+                ksys = pickUnlessOne(ksinfo, 'klassifikasjonssystem')
+                if ksys is None:
+                    print("error: No klassifikasjonssystem available.")
+                    return
+
+                # klasse under klassifikasjonssystem
+                kelasrel = relbase + '/arkivstruktur/klasse/'
+                kelashref = objectOperation(ksys, kelasrel)
+                if kelashref:
+                    (c, res) = api.json_get(kelashref)
+                    kelasinfo = json.loads(c)
+                    if len(kelasinfo.get('results', [])) > 0:
+                        klasse = pickUnlessOne(kelasinfo, 'klasse')
+                        if klasse is None:
+                            print("error: No klasse available.")
+                            return
+
+                        # Check for underklasse (sub-classes)
+                        underkelasrel = relbase + '/arkivstruktur/underklasse/'
+                        underkashref = objectOperation(klasse, underkelasrel)
+                        if underkashref:
+                            (c, res) = api.json_get(underkashref)
+                            ukinfo = json.loads(c)
+                            if len(ukinfo.get('results', [])) > 0:
+                                uklasse = pickUnlessOne(ukinfo, 'underklasse')
+                                if uklasse is not None:
+                                    klasse = uklasse
+
+                        # mappe under (sub-)klasse
+                        mappe_list = getMappesFromEntity(klasse)
+                        fileinfo = pickLeafMappe(mappe_list)
+                        if fileinfo is None:
+                            return
+
+                    # If no classes, fall through to direct mappe check below
+                if not kelashref or len(kelasinfo.get('results', [])) == 0:
+                    pass  # fall through to direct mappe path
+
+        # Direct mappe under arkivdel (fallback / primary when no klassifikasjonssystem)
         if fileinfo is None:
-            print("error: Fant ingen mappe.  Tom database?")
-            print("error: Kan ikke laste opp dokumenter uten definert mappe.")
-            return
+            mappe_list = getMappesFromEntity(info)
+            if mappe_list is None:
+                print("error: Fant intet relasjon for %s.  Tom database?" % filesrel)
+                print("error: Kan ikke laste opp dokumenter uten definert mappe.")
+                return
+
+            fileinfo = pickLeafMappe(mappe_list)
+            if fileinfo is None:
+                return
 
     # Test if it is possible to reach a dokumentobject by following
     # the relations from the top.
@@ -324,7 +435,21 @@ def main():
         docobjinfo = createObject(api, newdocobjhref, data)
 
         newfilehref = objectOperation(docobjinfo, relbase + '/arkivstruktur/fil/')
-        (c, res) = api.post(newfilehref, fh, mimetype, length=filesize)
+        try:
+            (c, res) = api.post(newfilehref, fh, mimetype, length=filesize)
+        except HTTPError as e:
+            body = e.read().decode('UTF-8', errors='replace')
+            print("error: file upload to %s failed with HTTP %d:" % (newfilehref, e.code), file=sys.stderr)
+            try:
+                jbody = json.loads(body)
+                if 'feil' in jbody and 'beskrivelse' in jbody['feil']:
+                    print("  %s" % jbody['feil']['beskrivelse'], file=sys.stderr)
+                else:
+                    print("  %s" % body, file=sys.stderr)
+            except (json.JSONDecodeError, KeyError):
+                print("  %s" % body, file=sys.stderr)
+            retval = 1
+            continue
         if 201 != res.code:
             print("error: upload failed (status == %d)" % res.code)
             retval = 1
