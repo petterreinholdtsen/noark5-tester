@@ -116,7 +116,7 @@ class Endpoint:
                     'username': username,
                     'password': password,
                 }
-                (j,r) = self.json_post(url, jsondata,
+                (j,r) = self.json_post(url, data,
                                        contenttype='application/json')
             except HTTPError as e:
                 raise LoginFailure("Posting to login relation %s failed: %s" % (url, e))
