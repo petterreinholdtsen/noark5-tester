@@ -824,6 +824,9 @@ Also, should 'date' fields accept values with time of day in them,
 or should it be rejected?
 
 """
+        now = utcnowtz().replace(microsecond=0) \
+                        .isoformat() \
+                        .replace('+00:00', 'Z')
         rel = self.relbaseurl + 'arkivstruktur/ny-registrering/'
         name = 'record'
         field = "arkivertDato"
@@ -857,6 +860,7 @@ or should it be rejected?
             for timevalue in timevalues:
                 try:
                     data = {
+                        'tittel': u"Title of the test record created %s" % now,
                         field : timevalue,
                     }
                     info = self.createEntity(name, rel, self.rels, data, failureexpected=True)
@@ -1154,6 +1158,7 @@ or should it be rejected?
             except HTTPError as e:
                 pass
         recorddata = {
+            'tittel': u"Title of the test record created %s" % now,
         }
         createrecordrel = self.relbaseurl + 'arkivstruktur/ny-registrering/'
         recordinfo = self.createEntity('record', createrecordrel,
