@@ -1129,7 +1129,7 @@ or should it be rejected?
                     'fylkesnummer': u'01',
                     'landkode': {
                         'kode': u'NO',
-                        'kodenavn': u'Norge',
+                        'kodenavn': u'Norway',
                     },
                     'planidentifikasjon': u'050505',
                 }),
