@@ -772,10 +772,14 @@ Test basis requirements for NOARK 5 Core.
                         # accessors.
                         print("removing key %s: %s" % (key, info[key]))
                         info.pop(key, None)
+                # For virksomhetsspesifikkeMetadata, skip navn because N5TG chapter 6
+                # requires format <namespace>:<fieldName> with only lowercase a-z, digits, hyphens
+                is_vsm = 'virksomhetsspesifikkeMetadata' in url
                 modkey = None
                 for keycandidate in (
                         'arkivertAv',
                         'arkivskaperNavn',
+                        'beskrivelse',
                         'bygningsnummer',
                         'dNummer',
                         'foedselsnummer',
@@ -791,7 +795,7 @@ Test basis requirements for NOARK 5 Core.
                         'tittel',
                         'x'
                 ):
-                    if keycandidate in info:
+                    if keycandidate in info and not (is_vsm and keycandidate == 'navn'):
                         modkey = keycandidate
                 if modkey:
                     if int == type(info[modkey]) or float == type(info[modkey]):
@@ -1578,7 +1582,7 @@ or should it be rejected?
             vsmdata = {
                 u'navn' : self.vsmkey,
                 u'type' : u'string',
-#                'beskrivelse' : '',
+                u'beskrivelse' : 'Test VSM description',
 #                'kilde' : '',
 #                'utdatert' : False,
             }
