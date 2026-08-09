@@ -1704,7 +1704,7 @@ or should it be rejected?
              "part/partRolle/kode eq 'ADV'", 1),
 
             ('arkivstruktur/mappe/',
-             "contains(tittel, 'file') AND dokumentmedium/kode eq null and saksaar ne null", 1),
+             "contains(tittel, 'file') AND dokumentmedium/kode eq 'E' and saksaar ne null", 1),
 
             # FIXME Figure out notation to search for this
 # We do not know the correct notation for this search
