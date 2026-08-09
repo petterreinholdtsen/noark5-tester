@@ -91,7 +91,6 @@ excludes = {
         'referanseArkivdel',
     ),
     'arkivnotat': (
-        'dokumentmedium',
         'systemID',
     ),
     'moeteregistrering': (
@@ -141,6 +140,9 @@ metadata = {
         'saksstatus',
     ),
     'registrering': (
+        'dokumentmedium',
+    ),
+    'arkivnotat': (
         'dokumentmedium',
     ),
     'journalpost': (
