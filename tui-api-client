@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+# Copyright (C) 2026 Petter Reinholdtsen
+#
+# Licensed under the GNU General Public License Version 2
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, see <http://www.gnu.org/licenses/>.
+
+"""
+Noark 5 v5 REST API client with text-based user interface.
+
+Usage examples:
+    ./tui-api-client                          # Launch interactive TUI
+    ./tui-api-client --help                   # Show this help message
+    ./tui-api-client list-arkiv               # List top-level archives (CLI mode)
+    ./tui-api-client create-mappe --parent URL --tittel "Title"  # Create mappe
+    ./tui-api-client upload-file --dokumentobjekt URL --file FILE  # Upload file
+
+For detailed help on a command:
+    ./tui-api-client <command> --help
+
+Connection options (defaults shown):
+    --baseurl http://arkiv.local/noark5v5/
+    --username pereadm
+    --password secret
+"""
+
+import sys
+import os
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "lib"))
+
+from n5tui.cli import main
+
+if __name__ == "__main__":
+    main()

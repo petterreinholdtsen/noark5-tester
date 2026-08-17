@@ -276,6 +276,43 @@ Recursively look for relation in API.
         content = content.decode("UTF-8")
         return (content, response)
 
+    def patch(self, path, data, mimetype="application/merge-patch+json", etag=None):
+        """RFC 7396 JSON Merge Patch on the given path.
+
+        Args:
+            path: API path to PATCH
+            data: JSON-serializable payload (dict/list) or raw bytes/string
+            mimetype: Content-Type for request body (default merge-patch+json)
+            etag: ETag value for If-Match header (optimistic locking)
+
+        Returns:
+            Tuple of (response_content_bytes, response_object).
+        """
+        url = self.expandurl(path)
+        if isinstance(data, (dict, list)):
+            import json as _json
+
+            data = _json.dumps(data)
+        if isinstance(data, str):
+            data = data.encode("utf-8")
+        headers = {
+            "Accept": "application/vnd.noark5+json",
+            "Content-Type": mimetype,
+            "Content-Length": len(data),
+        }
+        h, t = self.get_auth()
+        if h:
+            headers[h] = t
+        if etag is not None:
+            headers["If-Match"] = etag
+        if self.verbose:
+            print("PATCH %s: %s" % (url, headers))
+        request = Request(url, data, headers=headers)
+        request.get_method = lambda: "PATCH"
+        response = urlopen(request)
+        content = response.read()
+        return (content, response)
+
     def put(self, path, data, mimetype, length=None, etag=None):
         url = self.expandurl(path)
         if length is None:
