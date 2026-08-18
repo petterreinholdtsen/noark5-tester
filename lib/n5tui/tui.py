@@ -2986,7 +2986,7 @@ def create_tui(baseurl=None, username=None, password=None):
 
     set_status(
         "%s - Login: %s | h=help  q=quit"
-        % (baseurl or "http://arkiv.local:8092/noark5v5/", login_status)
+        % (baseurl or "http://localhost:8092/noark5v5/", login_status)
     )
 
     left_pane = urwid.LineBox(

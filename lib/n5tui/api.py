@@ -33,10 +33,10 @@ class N5API(Endpoint):
 
     def __init__(self, baseurl=None, username=None, password=None):
         if baseurl is None:
-            baseurl = "http://arkiv.local:8092/noark5v5/"
+            baseurl = "http://localhost:8092/noark5v5/"
         Endpoint.__init__(self, baseurl)
-        self.username = username or "pereadm"
-        self.password = password or "secret"
+        self.username = username or "admin@example.com"
+        self.password = password or "password"
         self.logged_in = False
 
     def ensure_login(self):

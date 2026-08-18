@@ -98,13 +98,13 @@ class Endpoint:
         return (None, None)
 
     def login(self, username = None, password = None,
-              client_id=None, auth_pwd='secret'):
+              client_id=None, auth_pwd='password'):
         url7519 = self.findRelation("%slogin/rfc7519/" % self.nikitarelbaseurl)
         url6749 = self.findRelation("%slogin/rfc6749/" % self.nikitarelbaseurl)
         urloidc = self.findRelation("%slogin/oidc/" % self.relbaseurl)
         url7617 = self.findRelation("%slogin/rfc7617/" % self.relbaseurl)
 
-        auth_pwd = 'secret'
+        auth_pwd = 'password'
         if url7519 is not None:
             url = url7519
             try:

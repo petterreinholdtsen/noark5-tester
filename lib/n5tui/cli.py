@@ -32,10 +32,10 @@ def build_parser():
     parser.add_argument(
         "--baseurl",
         default=None,
-        help="API base URL (default: http://arkiv.local:8092/noark5v5/)",
+        help="API base URL (default: http://localhost:8092/noark5v5/)",
     )
-    parser.add_argument("--username", default=None, help="Username (default: pereadm)")
-    parser.add_argument("--password", default=None, help="Password (default: secret)")
+    parser.add_argument("--username", default=None, help="Username (default: admin@example.com)")
+    parser.add_argument("--password", default=None, help="Password (default: password)")
     parser.add_argument(
         "--cli",
         action="store_true",

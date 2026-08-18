@@ -32,9 +32,9 @@ For detailed help on a command:
     ./tui-api-client <command> --help
 
 Connection options (defaults shown):
-    --baseurl http://arkiv.local/noark5v5/
-    --username pereadm
-    --password secret
+    --baseurl http://localhost:8092/noark5v5/
+    --username admin@example.com
+    --password password
 """
 
 import sys

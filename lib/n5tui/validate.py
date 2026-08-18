@@ -485,9 +485,9 @@ def run_tui_validation(baseurl=None, username=None, password=None):
                                 try:
                                     from n5core.endpoint import Endpoint
 
-                                    ep = Endpoint("http://arkiv.local:8092/noark5v5/")
-                                    ep.username = username or "pereadm"
-                                    ep.password = password or "secret"
+                                    ep = Endpoint("http://localhost:8092/noark5v5/")
+                                    ep.username = username or "admin@example.com"
+                                    ep.password = password or "password"
                                     downloaded, dres = ep._get(fil_url)
                                     if downloaded == test_content:
                                         download_ok = True
@@ -719,9 +719,9 @@ def run_tui_validation(baseurl=None, username=None, password=None):
 
             # Find a dokumentbeskrivelse to work with via API
             test_api = _N5API(
-                baseurl or "http://arkiv.local:8092/noark5v5/",
-                username or "pereadm",
-                password or "secret",
+                baseurl or "http://localhost:8092/noark5v5/",
+                username or "admin@example.com",
+                password or "password",
             )
             root_data = test_api.get_entity("")
             root_links = test_api.parselinks(root_data.get("_links", {}))
@@ -853,9 +853,9 @@ def run_tui_validation(baseurl=None, username=None, password=None):
             from n5tui.api import N5API as _N5API, relbaseurl as _rb
 
             test_api = _N5API(
-                baseurl or "http://arkiv.local:8092/noark5v5/",
-                username or "pereadm",
-                password or "secret",
+                baseurl or "http://localhost:8092/noark5v5/",
+                username or "admin@example.com",
+                password or "password",
             )
             test_api.ensure_login()
 
@@ -1013,9 +1013,9 @@ def run_tui_validation(baseurl=None, username=None, password=None):
             from n5tui.api import N5API as _N5API, relbaseurl as _rb
 
             test_api = _N5API(
-                baseurl or "http://arkiv.local:8092/noark5v5/",
-                username or "pereadm",
-                password or "secret",
+                baseurl or "http://localhost:8092/noark5v5/",
+                username or "admin@example.com",
+                password or "password",
             )
             test_api.ensure_login()
 
