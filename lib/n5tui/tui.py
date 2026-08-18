@@ -18,6 +18,7 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 import json
+import sys
 import warnings
 import urwid
 from urwid.widget.columns import ColumnsWarning as _CW
@@ -436,10 +437,6 @@ class LazyChildWalker(urwid.ListWalker):
         # Collect IDs from ALL relation types first (most derived last = wins)
         self._collect_ids()
 
-        # Pre-populate all relation type caches so _total_items() returns accurate counts immediately
-        for tidx in range(len(self._relations)):
-            self._ensure_cache(tidx)
-
     def _get_system_id(self, child, tlabel):
         """Extract systemID from entity (arkivskaper uses arkivskaperID)."""
         if "arkivskaper" in tlabel.lower():
@@ -457,24 +454,48 @@ class LazyChildWalker(urwid.ListWalker):
         with accurate deduplicated counts (avoids position mapping issues from
         partial page loading where duplicate distribution varies per page).
         """
+        def _dbg(*a):
+            if getattr(self.api, 'verbose', False):
+                print("[TREE] " + " ".join(str(x) for x in a), file=sys.stderr)
+
+        _dbg("parent_path:", self.parent_path)
+        _dbg("relations found:", [(r[0], r[1]) for r in self._relations])
+
         # Process relation types in REVERSE order: most derived types claim first
         for tidx in range(len(self._relations) - 1, -1, -1):
             self._ensure_cache(tidx)
             _, turl = self._relations[tidx]
             total = self._cache[tidx]["total"]
             if total == 0:
+                _dbg("claim phase skip (count=0)", self._relations[tidx][0], "url", turl)
                 continue
-            try:
-                resp = self.api.get_entity(
-                    "%s?$top=%d" % (turl, min(total, PAGE_SIZE * 10))
-                )
-            except Exception:
-                continue
-            for child in resp.get("results", []):
-                sysid = self._get_system_id(child, self._relations[tidx][0])
-                if sysid and sysid not in self._claimed_ids:
-                    # First claim wins (we process derived first)
-                    self._claimed_ids[sysid] = tidx
+
+            claimed_count = 0
+            # Paginate through all results to claim IDs
+            skip = 0
+            while skip < total:
+                try:
+                    query_url = "%s?$top=%d&$skip=%d" % (turl, PAGE_SIZE * 10, skip)
+                    resp = self.api.get_entity(query_url)
+                    results = resp.get("results", [])
+                    if not results:
+                        break
+                except Exception as e:
+                    _dbg("claim phase ERROR:", self._relations[tidx][0], str(e))
+                    break
+
+                for child in results:
+                    sysid = self._get_system_id(child, self._relations[tidx][0])
+                    if sysid and sysid not in self._claimed_ids:
+                        # First claim wins (we process derived first)
+                        self._claimed_ids[sysid] = tidx
+                        claimed_count += 1
+
+                skip += len(results)
+
+            _dbg("claim phase:", self._relations[tidx][0], "-> claimed", claimed_count, "IDs (total=", total, ")")
+
+        _dbg("claimed IDs:", {k: self._relations[v][0] for k, v in self._claimed_ids.items()})
 
         # Load ALL pages for each type to build complete deduplicated widget lists
         # This ensures accurate counts for position mapping
@@ -486,16 +507,18 @@ class LazyChildWalker(urwid.ListWalker):
 
             all_widgets = []
             loaded = 0
+            skipped_dupes = 0
             while loaded < total:
                 skip = loaded
                 try:
-                    resp = self.api.get_entity(
-                        "%s?$top=%d&$skip=%d" % (turl, PAGE_SIZE, skip)
-                    )
-                except Exception:
+                    query_url = "%s?$top=%d&$skip=%d" % (turl, PAGE_SIZE, skip)
+                    resp = self.api.get_entity(query_url)
+                except Exception as e:
+                    _dbg("load page ERROR:", self._relations[tidx][0], "query:", query_url, str(e))
                     break
                 results = resp.get("results", [])
                 if not results:
+                    _dbg("load page empty:", self._relations[tidx][0], "query:", query_url)
                     break
 
                 for child in results:
@@ -505,10 +528,22 @@ class LazyChildWalker(urwid.ListWalker):
 
                     # Skip if claimed by a different (more derived) type
                     if sysid and self._claimed_ids.get(sysid) != tidx:
+                        skipped_dupes += 1
                         continue
 
                     if "arkivskaper" in tlabel.lower():
                         tittel = child.get("arkivskaperNavn", "?")
+                    elif "dokumentobjekt" in c_self:
+                        fn = child.get("filnavn", "") or ""
+                        fmt = child.get("format", {})
+                        parts = []
+                        if fn:
+                            parts.append(fn)
+                        if isinstance(fmt, dict):
+                            fkn = fmt.get("kodenavn") or fmt.get("kode") or ""
+                            if fkn and fkn.lower() not in ("unknown", "ukjent filformat"):
+                                parts.append("(%s)" % fkn)
+                        tittel = "".join(parts) if parts else "(dokumentobjekt)"
                     else:
                         tittel = child.get("tittel", child.get("klasseID", "?"))
 
@@ -527,40 +562,46 @@ class LazyChildWalker(urwid.ListWalker):
             # Store as single complete list; update total to deduplicated count
             self._cache[tidx]["pages"] = {0: all_widgets}
             self._cache[tidx]["total"] = len(all_widgets)
+            _dbg("load phase result:", self._relations[tidx][0], "-> widgets=", len(all_widgets), "skipped_dupes=", skipped_dupes, "(raw total was", total, ")")
 
-        # Pre-populate all relation type caches so _total_items() returns accurate counts immediately
-        for tidx in range(len(self._relations)):
-            self._ensure_cache(tidx)
-            _, turl = self._relations[tidx]
-            total = self._cache[tidx]["total"]
-            if total == 0:
-                continue
-            try:
-                resp = self.api.get_entity(
-                    "%s?$top=%d" % (turl, min(total, PAGE_SIZE * 10))
-                )
-            except Exception:
-                continue
-            for child in resp.get("results", []):
-                sysid = self._get_system_id(child, self._relations[tidx][0])
-                if sysid and sysid not in self._claimed_ids:
-                    # First claim wins (we process derived first)
-                    self._claimed_ids[sysid] = tidx
+        final_total = sum(c["total"] for c in self._cache.values())
+        _dbg("TREE FINAL count:", final_total)
 
     def _total_items(self):
         """Total number of items across all relation types."""
         return sum(c["total"] for c in self._cache.values())
 
     def _ensure_cache(self, tidx):
-        """Ensure cache entry exists for type index."""
+        """Ensure cache entry exists for type index.
+
+        Paginates through all results to discover the true collection size,
+        since Nikita's 'count' field reports items returned (not total).
+        """
+        def _dbg(*a):
+            if getattr(self.api, 'verbose', False):
+                print("[TREE] " + " ".join(str(x) for x in a), file=sys.stderr)
+
         if tidx not in self._cache:
             _, turl = self._relations[tidx]
             try:
-                resp_data = self.api.get_entity("%s?$top=1" % turl)
-                # Nikita returns 'count', not @odata.count
-                total = resp_data.get("count", 0) or len(resp_data.get("results", []))
-            except Exception:
+                # First query with a large $top to get all results efficiently
+                resp_data = self.api.get_entity("%s?$top=%d" % (turl, PAGE_SIZE * 10))
+                results = resp_data.get("results", [])
+                total = len(results)
+
+                # If we got exactly PAGE_SIZE*10, there might be more — paginate to discover
+                while total > 0 and len(results) == PAGE_SIZE * 10:
+                    skip = total
+                    resp_data = self.api.get_entity("%s?$top=%d&$skip=%d" % (turl, PAGE_SIZE * 10, skip))
+                    results = resp_data.get("results", [])
+                    if not results:
+                        break
+                    total += len(results)
+
+                _dbg("_ensure_cache:", self._relations[tidx][0], "-> discovered total=", total)
+            except Exception as e:
                 total = 0
+                _dbg("_ensure_cache ERROR:", self._relations[tidx][0], str(e))
             self._cache[tidx] = {"total": total, "pages": {}}
 
     def _find_type_for_pos(self, pos):
@@ -602,6 +643,18 @@ class LazyChildWalker(urwid.ListWalker):
             if "arkivskaper" in tlabel.lower():
                 tittel = child.get("arkivskaperNavn", "?")
                 sysid = child.get("arkivskaperID", "")
+            elif "dokumentobjekt" in c_self:
+                fn = child.get("filnavn", "") or ""
+                fmt = child.get("format", {})
+                parts = []
+                if fn:
+                    parts.append(fn)
+                if isinstance(fmt, dict):
+                    fkn = fmt.get("kodenavn") or fmt.get("kode") or ""
+                    if fkn and fkn.lower() not in ("unknown", "ukjent filformat"):
+                        parts.append("(%s)" % fkn)
+                tittel = "".join(parts) if parts else "(dokumentobjekt)"
+                sysid = child.get("systemID", "")
             else:
                 tittel = child.get("tittel", child.get("klasseID", "?"))
                 sysid = child.get("systemID", "")
@@ -1045,12 +1098,17 @@ class EntityDetail(urwid.WidgetWrap):
         """Fetch child entities from the entity's _links relations.
 
         Returns list of (type_label, date_str, title) tuples for display."""
+        def _dbg(*a):
+            if getattr(self.api, 'verbose', False):
+                print("[DETAIL] " + " ".join(str(x) for x in a), file=sys.stderr)
+
         if not self.api:
             return []
 
         try:
             relations = self.api.get_children(entity_dict, CHILD_RELATIONS)
             children = []
+            _dbg("relations found:", [(r[0], r[1]) for r in relations])
             for child_type, child_url in relations:
                 # Map relation type to display name for children
                 type_display_map = {
@@ -1067,7 +1125,10 @@ class EntityDetail(urwid.WidgetWrap):
                 }
 
                 try:
-                    resp = self.api.get_entity("%s?$top=10" % child_url)
+                    query_url = "%s?$top=10" % child_url
+                    resp = self.api.get_entity(query_url)
+                    results_count = len(resp.get("results", []))
+                    _dbg(child_type, "-> query:", query_url, "-> got", results_count)
                     for child in resp.get("results", []):
                         c_self = child.get("_links", {}).get("self", {}).get("href", "")
                         opprettet = child.get("opprettetDato", "")
@@ -1112,6 +1173,7 @@ class EntityDetail(urwid.WidgetWrap):
                 except Exception:
                     pass
 
+            _dbg("DETAIL FINAL count:", len(children), "(capped at 20)")
             return children[:20]  # Limit to first 20 for display
         except Exception:
             return []
