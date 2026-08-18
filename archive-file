@@ -245,7 +245,7 @@ def main():
 
         def pickLeafMappe(mappe_list_info):
             """Pick a mappe from list, auto-drilling to leaf if needed."""
-            fileinfo = pickUnlessOne(mappe_list_info, 'mappe', quiet=True)
+            fileinfo = pickUnlessOne(mappe_list_info, 'mappe')
             if fileinfo is None:
                 print("error: Fant ingen mappe.  Tom database?")
                 return None
