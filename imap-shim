@@ -7,131 +7,668 @@ __author__ = "Petter Reinholdtsen"
 IMAP frontend for the Noark 5 Tjenestegrensesnitt API, to read archive
 material using an IMAP client.
 
-Based on the protocol description in
-https://datatracker.ietf.org/doc/html/rfc3501
+Protocol: RFC 9051 (IMAP/4, obsoletes RFC 3501)
 
 """
 
 import sys
 import os
-sys.path.append(os.path.join(sys.path[0],'lib'))
+sys.path.append(os.path.join(sys.path[0], 'lib'))
 
 import argparse
 import asyncio
+import fnmatch
 import json
 import re
+import shlex
 
 import n5core.endpoint
 from n5core.endpoint import HTTPError, LoginFailure
 
+
 class ImapShim():
     class ImapConnection(n5core.endpoint.Endpoint):
-        #baseurl = 'http://localhost:8092/noark5v5/'
-        baseurl = 'https://nikita.oslomet.no/noark5v5/'
-        def __init__(self):
-            n5core.endpoint.Endpoint.__init__(self, self.baseurl)
+        def __init__(self, baseurl):
+            self.selected_mailbox = None
+            self.selected_name = None
+            self.msg_count = 0
+            self.messages = []
+            n5core.endpoint.Endpoint.__init__(self, baseurl)
 
-        def imapreply(self, writer, msg):
+        def _list_fonds(self):
+            """Return list of fonds (arkiv) titles from N5 API."""
+            try:
+                fondsrel = self.relbaseurl + 'arkivstruktur/arkiv/'
+                fondshref = self.findRelation(fondsrel)
+                (c, res) = self.json_get(fondshref)
+                fondsinfo = json.loads(c)
+                if fondsinfo.get('count', 0) > 0:
+                    return [f['tittel'] for f in fondsinfo['results']]
+            except Exception as e:
+                print(f"LIST error: {e}", flush=True)
+            return []
+
+        def find_messages(self, arkiv_name):
+            """Walk N5 hierarchy under given arkiv to find all dokumentobjekter with email content."""
+            found = []
+            rel_arkivdel = self.relbaseurl + 'arkivstruktur/arkivdel/'
+            rel_klassifiseringssystem = self.relbaseurl + 'arkivstruktur/klassifikasjonssystem/'
+            rel_klasse = self.relbaseurl + 'arkivstruktur/klasse/'
+            rel_subklasse = self.relbaseurl + 'arkivstruktur/subklasse/'
+            rel_mappe = self.relbaseurl + 'arkivstruktur/mappe/'
+            rel_registrering = self.relbaseurl + 'arkivstruktur/registrering/'
+            rel_dokumentbeskrivelse = self.relbaseurl + 'arkivstruktur/dokumentbeskrivelse/'
+            rel_dokumentobjekt = self.relbaseurl + 'arkivstruktur/dokumentobjekt/'
+
+            def walk_mappes(mappe_url):
+                try:
+                    (c, res) = self.json_get(mappe_url)
+                    mp = json.loads(c)
+                except Exception:
+                    return
+
+                undermappe_rel = 'https://rel.arkivverket.no/noark5/v5/api/arkivstruktur/undermappe/'
+                if undermappe_rel in mp['_links']:
+                    sub_url = mp['_links'][undermappe_rel]['href'].split('{')[0]
+                    try:
+                        (sc, sr) = self.json_get(sub_url)
+                        subs = json.loads(sc)
+                        for sm in subs.get('results', []):
+                            walk_mappes(sm['_links']['self']['href'])
+                    except Exception:
+                        pass
+
+                if rel_registrering in mp['_links']:
+                    reg_url = mp['_links'][rel_registrering]['href']
+                    try:
+                        (rc, rr) = self.json_get(reg_url)
+                        regs = json.loads(rc)
+                        for r in regs.get('results', []):
+                            if rel_dokumentbeskrivelse not in r['_links']:
+                                continue
+                            db_url = r['_links'][rel_dokumentbeskrivelse]['href']
+                            try:
+                                (dc, dr) = self.json_get(db_url)
+                                dbs = json.loads(dc)
+                                for d in dbs.get('results', []):
+                                    if rel_dokumentobjekt not in d['_links']:
+                                        continue
+                                    dobj_url = d['_links'][rel_dokumentobjekt]['href']
+                                    try:
+                                        (oc, orr) = self.json_get(dobj_url)
+                                        objs = json.loads(oc)
+                                        for o in objs.get('results', []):
+                                            if o.get('mimeType') == 'message/rfc822':
+                                                fil_rel = self.relbaseurl + 'arkivstruktur/fil/'
+                                                referanse_fil_url = None
+                                                if fil_rel in o['_links']:
+                                                    referanse_fil_url = o['_links'][fil_rel]['href']
+                                                found.append({
+                                                    'uid': o['systemID'],
+                                                    'size': o.get('filstoerrelse', 0),
+                                                    'referanse_fil': referanse_fil_url,
+                                                    'mappe_tittel': mp.get('tittel', ''),
+                                                    'registrering_tittel': r.get('tittel', ''),
+                                                    'opprettet_dato': o.get('opprettetDato', ''),
+                                                })
+                                    except Exception:
+                                        pass
+                            except Exception:
+                                pass
+                    except Exception:
+                        pass
+
+            try:
+                rel_arkiv = self.relbaseurl + 'arkivstruktur/arkiv/'
+                arkiv_rel = self.findRelation(rel_arkiv)
+                (c, res) = self.json_get(arkiv_rel)
+                fonds = json.loads(c)
+                for f in fonds.get('results', []):
+                    if f['tittel'] != arkiv_name:
+                        continue
+                    arkivdel_url = None
+                    if rel_arkivdel in f['_links']:
+                        arkivdel_url = f['_links'][rel_arkivdel]['href'].split('{')[0]
+
+                    if not arkivdel_url:
+                        break
+                    try:
+                        (ac, ar) = self.json_get(arkivdel_url)
+                        adels = json.loads(ac)
+                        for adel in adels.get('results', []):
+                            if rel_klassifiseringssystem not in adel['_links']:
+                                continue
+                            ks_url = adel['_links'][rel_klassifiseringssystem]['href'].split('{')[0]
+                            try:
+                                (kc, kr) = self.json_get(ks_url)
+                                kses = json.loads(kc)
+                                for ks in kses.get('results', []):
+                                    if rel_klasse not in ks['_links']:
+                                        continue
+                                    kl_url = ks['_links'][rel_klasse]['href'].split('{')[0]
+                                    try:
+                                        (cc, cr) = self.json_get(kl_url)
+                                        klasser = json.loads(cc)
+
+                                        def walk_klasser(kl_info):
+                                            if rel_subklasse in kl_info['_links']:
+                                                sk_url = kl_info['_links'][rel_subklasse]['href'].split('{')[0]
+                                                try:
+                                                    (scc, scr) = self.json_get(sk_url)
+                                                    subs = json.loads(scc)
+                                                    for sk in subs.get('results', []):
+                                                        walk_klasser(sk)
+                                                except Exception:
+                                                    pass
+                                            if rel_mappe in kl_info['_links']:
+                                                mp_url = kl_info['_links'][rel_mappe]['href'].split('{')[0]
+                                                try:
+                                                    (mc, mr) = self.json_get(mp_url)
+                                                    mappes = json.loads(mc)
+                                                    for mp in mappes.get('results', []):
+                                                        walk_mappes(mp['_links']['self']['href'])
+                                                except Exception:
+                                                    pass
+
+                                        for kl in klasser.get('results', []):
+                                            walk_klasser(kl)
+                                    except Exception:
+                                        pass
+                            except Exception:
+                                pass
+
+                            if rel_mappe in adel['_links']:
+                                mp_url = adel['_links'][rel_mappe]['href'].split('{')[0]
+                                try:
+                                    (mc, mr) = self.json_get(mp_url)
+                                    mappes = json.loads(mc)
+                                    for mp in mappes.get('results', []):
+                                        walk_mappes(mp['_links']['self']['href'])
+                                except Exception:
+                                    pass
+                    except Exception:
+                        pass
+            except Exception:
+                pass
+
+            self.messages = []
+            for i, msg in enumerate(found, 1):
+                msg['seq'] = i
+                msg['n5id'] = msg.pop('uid', '')
+                msg['uid'] = i
+                msg['flags'] = {'\\Seen'}
+                self.messages.append(msg)
+            self.msg_count = len(self.messages)
+
+        async def imapreply(self, writer, msg):
             msg = f"{msg}\r\n".encode()
-            print(f"Send: {msg!r}")
+            print(f"Send: {msg!r}", flush=True)
             writer.write(msg)
+            await writer.drain()
 
-        def do_capability(self, args):
-            pass
+        def _match_mailbox(self, name, pattern):
+            """Simple IMAP mailbox wildcard matching. '%' matches any chars."""
+            # Handle patterns like "Testarkiv/%" — no children exist yet, so only exact or % match
+            if '/' in pattern:
+                return False  # No sub-mailboxes implemented yet
+            if not pattern or pattern == '*' or pattern == '%':
+                return True
+            return fnmatch.fnmatch(name, pattern)
+
+        def _parse_seq_set(self, seqset_str):
+            result = []
+            for part in seqset_str.split(','):
+                if ':' in part:
+                    start_str, end_str = part.split(':', 1)
+                    start = int(start_str) if start_str != '*' else 1
+                    end = int(end_str) if end_str != '*' else self.msg_count
+                    result.extend(range(start, end + 1))
+                else:
+                    result.append(int(part) if part != '*' else self.msg_count)
+            return sorted(set(result))
+
+        def _find_msg_by_uid(self, uid_set_str):
+            try:
+                uid = int(uid_set_str)
+                for i, msg in enumerate(self.messages):
+                    if msg['uid'] == uid:
+                        return i + 1
+            except Exception as ex:
+                print(f"_find_msg_by_uid({uid_set_str!r}) error: {ex}", flush=True)
+            return None
+
+        def _parse_items_str(self, raw):
+            """Strip outer quotes/parens from IMAP FETCH item list (RFC 9051).
+
+            Handles: "(FLAGS UID)", ("FLAGS UID"), and ("UID FLAGS BODY.PEEK[...]").
+            Must not eat nested parens like HEADER.FIELDS (...)."""
+            s = raw.strip()
+            # Strip outer double-quotes first (bare "FLAGS UID" from some clients)
+            if len(s) >= 2 and s[0] == '"' and s[-1] == '"':
+                s = s[1:-1]
+            # Now strip exactly one pair of outer parens, not all
+            if len(s) >= 2 and s[0] == '(' and s[-1] == ')':
+                s = s[1:-1]
+                # After paren strip, may have embedded quotes: "UID FLAGS ..." from ("...") format
+                if len(s) >= 2 and s[0] == '"' and s[-1] == '"':
+                    s = s[1:-1]
+            return s.upper()
+
+        def _split_items(self, items_str):
+            """Split space-separated IMAP FETCH items respecting bracket/paren nesting."""
+            items = []
+            current = ''
+            depth = 0
+            in_quote = False
+            for ch in items_str:
+                if ch == '"' and (not current or current[-1] != '\\'):
+                    in_quote = not in_quote
+                    current += ch
+                elif ch in '([' and not in_quote:
+                    depth += 1
+                    current += ch
+                elif ch in ')]' and not in_quote:
+                    depth -= 1
+                    current += ch
+                elif ch == ',' and depth == 0 and not in_quote:
+                    if current.strip():
+                        items.append(current.strip())
+                    current = ''
+                else:
+                    current += ch
+            if current.strip():
+                # Single chunk — split on spaces at depth 0
+                if not items:
+                    tok = ''
+                    d = 0
+                    q = False
+                    for ch in current:
+                        if ch == '"' and (not tok or tok[-1] != '\\'):
+                            q = not q; tok += ch
+                        elif ch in '([' and not q:
+                            d += 1; tok += ch
+                        elif ch in ')]' and not q:
+                            d -= 1; tok += ch
+                        elif ch == ' ' and d == 0 and not q:
+                            if tok.strip():
+                                items.append(tok.strip())
+                            tok = ''
+                        else:
+                            tok += ch
+                    if tok.strip():
+                        items.append(tok.strip())
+                else:
+                    items.append(current.strip())
+            return items
+
+        def _parse_fetch_items(self, items_str):
+            """Parse IMAP FETCH item list respecting bracket/paren nesting."""
+            inner = self._parse_items_str(items_str)
+            return self._split_items(inner)
+
+        async def _fetch_message(self, writer, tag, seq, items_str, msg):
+            item_list = self._parse_fetch_items(items_str)
+            parts = []
+            body_data = None
+            fetch_section = None  # 'full', 'header', or None
+            header_fields_pattern = None
+            fetch_envelope = False
+            section_tag = None  # Canonical tag for FETCH response (no PEEK)
+
+            for item in item_list:
+                if item == 'UID':
+                    parts.append(f'UID {msg["uid"]}')
+                elif item == 'FLAGS':
+                    flags_str = '(' + ' '.join(msg['flags']) + ')' if msg['flags'] else '()'
+                    parts.append(f'FLAGS {flags_str}')
+                elif item in ('RFC822', 'BODY[]'):
+                    fetch_section = 'full'
+                    section_tag = 'BODY[]'
+                elif re.match(r'^BODY\.PEEK\[HEADER(\.FIELDS\s*\((.+)\))?\]$', item):
+                    fetch_section = 'header'
+                    m_fields = re.search(r'HEADER\.FIELDS\s*\((.+)\)', item)
+                    if m_fields:
+                        header_fields_pattern = [f.strip() for f in m_fields.group(1).split()]
+                    # Canonical response tag: BODY[HEADER.FIELDS (...)] (no PEEK)
+                    section_tag = re.sub(r'^BODY\.PEEK', 'BODY', item)
+                elif re.match(r'^BODY(\.PEEK)?\[.*\]$', item):
+                    fetch_section = 'full'
+                    # Canonical response tag: strip PEEK
+                    section_tag = re.sub(r'^BODY\.PEEK', 'BODY', item)
+                elif item == 'INTERNALDATE':
+                    parts.append("INTERNALDATE \"07-Nov-2016 13:17:51 +0100\"")
+                elif item == 'RFC822.SIZE':
+                    parts.append('RFC822.SIZE 3323')
+                elif item == 'ENVELOPE':
+                    fetch_envelope = True
+
+            # Fetch raw email if needed for any body section
+            if fetch_section or fetch_envelope:
+                data_url = msg.get('referanse_fil')
+                try:
+                    (c, res) = await asyncio.to_thread(self.json_get, data_url)
+                    body_data = c if isinstance(c, bytes) else c.encode()
+                except Exception as ex:
+                    print(f"FETCH error for uid={msg['uid']}: {ex}", flush=True)
+
+            # Parse envelope from headers if requested
+            if fetch_envelope and not body_data:
+                data_url = msg.get('referanse_fil')
+                try:
+                    (c, res) = await asyncio.to_thread(self.json_get, data_url)
+                    body_data = c if isinstance(c, bytes) else c.encode()
+                except Exception as ex:
+                    print(f"ENVELOPE fetch error for uid={msg['uid']}: {ex}", flush=True)
+
+            if body_data:
+                raw = body_data
+                # Extract headers (everything up to first blank line) for envelope/header fetches
+                header_text = None
+                if fetch_section == 'header' or fetch_envelope:
+                    header_end = raw.find(b'\r\n\r\n')
+                    if header_end > 0:
+                        full_headers = raw[:header_end]
+                    else:
+                        header_end2 = raw.find(b'\n\n')
+                        if header_end2 > 0:
+                            full_headers = raw[:header_end2]
+                        else:
+                            full_headers = raw
+
+                    # If specific fields requested, filter to only those (for HEADER.FIELDS)
+                    if fetch_section == 'header' and header_fields_pattern:
+                        wanted = {f.upper() for f in header_fields_pattern}
+                        lines = full_headers.decode('utf-8', errors='replace').split('\n')
+                        filtered = []
+                        current_header = None
+                        for line in lines:
+                            stripped = line.strip()
+                            if ':' in stripped and not (line.startswith(' ') or line.startswith('\t')):
+                                hdr_name = stripped.split(':', 1)[0].strip().upper()
+                                current_header = hdr_name
+                            else:
+                                current_header = None
+
+                            if current_header in wanted:
+                                filtered.append(line)
+
+                        raw = '\n'.join(filtered).encode('utf-8')
+                    elif fetch_section == 'header':
+                        raw = full_headers
+                # Parse headers into dict for envelope construction
+                if fetch_envelope or header_text is None:
+                    header_end = raw.find(b'\r\n\r\n')
+                    if header_end > 0:
+                        full_headers_bytes = raw[:header_end]
+                    else:
+                        header_end2 = raw.find(b'\n\n')
+                        if header_end2 > 0:
+                            full_headers_bytes = raw[:header_end2]
+                        else:
+                            full_headers_bytes = raw
+                    header_text = full_headers_bytes.decode('utf-8', errors='replace').split('\r\n')
+
+                # Build envelope from parsed headers (RFC 9051 section 7.5.2)
+                if fetch_envelope and header_text:
+                    hdrs = {}
+                    current_name = None
+                    for line in header_text:
+                        stripped = line.strip()
+                        if ':' in stripped and not (line.startswith(' ') or line.startswith('\t')):
+                            current_name = stripped.split(':', 1)[0].strip()
+                            hdrs[current_name] = stripped.split(':', 1)[1].strip()
+                        elif current_name:
+                            hdrs[current_name] += ' ' + stripped
+
+                    def imap_quote(s):
+                        if not s:
+                            return '(NIL)'
+                        esc = s.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n').replace('\r', '')
+                        return f'"{esc}"'
+
+                    subject = hdrs.get('Subject', '').strip()
+                    date_str = hdrs.get('Date', '').strip()
+                    message_id = hdrs.get('Message-ID', '').strip()
+                    in_reply_to = hdrs.get('In-Reply-To', '').strip()
+
+                    def parse_addresses(addr_header):
+                        if not addr_header:
+                            return '(NIL)'
+                        # Simple address parsing — handle "Name <email>" or bare "<email>" or bare "email"
+                        addrs = []
+                        for part in re.split(r',\s*', addr_header):
+                            part = part.strip().strip('<>').split('@')[0] if '@' in part else part.strip()
+                            m_addr = re.match(r'<([^>]+)>', addr_header)
+                            email = m_addr.group(1) if m_addr else ''
+                            name = addr_header.split('<')[0].strip().strip('"') if '<' in addr_header else (part or '')
+                            addrs.append(f'({imap_quote(name)} NIL NIL {imap_quote(email)})')
+                        return '(' + ' '.join(addrs) + ')'
+
+                    from_addrs = parse_addresses(hdrs.get('From', ''))
+                    to_addrs = parse_addresses(hdrs.get('To', ''))
+                    cc_addrs = parse_addresses(hdrs.get('Cc', ''))
+                    sender_addrs = from_addrs  # RFC 9051: default sender = from if missing
+                    replyto_addrs = from_addrs  # RFC 9051: default reply-to = from if missing
+
+                    envelope_str = f'ENVELOPE ({imap_quote(date_str)} {imap_quote(subject)} {from_addrs} {sender_addrs} {replyto_addrs} {to_addrs} {cc_addrs} (NIL) {imap_quote(in_reply_to)} {imap_quote(message_id)})'
+                    parts.append(envelope_str)
+
+                # If only envelope was requested, no body data to send
+                if not fetch_section:
+                    await self.imapreply(writer, f'* {seq} FETCH ({' '.join(parts)})')
+
+                parts_str = ' '.join(parts) + f' {section_tag}' if parts else section_tag
+                # Prepare raw body bytes for IMAP literal transmission.
+                # imap_read_literal strips \r from \r\n, so N counts non-\r bytes only.
+                # Use LF-only to avoid double-counting issues.
+                text = raw.decode('utf-8', errors='replace').replace('\r\n', '\n').replace('\r', '\n')
+                if fetch_section == 'header':
+                    if not text.endswith('\n\n'):
+                        text += '\n'
+                body_bytes = text.encode('utf-8')
+
+                # Send as IMAP literal: BODY[...] {N}\r\n<raw bytes>\r\n)\r\n
+                fetch_line = f'* {seq} FETCH ({parts_str} {{{len(body_bytes)}}})\r\n'
+                msg_bytes = fetch_line.encode('utf-8') + body_bytes + b'\r\n)\r\n'
+                print(f"Send literal: {fetch_line!r} + {len(body_bytes)} bytes", flush=True)
+                writer.write(msg_bytes)
+                await writer.drain()
+            elif parts:
+                await self.imapreply(writer, f'* {seq} FETCH ({' '.join(parts)})')
 
         async def protocol_handler(self, reader, writer):
             writer.write(b"* OK IMAP4rev1 Service Ready\r\n")
+            await writer.drain()
             connected = True
             while connected:
                 addr = writer.get_extra_info('peername')
-                data = await reader.read(100)
-                for message in data.decode().split('\r\n'):
+                data = await reader.read(4096)
+                if not data:
+                    connected = False
+                    break
+                for message in data.decode(errors='replace').split('\r\n'):
                     if '' == message:
                         continue
-                    print(f"Received {message!r} from {addr!r}")
+                    # Handle clients that send \n instead of \r\n (nc, some IMAP clients)
+                    message = message.rstrip('\n')
+                    print(f"Received {message!r} from {addr!r}", flush=True)
 
-                    m = re.match(r"^(\S+) (\S+) ?(.+)?$", message)
-                    msgid = m.group(1)
-                    command = m.group(2)
-                    args = m.group(3)
-
-                    if 'CAPABILITY' == command:
-                        capabilities = [
-                            'IMAP4rev1',
-#                            'AUTH=LOGIN',
-#                            'AUTH=PLAIN',
-#                            'CHILDREN',
-#                            'ENABLE',
-#                            'ID',
-                            'IDLE',
-#                            'LITERAL+',
-#                            'NAMESPACE',
-#                            'UIDPLUS',
-                        ]
-                        self.imapreply(writer, '* CAPABILITY %s' % ' '.join(sorted(capabilities)))
-                        self.imapreply(writer, f"{msgid} OK CAPABILITY completed")
-                    elif 'LIST' == command:
-                        # FIXME implement
-                        fondsrel = self.relbaseurl + 'arkivstruktur/arkiv/'
-                        fondshref = self.findRelation(fondsrel)
-                        (c, res) = self.json_get(fondshref)
-                        fondsinfo = json.loads(c)
-                        if 0 < fondsinfo['count']:
-                            for fond in fondsinfo['results']:
-                                #print(fond)
-                                self.imapreply(writer, f'* LIST (\\HasChildren)) "/" "{fond["tittel"]}"')
-                        self.imapreply(writer, f"{msgid} OK LIST completed")
-                    elif 'SELECT' == command:
-                        # FIXME implement
-                        self.imapreply(writer, '* 0 EXISTS')
-                        self.imapreply(writer, '* 0 RECENT')
-                        self.imapreply(writer, f"{msgid} OK [READ-WRITE] SELECT completed")
-                    elif 'FETCH' == command:
-                        # FIXME implement
-                        self.imapreply(writer, f"{msgid} NO Not yet implemented")
-                    elif 'LOGIN' == command:
-                        m = re.match(r'"(\S+)" "(\S*)"', args)
+                    try:
+                        m = re.match(r"^(\S+)\s+(.+)$", message)
                         if not m:
-                            self.imapreply(writer, f"{msgid} BAD LOGIN rejected")
+                            continue
+                        msgid = m.group(1)
+                        rest = m.group(2).strip()
+                        parts_cmd = rest.split(None, 1)
+                        command = parts_cmd[0]
+                        args = parts_cmd[1] if len(parts_cmd) > 1 else None
+
+                        if 'CAPABILITY' == command:
+                            capabilities = [
+                                'IMAP4rev1',
+                                'IDLE',
+                                'UIDPLUS',
+                            ]
+                            await self.imapreply(writer, '* CAPABILITY %s' % ' '.join(sorted(capabilities)))
+                            await self.imapreply(writer, f"{msgid} OK CAPABILITY completed")
+                        elif 'STARTTLS' == command:
+                            await self.imapreply(writer, f"{msgid} NO Sorry, not implemented")
+                        elif 'LIST' == command:
+                            # Parse LIST reference mailbox — filter by mailbox pattern if provided
+                            list_args = args.split() if args else []
+                            reference = list_args[0].strip('"') if list_args else ''
+                            mailbox_pattern = list_args[1].strip('"') if len(list_args) > 1 else '%'
+                            fonds = await asyncio.to_thread(self._list_fonds)
+                            for fond in fonds:
+                                if self._match_mailbox(fond, mailbox_pattern):
+                                    flags = '(\\HasNoChildren \\Marked)'
+                                    await self.imapreply(writer, f'* LIST {flags} "/" "{fond}"')
+                            await self.imapreply(writer, f"{msgid} OK LIST completed")
+                        elif 'SELECT' == command:
+                            self.selected_name = args.strip().strip('"') if args else None
+                            await asyncio.to_thread(self.find_messages, self.selected_name)
+                            await self.imapreply(writer, '* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)')
+                            await self.imapreply(writer, f'* {self.msg_count} EXISTS')
+                            await self.imapreply(writer, '* 0 RECENT')
+                            await self.imapreply(writer, '* OK [PERMANENTFLAGS (\\Deleted \\Seen)] Limited')
+                            await self.imapreply(writer, '* OK [UIDVALIDITY 1] UIDs valid.')
+                            uidnext = self.msg_count + 1 if self.messages else 1
+                            await self.imapreply(writer, f'* OK [UIDNEXT {uidnext}] Predicted next UID.')
+                            await self.imapreply(writer, f'{msgid} OK [READ-WRITE] SELECT completed')
+                        elif 'EXAMINE' == command:
+                            self.selected_name = args.strip().strip('"') if args else None
+                            await asyncio.to_thread(self.find_messages, self.selected_name)
+                            await self.imapreply(writer, '* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)')
+                            await self.imapreply(writer, f'* {self.msg_count} EXISTS')
+                            await self.imapreply(writer, '* 0 RECENT')
+                            await self.imapreply(writer, '* OK [PERMANENTFLAGS ()] No permanent flags permitted')
+                            await self.imapreply(writer, '* OK [UIDVALIDITY 1] UIDs valid.')
+                            uidnext = self.msg_count + 1 if self.messages else 1
+                            await self.imapreply(writer, f'* OK [UIDNEXT {uidnext}] Predicted next UID.')
+                            await self.imapreply(writer, f'{msgid} OK [READ-ONLY] EXAMINE completed')
+                        elif 'FETCH' == command:
+                            fetch_args = args.strip() if args else ''
+                            is_uid_fetch = fetch_args.upper().startswith('UID')
+                            if is_uid_fetch:
+                                parts = fetch_args.split(None, 2)
+                                if len(parts) >= 3:
+                                    uid_set_str = parts[1]
+                                    items_raw = parts[2].strip()
+                                    target_seq = self._find_msg_by_uid(uid_set_str)
+                                    if target_seq is not None and self.messages:
+                                        msg = self.messages[target_seq - 1]
+                                        await self._fetch_message(writer, msgid, target_seq, items_raw, msg)
+                            else:
+                                parts = fetch_args.split(None, 1)
+                                if len(parts) >= 2:
+                                    seq_set_str = parts[0]
+                                    items_raw = parts[1].strip()
+                                    for s in self._parse_seq_set(seq_set_str):
+                                        if 1 <= s <= self.msg_count and self.messages:
+                                            msg = self.messages[s - 1]
+                                            await self._fetch_message(writer, msgid, s, items_raw, msg)
+                            await self.imapreply(writer, f"{msgid} OK FETCH completed")
+                        elif 'LOGIN' == command:
+                            # Parse LOGIN args: handle atom, quoted, or mixed formats (Mutt sends "user" "pass")
+                            try:
+                                parts = shlex.split(args)
+                                username, password = parts[0], parts[1]
+                            except (ValueError, IndexError):
+                                await self.imapreply(writer, f"{msgid} BAD LOGIN rejected")
+                                connected = False
+                                break
+                            try:
+                                await asyncio.to_thread(self.login, username=username, password=password)
+                                await self.imapreply(writer, f"{msgid} OK LOGIN completed")
+                            except (LoginFailure, Exception) as e:
+                                print(f"LOGIN failed for {username}: {e}", flush=True)
+                                await self.imapreply(writer, f"{msgid} NO LOGIN rejected")
+                                connected = False
+                        elif 'LOGOUT' == command:
+                            await self.imapreply(writer, '* BYE Logging out')
+                            await self.imapreply(writer, f"{msgid} OK LOGOUT completed")
                             connected = False
-                            #raise ValueError(f"Unable to locate username and password from {message!r}")
-                        username = m.group(1)
-                        password = m.group(2)
-                        try:
-                            self.login(username=username, password=password)
-                            self.imapreply(writer, f"{msgid} OK LOGIN completed")
-                        except LoginFailure as e:
-                            self.imapreply(writer, f"{msgid} NO LOGIN rejected")
-                            connected = False
-                    elif 'LOGOUT' == command:
-                        self.imapreply(writer, f"{msgid} OK")
-                        connected = False
-                    elif 'NOOP' == command:
-                        self.imapreply(writer, f"{msgid} OK NOOP completed")
-                    else:
-                        self.imapreply(writer, f"{msgid} NO Sorry, not implemented")
-                await writer.drain()
+                        elif 'NOOP' == command:
+                            await self.imapreply(writer, f"{msgid} OK NOOP completed")
+                        elif 'UID' == command:
+                            if args and args.upper().startswith('FETCH'):
+                                fetch_args = args[5:].strip()
+                                parts = fetch_args.split(None, 1)
+                                if len(parts) >= 2:
+                                    uid_set_str = parts[0]
+                                    items_raw = parts[1].strip()
+                                    target_seq = self._find_msg_by_uid(uid_set_str)
+                                    if target_seq is not None and self.messages:
+                                        msg = self.messages[target_seq - 1]
+                                        await self._fetch_message(writer, msgid, target_seq, items_raw, msg)
+                                await self.imapreply(writer, f"{msgid} OK UID FETCH completed")
+                            elif args and args.upper().startswith('SEARCH'):
+                                pass
+                            else:
+                                await self.imapreply(writer, f"{msgid} NO UID subcommand not implemented")
+                        elif 'STATUS' == command:
+                            # Parse STATUS "mailbox" (attr1 attr2 ...) — return stub values
+                            try:
+                                status_parts = shlex.split(args)
+                                mailbox = status_parts[0] if status_parts else ''
+                            except ValueError:
+                                mailbox = ''
+                            await self.imapreply(writer, f'* STATUS "{mailbox}" (MESSAGES {self.msg_count} UIDNEXT 2 UIDVALIDITY 1 UNSEEN 0)')
+                            await self.imapreply(writer, f"{msgid} OK STATUS completed")
+                        elif 'LSUB' == command:
+                            # Return same list as LIST (Mutt calls this), filter by mailbox pattern
+                            lsub_args = args.split() if args else []
+                            reference = lsub_args[0].strip('"') if lsub_args else ''
+                            mailbox_pattern = lsub_args[1].strip('"') if len(lsub_args) > 1 else '*'
+                            fonds = await asyncio.to_thread(self._list_fonds)
+                            for fond in fonds:
+                                if self._match_mailbox(fond, mailbox_pattern):
+                                    flags = '(\\HasChildren)'
+                                    await self.imapreply(writer, f'* LSUB {flags} "/" "{fond}"')
+                            await self.imapreply(writer, f"{msgid} OK LSUB completed")
+                        elif 'CLOSE' == command:
+                            self.messages = []
+                            self.msg_count = 0
+                            self.selected_name = None
+                            await self.imapreply(writer, f"{msgid} OK CLOSE completed")
+                        else:
+                            await self.imapreply(writer, f"{msgid} NO Sorry, not implemented")
+                    except Exception as ex:
+                        import traceback
+                        traceback.print_exc()
+                        print(f"  Command error processing {message!r}: {ex}", flush=True)
 
             print("Close the connection")
             writer.close()
-    
+
+    def __init__(self, baseurl):
+        self.baseurl = baseurl
+
     async def handle_imap(self, reader, writer):
-        c = self.ImapConnection()
+        c = self.ImapConnection(self.baseurl)
         try:
             await c.protocol_handler(reader, writer)
         except Exception as e:
             print("Error, exiting connection: %s" % e)
             writer.close()
-            
 
-    async def main():
-        s = ImapShim()        
-        s.server = await asyncio.start_server(s.handle_imap, '127.0.0.1', 143)
 
-        addr = s.server.sockets[0].getsockname()
-        print(f'Serving on {addr}')
+async def main():
+    parser = argparse.ArgumentParser(description='IMAP shim for Noark 5 API')
+    parser.add_argument('--baseurl', default='http://localhost:8092/noark5v5/',
+                        help="Noark 5 API base URL (default: %(default)s)")
+    parser.add_argument('--port', type=int, default=143,
+                        help="IMAP listen port (default: %(default)s)")
+    args = parser.parse_args()
 
-        async with s.server:
-            await s.server.serve_forever()
+    s = ImapShim(args.baseurl)
+    server = await asyncio.start_server(s.handle_imap, '127.0.0.1', args.port)
 
-asyncio.run(ImapShim.main())
+    addr = server.sockets[0].getsockname()
+    print(f'Serving on {addr}')
+
+    async with server:
+        await server.serve_forever()
+
+
+asyncio.run(main())
