@@ -1990,7 +1990,7 @@ class EditDialog(urwid.Pile):
             return
 
         try:
-            content, _res = self.api.json_merge_patch(
+            content, _res = self.api.patch(
                 self.entity_path, patch_data, etag=self.etag
             )
             result = json.loads(content)
