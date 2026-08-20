@@ -19,11 +19,14 @@ import argparse
 import json
 import email
 import magic
+import zipfile
+import xml.etree.ElementTree as ET
 from hashlib import sha256
 import n5core.endpoint
 from urllib.error import HTTPError
 from n5core.pick import pickUnlessOne
 from pypdf import PdfReader
+from PIL import Image
 
 class infoReader():
     def __init__(self, fh, filepath):
@@ -41,9 +44,24 @@ constructor, to avoid moving the file handle pointer for others later.
         infoReader.__init__(self, fh, filepath)
         reader = PdfReader(fh)
         metadata = reader.metadata
-        self.title = getattr(metadata, '/Title', None) or None
-        self.producer = getattr(metadata, '/Producer', None) or None
-        self.creator = getattr(metadata, '/Creator', None) or None
+
+        # pypdf exposes lowercase property names (not /Title dict keys)
+        self.title = getattr(metadata, 'title', None) or None
+        self.author = getattr(metadata, 'author', None) or None
+        self.description = getattr(metadata, 'subject', None) or None  # subject → beskrivelse
+
+        # Keywords can be semicolon-separated (PDF spec) or comma-separated
+        raw_kw = getattr(metadata, 'keywords', None) or ''
+        if raw_kw:
+            sep = ';' if ';' in raw_kw else ','
+            self.subjects = [k.strip() for k in raw_kw.split(sep) if k.strip()]
+        else:
+            self.subjects = []
+
+        # Creator/producer (tool names — not mapped to Noark 5 fields directly)
+        self.producer = getattr(metadata, 'producer', None) or None
+        self.creator = getattr(metadata, 'creator', None) or None
+
         # Detect PDF version from header like "%PDF-1.5"
         hdr = reader.pdf_header  # e.g. "%PDF-1.5"
         ver = hdr.split('-')[1] if '-' in hdr else ''
@@ -52,10 +70,210 @@ constructor, to avoid moving the file handle pointer for others later.
         else:
             self.format = None
 
+        # Page count (available for reference)
+        self.page_count = len(reader.pages)
+
 class imageReader(infoReader):
     def __init__(self, fh, filepath):
+        """Extract metadata from images (EXIF for JPEG/TIFF, IHDR text chunks for PNG)."""
         infoReader.__init__(self, fh, filepath)
-        return
+        self.author = None
+        self.description = None
+        self.subjects = []
+        self.gps_latitude = None
+        self.gps_longitude = None
+        self.gps_altitude = None
+
+        try:
+            fh.seek(0, os.SEEK_SET)
+            img = Image.open(fh)
+
+            # JPEG/TIFF EXIF extraction
+            exif = img.getexif()
+            if exif:
+                from PIL.ExifTags import TAGS
+                for tag_id, value in exif.items():
+                    tag_name = TAGS.get(tag_id, '')
+
+                    # ImageDescription → beskrivelse
+                    if tag_name == 'ImageDescription':
+                        self.description = str(value)
+
+                    # Artist → forfatter
+                    elif tag_name == 'Artist':
+                        self.author = value
+
+                    # Copyright (0x8298) or XPComment/XPTitle often used as title
+                    elif tag_name in ('Copyright',):
+                        if not self.title:
+                            self.title = value
+
+                # GPS coordinates → Posisjon (nasjonalidentifikator)
+                gps_ifd = exif.get_ifd(0x8825)  # ExifIFD.GPS
+                if gps_ifd and gps_ifd.get(2) is not None and gps_ifd.get(4) is not None:
+                    self.gps_latitude = _gps_dms_to_decimal(gps_ifd.get(2), gps_ifd.get(0))
+                    self.gps_longitude = _gps_dms_to_decimal(gps_ifd.get(4), gps_ifd.get(1))
+                    if gps_ifd.get(6) is not None:  # GPSAltitude
+                        alt_ref = gps_ifd.get(5, 0)  # GPSAltitudeRef: 0=above sea level, 1=below
+                        self.gps_altitude = float(gps_ifd[6]) if alt_ref == 0 else -float(gps_ifd[6])
+
+            # PNG text chunks (tEXt, iTXt) — read from img.text or img.info
+            png_fields = getattr(img, 'text', None) or img.info
+            if png_fields:
+                if not self.description and png_fields.get('Description'):
+                    self.description = str(png_fields['Description'])
+                if not self.author and png_fields.get('Author'):
+                    self.author = png_fields['Author']
+                if not self.title and png_fields.get('Copyright'):
+                    self.title = png_fields['Copyright']
+        except Exception:
+            pass  # Fall back to filename-based metadata
+
+
+def _gps_dms_to_decimal(dms, ref):
+    """Convert EXIF GPS DMS tuple (degrees, minutes, seconds) + ref to decimal degrees.
+
+    EXIF stores each component as a rational: (numerator, denominator).
+    Pillow returns them as tuples of numbers or Fraction objects.
+    """
+    if dms is None or len(dms) != 3:
+        return None
+    def _to_float(comp):
+        # Handle (numerator, denominator) format from EXIF rationals
+        if isinstance(comp, (int, float)):
+            return float(comp)
+        if hasattr(comp, '__iter__') and len(comp) == 2:
+            num, den = comp[0], comp[1]
+            # Recursively handle nested tuples/Fractions
+            if isinstance(num, (tuple, list)):
+                num = _to_float(num)
+            if isinstance(den, (tuple, list)):
+                den = _to_float(den)
+            return float(num) / float(den) if den else 0.0
+        # Single-element tuple like (59,)
+        if hasattr(comp, '__iter__') and len(comp) == 1:
+            return float(comp[0])
+        return float(comp)
+    deg = _to_float(dms[0])
+    mins = _to_float(dms[1])
+    secs = _to_float(dms[2])
+    decimal = deg + (mins / 60.0) + (secs / 3600.0)
+    if ref in ('S', 'W'):
+        decimal = -decimal
+    return round(decimal, 6)
+
+class epubReader(infoReader):
+    def __init__(self, fh, filepath):
+        """
+        Extract book title and author from EPUB metadata (OPF file).
+        EPUB is a ZIP archive with standardized internal structure.
+        """
+        infoReader.__init__(self, fh, filepath)
+        self.author = None
+        fh.seek(0, os.SEEK_SET)
+        try:
+            with zipfile.ZipFile(fh) as zf:
+                # Find content.opf via container.xml
+                opf_path = None
+                try:
+                    with zf.open('META-INF/container.xml') as cf:
+                        root = ET.parse(cf).getroot()
+                        ns = {'container': 'urn:oasis:names:tc:opendocument:xmlns:container'}
+                        rootfile_el = root.find('container:rootfiles/container:rootfile', ns)
+                        if rootfile_el is None:
+                            rootfile_el = root.find('.//rootfile')
+                        opf_path = rootfile_el.get('full-path') if rootfile_el is not None else None
+                except KeyError:
+                    pass
+
+                # Fallback: scan for .opf file
+                if opf_path is None:
+                    for name in zf.namelist():
+                        if name.endswith('.opf'):
+                            opf_path = name
+                            break
+
+                if opf_path and opf_path in zf.namelist():
+                    with zf.open(opf_path) as of:
+                        doc = ET.parse(of).getroot()
+                        self._parse_opf_metadata(doc)
+        except (zipfile.BadZipFile, KeyError, ET.ParseError):
+            pass  # Fall back to filename
+
+    def _parse_opf_metadata(self, root):
+        """Parse OPF package document for metadata."""
+        opf_ns = 'http://www.idpf.org/2007/opf'
+        dc_ns = 'http://purl.org/dc/elements/1.1/'
+
+        def findall_el(el, tag):
+            """Try multiple namespace prefixes for a given local name."""
+            candidates = [
+                el.find(f'{{{dc_ns}}}{tag}'),       # Dublin Core (EPUB 2)
+                el.find(tag),                         # No namespace / default
+                el.find(f'{{{opf_ns}}}{tag}'),        # OPF namespace
+            ]
+            for c in candidates:
+                if c is not None:
+                    return c
+            return None
+
+        def findall_el_all(el, tag):
+            """Find all elements matching a local name across namespaces."""
+            results = []
+            for ns in [dc_ns, '', opf_ns]:
+                if ns:
+                    results.extend(el.findall(f'{{{ns}}}{tag}'))
+                else:
+                    results.extend(el.findall(tag))
+            return results
+
+        meta_el = findall_el(root, 'metadata')
+        if meta_el is None:
+            return
+
+        title_el = findall_el(meta_el, 'title')
+        author_el = findall_el(meta_el, 'creator')
+
+        if title_el is not None and title_el.text:
+            self.title = title_el.text.strip()
+
+        if author_el is not None and author_el.text:
+            self.author = author_el.text.strip()
+
+        # Description → beskrivelse
+        desc_el = findall_el(meta_el, 'description')
+        if desc_el is not None and desc_el.text:
+            self.description = desc_el.text.strip()
+
+        # Publisher
+        publisher_el = findall_el(meta_el, 'publisher')
+        if publisher_el is not None and publisher_el.text:
+            self.publisher = publisher_el.text.strip()
+
+        # Subjects → nøkkelord (keywords) — multiple allowed
+        subjects = []
+        for subj_el in findall_el_all(meta_el, 'subject'):
+            if subj_el.text:
+                s = subj_el.text.strip()
+                if s and s not in subjects:
+                    subjects.append(s)
+        self.subjects = subjects
+
+        # Date (original publication event) → append to beskrivelse
+        opf_attr_event = f'{{{opf_ns}}}event'
+        for date_el in findall_el_all(meta_el, 'date'):
+            if date_el.get(opf_attr_event) == 'original-publication' and date_el.text:
+                self.pub_date = date_el.text.strip()
+                break
+
+        # Identifier URI (for eksternReferanse)
+        opf_attr_scheme = f'{{{opf_ns}}}scheme'
+        for id_el in findall_el_all(meta_el, 'identifier'):
+            scheme = id_el.get(opf_attr_scheme) or ''
+            if 'URI' in scheme.upper() and id_el.text:
+                self.identifier_uri = id_el.text.strip()
+                break
+
 
 class rfc822Reader(infoReader):
     def __init__(self, fh, filepath):
@@ -100,12 +318,22 @@ formatlist = {
         'inforeader': imageReader,
         'format':     { 'kode': 'fmt/353' },
     },
+    # PNG (ISO/IEC 15948)
+    'image/png': {
+        'inforeader': imageReader,
+        'format':     { 'kode': 'fmt/13' },
+    },
     # Ren text
     # XML v1
     # SOSI v2.2 (1995 el. nyere)
     # MPEG-2 (ISO 13818-2)
     # MP3 (ISO 11172-3 PCM eller PCM-basert)
 
+    # EPUB Format (PRONOM fmt/483)
+    'application/epub+zip': {
+        'inforeader': epubReader,
+        'format':     { 'kode': 'fmt/483' },
+    },
     # Unofficial types:
     'message/rfc822': {
         'inforeader': rfc822Reader,
@@ -128,6 +356,18 @@ the json structure.  If the link is templated, strip OData query params.
         return href
     return None
 
+class ApiError(Exception):
+    """Wrapper for API errors carrying parsed JSON body and HTTP code."""
+    def __init__(self, e, jbody=None):
+        self.http_code = e.code
+        self.url = e.url if hasattr(e, 'url') else ''
+        self.jbody = jbody or {}
+        feil_msg = self.jbody.get('feil', {}).get('beskrivelse', '') if isinstance(self.jbody, dict) and 'feil' in self.jbody else ''
+        msg = "POST to %s failed HTTP %d" % (self.url, self.http_code)
+        if feil_msg:
+            msg += ": %s" % feil_msg
+        super().__init__(msg)
+
 def createObject(api, url, data):
     try:
         (c, res) = api.json_post(url, data)
@@ -142,7 +382,7 @@ def createObject(api, url, data):
                 print("  %s" % body, file=sys.stderr)
         except (json.JSONDecodeError, KeyError):
             print("  %s" % body, file=sys.stderr)
-        raise
+        raise ApiError(e, jbody if 'jbody' in dir() else None) from e
     fondinfo = json.loads(c)
     return fondinfo
 
@@ -389,7 +629,26 @@ def main():
               (filename, doctitle, fileinfo['systemID'], fileinfo['tittel']))
         
         newreghref = objectOperation(fileinfo, relbase + '/arkivstruktur/ny-registrering/')
-        recordinfo = createObject(api, newreghref, { 'tittel': doctitle })
+        reg_data = { 'tittel': doctitle }
+
+        # Build beskrivelse from EPUB description, publisher, date
+        beskrivelse_parts = []
+        epub_desc = getattr(r, 'description', None)
+        if epub_desc:
+            beskrivelse_parts.append(epub_desc)
+        epub_pub = getattr(r, 'publisher', None)
+        epub_date = getattr(r, 'pub_date', None)
+        if epub_pub or epub_date:
+            pub_info = []
+            if epub_pub:
+                pub_info.append('Publisert av %s' % epub_pub)
+            if epub_date:
+                pub_info.append('Utgitt %s' % epub_date)
+            beskrivelse_parts.append('; '.join(pub_info))
+        if beskrivelse_parts:
+            reg_data['beskrivelse'] = '\n'.join(beskrivelse_parts)
+
+        recordinfo = createObject(api, newreghref, reg_data)
 
         # adding documentbeskrivelse between registrering av
         # dokumentobject might be optional, but skipping it is not
@@ -397,8 +656,8 @@ def main():
         # consier replacing 'docdescifo' with 'recordinfo' in the
         # ny-dokumentobject call to objectOperation().
         newdocdeschref = objectOperation(recordinfo,
-                                         relbase + '/arkivstruktur/ny-dokumentbeskrivelse/')
-        docdescinfo = createObject(api, newdocdeschref, {
+                                          relbase + '/arkivstruktur/ny-dokumentbeskrivelse/')
+        docdesc_data = {
             'tittel' : doctitle,
             'dokumenttype': {
                 'kode': 'B',
@@ -413,7 +672,67 @@ def main():
                 'kode': 'H',
                 'kodenavn': 'Hoveddokument'
             },
-        })
+        }
+
+        # Attach eksternReferanse from EPUB identifier URI
+        epub_id_uri = getattr(r, 'identifier_uri', None)
+        if epub_id_uri:
+            docdesc_data['eksternReferanse'] = epub_id_uri
+
+        # Mirror beskrivelse on dokumentbeskrivelse too
+        if beskrivelse_parts:
+            docdesc_data['beskrivelse'] = '\n'.join(beskrivelse_parts)
+
+        docdescinfo = createObject(api, newdocdeschref, docdesc_data)
+
+        # Attach author to document description if extracted from file metadata
+        nikitarelbase = 'https://nikita.arkivlab.no/noark5/v5/'
+        # Attach author
+        author = getattr(r, 'author', None)
+        if author:
+            print("  Author: %s" % author)
+            nyforfatterhref = objectOperation(docdescinfo,
+                nikitarelbase + 'ny-forfatter/')
+            if nyforfatterhref:
+                try:
+                    createObject(api, nyforfatterhref, { 'forfatter': author })
+                except HTTPError as e:
+                    print("warning: Failed to attach author %s" % author, file=sys.stderr)
+
+        # Attach keywords from EPUB subjects (only registrering supports nøkkelord in Nikita)
+        subjects = getattr(r, 'subjects', None) or []
+        if subjects:
+            for keyword in subjects:
+                print("  Keyword: %s" % keyword)
+                nykw_href_reg = objectOperation(recordinfo, nikitarelbase + 'ny-noekkelord/')
+                if nykw_href_reg:
+                    try:
+                        createObject(api, nykw_href_reg, { 'noekkelord': keyword })
+                    except HTTPError as e:
+                        print("warning: Failed to attach keyword %s" % keyword, file=sys.stderr)
+
+        # Attach Posisjon from GPS EXIF data (nasjonalidentifikator on registrering)
+        gps_lat = getattr(r, 'gps_latitude', None)
+        gps_lon = getattr(r, 'gps_longitude', None)
+        if gps_lat is not None and gps_lon is not None:
+            print("  Position: %.6f, %.6f" % (gps_lat, gps_lon))
+            nyposisjonhref = objectOperation(recordinfo, nikitarelbase + 'ny-posisjon/')
+            if nyposisjonhref:
+                pos_data = {
+                    'koordinatsystem': {
+                        'kode': 'EPSG:4326',
+                        'kodenavn': 'WGS84',
+                    },
+                    'x': gps_lon,   # longitude (x in EPSG:4326)
+                    'y': gps_lat,   # latitude (y in EPSG:4326)
+                }
+                gps_alt = getattr(r, 'gps_altitude', None)
+                if gps_alt is not None:
+                    pos_data['z'] = gps_alt
+                try:
+                    createObject(api, nyposisjonhref, pos_data)
+                except HTTPError as e:
+                    print("warning: Failed to attach Posisjon (%s)" % e, file=sys.stderr)
 
         newdocobjhref = objectOperation(docdescinfo,
                                         relbase + '/arkivstruktur/ny-dokumentobjekt/')
@@ -432,7 +751,17 @@ def main():
         fmt = getattr(r, 'format', None) or format
         if fmt:
             data['format'] = fmt
-        docobjinfo = createObject(api, newdocobjhref, data)
+        try:
+            docobjinfo = createObject(api, newdocobjhref, data)
+        except ApiError as e:
+            feil_msg = e.jbody.get('feil', {}).get('beskrivelse', '') if isinstance(e.jbody, dict) else ''
+            # If format code not recognized by server, retry without it
+            if 'Cannot find code' in feil_msg and 'format' in data:
+                print("warning: Format %s not registered on server, retrying without" % fmt['kode'], file=sys.stderr)
+                del data['format']
+                docobjinfo = createObject(api, newdocobjhref, data)
+            else:
+                raise
 
         newfilehref = objectOperation(docobjinfo, relbase + '/arkivstruktur/fil/')
         try:
