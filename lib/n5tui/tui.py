@@ -104,6 +104,7 @@ DOKUMENTBESKRIVELSE_FIELDS = [
     "tittel",
     "beskrivelse",
     "forfatter",
+    "noekkelord",
     "dokumentmedium",
     "oppbevaringssted",
     "tilknyttetRegistreringSom",
@@ -1232,7 +1233,7 @@ class EntityDetail(urwid.WidgetWrap):
             for key in all_keys:
                 val = entity_dict[key]
                 label = "%-24s " % (key + ":")
-                formatted = _format_metadata_value(val)
+                formatted = _format_metadata_value(val, field_name=key)
                 if formatted is not None:
                     lines.append(urwid.Text("%s%s" % (label, formatted)))
                 elif isinstance(val, dict):
@@ -1248,6 +1249,53 @@ class EntityDetail(urwid.WidgetWrap):
                 lines = [
                     urwid.Text(_json.dumps(entity_dict, indent=2, ensure_ascii=False))
                 ]
+
+            # Fetch sub-resources (nøkkelord, forfatter) from _links and display them
+            self_href = entity_dict.get("_links", {}).get("self", {}).get("href", "")
+            for sub_rel_suffix in ("noikkelord/", "forfatter/"):
+                rel_url = None
+                for lk in entity_dict.get("_links", {}):
+                    if isinstance(lk, str) and lk.endswith(sub_rel_suffix) and not lk.endswith("ny-" + sub_rel_suffix.lstrip("/")):
+                        lv = entity_dict["_links"][lk]
+                        if isinstance(lv, dict):
+                            href = lv.get("href", "")
+                            # Strip OData template parameters {?$filter...}
+                            brace = href.find("{")
+                            rel_url = href[:brace] if brace >= 0 else href
+                            break
+
+                # Fallback: construct URL from self_href when HATEOAS link is missing
+                # (Nikita bug: registrering doesn't advertise forfatter/ in _links)
+                if not rel_url and self_href:
+                    sub_name = sub_rel_suffix.rstrip("/")
+                    rel_url = self_href + "/" + sub_name
+
+                if not rel_url:
+                    continue
+
+                try:
+                    sub_data = self.api.get_entity(rel_url)
+                    results = sub_data.get("results", [])
+                    if results:
+                        label = "%-24s " % (sub_rel_suffix.rstrip("/") + ":")
+                        vals = []
+                        for item in results:
+                            # nøkkelord has 'nøkkelord' key; forfatter likely has 'forfatterNavn' or similar
+                            val_text = None
+                            if sub_rel_suffix == "noekkelord/":
+                                val_text = item.get("noekkelord", "?")
+                            elif sub_rel_suffix == "forfatter/":
+                                val_text = (
+                                    item.get("forfatter")
+                                    or item.get("forfatterNavn")
+                                    or item.get("navn")
+                                    or "?"
+                                )
+                            if val_text:
+                                vals.append(val_text)
+                        lines.append(urwid.Text("%s%s" % (label, ", ".join(vals))))
+                except Exception:
+                    pass
 
             # Fetch and display children section
             children = self._get_children(entity_dict)
@@ -1494,6 +1542,19 @@ def _collect_descendants(api, entity_path):
 def _format_metadata_value(val, field_name=None, entity_links=None):
     """Format a value for display. Metadata dicts become '[Kodenavn (Kode)]'."""
     if isinstance(val, dict):
+        # VSM: nested dict of metadata key -> value pairs
+        if field_name == "virksomhetsspesifikkeMetadata":
+            lines = []
+            for k, v in val.items():
+                if isinstance(v, dict):
+                    v_str = ", ".join(
+                        "%s=%s" % (sk, sv) for sk, sv in sorted(v.items())
+                    )
+                    lines.append("  %s: {%s}" % (k, v_str))
+                else:
+                    lines.append("  %s: %s" % (k, v))
+            return "\n".join(lines) if lines else "(tom)"
+
         kode = val.get("kode")
         navn = val.get("kodenavn") or val.get("navn") or val.get("beskrivelse")
         if kode is not None:
@@ -1637,16 +1698,11 @@ class _SubmitSelect(urwid.WidgetWrap):
                     raise urwid.ExitMainLoop()
                 return self._w.keypress(size, key)
 
-            popup_body = urwid.Pile(
-            [
-                (
-                    "pack",
-                    urwid.Text(("header", "  Velg verdi (Enter=confirm, Esc=cancel)")),
-                ),
-                ("pack", urwid.Divider("-")),
-                lb,
-            ]
-        )
+        popup_body = urwid.Pile([
+            ("pack", urwid.Text(("header", "  Velg verdi (Enter=confirm, Esc=cancel)"))),
+            ("pack", urwid.Divider("-")),
+            lb,
+        ])
 
         popup_width = min(60, max(len(self._label_prefix) + 40, 30))
 
@@ -1738,6 +1794,34 @@ def _fetch_metadata_options(api, field_name):
     return options
 
 
+class _VSMFieldsWidget(urwid.Pile):
+    """Edit widget for virksomhetsspesifikkeMetadata (VSM) fields.
+
+    Shows each VSM key-value pair as an editable row. Keys are fixed, values editable."""
+
+    def __init__(self, vsm_data):
+        self._edits = {}
+        rows = []
+        if vsm_data:
+            for k in sorted(vsm_data.keys()):
+                v = vsm_data[k]
+                if isinstance(v, dict):
+                    v_str = "; ".join("%s=%s" % (sk, sv) for sk, sv in sorted(v.items()))
+                else:
+                    v_str = str(v) if v else ""
+                edit = _SubmitEdit("  VSM %-24s " % k, edit_text=v_str)
+                self._edits[k] = edit
+                rows.append(edit)
+        if not rows:
+            rows.append(urwid.Text(("body", "  (ingen VSM-verdier)")))
+
+        super().__init__(rows)
+
+    def get_value(self):
+        """Return dict of VSM key -> string value."""
+        return {k: e.get_edit_text().strip() for k, e in self._edits.items()}
+
+
 class EditDialog(urwid.Pile):
     """Edit existing entity via RFC 7396 merge-patch (PATCH).
 
@@ -1764,6 +1848,13 @@ class EditDialog(urwid.Pile):
         self.inputs = {}
         self.original_values = {}
 
+        # Auto-add VSM to editable fields if present in entity data
+        vsm_data = entity_data.get("virksomhetsspesifikkeMetadata")
+        if isinstance(vsm_data, dict) and "virksomhetsspesifikkeMetadata" not in editable_fields:
+            self._all_fields = list(editable_fields) + ["virksomhetsspesifikkeMetadata"]
+        else:
+            self._all_fields = list(editable_fields)
+
         super().__init__([])
 
         status_text = (
@@ -1775,8 +1866,20 @@ class EditDialog(urwid.Pile):
             (urwid.Divider("-"), ("pack", None)),
         ]
 
-        for field in editable_fields:
+        for field in self._all_fields:
             current_raw = entity_data.get(field, "")
+
+            # VSM: show as multi-field editor
+            if field == "virksomhetsspesifikkeMetadata" and isinstance(current_raw, dict):
+                vsm_widget = _VSMFieldsWidget(current_raw)
+                self.inputs[field] = vsm_widget
+                self.original_values[field] = current_raw
+                form_items.append(
+                    (urwid.Text(("header", "  Virksomhetsspesifikke metadata:")), ("pack", None))
+                )
+                form_items.append((vsm_widget, ("pack", None)))
+                continue
+
             current_val = (
                 str(current_raw)
                 if not isinstance(current_raw, dict)
@@ -1857,10 +1960,20 @@ class EditDialog(urwid.Pile):
     def _on_save(self):
         """Execute PATCH with RFC 7396 merge-patch for changed fields."""
         patch_data = {}
-        for field in self.editable_fields:
+        for field in self._all_fields:
             edit_wid = self.inputs.get(field)
             if not edit_wid:
                 continue
+
+            # VSM: get_value() returns dict of key -> value strings
+            if isinstance(edit_wid, _VSMFieldsWidget):
+                new_val = edit_wid.get_value()
+                old_val = self.original_values.get(field, {}) or {}
+                old_strs = {k: str(v) for k, v in old_val.items()}
+                if new_val != old_strs and (new_val or old_val):
+                    patch_data[field] = new_val
+                continue
+
             new_val = (
                 edit_wid.get_value()
                 if isinstance(edit_wid, _SubmitSelect)
