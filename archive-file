@@ -74,7 +74,7 @@ constructor, to avoid moving the file handle pointer for others later.
         # Page count (available for reference)
         self.page_count = len(reader.pages)
 
-    def getForfatter(self): return self.creator
+    def getForfatter(self): return self.author or self.creator
 
 class imageReader(infoReader):
     def __init__(self, fh, filepath):
@@ -742,25 +742,24 @@ def main():
                 except HTTPError as e:
                     print("warning: Failed to attach Posisjon (%s)" % e, file=sys.stderr)
 
-        # Register forfatter on both registrering and dokumentbeskrivelse if available
+        # Register forfatter on registrering if available (dokumentbeskrivelse handled above)
         author = r.getForfatter()
         if author:
-            for entity_info in (recordinfo, docdescinfo):
-                self_href = entity_info['_links']['self']['href']
-                ny_forfatter_url = self_href.rstrip('/') + '/ny-forfatter'
-                try:
-                    createObject(api, ny_forfatter_url, {'forfatter': author})
-                    print("  Registered forfatter '%s'" % author)
-                except HTTPError as e:
-                    if e.code != 409:
-                        body = e.read().decode('UTF-8', errors='replace')
-                        print("warning: POST to %s failed with HTTP %d" % (ny_forfatter_url, e.code), file=sys.stderr)
-                        try:
-                            jbody = json.loads(body)
-                            if 'feil' in jbody and 'beskrivelse' in jbody['feil']:
-                                print("  %s" % jbody['feil']['beskrivelse'], file=sys.stderr)
-                        except (json.JSONDecodeError, KeyError):
-                            pass
+            self_href = recordinfo['_links']['self']['href']
+            ny_forfatter_url = self_href.rstrip('/') + '/ny-forfatter'
+            try:
+                createObject(api, ny_forfatter_url, {'forfatter': author})
+                print("  Registered forfatter '%s'" % author)
+            except HTTPError as e:
+                if e.code != 409:
+                    body = e.read().decode('UTF-8', errors='replace')
+                    print("warning: POST to %s failed with HTTP %d" % (ny_forfatter_url, e.code), file=sys.stderr)
+                    try:
+                        jbody = json.loads(body)
+                        if 'feil' in jbody and 'beskrivelse' in jbody['feil']:
+                            print("  %s" % jbody['feil']['beskrivelse'], file=sys.stderr)
+                    except (json.JSONDecodeError, KeyError):
+                        pass
 
         newdocobjhref = objectOperation(docdescinfo,
                                         relbase + '/arkivstruktur/ny-dokumentobjekt/')
