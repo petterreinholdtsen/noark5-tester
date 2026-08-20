@@ -1264,12 +1264,6 @@ class EntityDetail(urwid.WidgetWrap):
                             rel_url = href[:brace] if brace >= 0 else href
                             break
 
-                # Fallback: construct URL from self_href when HATEOAS link is missing
-                # (Nikita bug: registrering doesn't advertise forfatter/ in _links)
-                if not rel_url and self_href:
-                    sub_name = sub_rel_suffix.rstrip("/")
-                    rel_url = self_href + "/" + sub_name
-
                 if not rel_url:
                     continue
 
