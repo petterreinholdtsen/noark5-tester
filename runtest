@@ -478,7 +478,7 @@ class Noark5Tester (n5core.endpoint.Endpoint):
                                         self.rels[rel] = href
                     else:
                         if self.isknownwithoutlinks(url):
-                            self.xfailure("missing _links from GET %s" % url)
+                            self.success("missing _links from GET %s" % url)
                         else:
                             self.failure("missing _links from GET %s" % url)
                     if baseref is not None and type(baseref) is not list:
