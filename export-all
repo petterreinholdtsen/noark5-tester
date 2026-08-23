@@ -137,12 +137,6 @@ def sha256_of_file(filename):
     return hasher.hexdigest()
 
 
-def utcnowtz():
-    u = datetime.datetime.utcnow()
-    u = u.replace(tzinfo=pytz.utc)
-    return u
-
-
 class XMLTag(object):
     def __init__(self, level, fh, tagname, attr=None):
         self.fh = fh
@@ -207,7 +201,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         self.username = 'admin@example.com'
         self.password = 'password'
         self.client_id = 'nikita-client'
-        utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc)
+        utcnow = datetime.datetime.now(datetime.UTC).replace(microsecond=0)
         self.savedir = 'json-dump-%s' % utcnow.isoformat()
         parser = argparse.ArgumentParser()
         parser.add_argument('--username', help='(default is %s)' % self.username)
@@ -1424,8 +1418,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
         systemhref = self.findRelation('%sadmin/system/' % self.relbaseurl)
         (c, res) = self.json_get(systemhref)
         self.system = json.loads(c)
-
-        utcnow = datetime.datetime.utcnow().replace(microsecond=0, tzinfo=pytz.utc).isoformat()
+        utcnow = datetime.datetime.now(datetime.UTC).replace(microsecond=0).isoformat()
         if 'count' not in arkivinfo or 0 < arkivinfo['count']:
             for arkiv in arkivinfo['results']:
                 arkivcopy = copy.deepcopy(arkiv)
@@ -1507,7 +1500,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                                                 attr={'name': 'archivalPeriod'}):
                                     with output.tag('properties'):
                                         property(output, 'startDate', arkiv['opprettetDato'])
-                                        endDate = utcnowtz()\
+                                        endDate = datetime.datetime.now(datetime.UTC)\
                                             .replace(microsecond=0) \
                                             .isoformat() \
                                             .replace('+00:00', 'Z')

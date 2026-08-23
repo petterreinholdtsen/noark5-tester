@@ -51,11 +51,6 @@ from n5core.endpoint import URLError
 noarkrelbase = n5core.endpoint.Endpoint.relbaseurl
 nikitarelbaseurl = n5core.endpoint.Endpoint.nikitarelbaseurl
 
-def utcnowtz():
-    u = datetime.datetime.utcnow()
-    u = u.replace(tzinfo=pytz.utc)
-    return u
-
 class Noark5Tester (n5core.endpoint.Endpoint):
     knownrels = [
         noarkrelbase + 'admin/',
@@ -826,7 +821,8 @@ Also, should 'date' fields accept values with time of day in them,
 or should it be rejected?
 
 """
-        now = utcnowtz().replace(microsecond=0) \
+        now = datetime.datetime.now(datetime.UTC) \
+                        .replace(microsecond=0) \
                         .isoformat() \
                         .replace('+00:00', 'Z')
         rel = self.relbaseurl + 'arkivstruktur/ny-registrering/'
@@ -874,7 +870,8 @@ or should it be rejected?
                     level("unable to create record with %s='%s'" % (field, timevalue))
 
     def testNewDocument(self):
-        now = utcnowtz().replace(microsecond=0) \
+        now = datetime.datetime.now(datetime.UTC) \
+                        .replace(microsecond=0) \
                         .isoformat() \
                         .replace('+00:00', 'Z')
         if not self.gotlogin:
