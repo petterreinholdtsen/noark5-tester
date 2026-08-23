@@ -57,74 +57,33 @@ formatsuffix = {
     'fmt/19': 'pdf',  # PDF (1.5)
     'fmt/20': 'pdf',  # PDF (1.6)
     'fmt/39': 'doc',  # Microsoft Word 6.0 (doc)
-    'fmt/41': 'jpeg',
     'fmt/42': 'jpeg',
     'fmt/61': 'xls',  # Microsoft Excel Workbook (97-2000)
     'fmt/95': 'pdf',
     'fmt/96': 'html',
-    'fmt/97': 'html',
-    'fmt/98': 'html',
-    'fmt/99': 'html',
-    'fmt/100': 'html',
     'fmt/101': 'xml',
-    'fmt/103': 'html',
-    'fmt/120': 'xml',
-    'fmt/121': 'xml',
     'fmt/126': 'ppt',
     'fmt/134': 'mp3',
     'fmt/136': 'odt',
     'fmt/137': 'ods',
     'fmt/138': 'odp',
-    'fmt/155': 'tiff',
-    'fmt/156': 'tiff',
-    'fmt/199': 'mp4',
-    'fmt/206': 'sql',
-    'fmt/214': 'xlsx',
-    'fmt/215': 'pptx',
     'fmt/276': 'pdf',  # Acrobat PDF 1.7
     'fmt/278': 'rfc822',
-    'fmt/279': 'flac',
-    'fmt/289': 'warc',
     'fmt/290': 'odt',
     'fmt/291': 'odt',
-    'fmt/292': 'odp',
-    'fmt/293': 'odp',
-    'fmt/294': 'ods',
-    'fmt/295': 'ods',
     'fmt/353': 'tiff',
     'fmt/354': 'pdf',
     'fmt/412': 'docx',  # Microsoft Word 2007 (docx)
-    'fmt/413': 'xlsx',  # Microsoft Excel 2007 (xlsx) - inferred from Office 2007 series
-    'fmt/414': 'pptx',  # Microsoft PowerPoint 2007 (pptx) - inferred from Office 2007 series
     'fmt/483': 'epub',
-    'fmt/640': 'mpeg2',
-    'fmt/659': 'ifc',
-    'fmt/664': 'ifc',
-    'fmt/699': 'ifc',
-    'fmt/700': 'ifc',
     'fmt/703': 'wav',
-    'fmt/704': 'wav',
-    'fmt/705': 'wav',
-    'fmt/896': 'xml',
     'fmt/950': 'rfc822',
-    'fmt/1011': 'xml',
-    'fmt/1047': 'gml',
-    'fmt/1189': 'xml',
     'fmt/1246': 'sosi',
-    'fmt/1247': 'sosi',
-    'fmt/1248': 'sosi',
-    'fmt/1249': 'sosi',
-    'fmt/1250': 'sosi',
     'fmt/1827': 'docx',  # Strict ISO 29500-1:2008 docx
     'fmt/1828': 'xlsx',  # Strict ISO 29500-1:2008 xlsx (Nikita typo "xslx")
     'fmt/1829': 'pptx',  # Strict ISO 29500-1:2008 pptx
     'x-fmt/18': 'csv',
     'x-fmt/111': 'txt',
-    'x-fmt/227': 'gml',
-    'x-fmt/263': 'zip',
-    'x-fmt/265': 'tar',
     'x-fmt/386': 'mpeg2',
-    'x-fmt/392': 'jpeg2000',
 }
 
 def sha256_of_file(filename):
