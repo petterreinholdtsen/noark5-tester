@@ -50,6 +50,14 @@ ARKIVDEL_FIELDS = [
     "avsluttetDato",
     "avsluttetAv",
 ]
+
+READONLY_SYSTEM_FIELDS = {
+    "systemID",
+    "opprettetDato",
+    "opprettetAv",
+    "endretDato",
+    "endretAv",
+}
 KLASSIFIKASJONSSYSTEM_FIELDS = [
     "tittel",
     "beskrivelse",
@@ -61,6 +69,9 @@ MAPPE_FIELDS = [
     "offentligTittel",
     "beskrivelse",
     "noekkelord",
+    "mappetype",
+    "avsluttetDato",
+    "avsluttetAv",
     "dokumentmedium",
     "oppbevaringssted",
 ]
@@ -109,6 +120,8 @@ DOKUMENTBESKRIVELSE_FIELDS = [
     "oppbevaringssted",
     "tilknyttetRegistreringSom",
     "dokumentnummer",
+    "tilknyttetDato",
+    "tilknyttetAv",
 ]
 DOKUMENTOBJEKT_FIELDS = [
     "versjonsnummer",
@@ -1250,9 +1263,9 @@ class EntityDetail(urwid.WidgetWrap):
                     urwid.Text(_json.dumps(entity_dict, indent=2, ensure_ascii=False))
                 ]
 
-            # Fetch sub-resources (nøkkelord, forfatter) from _links and display them
+            # Fetch sub-resources (noekkelord, forfatter) from _links and display them
             self_href = entity_dict.get("_links", {}).get("self", {}).get("href", "")
-            for sub_rel_suffix in ("noikkelord/", "forfatter/"):
+            for sub_rel_suffix in ("noekkelord/", "forfatter/"):
                 rel_url = None
                 for lk in entity_dict.get("_links", {}):
                     if isinstance(lk, str) and lk.endswith(sub_rel_suffix) and not lk.endswith("ny-" + sub_rel_suffix.lstrip("/")):
@@ -1274,16 +1287,14 @@ class EntityDetail(urwid.WidgetWrap):
                         label = "%-24s " % (sub_rel_suffix.rstrip("/") + ":")
                         vals = []
                         for item in results:
-                            # nøkkelord has 'nøkkelord' key; forfatter likely has 'forfatterNavn' or similar
+                            # noekkelord has 'noekkelord' key; forfatter likely has 'forfatter' or similar
                             val_text = None
                             if sub_rel_suffix == "noekkelord/":
                                 val_text = item.get("noekkelord", "?")
                             elif sub_rel_suffix == "forfatter/":
                                 val_text = (
                                     item.get("forfatter")
-                                    or item.get("forfatterNavn")
-                                    or item.get("navn")
-                                    or "?"
+                                                                                                            or "?"
                                 )
                             if val_text:
                                 vals.append(val_text)
@@ -1378,6 +1389,12 @@ METADATA_FIELDS = {
     "variantformat": "variantformat",
     "sjekksumAlgoritme": "sjekksumalgoritme",
     "partRolle": "partrolle",
+    "land": "land",
+    "postnummer": "postnummer",
+    "mappetype": "mappetype",
+    "graderingskode": "graderingskode",
+    "skjermingdokument": "skjermingdokument",
+    "skjermingmetadata": "skjermingmetadata",
 }
 
 MOVE_TYPE_DISPLAY = {
@@ -1816,6 +1833,213 @@ class _VSMFieldsWidget(urwid.Pile):
         return {k: e.get_edit_text().strip() for k, e in self._edits.items()}
 
 
+# Secondary entity management configuration.
+# Maps display name → (create_rel_suffix, collection_rel_suffix, create_fields)
+SECONDARY_ENTITY_CONFIG = [
+    ("Noekkelord", "ny-noekkelord/", None, ["noekkelord"]),
+    ("Forfatter", "ny-forfatter/", None, ["forfatter"]),
+    ("Merknad", "ny-merknad/", "merknad/", ["tekst"]),
+    ("Kryssreferanse", "ny-kryssreferanse/", None, ["kryssreferanse"]),
+]
+
+
+class _SecondaryEntitySection(urwid.Pile):
+    """Shows existing secondary entities (noekkelord, forfatter, etc.) with add support.
+
+    Discovers available endpoints from entity _links and shows:
+    - Existing values as read-only list
+    - Add button that opens a simple create dialog
+    """
+
+    def __init__(self, api, entity_data, loop_ref):
+        self.api = api
+        self.entity_data = entity_data
+        self.loop_ref = loop_ref
+        self._sections = []
+        self._links = api.parselinks(entity_data.get("_links", {}))
+        self.relbaseurl = getattr(api, 'relbaseurl', '') or Endpoint.relbaseurl
+
+        # Discover which secondary entities are available on this entity
+        for label, ny_rel, coll_rel, fields in SECONDARY_ENTITY_CONFIG:
+            full_ny = "%s%s" % (self.relbaseurl, ny_rel) if self.relbaseurl else ny_rel
+            # Try both with and without relbase prefix (Nikita endpoints use nikita namespace)
+            nikita_ny = "https://nikita.arkivlab.no/noark5/v5/%s/" % ny_rel.rstrip('/').split('/')[-1]
+
+            create_url = None
+            coll_url = None
+
+            if full_ny in self._links:
+                create_url = api.clean_url(self._links[full_ny])
+            elif nikita_ny in self._links:
+                create_url = api.clean_url(self._links[nikita_ny])
+
+            # Collection endpoint — use same logic as detail view (line 1268):
+            # look for _links key ending with suffix, excluding "ny-" prefix
+            if not coll_url:
+                coll_suffix = ny_rel[3:] if ny_rel.startswith("ny-") else ny_rel
+                exclude_suffix = "ny-" + coll_suffix.lstrip("/")
+                for lk, lv in self._links.items():
+                    if isinstance(lk, str) and lk.endswith(coll_suffix) and not lk.endswith(exclude_suffix):
+                        coll_url = api.clean_url(lv)
+                        break
+
+            # Also try explicit relbase collection endpoint from config
+            std_coll = "%s%s" % (self.relbaseurl, coll_rel) if coll_rel and self.relbaseurl else None
+            if not coll_url and std_coll and std_coll in self._links:
+                coll_url = api.clean_url(self._links[std_coll])
+
+            if create_url or coll_url:
+                # Fetch existing values
+                existing = []
+                try:
+                    if coll_url:
+                        resp = api.get_entity(coll_url)
+                        for item in resp.get("results", []):
+                            val = self._extract_value(item, label)
+                            if val:
+                                existing.append(val)
+                except Exception:
+                    pass
+
+                section = {
+                    "label": label,
+                    "create_url": create_url,
+                    "fields": fields,
+                    "existing": existing,
+                }
+                self._sections.append(section)
+
+        # Build widget rows
+        rows = []
+        if not self._sections:
+            rows.append(urwid.Text(("body", "  (ingen sekundære entiteter tilgjengelig)")))
+        else:
+            for sec in self._sections:
+                label = sec["label"]
+                vals = ", ".join(sec["existing"]) if sec["existing"] else "(ingen)"
+                rows.append(urwid.Text(("header", "  %s:" % label)))
+                rows.append(_SelectableText("    %s" % vals))
+
+                if sec["create_url"]:
+                    btn = _CompactButton(
+                        "+ Legg til %s" % label.lower(),
+                        lambda _: self._show_add_dialog(sec),
+                    )
+                    rows.append(urwid.Columns([btn, ("given", 4, urwid.Text(""))]))
+
+        super().__init__(rows)
+
+    def _extract_value(self, item, section_label):
+        """Extract display value from secondary entity item."""
+        if section_label == "Noekkelord":
+            return item.get("noekkelord", "?")
+        elif section_label == "Forfatter":
+            return (
+                item.get("forfatter")
+                                                or item.get("partNavn")
+                or "?"
+            )
+        elif section_label == "Merknad":
+            return item.get("tekst", "?")[:50]
+        elif section_label == "Kryssreferanse":
+            return (
+                item.get("kryssreferanse")
+                or item.get("tittel")
+                or "?"
+            )
+        return str(item)
+
+    def _show_add_dialog(self, section):
+        """Show a simple dialog to add a new secondary entity."""
+        label = section["label"]
+        create_url = section["create_url"]
+        fields = section["fields"]
+
+        # Build simple form
+        edit_widgets = []
+        for f in fields:
+            edit_widgets.append(_SubmitEdit("  %-20s " % f))
+
+        def _on_add():
+            vals = {}
+            for i, f in enumerate(fields):
+                w = edit_widgets[i] if i < len(edit_widgets) else None
+                if w:
+                    v = w.get_edit_text().strip()
+                    if v:
+                        vals[f] = v
+
+            try:
+                content, _res = self.api.json_post(create_url, vals)
+                # Refresh parent entity
+                refreshed = self._refresh_entity()
+                if refreshed:
+                    # Update existing values in section
+                    self._update_section(section, refreshed)
+            except Exception as e:
+                err_widget = urwid.Text(("error", "  Feil: %s" % str(e)[:100]))
+                self.contents.insert(-1, (err_widget, ("pack", None)))
+
+        # Build dialog rows
+        dialog_rows = [
+            urwid.Text(("header", "  Legg til ny %s" % label.lower())),
+            urwid.Divider("-"),
+        ]
+        for w in edit_widgets:
+            dialog_rows.append(w)
+
+        btn_row = urwid.Columns([
+            ("given", 4, urwid.Text("")),
+            _CompactButton("Legg til", _on_add),
+            ("given", 2, urwid.Divider()),
+            _CompactButton("Avbryt", lambda _: None),
+        ])
+        dialog_rows.append(btn_row)
+
+        dialog = urwid.Pile(dialog_rows)
+        overlay = urwid.Overlay(
+            urwid.LineBox(dialog),
+            self.loop_ref.original_widget,
+            align="center",
+            width=50,
+            valign="middle",
+            height=len(fields) + 6,
+        )
+        self.loop_ref.widget = overlay
+
+    def _refresh_entity(self):
+        """Re-fetch entity to get updated secondary entities."""
+        try:
+            links = self.entity_data.get("_links", {})
+            self_href = links.get("self", {}).get("href")
+            if self_href:
+                return self.api.get_entity(self_href)
+        except Exception:
+            pass
+        return None
+
+    def _update_section(self, section, entity_data):
+        """Update existing values in a section after adding new item."""
+        coll_url = None
+        for lk, lv in self._links.items():
+            if "merknad" in lk.lower() and section["label"] == "Merknad":
+                coll_url = self.api.clean_url(lv)
+                break
+
+        existing = []
+        try:
+            if coll_url:
+                resp = self.api.get_entity(coll_url)
+                for item in resp.get("results", []):
+                    val = self._extract_value(item, section["label"])
+                    if val:
+                        existing.append(val)
+        except Exception:
+            pass
+
+        section["existing"] = existing
+
+
 class EditDialog(urwid.Pile):
     """Edit existing entity via RFC 7396 merge-patch (PATCH).
 
@@ -1841,6 +2065,7 @@ class EditDialog(urwid.Pile):
         self.on_done = on_done
         self.inputs = {}
         self.original_values = {}
+        self.entity_data = entity_data
 
         # Auto-add VSM to editable fields if present in entity data
         vsm_data = entity_data.get("virksomhetsspesifikkeMetadata")
@@ -1896,6 +2121,13 @@ class EditDialog(urwid.Pile):
                 edit = _SubmitEdit("  %-15s " % field, edit_text=str(current_raw))
                 self.inputs[field] = edit
                 form_items.append((edit, ("pack", None)))
+
+        # Secondary entities (noekkelord, forfatter, merknad, kryssreferanse)
+        secondary_section = _SecondaryEntitySection(
+            self.api, self.entity_data, self.loop_ref
+        )
+        form_items.append((urwid.Divider(), ("pack", None)))
+        form_items.append((secondary_section, ("pack", None)))
 
         buttons_row = urwid.Columns(
             [
@@ -3316,19 +3548,16 @@ def create_tui(baseurl=None, username=None, password=None):
             except Exception as ex:
                 set_status("Cannot load entity for editing: %s" % ex)
                 return
-            editable_fields = [f for f in _get_entity_fields(path) if f in entity]
-            if not editable_fields:
-                # Fall back to any non-system, non-readonly fields present on the entity
-                readonly = {
-                    "systemID",
-                    "opprettetDato",
-                    "opprettetAv",
-                    "endretDato",
-                    "endretAv",
-                }
-                editable_fields = [
-                    f for f in entity if not f.startswith("_") and f not in readonly
-                ]
+
+            # Discover ALL editable fields: known fields + any other non-readonly attrs on entity
+            known_fields = [f for f in _get_entity_fields(path) if f in entity]
+            dynamic_fields = [
+                f
+                for f in entity
+                if not f.startswith("_") and f not in READONLY_SYSTEM_FIELDS
+            ]
+            editable_fields = sorted(set(known_fields) | set(dynamic_fields))
+
             if not editable_fields:
                 set_status("No editable fields on this entity")
                 return
@@ -3348,13 +3577,14 @@ def create_tui(baseurl=None, username=None, password=None):
             dialog = EditDialog(
                 api, path, entity, etag, editable_fields, loop, on_done=on_edited
             )
+            # Let dialog grow to fit all fields; cap at 90% of terminal height
             overlay = urwid.Overlay(
                 urwid.LineBox(dialog),
                 main_pile,
                 align="center",
                 width=("relative", 70),
                 valign="middle",
-                height=("relative", 50),
+                height=("relative", 90),
             )
             loop.original_widget = loop.widget
             loop.widget = overlay
