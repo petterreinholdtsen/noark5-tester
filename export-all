@@ -500,7 +500,7 @@ class ContentDumper(n5core.endpoint.Endpoint):
                         # Deriving filename from checksum provide
                         # automatic deduplication, assuming there is
                         # no hash collition in the dataset and
-                        # consiste format string is used.
+                        # consistent format string is used.
                         if 'format' in origcontent and 'kode' in origcontent['format']:
                             formatkode = origcontent['format']['kode']
                         else:
