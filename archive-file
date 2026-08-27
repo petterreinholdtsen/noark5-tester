@@ -18,6 +18,7 @@ sys.path.append(os.path.join(sys.path[0],'lib'))
 import argparse
 import json
 import email
+from email.header import decode_header as _decode_email_header
 import magic
 import zipfile
 import xml.etree.ElementTree as ET
@@ -285,19 +286,51 @@ class epubReader(infoReader):
 
 class rfc822Reader(infoReader):
     def __init__(self, fh, filepath):
+        import io
         infoReader.__init__(self, fh, filepath)
         self.filename = None
+        self.author = None
         fh.seek(0, os.SEEK_SET)
-        msg = email.message_from_file(fh)
+        # Read binary content into memory to avoid closing the underlying file handle
+        raw_content = fh.read().decode('utf-8', errors='replace')
+        msg = email.message_from_string(raw_content)
         if 'subject' in msg:
-            subject, encoding = \
-                email.Header.decode_header(msg.get('subject'))[0]
-            if encoding!=None:
-                self.title = subject.decode(encoding)
+            parts = _decode_email_header(msg.get('subject'))
+            if parts:
+                subject, encoding = parts[0]
+                if isinstance(subject, bytes):
+                    self.title = subject.decode(encoding or 'utf-8', errors='replace')
+                else:
+                    self.title = subject
             print("S: %s" % self.title)
         if 'message-id' in msg:
             self.filename = msg['message-id']
+
+        # Extract author from From header (decode encoded words)
+        for hdr_name in ('From', 'Sender'):
+            if hdr_name in msg:
+                raw = msg.get(hdr_name)
+                decoded_parts = _decode_email_header(raw)
+                names = []
+                for part, enc in decoded_parts:
+                    if isinstance(part, bytes):
+                        part = part.decode(enc or 'utf-8', errors='replace')
+                    # Extract display name from "Name <email>" format
+                    import re
+                    m = re.match(r'^(.*?)\s*<.*>$', part.strip())
+                    if m:
+                        names.append(m.group(1).strip('"').strip())
+                    elif '@' in part and not any(c.isalpha() for c in part.split('@')[0]):
+                        pass  # bare address, no name
+                    else:
+                        names.append(part.strip())
+                if names:
+                    self.author = ', '.join(names)
+                    break
+
         return
+
+    def getForfatter(self): return self.author
 
 # PRONOM codes for PDF versions (from https://www.nationalarchives.gov.uk/PRONOM/)
 pdf_formatcodes = {
@@ -693,19 +726,36 @@ def main():
 
         docdescinfo = createObject(api, newdocdeschref, docdesc_data)
 
-        # Attach author to document description if extracted from file metadata
         nikitarelbase = 'https://nikita.arkivlab.no/noark5/v5/'
-        # Attach author
-        author = getattr(r, 'author', None)
+
+        # Attach forfatter to both dokumentbeskrivelse and registrering (N5TG spec: both support [0..*] forfatter)
+        author = r.getForfatter()
         if author:
             print("  Author: %s" % author)
+            # Attach to dokumentbeskrivelse
             nyforfatterhref = objectOperation(docdescinfo,
                 nikitarelbase + 'ny-forfatter/')
             if nyforfatterhref:
                 try:
                     createObject(api, nyforfatterhref, { 'forfatter': author })
                 except HTTPError as e:
-                    print("warning: Failed to attach author %s" % author, file=sys.stderr)
+                    print("warning: Failed to attach author to dokumentbeskrivelse (%s)" % e, file=sys.stderr)
+
+            # Attach to registrering
+            self_href = recordinfo['_links']['self']['href']
+            ny_forfatter_url = self_href.rstrip('/') + '/ny-forfatter'
+            try:
+                createObject(api, ny_forfatter_url, {'forfatter': author})
+            except HTTPError as e:
+                if e.code != 409:
+                    body = e.read().decode('UTF-8', errors='replace')
+                    print("warning: POST to %s failed with HTTP %d" % (ny_forfatter_url, e.code), file=sys.stderr)
+                    try:
+                        jbody = json.loads(body)
+                        if 'feil' in jbody and 'beskrivelse' in jbody['feil']:
+                            print("  %s" % jbody['feil']['beskrivelse'], file=sys.stderr)
+                    except (json.JSONDecodeError, KeyError):
+                        pass
 
         # Attach keywords from EPUB subjects (only registrering supports nøkkelord in Nikita)
         subjects = getattr(r, 'subjects', None) or []
@@ -741,25 +791,6 @@ def main():
                     createObject(api, nyposisjonhref, pos_data)
                 except HTTPError as e:
                     print("warning: Failed to attach Posisjon (%s)" % e, file=sys.stderr)
-
-        # Register forfatter on registrering if available (dokumentbeskrivelse handled above)
-        author = r.getForfatter()
-        if author:
-            self_href = recordinfo['_links']['self']['href']
-            ny_forfatter_url = self_href.rstrip('/') + '/ny-forfatter'
-            try:
-                createObject(api, ny_forfatter_url, {'forfatter': author})
-                print("  Registered forfatter '%s'" % author)
-            except HTTPError as e:
-                if e.code != 409:
-                    body = e.read().decode('UTF-8', errors='replace')
-                    print("warning: POST to %s failed with HTTP %d" % (ny_forfatter_url, e.code), file=sys.stderr)
-                    try:
-                        jbody = json.loads(body)
-                        if 'feil' in jbody and 'beskrivelse' in jbody['feil']:
-                            print("  %s" % jbody['feil']['beskrivelse'], file=sys.stderr)
-                    except (json.JSONDecodeError, KeyError):
-                        pass
 
         newdocobjhref = objectOperation(docdescinfo,
                                         relbase + '/arkivstruktur/ny-dokumentobjekt/')
