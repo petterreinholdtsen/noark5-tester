@@ -1559,12 +1559,15 @@ or should it be rejected?
         (entry, res) = self.json_get(url)
         metadatalist = json.loads(entry)
         links = self.parselinks(metadatalist['_links'])
+        href = links[vsmrel]
 
         try:
-            (entry, res) = self.json_get(links[vsmrel])
+            if 'templated' in metadatalist['_links'][vsmrel] and metadatalist['_links'][vsmrel]['templated']:
+                href = href.split('{')[0]
+            (entry, res) = self.json_get(href)
             vsmlist = json.loads(entry)
         except HTTPError as e:
-            print("GET %s failed: %s (%s)" % (url, str(e), e.read()))
+            print("GET %s failed: %s (%s)" % (href, str(e), e.read()))
             raise
         self.vsmkey = None
         if 0 < vsmlist['count']:
