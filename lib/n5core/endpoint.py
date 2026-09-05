@@ -326,7 +326,7 @@ Recursively look for relation in API.
         if h:
             headers[h] = t
         if etag is not None:
-            headers['ETag'] = etag
+            headers["If-Match"] = etag
         if self.verbose:
             print("PUT %s: %s" % (url, headers))
         if self.verbose:
@@ -404,7 +404,7 @@ Recursively look for relation in API.
         if h:
             headers[h] = t
         if etag is not None:
-            headers['ETag'] = etag
+            headers["If-Match"] = etag
         request = urllib.request.Request(url, None, headers)
         request.get_method = lambda: 'DELETE'
         response = opener.open(request)
